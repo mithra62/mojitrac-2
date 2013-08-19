@@ -1,0 +1,413 @@
+/*
+ *  File:         demo_table_jui.css
+ *  CVS:          $Id$
+ *  Description:  CSS descriptions for DataTables demo pages
+ *  Author:       Allan Jardine
+ *  Created:      Tue May 12 06:47:22 BST 2009
+ *  Modified:     $Date$ by $Author$
+ *  Language:     CSS
+ *  Project:      DataTables
+ *
+ *  Copyright 2009 Allan Jardine. All Rights Reserved.
+ *
+ * ***************************************************************************
+ * DESCRIPTION
+ *
+ * The styles given here are suitable for the demos that are used with the standard DataTables
+ * distribution (see www.datatables.net). You will most likely wish to modify these styles to
+ * meet the layout requirements of your site.
+ *
+ * Common issues:
+ *   'full_numbers' pagination - I use an extra selector on the body tag to ensure that there is
+ *     no conflict between the two pagination types. If you want to use full_numbers pagination
+ *     ensure that you either have "example_alt_pagination" as a body class name, or better yet,
+ *     modify that selector.
+ *   Note that the path used for Images is relative. All images are by default located in
+ *     ../images/ - relative to this CSS file.
+ */
+
+
+/*
+ * jQuery UI specific styling
+ */
+
+.paging_two_button .fg-button {
+	float: left;
+	cursor: pointer;
+	* cursor: hand;
+}
+
+.paging_full_numbers .fg-button {
+	padding: 2px 6px;
+	cursor: pointer;
+	* cursor: hand;
+}
+
+.paging_full_numbers {
+	width: 350px !important;
+}
+
+.fg-toolbar {
+	padding: 5px;
+}
+
+.dataTables_paginate {
+	width: auto;
+}
+
+table.display thead th {
+	padding: 3px 0px 3px 10px;
+	cursor: pointer;
+	* cursor: hand;
+}
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *
+ * Everything below this line is the same as demo_table.css. This file is
+ * required for 'cleanliness' of the markup
+ *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables features
+ */
+
+.dataTables_wrapper {
+	position: relative;
+	min-height: 102px;
+	_height: 302px;
+	clear: both;
+}
+
+.dataTables_processing {
+	position: absolute;
+	top: 0px;
+	left: 50%;
+	width: 250px;
+	margin-left: -125px;
+	border: 1px solid #ddd;
+	text-align: center;
+	color: #999;
+	font-size: 11px;
+	padding: 2px 0;
+}
+
+.dataTables_length {
+	width: 40%;
+	float: left;
+}
+
+.dataTables_filter {
+	width: 50%;
+	float: right;
+	text-align: right;
+}
+
+.dataTables_info {
+	width: 50%;
+	float: left;
+}
+
+.dataTables_paginate {
+	float: right;
+	text-align: right;
+}
+
+/* Pagination nested */
+.paginate_disabled_previous, .paginate_enabled_previous, .paginate_disabled_next, .paginate_enabled_next {
+	height: 19px;
+	width: 19px;
+	margin-left: 3px;
+	float: left;
+}
+
+/*.paginate_disabled_previous {
+	background-image: url('../images/back_disabled.jpg');
+}
+
+.paginate_enabled_previous {
+	background-image: url('../images/back_enabled.jpg');
+}
+
+.paginate_disabled_next {
+	background-image: url('../images/forward_disabled.jpg');
+}
+
+.paginate_enabled_next {
+	background-image: url('../images/forward_enabled.jpg');
+}*/
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables display
+ */
+table.display {
+}
+
+table.display thead th {
+	padding: 5px 10px;
+	border-top: 0 solid black;
+	font-weight: bold;
+}
+
+table.display tfoot th {
+	padding: 5px 10px;
+	border-top: 1px solid black;
+	font-weight: bold;
+}
+
+table.display tr.heading2 td {
+	border-bottom: 1px solid #aaa;
+}
+
+table.display td {
+	padding: 5px 10px;
+}
+
+table.display td.center {
+	text-align: center;
+}
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * DataTables sorting
+ */
+/*
+.sorting_asc {
+	background: url('../images/sort_asc.jpg') no-repeat center right;
+}
+
+.sorting_desc {
+	background: url('../images/sort_desc.jpg') no-repeat center right;
+}
+
+.sorting {
+	background: url('../images/sort_both.jpg') no-repeat center right;
+}
+*/
+
+
+tr.odd {
+	background-color: #ece9df;
+}
+
+tr.even {
+	background-color: #f2f0e9;
+}
+
+
+
+
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Misc
+ */
+.top, .bottom {
+	padding: 15px;
+	background-color: #F5F5F5;
+	border: 1px solid #CCCCCC;
+}
+
+.top .dataTables_info {
+	float: none;
+}
+
+.dataTables_empty {
+	text-align: center;
+}
+
+tfoot input {
+	margin: 0.5em 0;
+	width: 100%;
+	color: #444;
+}
+
+tfoot input.search_init {
+	color: #999;
+}
+
+td.group {
+	background-color: #d1cfd0;
+	border-bottom: 2px solid #A19B9E;
+	border-top: 2px solid #A19B9E;
+}
+
+td.details {
+	background-color: #d1cfd0;
+	border: 2px solid #A19B9E;
+}
+
+
+.example_alt_pagination div.dataTables_info {
+	width: 40%;
+}
+
+.paging_full_numbers span.paginate_button,
+ 	.paging_full_numbers span.paginate_active {
+	border: 1px solid #aaa;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding: 2px 5px;
+	margin: 0 3px;
+	cursor: pointer;
+	*cursor: hand;
+}
+
+.paging_full_numbers span.paginate_button {
+	background-color: #ddd;
+}
+
+.paging_full_numbers span.paginate_button:hover {
+	background-color: #ccc;
+}
+
+.paging_full_numbers span.paginate_active {
+	background-color: #99B3FF;
+}
+
+table.display tr.even.row_selected td {
+	background-color: #B0BED9;
+}
+
+table.display tr.odd.row_selected td {
+	background-color: #9FAFD1;
+}
+
+
+/*
+ * Sorting classes for columns
+ */
+/* For the standard odd/even */
+tr.odd td.sorting_1 {
+	background-color: #D9E9F9;
+}
+
+tr.odd td.sorting_2 {
+	background-color: #D9E9F9;
+}
+
+tr.odd td.sorting_3 {
+	background-color: #D9E9F9;
+}
+
+tr.even td.sorting_1 {
+	background-color: #D9E9F9;
+}
+
+tr.even td.sorting_2 {
+	background-color: #D9E9F9;
+}
+
+tr.even td.sorting_3 {
+	background-color: #D9E9F9;
+}
+
+
+/*
+ * Row highlighting
+ */
+ table.tablesorter, table.form_table, .doc_table { border: 1px solid #CCCCCC; font-size: 8pt; width: 100%; text-align: left;margin: 8px 0 5px 0; line-height: 24px; }
+
+.doc_table 
+{
+	padding:5px;	
+}
+table.tablesorter thead tr, table.form_table thead tr, .doc_table tr th { height: 20px; }
+
+table.tablesorter thead tr th, table.form_table thead tr th, .doc_table tr th {
+	background-color: #D9E9F9;
+	height:20px;
+	background-image: none;
+	white-space: nowrap;
+	font-weight: bold;
+	background-position: center right;
+}
+
+.doc_table tr th, .doc_table td
+{
+	padding-left:5px;	
+}
+
+.doc_table_td
+{
+	padding-left:20px;	
+}
+table.tablesorter thead
+{
+	cursor:pointer;
+	background-image: none;	
+	white-space: nowrap;
+}
+
+table.tablesorter tbody td, table.form_table tbody td {
+	color: #666666;
+	background-color: #FFF;
+	vertical-align: top;
+	border-bottom: 1px solid #CCC;
+	padding: 7px;
+	border-right: 1px solid #CCC;
+}
+
+
+table.tablesorter tbody tr.odd td, table.form_table tbody tr.odd td { 
+	background-color:#E9E9E9; 
+}
+table.tablesorter thead tr .headerSortUp { 
+	background-image: url(../images/asc.gif); 
+}
+table.tablesorter thead tr .headerSortDown { 
+	background-image: url(../images/desc.gif); 
+}
+
+.tablesorter tr.odd:hover td.sorting_1, 
+.tablesorter tr.odd:hover td.sorting_2, 
+.tablesorter tr.odd:hover td.sorting_3, 
+.tablesorter tr.even:hover td.sorting_1, 
+.tablesorter tr.even:hover td.sorting_2, 
+.tablesorter tr.even:hover td.sorting_3, 
+.tablesorter tbody tr.even:hover, .tablesorter tbody tr.even td.highlighted,
+table.tablesorter tbody tr:hover td, table.form_table tr.odd:hover {
+	background-color: #D9E9F9;
+}
+
+ .tablesorter tbody tr.odd:hover td, .tablesorter tbody tr.odd td.highlighted {
+	background-color: #D9E9F9;
+}
+.tablesorter tr:hover td a, .tablesorter tr:hover td a:hover {}
+
+
+div.dataTables_info, div.dataTables_filter, div.dataTables_length, .dataTables_paginate { 
+	font-size: 14px;
+	font-weight: normal;
+}
+
+.dataTables_filter input {
+	margin: 0px 10px 0px 0px;border: 1px solid #CCCCCC;background-color: #F3F3F3;
+}
+
+input:focus, textarea:focus		{ background-color: #FFFFE1; border: 1px solid #999999;}
+
+.dataTables_length select {
+	margin: 0px 10px 0px 0px;border: 1px solid #CCCCCC;background-color: #F3F3F3; 
+}
+
+.dataTables_length, .dataTables_filter {
+	font-size: 10px; 
+}
+
+table.form_table thead tr th {
+	height:30px;
+	padding: 10px;
+	font-size: 12px; 
+	border-right: 1px solid #CCC;
+	border-bottom: 1px solid #CCC;
+}
+
+table.form_table tbody tr td {
+	background-color: #E9E9E9;
+}

@@ -1,0 +1,82 @@
+@charset "UTF-8";
+/* CSS Document */
+
+div#calendar_wrapper {
+	width:100%;
+	text-align: center;
+	border: 1px solid #DADADA;
+}
+
+/* calendar header css */
+div#calendar_header {
+	padding: 2px 0;
+	background: #D9E9F9;
+	overflow:auto;
+	text-align: center;
+	line-height: 20px;
+	border: 1px solid #DADADA;
+}
+
+div#calendar_header a#prevMonth {
+	margin: 0 40px 0 5px;
+	text-decoration: none;
+	color: #666666;
+	text-align: left;
+	font-weight: bold;
+	font-size: 8pt;
+}
+
+div#calendar_header a#nextMonth {
+	margin: 0 5px 0 40px;
+	text-decoration: none;
+	color: #666666;
+	text-align: right;
+	font-weight: bold;
+	font-size: 8pt;
+}
+
+div#calendar_header form {
+	display: inline;
+}
+
+/* calendar body css */
+table.calendar {
+	font-size: 10px;
+	background: #F6F6FF;
+	border-collapse: collapse;
+	width:100%;
+}
+
+table.calendar tr {
+	padding: 3px;
+}
+
+table.calendar tr.header a:hover {
+	text-decoration: underline;
+}
+
+table.calendar tr.weekdays {
+	height: 25px;
+	background: #E9E9E9;
+	text-align: center;
+}
+
+table.calendar tr.days {
+	height: 115px;
+}
+
+table.calendar td {
+	width: 66px;
+	padding: 3px;
+	border: 1px solid #DADADA;
+	text-align: left;
+	padding-left:2px;
+}
+
+table.calendar td.today {
+	background: #F1F0CC;
+}
+
+code.comment {
+	color: #FF742A;
+}

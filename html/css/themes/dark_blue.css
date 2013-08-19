@@ -1,0 +1,31 @@
+@charset "utf-8";
+/* -------------------------------------------------------------------
+					 	Silky Admin Template
+							   by Jeff Adams
+-------------------------------------------------------------------- */
+
+
+/* -------------------------------------------------------------------
+					 THEME FILE
+-------------------------------------------------------------------- */
+
+#header						{ background-color: #2E4266; }
+#nav a 						{ color: #2E4266; background-color: #CCD7E9;}
+
+/* Navigation Hover Styles */	
+#head_wrap #nav a:hover	 	{ background-color: #6C89BD;}
+
+#sub_nav_wrap				{ background-color: #FFFFFF; }
+#primary_content a, 
+#footer a 					{ color: #2E4266; }
+
+#sidebar h3 					{ background-color: #CCD7E9; border: 1px solid #AABBDD; }
+#sidebar a 					{ color: #2E4266; font-size: 14px; font-weight: bold;}
+#sidebar a:hover				{ color: #4F71B0;}
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+							 background-color: #CCD7E9;
+							 border: 1px solid #AABBDD;
+							 font-size: 9pt;
+							 padding: 7px;
+							 text-align: left;
+}

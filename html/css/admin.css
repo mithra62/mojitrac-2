@@ -1,0 +1,187 @@
+@charset "utf-8";
+
+body					{ background-color: #DDD; margin: 50px 0 50px 0; padding: 0; font-family: Arial, Helvetica, sans-serif;}
+.png_bg		{}
+#admin_wrapper 		{ background-color: #FFFFFF; width: 400px; margin: 0px auto 0px auto; padding: 15px 20px 15px 20px; border: 5px solid #CCC;}
+#admin_wrapper h1 	{font-size:20px; padding: 3px 0 3px 0px; margin: 0px;}
+
+a { color:#3C8DDF; }
+
+.success, .fail, .information, .attention {
+	margin-top: 8px; margin-bottom: 8px;
+	background-repeat: no-repeat; background-position: 10px center;
+	padding: 10px 10px 10px 40px;
+	height: 15px;
+	font-weight: bold; text-transform: uppercase; font-size: 11px;
+	line-height: 15px;
+	
+}
+
+/* Succes Notification Box */
+.success 				{
+	background-color: #E3FFDF;
+	border: 1px solid #97FF88;
+	color: #009900;
+	background-image: url(../images/accept.png);
+}
+/* Failure Notification Box */
+.fail 					{
+	background-color: #FFE1E1;
+	border: 1px solid #FF9595;
+	color: #CC3300;
+	background-image: url(../images/cancel.png);
+}
+/* Information Notification Box */
+.information 			{
+	background-color: #D7DFFF;
+	border: 1px solid #93A8FF;
+	color: #0033FF;
+	background-image: url(../images/information.png);
+}
+/* Attention Notification Box */
+.attention 		{ background-color: #FFFBCC; border: 1px solid #FFF35E;color: #C69E00; background-image: url(../images/error.png);}
+
+/* Notification Close Button */
+.close-notification					{
+	width: 16px; height: 16px;
+	position: absolute;
+	background: url(../images/close.png) no-repeat;
+	top: 5px; right: 5px;
+	cursor: pointer;
+}
+
+
+/*----  FORMS ---- */
+
+form  label, a, ul.errors, ul.errors li, label.error { font-weight: bold; font-size: 12px;margin-bottom: 10px;display: block;margin-top: 10px; }
+form p 			{ padding: 0px; margin: 0px;}
+form .input 		{ border: 1px solid #CCCCCC; padding: 7px; background-color: #F3F3F3; width: 386px; margin: 0px;}
+form select 		{ padding: 0px;margin: 0px;}
+
+form .button		{
+				 background-color: #D6D6D6;
+				 color: #666666;
+				 font-weight: bold;
+				 border: 1px solid #CCCCCC;
+				 margin-top: 5px;
+				 margin-bottom: 5px;
+				 padding: 5px 7px 5px 7px;}
+
+form .select		{ width: 20%;padding: 2px;margin: 0px;}
+input:focus, textarea:focus		{
+				 background-color: #FFFFE1;
+				 border: 1px solid #999999;
+}
+
+ul.errors, ul.errors li, label.error
+{
+	color: #FF0000;
+	padding: 0px;
+	padding-top:0px;
+	padding-left: 0px;
+	margin: 0px;
+	list-style-type: none;
+	white-space:nowrap; 	
+}
+
+.shortPass{
+	background:url(../password_strength/images/red.png) no-repeat 0 0;
+}
+.shortPass span{
+	background:url(../password_strength/images/red.png) no-repeat top right;
+}
+.badPass{
+	background:url(../password_strength/images/red.png) no-repeat 0 0;
+}
+.badPass span{
+	background:url(../password_strength/images/red.png) no-repeat top right;
+}
+.goodPass{
+	background:url(../password_strength/images/yellow.png) no-repeat 0 0;
+}
+.goodPass span{
+	background:url(../password_strength/images/yellow.png) no-repeat top right;
+}
+.strongPass{
+	background:url(../password_strength/images/green.png) no-repeat 0 0;
+}
+.strongPass span{
+	background:url(../password_strength/images/green.png) no-repeat top right;
+}
+
+.top_testresult{
+	font-weight: bold;
+	font-size:13px;
+	font-family: arail,helvetica,san-serif;
+	color:#666;
+	padding:0;
+	margin:0 0 2px 0;
+}
+.top_testresult span{
+	padding:6px ;
+	margin:0;
+}
+.top_shortPass{
+	background:#edabab;
+	border:1px solid #bc0000;
+	display:block;
+}
+.top_shortPass span{
+	
+}
+.top_badPass{
+	background:#edabab;
+	border:1px solid #bc0000;
+	display:block;
+}
+.top_badPass span{
+	
+}
+.top_goodPass{
+	background:#ede3ab;
+	border:1px solid #bc9f00;
+	display:block;
+}
+.top_goodPass span{
+
+}
+.top_strongPass{
+	background:#d3edab;
+	border:1px solid #73bc00;
+	display:block;
+}
+.top_strongPass span{
+
+}
+
+#logo
+{
+	width:400px;
+	margin: 0px auto 0px auto; 	
+}
+
+@charset "utf-8";
+
+#header			{ background-color: #1B63AB; }
+
+#nav a 			{ color: #FFFFFF; background-color: #2278CE;}
+
+/* Navigation Hover Styles */	
+#head_wrap #nav a:hover	
+				{ background-color: #1B63AB; }
+		
+#sub_nav_wrap	{ background-color: #FFFFFF; }
+#primary_content a, 
+#footer a 		{ color: #3C8DDF;}
+#sidebar h3 		{ background-color: #D9E9F9; border: 1px solid #B6D5F3; }
+#sidebar a 		{ color: #3C8DDF;font-size: 14px;font-weight: bold;}
+#sidebar a:hover	{ color: #1B5C9E; }
+
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+				 background-color: #D9E9F9;
+				 border: 1px solid #B6D5F3;
+				 font-size: 9pt;
+				 padding: 7px;
+				 text-align: left;
+}
+
