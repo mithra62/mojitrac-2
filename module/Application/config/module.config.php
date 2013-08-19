@@ -20,6 +20,48 @@ return array(
                     ),
                 ),
             ),
+            'php-info' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/php-info',
+                    'defaults' => array(
+                        'controller' => 'Application\Controller\Index',
+                        'action'     => 'phpInfo',
+                    ),
+                ),
+            ),
+            
+            'login' => array(
+            		'type' => 'Zend\Mvc\Router\Http\Literal',
+            		'options' => array(
+            				'route'    => '/login',
+            				'defaults' => array(
+            						'controller' => 'Application\Controller\Login',
+            						'action'     => 'index',
+            				),
+            		),
+            ),
+            'login/process' => array(
+            		'type' => 'Zend\Mvc\Router\Http\Literal',
+            		'options' => array(
+            				'route'    => '/login/process',
+            				'defaults' => array(
+            						'controller' => 'Application\Controller\Login',
+            						'action'     => 'process',
+            				),
+            		),
+            ),
+            'login/logout' => array(
+            		'type' => 'Zend\Mvc\Router\Http\Literal',
+            		'options' => array(
+            				'route'    => '/login/logout',
+            				'defaults' => array(
+            						'controller' => 'Application\Controller\Login',
+            						'action'     => 'logout',
+            				),
+            		),
+            ),
+                        
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -73,7 +115,8 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
+            'Application\Controller\Index' => 'Application\Controller\IndexController',
+            'Application\Controller\Login' => 'Application\Controller\LoginController'
         ),
     ),
     'view_manager' => array(
@@ -92,6 +135,21 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+
+    'view_helpers' => array(
+    	/*
+	    'factories' => array(
+	    		'showmessages' => function($sm) {
+	    			$helper = new ModuleName\Helper\MessageShower();
+	    			// do stuff with $sm or the $helper
+	    			return $helper;
+	    		},
+	    ),
+	   */
+	    'invokables' => array(
+	    	'StaticUrl' => 'Application\View\Helper\StaticUrl',
+	    ),
+    ),    
     // Placeholder for console routes
     'console' => array(
         'router' => array(

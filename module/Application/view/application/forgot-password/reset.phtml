@@ -1,0 +1,47 @@
+	<h1>Password Reset</h1>		
+<?php 
+
+if(is_array($this->messages) && count($this->messages) >= 1)
+{
+	foreach($this->messages AS $message) 
+	{
+		echo '<div class="fail large png_bg">'.$message.'</div>';
+	}
+} else {
+	
+	echo '<div class="information large png_bg">Select your new password and enter it below.</div> ';
+}
+?>		
+<form action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod()) ?>" id="sumbitForm">
+  
+<p><label>New Password</label>
+<?php echo $this->form->new_password; ?>
+</p>
+
+<p><label>Confirm Password</label>
+<?php echo $this->form->confirm_password; ?>
+</p>
+  
+<p>
+ <input type="submit" name="Submit" id="button" value="Submit"  class="button"/>
+</p>
+<a href="<?php echo $this->url(array('controller'=>'login','action'=>'index'), null, TRUE);?>" class="blueLink">Back to Login</a>
+</form>
+
+<script type="text/javascript">
+jQuery(document).ready(function($){
+
+	$("#new_password").passStrength({
+		shortPass: 		"top_shortPass",
+		badPass:		"top_badPass",
+		goodPass:		"top_goodPass",
+		strongPass:		"top_strongPass",
+		baseStyle:		"top_testresult",
+		enableUcheck:	0,
+		userid:			"#confirm_password",
+		messageloc:		0
+	});	
+	
+	
+});
+</script>
