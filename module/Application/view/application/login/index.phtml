@@ -16,7 +16,9 @@ if(is_array($this->messages) && count($this->messages) >= 1)
 }
 ?>		
 		<?php echo $this->form()->openTag($form);; ?>
-				  
+		<?php 
+		$csrf = $form->get('_x');
+		echo $this->formRow($csrf); ?>				  
 		<p><label>Email</label>
 		<?php 
 		$email = $form->get('email');

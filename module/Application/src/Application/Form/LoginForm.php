@@ -50,6 +50,15 @@ class LoginForm extends Form
 				),
 		));
 		$this->add(array(
+				'name' => '_x',
+				'type' => 'Csrf',
+				'options' => array(
+						'csrf_options' => array(
+								'timeout' => 600
+						)
+				)
+		));		
+		$this->add(array(
 				'name' => 'submit',
 				'type' => 'Submit',
 				'attributes' => array(
