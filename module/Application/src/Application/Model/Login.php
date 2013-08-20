@@ -1,17 +1,99 @@
 <?php
+ /**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		1.0
+ * @filesource 	./module/Application/src/Application/Model/Login.php
+ */
+
 namespace Application\Model;
 
-// Add these import statements
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
-
+/**
+ * Application - Login Model
+ *
+ * Handles login functionality
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/Application/src/Application/Model/Login.php
+ */
 class Login
 {
+	/**
+	 * The 
+	 * @var unknown
+	 */
 	protected $inputFilter;
 	
+	private $authAdapter;
+	
+	public function setAuthAdapter($auth)
+	{
+		$this->authAdapter = $auth;
+	}
+	
+	public function processLogin()
+	{
+		// Attempt authentication, saving the result
+		$result = $this->authAdapter->authenticate();
+		switch ($result->getCode())
+		{
+			case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
+				/** do stuff here **/
+				break;
+	
+			case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
+				// Invalid entries
+				$this->view->messages = array('Invalid Credentials! Please Try Again :)');
+				 
+				$this->view->form = $form;
+				$form->populate($values);
+				return $this->render('index'); // re-render the login form
+				break;
+	
+			case Zend_Auth_Result::SUCCESS:
+				/** do stuff for successful authentication **/
+			  
+				//update
+				break;
+	
+			default:
+				/** do stuff for other failure **/
+				break;
+		}
+	
+		$user = new PM_Model_Users(new PM_Model_DbTable_Users);
+		$user->upateLoginTime($auth->getIdentity());
+	
+		// We're authenticated! Redirect to the home page
+	
+		$this->session = new Zend_Session_Namespace('PM');
+		$this->_flashMessenger->addMessage('Welcome to MojiTrac!');
+		if($this->session->redirect_to != '')
+		{
+			$url = $this->session->redirect_to;
+			unset($this->session->redirect_to);
+			$this->_redirector = $this->_helper->getHelper('Redirector');
+			$this->_redirector->gotoUrl($url);
+			exit;
+		}
+		else
+		{
+			$this->_helper->redirector('index', 'index', 'pm');
+		}
+		exit;
+	
+	}
+		
 	// Add content to these methods:
 	public function setInputFilter(InputFilterInterface $inputFilter)
 	{

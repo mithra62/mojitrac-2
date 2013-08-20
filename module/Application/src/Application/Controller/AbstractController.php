@@ -15,6 +15,8 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Application\Adapter\AuthAdapter;
+use Zend\XmlRpc\Value\ArrayValue;
 
  /**
  * Default - AbstractController Controller
@@ -25,5 +27,16 @@ use Zend\View\Model\ViewModel;
  */
 abstract class AbstractController extends AbstractActionController
 {
+	/**
+	 * ZF Config
+	 * Contains the entire compiled configuration 
+	 * @var Array
+	 */
+	public $config = array();
 	
+	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
+	{
+		$this->config = $this->getServiceLocator()->get('Config');
+		return parent::onDispatch( $e );
+	}
 }

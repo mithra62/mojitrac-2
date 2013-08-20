@@ -1,0 +1,74 @@
+<?php
+ /**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		1.0
+ * @filesource 	./moji/application/controllers/LoginController.php
+ */
+
+namespace Application\Model;
+
+use Zend\Db\Adapter\Adapter;
+use Zend\Db\TableGateway\AbstractTableGateway;
+use Zend\Db\Sql\Select;
+
+ /**
+ * Model Abstract
+ *
+ * Sets things up for abstracted functionality
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./moji/application/models/Abstract.php
+ */
+abstract class AbstractModel extends AbstractTableGateway
+{
+	/**
+	 * The database object
+	 * @var object
+	 */
+	protected $db;
+	
+	/**
+	 * The Cache Object
+	 * @var object
+	 */
+	public $cache;
+
+	/**
+	 * The stored cache name
+	 * @var string
+	 */
+	public $cache_key = null;
+		
+	public $events = null;
+	
+	public function __construct()
+	{
+
+	}
+	
+	/**
+	 * Wraps up the Event functionality nice and tidy
+	 * @param Zend_EventManager_EventCollection $events
+	 * @return Ambigous <Zend_EventManager_EventManager, Zend_EventManager_EventCollection>
+	 */
+	public function events(Zend_EventManager_EventCollection $events = null)
+	{
+		if (null !== $events) {
+			$this->events = $events;
+		} elseif (null === $this->events) {
+			$this->events = Zend_Registry::get('event_manager');
+		}
+		return $this->events;
+	}
+
+	public function event($name, $obj, $argv)
+	{
+		return $this->events()->trigger($name, $obj, $argv);
+	}
+}

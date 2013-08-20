@@ -1,6 +1,10 @@
 <?php
 namespace PM;
 
+use Zend\Mvc\ModuleRouteListener;
+use Zend\Mvc\MvcEvent;
+use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
+
 class Module
 {
     public function getConfig()
