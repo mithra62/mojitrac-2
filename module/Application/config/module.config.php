@@ -61,6 +61,26 @@ return array(
             				),
             		),
             ),
+            'forgot-password' => array(
+            		'type' => 'Zend\Mvc\Router\Http\Literal',
+            		'options' => array(
+            				'route'    => '/forgot-password',
+            				'defaults' => array(
+            						'controller' => 'Application\Controller\ForgotPassword',
+            						'action'     => 'index',
+            				),
+            		),
+            ), 
+            'forgot-password/reset' => array(
+            		'type' => 'Zend\Mvc\Router\Http\Literal',
+            		'options' => array(
+            				'route'    => '/forgot-password/reset',
+            				'defaults' => array(
+            						'controller' => 'Application\Controller\ForgotPassword',
+            						'action'     => 'reset',
+            				),
+            		),
+            ),            
                         
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
@@ -116,7 +136,8 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
-            'Application\Controller\Login' => 'Application\Controller\LoginController'
+            'Application\Controller\Login' => 'Application\Controller\LoginController',
+            'Application\Controller\ForgotPassword' => 'Application\Controller\ForgotPasswordController'
         ),
     ),
     'view_manager' => array(

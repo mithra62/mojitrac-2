@@ -13,7 +13,6 @@
 namespace Application\Model;
 
 use Zend\Db\Adapter\Adapter;
-use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\Sql\Sql;
 
  /**
@@ -25,7 +24,7 @@ use Zend\Db\Sql\Sql;
  * @author		Eric Lamb
  * @filesource 	./moji/application/models/Abstract.php
  */
-abstract class AbstractModel extends AbstractTableGateway
+abstract class AbstractModel
 {
 	/**
 	 * The database object
@@ -72,6 +71,11 @@ abstract class AbstractModel extends AbstractTableGateway
 	public function getRows()
 	{
 		
+	}
+	
+	public function getAdapter()
+	{		
+		return $this->adapter;
 	}
 	
 	/**

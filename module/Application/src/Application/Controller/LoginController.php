@@ -16,6 +16,7 @@ use Application\Controller\AbstractController;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Db\Sql\Sql;
+use Zend\Authentication\Result as AuthenticationResult;
 
 use Application\Adapter\AuthAdapter;
 use Application\Model\Login;
@@ -45,6 +46,7 @@ class LoginController extends AbstractController
     	{	
     		$user = new User($this->getAdapter(), new Sql($this->getAdapter()));
 			$login = new Login($user);
+			$login->setAuthAdapter($this->getAdapter());
 			$form->setInputFilter($login->getInputFilter());
 			$form->setData($request->getPost());
 			if ($form->isValid()) 
@@ -54,29 +56,24 @@ class LoginController extends AbstractController
 				$this->getAuthService()->getAdapter()->setIdentity($request->getPost('email'))
 									   ->setCredential($request->getPost('password'));
 				$result = $this->getAuthService()->authenticate();
-				
-				$this->getSessionStorage()->setRememberMe(1);
-				//set storage again
-				$this->getAuthService()->setStorage($this->getSessionStorage());				
-				print_r($result);
-				
-				/*
-				$auth = new AuthAdapter($user, $data['email'], $data['password']);
-				$login->setAuthAdapter($auth);
-				*/
-				echo 'fdas';
-				exit;
-				if($login->processLogin())
+				switch ($result->getCode())
 				{
-					//return $this->redirect()->toRoute('login');
-					echo $identity = $auth->getIdentity();
-					exit;
-					echo 'fdsfdsaa';
-					exit;
-				}
+					case AuthenticationResult::SUCCESS:
+						return TRUE;
+
+						$this->getSessionStorage()->setRememberMe(1);
+						$this->getAuthService()->setStorage($this->getSessionStorage());	
+						$this->flashMessenger()->addMessage('Login Successful!');
+						return $this->redirect()->toRoute('forgot-password');											
+					break;
 				
-				$this->flashMessenger()->addMessage('Invalid Credentials! Please Try Again');
-				return $this->redirect()->toRoute('login');
+					case AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND:
+					case AuthenticationResult::FAILURE_CREDENTIAL_INVALID:
+					default:
+						$this->flashMessenger()->addMessage('Invalid Credentials! Please Try Again');
+						return $this->redirect()->toRoute('login');						
+					break;
+				}
 			}
     	}
     	

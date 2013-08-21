@@ -16,7 +16,6 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Authentication\Result as AuthenticationResult;
 
 /**
  * Application - Login Model
@@ -41,46 +40,6 @@ class Login
 	{
 		$this->authAdapter = $auth;
 	}
-	
-	public function processLogin()
-	{
-		// Attempt authentication, saving the result
-		$result = $this->authAdapter->authenticate();
-		switch ($result->getCode())
-		{
-			case AuthenticationResult::SUCCESS:
-				return TRUE;
-			break;
-	
-			case AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND:
-			case AuthenticationResult::FAILURE_CREDENTIAL_INVALID:
-			default:
-				return FALSE;
-			break;
-		}
-	
-		$user = new PM_Model_Users(new PM_Model_DbTable_Users);
-		$user->upateLoginTime($auth->getIdentity());
-	
-		// We're authenticated! Redirect to the home page
-	
-		$this->session = new Zend_Session_Namespace('PM');
-		$this->_flashMessenger->addMessage('Welcome to MojiTrac!');
-		if($this->session->redirect_to != '')
-		{
-			$url = $this->session->redirect_to;
-			unset($this->session->redirect_to);
-			$this->_redirector = $this->_helper->getHelper('Redirector');
-			$this->_redirector->gotoUrl($url);
-			exit;
-		}
-		else
-		{
-			$this->_helper->redirector('index', 'index', 'pm');
-		}
-		exit;
-	
-	}
 		
 	// Add content to these methods:
 	public function setInputFilter(InputFilterInterface $inputFilter)
@@ -104,6 +63,14 @@ class Login
 				'validators' => array(
 					array(
 						'name' => 'EmailAddress',
+					),
+					array(
+						'name' => 'Db\RecordExists',
+						'options' => array(
+						        'table' => 'users',
+						        'field' => 'email',
+								'adapter' => $this->authAdapter
+						    )
 					),
 				),
 			)));

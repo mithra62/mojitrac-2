@@ -135,8 +135,8 @@ class User extends AbstractModel
 	 */
 	public function getUserByEmail($email)
 	{
-		$sql = $this->db->select()->where('email = ?', $email);
-		return $this->db->getUser($sql);
+		$sql = $this->db->select()->from('users')->where(array('email' => $email));
+		return $this->getRow($sql);
 	}
 	
 	/**
@@ -271,7 +271,11 @@ class User extends AbstractModel
 	 */
 	public function upatePasswordHash($id, $hash)
 	{
-		$sql = array('pw_forgotten' => new Zend_Db_Expr('NOW()'), 'forgotten_hash' => $hash, 'last_modified' => new Zend_Db_Expr('NOW()'));
+		$sql = array(
+				'pw_forgotten' => new Zend_Db_Expr('NOW()'), 
+				'forgotten_hash' => $hash, 
+				'last_modified' => new Zend_Db_Expr('NOW()')
+		);
 		return $this->db->update($sql, "id = '$id'");
 	}	
 	

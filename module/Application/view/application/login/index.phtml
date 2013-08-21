@@ -15,7 +15,7 @@ if(is_array($this->messages) && count($this->messages) >= 1)
 	echo '<div class="information large png_bg">To log in please enter your credentials below.</div> ';
 }
 ?>		
-		<?php echo $this->form()->openTag($form);; ?>
+		<?php echo $this->form()->openTag($form); ?>
 		<?php 
 		$csrf = $form->get('_x');
 		echo $this->formRow($csrf); ?>				  
@@ -36,7 +36,7 @@ if(is_array($this->messages) && count($this->messages) >= 1)
 		<input type="reset" name="reset" id="reset" value="Reset" class="button" />
 		
 		<br />
-		<a href="<?php //echo $this->url(array('controller'=>'forgot-password','action'=>'index'));?>">Forgot Password</a>
+		<a href="<?php echo $this->url('forgot-password'); ?>">Forgot Password</a>
 	  </p>
 		
 	<?php echo $this->form()->closeTag() ?>

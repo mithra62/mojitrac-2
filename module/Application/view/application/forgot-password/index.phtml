@@ -1,5 +1,9 @@
-	<h1>Forgot Password</h1>		
+<h1>Forgot Password</h1>		
 <?php 
+
+$form = $this->form;
+$form->setAttribute('id', 'sumbitForm');
+$form->prepare();
 
 if(is_array($this->messages) && count($this->messages) >= 1)
 {
@@ -11,18 +15,19 @@ if(is_array($this->messages) && count($this->messages) >= 1)
 	
 	echo '<div class="information large png_bg">Welcome. To log in enter your credentials below.</div> ';
 }
-?>		
-			<form action="<?php echo $this->escape($this->form->getAction()); ?>" 
-				  method="<?php echo $this->escape($this->form->getMethod()) ?>" 
-				  id="sumbitForm">
-				  
+
+echo $this->form()->openTag($form); 
+		$csrf = $form->get('_x');
+		echo $this->formRow($csrf); ?>				  
 		<p><label>Email</label>
-		<?php echo $this->form->email; ?>
+		<?php 
+		$email = $form->get('email');
+		echo $this->formRow($email); ?>		
 	  </p>
 	  
 	  <p><input type="submit" name="Submit" id="button" value="Submit"  class="button"/></p>
-		<a href="<?php echo $this->url(array('controller'=>'login','action'=>'index'));?>" class="blueLink">Back to Login</a>
-	</form>
+		<a href="<?php echo $this->url('login');?>" class="blueLink">Back to Login</a>
+<?php echo $this->form()->closeTag() ?>
 	
 <script type="text/javascript">
 $.validator.setDefaults({

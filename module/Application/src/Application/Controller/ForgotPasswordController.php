@@ -10,10 +10,18 @@
  * @filesource 	./moji/application/controllers/ForgotPasswordController.php
  */
 
-/**
- * Include the AbstractController Controller class
- */
-include 'AbstractController.php';
+namespace Application\Controller;
+
+use Application\Controller\AbstractController;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
+use Zend\Db\Sql\Sql;
+
+use Application\Form\ForgotPasswordForm;
+use Application\Model\User;
+use Application\Model\DbTable\UserTable;
+use Application\Model\ForgotPassword;
+use Application\Model\Hash;
 
  /**
  * Default - Forgot Password Controller Class
@@ -24,16 +32,8 @@ include 'AbstractController.php';
  * @author		Eric Lamb
  * @filesource 	./moji/application/controllers/ForgotPasswordController.php
  */
-class ForgotPasswordController extends Default_Abstract
-{
-	protected $_flashMessenger = null;
-	
-    public function init()
-    {
-        $this->_flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $this->initView();
-    }
-    
+class ForgotPasswordController extends AbstractController
+{   
     public function resetAction()
     {
     	$hash = $this->_request->getParam('p', FALSE);
@@ -73,25 +73,32 @@ class ForgotPasswordController extends Default_Abstract
     }
     
     public function indexAction()
-    {	 	
-    	$fp = new Model_ForgotPassword;
-    	$form = $fp->getForm();
-        
+    {
+    	$fp = new ForgotPassword($this->getAdapter());
+    	$form = new ForgotPasswordForm();
+    	$request = $this->getRequest();
+    	
     	if ($this->getRequest()->isPost()) 
     	{
     		$formData = $this->getRequest()->getPost();
+    		$form->setInputFilter($fp->getInputFilter());
+    		$form->setData($request->getPost());    		
 			if ($form->isValid($formData)) 
 			{
-				if($fp->sendEmail($formData['email']))
+				if($fp->sendEmail(new Hash, $formData['email']))
 				{
 					$this->_flashMessenger->addMessage('Please check your email');
 					$this->_helper->redirector('index', 'login');
 				}
 			}
     	}
-    	$this->view->messages = $this->_flashMessenger->getMessages();
-    	$this->view->title = "Forgot Password";
-    	$this->view->headTitle($this->view->title, 'PREPEND');
-    	$this->view->form = $form;
+    	
+    	$view = array();
+    	$view['messages'] = $this->flashMessenger()->getMessages();
+    	$view['title'] = "Forgot Password";
+    	
+    	//$this->view->headTitle('Login', 'PREPEND');
+    	$view['form'] = $form;
+    	return $view;    	
     }   
 }
