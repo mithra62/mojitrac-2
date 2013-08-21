@@ -15,12 +15,14 @@ namespace Application\Controller;
 use Application\Controller\AbstractController;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Sql;
 
 use Application\Adapter\AuthAdapter;
 use Application\Model\Login;
 use Application\Form\LoginForm;
-use PM\Model\Users;
+use Application\Model\User;
+use Application\Model\DbTable\UserTable;
+
 
  /**
  * Default - Login Class
@@ -41,21 +43,40 @@ class LoginController extends AbstractController
     	$request = $this->getRequest();
     	if ($request->isPost())
     	{	
-    		$user = new Users(new TableGateway($this->getUsersTable()));
+    		$user = new User($this->getAdapter(), new Sql($this->getAdapter()));
 			$login = new Login($user);
 			$form->setInputFilter($login->getInputFilter());
 			$form->setData($request->getPost());
 			if ($form->isValid()) 
 			{
 				$data = $form->getData();
-				$login->setAuthAdapter(new AuthAdapter($user, $data['email'], $data['password']));
+				
+				$this->getAuthService()->getAdapter()->setIdentity($request->getPost('email'))
+									   ->setCredential($request->getPost('password'));
+				$result = $this->getAuthService()->authenticate();
+				
+				$this->getSessionStorage()->setRememberMe(1);
+				//set storage again
+				$this->getAuthService()->setStorage($this->getSessionStorage());				
+				print_r($result);
+				
+				/*
+				$auth = new AuthAdapter($user, $data['email'], $data['password']);
+				$login->setAuthAdapter($auth);
+				*/
+				echo 'fdas';
+				exit;
 				if($login->processLogin())
 				{
-					echo 'fdsa';
+					//return $this->redirect()->toRoute('login');
+					echo $identity = $auth->getIdentity();
+					exit;
+					echo 'fdsfdsaa';
 					exit;
 				}
 				
-				$this->flashMessenger()->set();
+				$this->flashMessenger()->addMessage('Invalid Credentials! Please Try Again');
+				return $this->redirect()->toRoute('login');
 			}
     	}
     	
@@ -72,7 +93,7 @@ class LoginController extends AbstractController
     {
     	if (!$this->usersTable) {
     		$sm = $this->getServiceLocator();
-    		$this->usersTable = $sm->get('PM\Model\Users');
+    		$this->usersTable = $sm->get('Application\Model\DbTable\UserTable');
     	}
     	return $this->usersTable;
     }    

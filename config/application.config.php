@@ -10,8 +10,9 @@ return array(
         'Application',
         'Api',
         'PM',
-        'Clients'
-        ),
+        'Clients',
+    	'ZendDeveloperTools'
+        ),	
     'module_listener_options' => array(
         'module_paths' => array(
             './module',

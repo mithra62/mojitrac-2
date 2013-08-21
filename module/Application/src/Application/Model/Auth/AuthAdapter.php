@@ -1,10 +1,11 @@
 <?php
-namespace Application\Adapter;
+namespace Application\Model\Auth;
+
 use Zend\Authentication\Adapter\AdapterInterface;
 use Zend\Authentication\Adapter\AbstractAdapter;
 use Zend\Authentication\Result as AuthenticationResult;
 
-use PM\Model\Users;
+use Application\Model\User;
 
 class AuthAdapter extends AbstractAdapter
 {
@@ -19,11 +20,8 @@ class AuthAdapter extends AbstractAdapter
      *
      * @return void
      */
-    public function __construct(Users $users, $email, $password, $type = 'pm')
+    public function __construct(User $users)
     {
-    	$this->email = $email;
-    	$this->password = $password;
-    	$this->type = $type;
     	$this->users = $users;
     }
 
@@ -31,21 +29,22 @@ class AuthAdapter extends AbstractAdapter
      * Performs an authentication attempt
      *
      * @return \Zend\Authentication\Result
-     * @throws \Zend\Authentication\Adapter\Exception\ExceptionInterface
+     * @throws \Zend\Authentication\AuthAdapter\Exception\ExceptionInterface
      *               If authentication cannot be performed
      */
     public function authenticate()
     {
-
         //return $authResult = new AuthenticationResult(AuthenticationResult::FAILURE_CREDENTIAL_INVALID, 1);
         $authMessages = array();
-        
-		$data = $this->users->verifyCredentials($this->email, $this->password);
+		$data = $this->users->verifyCredentials($this->getIdentity(), $this->getCredential());
 		if(!$data)
 		{
 			$authResult = AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND;
+			$authMessages[] = 'Not Found';
+        	return new AuthenticationResult( $authResult, $this->email, $authMessages );
 		}		
 		
         $authResult = AuthenticationResult::SUCCESS;
+        return new AuthenticationResult( $authResult, $data['id'], $authMessages );
     }
 }

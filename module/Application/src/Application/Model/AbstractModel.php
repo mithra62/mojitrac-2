@@ -14,7 +14,7 @@ namespace Application\Model;
 
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway;
-use Zend\Db\Sql\Select;
+use Zend\Db\Sql\Sql;
 
  /**
  * Model Abstract
@@ -47,9 +47,31 @@ abstract class AbstractModel extends AbstractTableGateway
 		
 	public $events = null;
 	
-	public function __construct()
+	protected $adapter = null;
+	
+	public function __construct($adapter = null)
 	{
-
+		$this->adapter = $adapter;
+		$this->db = new SQL($this->getAdapter());
+	}
+	
+	public function getRow($sql)
+	{
+		$selectString = $this->db->getSqlStringForSqlObject($sql);
+		$result = $this->adapter->query($selectString, 'execute')->toArray();
+		if(!empty($result['0']))
+		{
+			return $result['0']; 
+		}
+		else
+		{
+			return array();
+		}
+	}
+	
+	public function getRows()
+	{
+		
 	}
 	
 	/**

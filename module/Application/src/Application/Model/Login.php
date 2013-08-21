@@ -16,6 +16,7 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
+use Zend\Authentication\Result as AuthenticationResult;
 
 /**
  * Application - Login Model
@@ -47,28 +48,15 @@ class Login
 		$result = $this->authAdapter->authenticate();
 		switch ($result->getCode())
 		{
-			case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
-				/** do stuff here **/
-				break;
+			case AuthenticationResult::SUCCESS:
+				return TRUE;
+			break;
 	
-			case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
-				// Invalid entries
-				$this->view->messages = array('Invalid Credentials! Please Try Again :)');
-				 
-				$this->view->form = $form;
-				$form->populate($values);
-				return $this->render('index'); // re-render the login form
-				break;
-	
-			case Zend_Auth_Result::SUCCESS:
-				/** do stuff for successful authentication **/
-			  
-				//update
-				break;
-	
+			case AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND:
+			case AuthenticationResult::FAILURE_CREDENTIAL_INVALID:
 			default:
-				/** do stuff for other failure **/
-				break;
+				return FALSE;
+			break;
 		}
 	
 		$user = new PM_Model_Users(new PM_Model_DbTable_Users);
