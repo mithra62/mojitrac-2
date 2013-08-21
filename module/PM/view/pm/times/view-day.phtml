@@ -1,0 +1,42 @@
+<div class="content_headers" style="padding-top:0px;">
+	<div class="timetracker_header">Existing Time For <?php echo $this->RelativeDate($this->date); ?></div>
+	<?php echo $this->ActionBlock('help', 'Help', $this->url(array('module' => 'pm','controller' => 'docs','action'=>'times', 'page' => 'view-day'), null, TRUE), 'facebox');?>	
+</div>
+<?php 
+$parts = explode('-', $this->date);
+$next_day = date('Y-m-d', mktime(0, 0, 0, $parts['1'], $parts['2']+1, $parts['0']));
+$prev_day = date('Y-m-d', mktime(0, 0, 0, $parts['1'], $parts['2']-1, $parts['0']));
+?>
+<div >
+	<div class="left">
+		<div class="back_link_content">
+			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'times','action'=>'view-day', 'date'=>$prev_day), null, TRUE); ?>" title="Back to <?php echo $this->user_data['first_name'].' '.$this->user_data['last_name']; ?>">
+				<?php echo $this->RelativeDate($prev_day); ?>	
+			</a><div><?php echo $this->InteractIcon('left-arrow', $this->RelativeDate($prev_day));?></div>
+		</div>
+	</div>
+	<?php if($this->date < date('Y-m-d')):?> 	
+	<div class="right">
+		<div class="back_link_content">
+			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'times','action'=>'view-day', 'date'=>$next_day)); ?>">
+				<?php echo $this->RelativeDate($next_day); ?> 
+			</a><div style="float:right; padding-left:5px;"><?php echo $this->InteractIcon('right-arrow', $this->RelativeDate($prev_day));?></div>
+		</div>	
+	</div>
+	<?php endif; ?>
+</div>
+<?php 
+if($this->times):
+	$options = array('times' => $this->times, 'enable_actions' => 'yes', 'enable_company' => 'yes', 'enable_project' => 'yes', 'enable_task' => 'yes');
+	echo $this->partial('times/partials/times.phtml', $options);
+
+else: ?>
+<br clear="all" />
+<div class="information png_bg">There hasn't been any time added yet.</div>
+
+<?php 
+endif; 
+
+$options = array('form' => $this->form, 'date' => $this->date);
+echo $this->partial('times/partials/form.phtml', $options);
+?>

@@ -1,0 +1,10 @@
+<div class="content_headers" style="padding-top:0px;">
+	<div class="file_header">Edit File</div>		
+</div>
+<?php 
+$options = array('id' => $this->id, 'controller' => 'files', 'name' => $this->file_data['name'], 'action' => 'view');
+echo $this->BackToLink($options); 
+
+$options = array('form' => $this->form, 'id' => $this->id);
+echo $this->partial('files/partials/form.phtml', $options); 
+?>

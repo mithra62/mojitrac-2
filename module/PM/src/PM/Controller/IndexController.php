@@ -1,0 +1,89 @@
+<?php
+/**
+ * mithra62 - MojiTrac
+*
+* @package		mithra62:Mojitrac
+* @author		Eric Lamb
+* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @link			http://mithra62.com/
+* @version		1.0
+* @filesource 	./moji/application/modules/pm/controllers/IndexController.php
+*/
+
+namespace PM\Controller;
+
+use PM\Controller\AbstractPmController;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
+/**
+* PM - Index Controller
+*
+* Routes the Index requests
+*
+* @package 		mithra62:Mojitrac
+* @author		Eric Lamb
+* @filesource 	./moji/application/modules/pm/controllers/IndexController.php
+*/
+class IndexController extends AbstractPmController
+{
+	public function preDispatch()
+	{
+		$this->view->headTitle('Dashboard', 'PREPEND');
+	}
+		
+    public function indexAction()
+    {
+    	return array();
+        $user = new PM_Model_Users(new PM_Model_DbTable_Users);
+		
+		$this->view->projects = $user->getAssignedProjects($this->identity);
+		
+		$task_data = $user->getAssignedTasks($this->identity, 30);
+		
+		if ($this->getRequest()->isPost()) 
+		{
+    		$formData = $this->getRequest()->getPost();
+    		if(array_key_exists('task_completed', $formData) && is_array($formData['task_completed']))
+    		{
+    			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
+    			$looped = FALSE;
+    			foreach($formData['task_completed'] AS $task_id => $value)
+	    		{
+		    		foreach($task_data AS $task_group)
+	    			{
+	    				foreach($task_group AS $t)
+	    				{
+	    					if($t['id'] == $task_id)
+	    					{    						
+	    						if($task->markCompleted($task_id, $this->identity))
+	    						{
+	    							$looped = TRUE;
+						            $noti = new PM_Model_Notifications;
+						            $noti->sendTaskStatusChange($t);	    							
+	    							PM_Model_ActivityLog::logTaskUpdate($t, $task_id, $t['project_id'], $this->identity);	    							
+	    						}
+	    					}
+	    				}
+	    				
+	    			}
+	    		}
+	    		if($looped)
+	    		{
+			    	$this->_flashMessenger->addMessage('Task(s) updated!');
+					$this->_helper->redirector('index','index', 'pm'); 
+					exit;	    			
+	    		}
+    		}
+		}
+		
+		$this->view->user_data = $user->getUserById($this->identity);
+		$this->view->tasks = $task_data;
+		$this->view->identity = $this->identity;
+    }
+    
+    public function infoAction()
+    {
+    	phpinfo();
+    	exit;
+    }
+}

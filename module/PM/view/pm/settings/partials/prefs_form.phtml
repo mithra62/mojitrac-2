@@ -1,0 +1,140 @@
+
+<form action="<?php echo $this->escape($this->form->getAction()); ?>" id="form_settings" method="<?php echo $this->escape($this->form->getMethod()) ?>"> 
+
+<div id="form_tabs">
+	<ul>
+
+		<li><a href="#notifications">Notifications</a></li>
+		<li><a href="#date_time">Date/Time</a></li>
+		<li><a href="#misc">Misc</a></li>
+	</ul>
+	
+	<div id="notifications">
+		<p class="user_role_boxes">
+			Select the events that you want to receive E-mail notifications for:<br /><br />
+			<label for="noti_assigned_task"><?php echo $this->form->noti_assigned_task; ?> When I am assigned to a new task.</label><br />
+			<label for="noti_status_task"><?php echo $this->form->noti_status_task; ?> When the status of one of my tasks changes.</label><br />
+			<label for="noti_priority_task"><?php echo $this->form->noti_priority_task; ?> When the priority of one of my tasks changes.</label><br />
+			<label for="noti_daily_task_reminder"><?php echo $this->form->noti_daily_task_reminder; ?> Daily task reminder.</label><br />
+			<label for="noti_add_proj_team"><?php echo $this->form->noti_add_proj_team; ?> When I am added to a project team.</label><br />
+			<label for="noti_remove_proj_team"><?php echo $this->form->noti_remove_proj_team; ?> When I am removed from a project team.</label><br />
+			<label for="noti_file_uploaded"><?php echo $this->form->noti_file_uploaded; ?> When a file is uploaded.</label><br />
+			<label for="noti_file_revision_uploaded"><?php echo $this->form->noti_file_revision_uploaded; ?> When a file revision is uploaded.</label>					
+		</p>
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>	
+	</div>	
+	
+	<div id="date_time">
+		<p>
+			<label for="timezone">Timezone</label>
+			<?php echo $this->form->timezone; ?>
+		</p>
+		
+		<p>
+			<label for="date_format">Date Format</label>
+			<?php echo $this->form->date_format; ?>
+		</p>	
+		
+		<p style="display: none" id="date_format_custom_p">
+			<label for="date_format_customt">Custom Date Format</label>
+			<?php echo $this->form->date_format_custom; ?> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'settings', 'page' => 'date_format'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Date Formats');?></a> 
+		</p>			
+		
+		<p>
+			<label for="time_format">Time Format</label>
+			<?php echo $this->form->time_format; ?> 
+		</p>
+		
+		<p style="display: none" id="time_format_custom_p">
+			<label for="time_format_customt">Custom Time Format</label>
+			<?php echo $this->form->time_format_custom; ?> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'settings', 'page' => 'time_format'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Time Formats');?></a> 
+		</p>
+		
+		<p><label for="enable_rel_time"><?php echo $this->form->enable_rel_time; ?> Enable relative time.</label></p>
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>	
+	</div>
+	
+	<div id="misc">
+		<p><label for="enable_contextual_help"><?php echo $this->form->enable_contextual_help; ?> Enable contextual help.</label></p>
+	
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>		
+	</div>
+
+</div>	
+
+<script type="text/javascript">
+jQuery(document).ready(function($){
+
+	if($("#time_format").val() == 'custom')
+	{
+		$("#time_format_custom_p").show();
+	}
+
+	if($("#date_format").val() == 'custom')
+	{
+		$("#date_format_custom_p").show();
+	}	
+		
+	$("#time_format").change(function(){
+		//$("#assignment_comment").show();
+		var time_format = $("#time_format").val();
+		if(time_format == 'custom')
+		{
+			$("#time_format_custom_p").show();
+		}
+		else
+		{
+			$("#time_format_custom_p").hide();
+		}
+	});
+
+	$("#date_format").change(function(){
+		//$("#assignment_comment").show();
+		var date_format = $("#date_format").val();
+		if(date_format == 'custom')
+		{
+			$("#date_format_custom_p").show();
+		}
+		else
+		{
+			$("#date_format_custom_p").hide();
+		}
+	});	
+
+	$.validator.addMethod( 'valDateFormatCustom', function(value,element) {
+		if($("#date_format").val() == 'custom' && $("#date_format_custom").val() == '')
+		{
+			return false;
+		}
+		return true;
+	});
+	$.validator.addMethod( 'valTimeFormatCustom', function(value,element) {
+		if($("#time_format").val() == 'custom' && $("#time_format_custom").val() == '')
+		{
+			return false;
+		}
+		return true;
+	});
+	
+	$('#form_settings').validate({
+			rules: {
+				date_format_custom: 'valDateFormatCustom',
+				time_format_custom: 'valTimeFormatCustom'
+			},
+			messages: {
+				date_format_custom: "required",
+				time_format_custom: "required"
+			}
+	});
+		
+});
+</script>		
+</form>	

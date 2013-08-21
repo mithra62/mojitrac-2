@@ -1,0 +1,22 @@
+<div class="content_headers" style="padding-top:0px;">
+	<div class="company_header">Remove Company: <?php echo $this->company['name']?></div>		
+</div>
+<div class="attention png_bg">
+Are you sure you want to remove "<?php echo $this->company['name']?>"? This can not be undone...
+</div>
+
+<p>
+<form action="<?php echo $this->url(array('module' => 'pm','controller'=>'companies','action'=>'remove', 'id' => $this->id), null, TRUE); ?>" method="POST">
+	<input type="submit" class="submit" value="Yes" name="confirm" /> <input type="submit" class="submit" value="No" name="fail"/>
+</form>
+</p>
+
+<h2>Company Details</h2>
+<p>
+"<a href="/pm/companies/view/id/<?php echo $this->id; ?>"><?php echo $this->company['name']?></a>" contains:
+<br />
+<?php echo $this->project_count; ?> Projects<br />
+<?php echo $this->task_count; ?> Tasks<br />
+<?php echo $this->file_count; ?> Files
+
+</p>

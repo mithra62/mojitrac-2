@@ -71,16 +71,12 @@ class Module
     					'Application\Model\Auth\AuthStorage' => function($sm){
     						return new \Application\Model\Auth\AuthStorage('mojitrac');
     					},
-    			
     					'AuthService' => function($sm) {
-    						
     						$db = $sm->get('Zend\Db\Adapter\Adapter');
     						$user = new User( $db ,  new Sql($db) );
-    						
     						$authService = new AuthenticationService();
     						$authService->setAdapter(new AuthAdapter($user));
     						$authService->setStorage($sm->get('Application\Model\Auth\AuthStorage'));
-    			
     						return $authService;
     					},
     					//end Auth

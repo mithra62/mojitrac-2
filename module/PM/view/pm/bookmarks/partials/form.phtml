@@ -1,0 +1,77 @@
+<style>
+#loading
+{
+	display:none;
+}
+</style>
+<div id="oputput"></div>
+<form action="<?php echo $this->escape($this->form->getAction()); ?>" 
+method="<?php echo $this->escape($this->form->getMethod()) ?>" id="bookmark_form" enctype="<?php echo $this->escape($this->form->getEnctype()); ?>">
+
+<?php 
+if($this->id > 0)
+	echo '<input type="hidden" value="'.$this->id.'" name="id" />';
+?>
+<p>
+	<label for="url">URL</label>
+	<?php echo $this->form->url; ?>
+</p>
+
+<p>
+	<label for="name">Name</label>
+	<?php echo $this->form->name; ?>
+</p>
+
+<?php if($this->company): ?>
+<p>
+	<label for="company_id" id="companies">Company</label>
+	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'companies','action'=>'view', 'id' => $this->company['id']), null, TRUE); ?>"><?php echo $this->company['name']; ?></a>
+	<input type="hidden" name="company" value="<?php echo $this->company['id']; ?>" />
+</p>
+<?php endif; ?>
+
+<?php if($this->project): ?>
+<p>
+	<label for="project_id">Project</label>
+	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'view', 'id' => $this->project['id']), null, TRUE); ?>"><?php echo $this->project['name']; ?></a>
+	<input type="hidden" name="project" value="<?php echo $this->project['id']; ?>" />
+</p>
+<?php endif; ?>
+
+<?php if($this->task): ?>
+<p>
+	<label for="task_id">Task</label>
+	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id' => $this->task['id']), null, TRUE); ?>"><?php echo $this->task['name']; ?></a>
+	<input type="hidden" name="task" value="<?php echo $this->task['id']; ?>" />
+</p>
+<?php endif; ?>
+<p>
+	<label for="description">Description</label>
+	<?php echo $this->form->description; ?>
+</p>
+
+<p>
+	<input type="submit" class="submit" value="Submit" />
+</p>
+</form>	
+<script type="text/javascript">
+jQuery(document).ready(function($){
+
+	$("#bookmark_form").validate({
+		rules: {
+			name: "required",
+		    url: {
+			      required: true,
+			      url: true
+			}
+		},
+		messages: {
+			name: "Please enter a name",
+		    url: {
+			      required: "Please enter a valid URL",
+			      url: "Please enter a valid URL"
+			}			
+		}
+	});	
+});
+</script>

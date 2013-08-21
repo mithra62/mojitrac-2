@@ -1,0 +1,93 @@
+
+<form action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod()) ?>" id="proj_form">
+<input type="hidden" name="start_date_default" id="start_date_default" value="<?php echo date('Y-m-d'); ?>" />
+<input type="hidden" name="end_date_default" id="end_date_default" value="<?php echo date('Y-m-d'); ?>" />
+<?php 
+if($this->id > 0)
+	echo '<input type="hidden" value="'.$this->id.'" name="id" />';
+?>
+<div id="form_tabs">
+	<ul>
+
+		<li><a href="#general">General</a></li>
+		<li><a href="#dates">Dates</a></li>
+	</ul>
+	<div id="general">
+	
+		<p>
+			<label for="name">Name</label>
+			<?php echo $this->form->name; ?>
+		</p>
+		
+		<p>
+			<label for="company_id">Company</label>
+			<?php echo $this->form->company_id; ?>
+		</p>
+		
+		<p>
+			<label for="status">Status</label>
+			<?php echo $this->form->status; ?>
+		</p>
+		
+		<p>
+			<label for="priority">Priority</label>
+			<?php echo $this->form->priority; ?>
+		</p>
+		
+		<p>
+			<label for="type">Type</label>
+			<?php echo $this->form->type; ?>
+		</p>								
+		
+		<p>
+			<label for="description">Description</label>
+			<?php echo $this->form->description; ?>
+		</p>
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>			
+	
+	</div>
+	
+	<div id="dates">
+	
+		<p>
+			<label for="start_date">Start Date</label>
+			<?php echo $this->form->start_date; ?>
+		</p>
+		<p>
+			<label for="end_date">End Date</label>
+			<?php echo $this->form->end_date; ?>
+		</p>
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" id="proj_submit"/>
+		</p>		
+	
+	</div>
+</div>
+<?php echo $this->ConfirmPageUnload('#proj_form')?>
+</form>	
+
+<script type="text/javascript">
+$.validator.setDefaults({
+	//submitHandler: function() { alert("submitted!"); }
+});
+
+$().ready(function() {
+
+	$("#proj_form").validate({
+		rules: {
+			name: "required",
+			company_id: "required"
+		},
+		messages: {
+			name: "Please enter a project name",
+			company_id: "Please select a company"
+		}
+	});
+
+});
+
+</script>

@@ -1,0 +1,32 @@
+<div class="content_headers" style="padding-top:0px;">
+	<div class="calendar_header">Calendar</div>
+		<div class="actions">
+			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'calendar', 'page' => 'main'), null, TRUE); ?>" rel="facebox" title="About Calendar">
+				<?php echo $this->InteractIcon('help', 'About Calendar');?>
+				<div class="action_text">Help</div>
+			</a>
+		</div>	
+</div>
+<?php
+$calendar_data = array();
+foreach($this->calendar_data AS $date => $data)
+{
+	$count = 0;
+	foreach($data AS $item)
+	{
+		$calendar_data[$date][$count] = $item;
+		if($item['type'] == 'projects')
+		{
+			$calendar_data[$date][$count]['string'] = '<img src="/images/icons/database_32.png" height="12" /> '.$calendar_data[$date][$count]['string'];
+		}
+		$count++;
+	}
+}
+//print_r($calendar_data);
+echo $this->Calendar(
+						$calendar_data,
+						$this->url(array('module' => 'pm','controller'=>'calendar','action'=>'view-day'), null, FALSE),
+						'date',
+						$this->month,
+						$this->year
+					);

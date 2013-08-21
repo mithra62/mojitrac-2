@@ -1,0 +1,12 @@
+<ul>
+	<?php if($this->CheckPermission('manage_users')):?>
+		<li><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'users','action'=>'index'), null, TRUE); ?>" class="<?php echo ($this->active_sub == 'users' ? 'active' : ''); ?>">Users</a></li>
+	<?php endif; ?>
+	<?php if($this->CheckPermission('manage_roles')):?>
+		<li><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'roles','action'=>'index'), null, TRUE); ?>" class="<?php echo ($this->active_sub == 'roles' ? 'active' : ''); ?>">Roles</a></li>
+	<?php endif; ?>
+	<li><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'admin','action'=>'settings'), null, TRUE); ?>" class=" <?php echo ($this->active_sub == 'global' ? 'active' : ''); ?>">Global Settings</a></li>
+	<li><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'import','action'=>'index'), null, TRUE); ?>" class="<?php echo ($this->active_sub == 'import' ? 'active' : ''); ?>">Import Data</a></li>
+	<li><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'options','action'=>'index'), null, TRUE); ?>" class="<?php echo ($this->active_sub == 'options' ? 'active' : ''); ?>">Type Options</a></li>
+	<li><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'ips','action'=>'index'), null, TRUE); ?>" class="last <?php echo ($this->active_sub == 'ips' ? 'active' : ''); ?>">Ip Access</a></li>
+</ul>

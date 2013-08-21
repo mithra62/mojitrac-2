@@ -1,0 +1,157 @@
+<form action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod()) ?>">
+<?php 
+	if($this->id > 0)
+		echo '<input type="hidden" value="'.$this->id.'" name="id" />';
+?>	
+<div id="form_tabs">
+	<ul>
+
+		<li><a href="#general">General</a></li>
+		<li><a href="#address">Address</a></li>
+		<li><a href="#phone">Phone</a></li>
+		<li><a href="#im">IM</a></li>
+	</ul>
+	<div id="general">
+
+		<p>
+			<label for="first_name">First Name</label>
+			<?php echo $this->form->first_name; ?>
+		</p>
+		
+		<p>
+			<label for="last_name">Last Name</label>
+			<?php echo $this->form->last_name; ?>
+		</p>
+		
+		<p>
+			<label for="company_id">Company</label>
+			<?php 
+			if($this->addAction)
+			{
+				echo '<a href="/pm/companies/view/id/'.$this->company_data['id'].'" title="'.$this->company_data['name'].'">'.$this->company_data['name'].'</a>';
+				echo '<input type="hidden" name="company_id" value="'.$this->company_data['id'].'" />';
+			} else {
+				echo $this->form->company_id; 
+			}
+			
+			?>
+		</p>			
+		
+		<p>
+			<label for="email">Email</label>
+			<?php echo $this->form->email; ?>
+		</p>
+		
+		<p>
+			<label for="email2">Secondary Email</label>
+			<?php echo $this->form->email2; ?>
+		</p>	
+
+		<p>
+			<label for="url">Website</label>
+			<?php echo $this->form->url; ?>
+		</p>
+		
+		<p>
+			<label for="job_title">Title</label>
+			<?php echo $this->form->job_title; ?>
+		</p>
+		
+		<p>
+			<label for="description">Description</label>
+			<?php echo $this->form->description; ?>
+		</p>		
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>				
+	</div>
+	<div id="address">
+		
+		<p>
+			<label for="address1">Address 1</label>
+			<?php echo $this->form->address1; ?>
+		</p>
+		
+		<p>
+			<label for="address2">Address 2</label>
+			<?php echo $this->form->address2; ?>
+		</p>
+		
+		<p>
+			<label for="city">City</label>
+			<?php echo $this->form->city; ?>
+		</p>
+		
+		<p>
+			<label for="zip">Zip</label>
+			<?php echo $this->form->zip; ?>
+		</p>
+		
+		<p>
+			<label for="state">State</label>
+			<?php echo $this->form->state; ?>
+		</p>
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>		
+	
+	</div>
+	<div id="phone">
+		<p>
+			<label for="phone_home">Home</label>
+			<?php echo $this->form->phone_home; ?>
+		</p>
+			
+		<p>
+			<label for="phone2">Work</label>
+			<?php echo $this->form->phone2; ?>
+		</p>
+		
+		<p>
+			<label for="mobile">Mobile</label>
+			<?php echo $this->form->mobile; ?>
+		</p>
+		
+		<p>
+			<label for="fax">Fax</label>
+			<?php echo $this->form->fax; ?>
+		</p>
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>			
+	</div>
+	<div id="im">
+		<p>
+			<label for="jabber">Jabber</label>
+			<?php echo $this->form->jabber; ?>
+		</p>
+			
+		<p>
+			<label for="aol">AIM</label>
+			<?php echo $this->form->aol; ?>
+		</p>
+		
+		<p>
+			<label for="yahoo">Yahoo!</label>
+			<?php echo $this->form->yahoo; ?>
+		</p>
+		
+		<p>
+			<label for="google_talk">Google Talk!</label>
+			<?php echo $this->form->google_talk; ?>
+		</p>
+		
+		<p>
+			<label for="msn">MSN!</label>
+			<?php echo $this->form->msn; ?>
+		</p>				
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>			
+	</div>	
+</div>	
+</form>

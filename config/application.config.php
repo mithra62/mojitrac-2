@@ -7,9 +7,9 @@
  */
 return array(
     'modules' => array(
-        'Application',
-        'Api',
         'PM',
+        'Api',
+        'Application',
         'Clients',
     	'ZendDeveloperTools'
         ),	

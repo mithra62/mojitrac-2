@@ -1,0 +1,20 @@
+<div class="content_headers" style="padding-top:0px;">
+	<div class="task_header">Delete Task: <?php echo $this->task['name']?></div>	
+</div>
+<div class="attention png_bg">
+Are you sure you want to remove "<?php echo $this->task['name']?>"? This can not be undone...
+</div>
+
+<p>
+<form action="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'remove', 'id' => $this->id), null, TRUE); ?>" method="POST">
+	<input type="submit" class="submit" value="Yes" name="confirm" /> <input type="submit" class="submit" value="No" name="fail"/>
+</form>
+</p>
+
+<h2>Task Details</h2>
+<p>
+<a href="/pm/tasks/view/id/<?php echo $this->id; ?>"><?php echo $this->task['name']?></a> contains:
+<br />
+<?php echo $this->file_count; ?> Files
+
+</p>

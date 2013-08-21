@@ -1,0 +1,42 @@
+<form action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod()) ?>">
+<?php 
+	if($this->id > 0)
+		echo '<input type="hidden" value="'.$this->id.'" name="id" />';
+?>	
+<div id="form_tabs">
+	<ul>
+
+		<li><a href="#general">General</a></li>
+		<li><a href="#perms">Permissions</a></li>
+	</ul>
+	<div id="general">
+		
+		<p>
+			<label for="name">Name</label>
+			<?php echo $this->form->name; ?>
+		</p>
+		
+		<p>
+			<label for="description">Description</label>
+			<?php echo $this->form->description; ?>
+		</p>		
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>				
+	</div>
+	<div id="perms">
+	
+	<?php foreach($this->permissions AS $perm): ?>
+		<p>
+			<label for="<?php echo $perm['name']; ?>"><?php echo $this->form->$perm['name']; ?> <?php echo $perm['description']; ?></label>
+			
+		</p>
+	<?php endforeach; ?>
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>			
+	</div>
+</div>	
+</form>

@@ -1,0 +1,7 @@
+<ul>
+	<li><a href="<?php echo $this->url(array('module' => 'pm','controller'=>'times','action'=>'view', $this->type => $this->id), null, TRUE); ?>" class="<?php echo ($this->active_sub == '' ? 'active' : ''); ?>">All</a></li>
+	<li><a href="<?php echo $this->url(array('module' => 'pm','controller'=>'times','action'=>'view', $this->type => $this->id, 'status' => 'paid'), null, TRUE); ?>" class="<?php echo ($this->active_sub == 'paid' ? 'active' : ''); ?>">Paid</a></li>
+	<li><a href="<?php echo $this->url(array('module' => 'pm','controller'=>'times','action'=>'view', $this->type => $this->id, 'status' => 'unsent'), null, TRUE); ?>" class="<?php echo ($this->active_sub == 'unsent' ? 'active' : ''); ?>">Unpaid</a></li>
+	<li><a href="<?php echo $this->url(array('module' => 'pm','controller'=>'times','action'=>'view', $this->type => $this->id, 'status' => 'sent'), null, TRUE); ?>" class="<?php echo ($this->active_sub == 'sent' ? 'active' : ''); ?>">Pending</a></li>
+	<li><a href="<?php echo $this->url(array('module' => 'pm','controller'=>'times','action'=>'view', $this->type => $this->id, 'status' => 'unbillable'), null, TRUE); ?>" class="<?php echo 'last '.($this->active_sub == 'unbillable' ? 'active' : ''); ?>">Unbillable</a></li>
+</ul>

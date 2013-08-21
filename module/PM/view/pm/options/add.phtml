@@ -1,0 +1,15 @@
+<div class="content_headers" style="padding-top:0px;">
+	<div class="admin_header">Add Option</div>				
+</div>
+<?php if(!$this->ajax_mode): ?>
+<div class="back_link_content">
+	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'options','action'=>'index'), null, TRUE); ?>" title="Back to Options">
+		Back to Options
+	</a><div><?php echo $this->InteractIcon('left-arrow', 'Back to Options');?></div>
+</div>	
+<br clear="all" />
+<?php endif; ?>
+<?php 
+$options = array('form' => $this->form);
+echo $this->partial('options/partials/form.phtml', $options); 
+?>

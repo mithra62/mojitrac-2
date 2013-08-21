@@ -1,0 +1,26 @@
+<div class="content_headers" style="padding-top:0px;">
+	<div class="user_role_header">Remove User: <?php echo $this->user['first_name']?> <?php echo $this->user['last_name']?></div>	
+</div>
+<div class="attention png_bg">
+<?php if($this->projects_owned_count || $this->tasks_owned_count || $this->files_owned_count):?>
+You can't remove a user if there has been activity with the account; it will be changed to a status of "suspended" and they will no longer be able to login instead. 
+<?php else: ?>
+Are you sure you want to remove "<?php echo $this->user['first_name']?> <?php echo $this->user['last_name']?>"? This can not be undone...
+<?php endif; ?>
+</div>
+
+<p>
+<form action="<?php echo $this->url(array('module' => 'pm','controller'=>'users','action'=>'remove', 'id' => $this->id), null, TRUE); ?>" method="POST">
+	<input type="submit" class="submit" value="Yes" name="confirm" /> <input type="submit" class="submit" value="No" name="fail"/>
+</form>
+</p>
+
+<h2>User Details</h2>
+<p>
+<a href="/pm/users/view/id/<?php echo $this->id; ?>"><?php echo $this->user['first_name']?> <?php echo $this->user['last_name']?></a> contains:
+<br />
+<?php echo $this->projects_owned_count; ?> Projects Owned<br />
+<?php echo $this->tasks_owned_count; ?> Tasks Owned<br />
+<?php echo $this->files_owned_count; ?> Files Owned
+
+</p>

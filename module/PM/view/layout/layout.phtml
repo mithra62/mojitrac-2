@@ -1,0 +1,112 @@
+<?php echo $this->partial('layout/pm/header'); ?>
+<?php echo $this->GlobalAlerts($this->identity); echo $this->identity; ?>
+<div id="header" class="png_bg">
+  <div id="head_wrap">
+  
+  	<div id="main_menu">
+	    <div id="login">
+	    <?php 
+        	$_user_data = new Model_DbTable_Member;
+        	$user_data = $_user_data->getMember(" id = '$identity'");
+            $username = $user_data['first_name'].' '.$user_data['last_name'];
+            $return  = '<p>Welcome Back <a href="'.$this->url(array('module'=> 'pm', 'controller'=>'users','action'=>'view', 'id' => $identity), null, TRUE).'" class="highlight">'.$username.'</a> | ';
+            $return .= ' <a href="'.$this->url(array('module'=> 'pm', 'controller'=>'calendar','action'=>'index'), null, TRUE).'" class="highlight">Calendar</a> | ';
+            
+            $return .= ' <a href="'.$this->url(array('module'=> 'pm', 'controller'=>'settings','action'=>'index'), null, TRUE).'" class="highlight">Account</a>';
+            $return .=' | <a href="'.$this->url(array('module'=> 'default', 'controller'=>'login','action'=>'logout'), null, TRUE).'" class="highlight">Logout</a></p>';
+        echo $return;
+	    ?>
+		</div>
+		
+	    <div id="nav">
+	        <ul>
+	            <li><a href="/pm/" class="<?php echo ($this->active_nav == 'home' ? 'active' : '');?> png_bg">Home</a></li>
+	            <!-- <li><a href="/pm/calendar/" class="<?php echo ($this->active_nav == 'calendar' ? 'active' : '');?> png_bg">Calendar</a></li> -->
+	            <?php if($this->CheckPermission('view_companies')):?> 
+	            	<li><a href="/pm/companies/" class="<?php echo ($this->active_nav == 'companies' ? 'active' : '');?> png_bg">Companies</a></li>
+	   		 	<?php endif; ?>
+	   		 	<?php if($this->CheckPermission('view_projects')):?> 
+	   		 		<li><a href="/pm/projects" class="<?php echo ($this->active_nav == 'projects' ? 'active' : '');?> png_bg">Projects</a></li>
+	            <?php endif; ?>
+	            <!-- 
+	            <li><a href="/pm/tasks" class="<?php echo ($this->active_nav == 'tasks' ? 'active' : '');?> png_bg">Tasks</a></li>
+	            <li><a href="/pm/files" class="<?php echo ($this->active_nav == 'files' ? 'active' : '');?> png_bg">Files</a></li> 
+	             -->
+	            
+	            <?php if($this->CheckPermission('view_time')):?> 
+	            	<li><a href="/pm/times" class="<?php echo ($this->active_nav == 'time' ? 'active' : '');?> png_bg">Time</a></li>
+	            <?php endif; ?>
+	            <?php if($this->CheckPermission('admin_access')):?> 
+	            	<li><a href="/pm/admin" class="<?php echo ($this->active_nav == 'admin' ? 'active' : '');?> png_bg">Admin</a></li>
+	            <?php endif; ?>
+	        </ul>
+	    </div>
+  </div>
+    
+    
+  <div id="logo">
+  	<a href="/"><img src="<?php echo $this->StaticUrl(); ?>/images/moji_logo.png" height="70"/></a>
+  </div>    
+    
+  </div>
+   
+</div>
+	
+    <div id="sub_nav_wrap">
+        <div id="sub_nav">
+        	<?php 
+        	$options = array(
+        					 'sub_menu_options' => $this->sub_menu_options, 
+        					 'active_sub' => $this->active_sub,
+        					 'company_id' => $this->company_id,
+        					 'type' => $this->type,
+        					 'id' => $this->id
+        	);
+        	echo (isset($this->sub_menu) ? $this->partial('pm/submenus/'.$this->sub_menu.'.phtml', $options) : ''); 
+        	?>
+        </div>
+    </div>
+
+    <div id="content_wrapper">
+			<?php
+			$options = array(
+				'messages'=>$this->messages, 
+				'title'=>$this->title, 
+				'errors'=>$this->errors, 
+				'error'=>$this->error,
+				'sidebar'=>$this->sidebar,
+				'sidbar_title'=>$this->sidbar_title,
+				'header_class'=>$this->header_class
+			);
+			switch($this->layout_style)
+			{
+				case 'left':
+					echo $this->partial('pm/left.phtml', $options); 
+				break;
+				
+				case 'right':
+					echo $this->partial('pm/right.phtml', $options); 
+				break;
+
+				default:
+					echo $this->partial('pm/single.phtml', $options); 
+				break;				
+			}
+			
+			
+			?>
+      
+
+
+
+    </div><!--  end div #content_wrapper -->
+<!--  END CONTENT_WRAPPER -->
+
+
+
+
+<!--  START FOOTER -->
+<div id="footer">
+    <p>&copy; <?php echo date('Y'); ?> <a href="http://mithra62.com" target="_blank" title="mithra62.com">mithra62</a> | Build: RC1 | <a href="#">Top</a></p>
+</div>
+<?php echo $this->partial('pm/footer.phtml'); ?>

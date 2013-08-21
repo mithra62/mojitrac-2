@@ -1,0 +1,41 @@
+
+<form action="<?php echo $this->escape($this->form->getAction()); ?>" 
+method="<?php echo $this->escape($this->form->getMethod()) ?>" enctype="<?php echo $this->escape($this->form->getEnctype()); ?>">
+
+<?php 
+if($this->id > 0)
+	echo '<input type="hidden" value="'.$this->id.'" name="id" />';
+?>
+<p>
+	<label for="file">File</label>
+	<?php echo $this->form->file; ?>
+</p>
+
+<p>
+	<label for="status">Status</label>
+	<?php echo $this->form->status; ?>
+</p>
+	
+<p>
+	<label for="description">Description</label>
+	<?php echo $this->form->description; ?>
+</p>
+
+<p>
+	<input type="submit" class="submit" value="Submit" />
+</p>
+</form>	
+
+<script type="text/javascript">
+
+jQuery(document).ready(function($){
+
+	$("input[type=file]").filestyle({ 
+	     image: "<?php echo $this->StaticUrl(); ?>/images/browse.gif",
+	     imageheight : 30,
+	     imagewidth : 83,
+	     width : 347
+	 });	
+
+});
+</script>

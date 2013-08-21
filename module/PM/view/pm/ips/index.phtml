@@ -1,0 +1,38 @@
+<div class="content_headers" style="padding-top:0px;">
+	<div class="admin_header">Ip Access Manager</div>	
+		<div class="actions">
+			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'ips', 'page' => 'main'), null, TRUE); ?>" rel="facebox" title="Add Project">
+				<?php echo $this->InteractIcon('help', 'About Ip Access Manager');?>
+				<div class="action_text">Help</div>
+			</a>
+		</div>	
+		<?php if($this->CheckPermission('manage_projects')):?>
+		<div class="actions">
+			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'ips','action'=>'add'), null, FALSE); ?>" title="Add Ip Address" rel="facebox">
+				<?php echo $this->InteractIcon('add', 'Add Project');?>
+				<div class="action_text">Add Ip</div>
+			</a>
+		</div>
+		<?php endif; ?>		
+</div>
+
+
+
+<?php 
+if($this->ips):
+	if($this->ip_block_enabled != 'true'):
+?>
+	<div class="attention canhide png_bg">IP Blocking isn't enabled. Click 
+	<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'ips','action'=>'enable'), null, TRUE); ?>">here</a> to enable.</div>
+<?php 
+	endif;
+	$options = array('ips' => $this->ips, 'enable_actions' => 'yes', 'facebox' => 'yes');
+	echo $this->partial('ips/partials/ips.phtml', $options); 
+
+else: 
+?>
+
+<div class="information png_bg">There aren't any ip addresses setup yet. <?php if($this->CheckPermission('manage_projects')): ?>Want to <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'ips','action'=>'add'), null, TRUE); ?>" rel="facebox">add</a> one?.<?php endif; ?></div>
+
+<?php 
+endif; ?>

@@ -1,0 +1,93 @@
+<div class="content_headers" style="padding-top:0px;">
+	<div class="file_header">Viewing File: <?php echo $this->file['name']; ?></div>
+	<?php if($this->CheckPermission('manage_files') || $this->user_is_on_team): ?>
+	
+	<div class="actions">
+		<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'remove', 'id' => $this->id), null, TRUE); ?>" rel="facebox" title="Delete">
+			<?php echo $this->InteractIcon('cross', 'Delete');?> 
+			<div class="action_text">Delete</div>
+		</a>
+	</div>	
+	<div class="actions">
+		<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'edit', 'id' => $this->id), null, TRUE); ?>" rel="facebox" title="Edit File">
+			<?php echo $this->InteractIcon('pencil', 'Edit');?>
+			<div class="action_text">Edit</div>
+		</a>
+	</div>
+	<?php endif; ?>		
+</div>
+
+<?php echo $this->Breadcrumb('file', $this->id); ?>
+
+<div class="item_details">
+    <div class="items" style="padding-left:10px;">
+    	<p>
+    		<span class="bold">Status:</span> <?php echo $this->FileStatus($this->file['status']);?><br />
+			<span class="bold">Last Modified:</span> <?php echo $this->RelativeDate($this->file['last_modified']); ?><br />
+			<span class="bold">Created Date:</span> <?php echo $this->RelativeDate($this->file['created_date']); ?> 
+    	</p>
+    </div>
+    <div class="items" style="padding-left:10px;">
+    	<p>
+			<span class="bold">Company:</span> <a href="<?php echo $this->url(array('module' => 'pm','controller'=>'companies','action'=>'view', 'id' => $this->file['company_id']), null, TRUE); ?>"><?php echo $this->file['company_name']; ?></a><br />
+			<?php if($this->file['project_name']): ?>
+			<span class="bold">Project:</span> <a href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'view', 'id' => $this->file['project_id']), null, TRUE); ?>"><?php echo $this->file['project_name']; ?></a>
+			<?php endif; ?>
+			<?php if($this->file['task_name']): ?>
+				<br /><span class="bold">Task:</span> <a href="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id' => $this->file['task_id']), null, TRUE); ?>"><?php echo $this->file['task_name']; ?></a>
+			<?php endif; ?>
+    	</p>
+    </div>
+</div>
+
+<br clear="all" />
+
+<?php if($this->file['description'] != ''): ?>
+<h2>Description:</h2>
+<p>
+<?php echo $this->FormatHtml($this->file['description']); ?>     	
+</p>
+<?php endif; ?>
+
+<div class="content_headers">
+	<div class="file_version_header">Revision History</div>	
+	<?php if($this->CheckPermission('manage_files') || $this->user_is_on_team): ?>
+	<div class="actions">
+		<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'add-revision', 'file' => $this->id), null, TRUE); ?>" rel="facebox" title="Add File Revision">
+			<?php echo $this->InteractIcon('add', 'Add Revision');?>
+			<div class="action_text">Add Revision</div>
+		</a>
+	</div>
+	<?php endif; ?>		
+</div>
+
+<?php 
+if($this->revision_history):
+	$options = array('revisions' => $this->revision_history);
+	echo $this->partial('files/partials/revisions.phtml', $options); 
+else: 
+?>
+<div class="information png_bg">There aren't any revisions yet. </div>
+<?php 
+endif;
+?>
+
+<div class="content_headers">
+	<div class="file_peer_reviews_header">Peer Reviews</div>	
+	<div class="actions">
+		<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'add-review', 'file' => $this->id), null, TRUE); ?>" rel="facebox" title="Add File Review">
+			<?php echo $this->InteractIcon('add', 'Add Review');?>
+			<div class="action_text">Add Review</div>
+		</a>
+	</div>
+</div>
+<?php 
+if($this->file_reviews):
+	$options = array('reviews' => $this->file_reviews);
+	echo $this->partial('files/partials/reviews.phtml', $options); 
+else: 
+?>
+<div class="information png_bg">There aren't any reviews yet. </div>
+<?php 
+endif;
+?>

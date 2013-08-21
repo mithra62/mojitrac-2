@@ -1,0 +1,63 @@
+<table cellpadding="0" cellspacing="0" class="<?php echo ($this->tableclass) ? $this->tableclass : 'tablesorter'; ?>" id="<?php echo ($this->tableid) ? $this->tableid : 'moji_bookmarks'; ?>">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Url</th>
+			<?php if($this->enable_project): ?>
+			<th>Project</th>
+			<?php endif;?>			
+			<?php if($this->enable_task): ?>
+			<th>Task</th>
+			<?php endif;?>			
+			<th>Added</th>
+			<th>Last Modified</th>
+			<?php if($this->enable_actions):?>
+			<th class="{sorter: false}">Actions</th>
+			<?php endif; ?>
+		</tr>
+	</thead>
+
+	<tbody>
+		<?php 
+		$i = 0;
+		foreach($this->bookmarks as $bookmark)
+		{
+		?>
+		<tr>
+			<td><a title="<?php echo $bookmark['name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'bookmarks','action'=>'view', 'id'=>$bookmark['id']), null, TRUE); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $bookmark['name']; ?></a></td>
+			<td><a title="<?php echo $bookmark['url']; ?>" href="<?php echo $bookmark['url']; ?>"><?php echo $this->Truncate($bookmark['url'], 50); ?></a></td>
+			
+			<?php if($this->enable_project): ?>
+			<td>
+				<?php if($bookmark['project_name']):?>
+					<a title="<?php echo $bookmark['project_name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=> $bookmark['project_id']), null, TRUE); ?>" ><?php echo $bookmark['project_name']; ?></a>
+				<?php else: ?>
+					N/A
+				<?php endif;?>
+			</td>
+			<?php endif;?>
+			
+			<?php if($this->enable_task): ?>
+			<td>
+				<?php if($bookmark['task_name']):?>
+					<a title="<?php echo $bookmark['task_name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id'=> $bookmark['task_id']), null, TRUE); ?>" ><?php echo $bookmark['task_name']; ?></a>
+				<?php else: ?>
+					N/A
+				<?php endif;?>			
+			</td>	
+			<?php endif;?>	
+				
+			<td><?php echo $this->RelativeDate($bookmark['created_date']); ?></td>
+			<td><?php echo $this->RelativeDate($bookmark['last_modified']); ?></td>
+			<?php if($this->enable_actions):?>
+			<td>
+			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'bookmarks','action'=>'edit', 'id'=>$bookmark['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit Bookmark');?></a>
+			<a <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> href="<?php echo $this->url(array('module' => 'pm','controller'=>'bookmarks','action'=>'remove', 'id'=>$bookmark['id']), null, TRUE); ?>" title="Delete"><?php echo $this->InteractIcon('cross', 'Remove Bookmark');?></a>
+			</td>
+			<?php endif; ?>
+		</tr>
+		<?php 
+		}
+		?>
+	</tbody>
+</table>

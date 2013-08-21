@@ -1,0 +1,91 @@
+<style>
+#loading
+{
+	display:none;
+}
+</style>
+<form id="time_form" action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod()) ?>" enctype="<?php echo $this->escape($this->form->getEnctype()); ?>">
+<div class="content_headers">
+	<div class="timetracker_header">Add Time</div>
+	<div class="actions">
+		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'times', 'page' => 'add'), null, TRUE); ?>" rel="facebox" title="Add Project">
+			<?php echo $this->InteractIcon('help', 'About Existing Time');?>
+			<div class="action_text">Help</div>
+		</a>
+	</div>	
+	<div class="actions" style="padding-top:0;">	
+		<label><?php echo $this->form->billable; ?> <div style="padding-bottom:5px; float:right;">Billable</div></label>
+	</div>			
+</div>
+<input type="hidden" name="date_default" id="date_default" value="<?php echo ($this->date ? $this->date : date('Y-m-d')); ?>" />
+
+<table cellpadding="0" cellspacing="0" class="form_table">
+	<thead>
+		<tr>
+			<th style="width:60px; text-align:left">Date</th>			
+			<th style="width:30px; text-align:left">Hours</th>
+			<th style="text-align:left">Company</th>
+			<th style="padding-right:20px; text-align:left">Project</th>
+			<th style="padding-right:20px; text-align:left">Task</th>
+			<th style="text-align:left">Description</th>
+			<th></th>
+		</tr>
+	</thead>
+
+	<tbody>
+		<tr>
+			<td style="padding-top:15px;"><?php echo $this->form->date; ?></td>
+			<td style="padding-top:15px;"><?php echo $this->form->hours; ?></td>
+			<td style="padding-top:15px;"><?php echo $this->form->company_id; ?></td>
+			<td style="padding-top:15px;"><?php echo $this->form->project_id; ?></td>
+			<td style="padding-top:15px;"><div id="tasks"><?php echo $this->form->task_id; ?></div></td>
+			<td style="padding-top:15px;"><?php echo $this->form->description; ?></td>
+			<td><input type="submit" class="submit" value="Submit" /></td>
+		</tr>
+	</tbody>
+</table>
+
+</form>
+
+<script type="text/javascript">
+jQuery(document).ready(function($){
+
+	$.validator.addMethod(
+		"mysqlDate",
+		function(value, element) {
+			// put your own logic here, this is just a (crappy) example
+			return value.match(/^\d\d?\/\d\d?\/\d\d\d\d$/);
+		},
+		"Please enter a date in the format dd/mm/yyyy"
+	);
+	
+	$("#time_form").validate({
+		rules: {
+			date: 
+			{
+				required: true,
+				dateISO: true
+			},
+	
+			hours: "required",
+			description: "required",
+			company_id: "required"
+		},
+		messages: {
+			date: "Required",
+			hours: "Required",
+			description: "Required",
+			company_id: "Required"
+		}
+	});	
+
+	$("#billable_copy").click(function(e){
+		e.preventDefault();
+
+		$('#billable').is(':checked');
+		return false;
+	});
+
+		
+});
+</script>
