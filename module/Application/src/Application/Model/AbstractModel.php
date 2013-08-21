@@ -73,6 +73,13 @@ abstract class AbstractModel
 		
 	}
 	
+	public function update($table, array $what = null, array $where = null)
+	{
+		$sql = $this->db->update($table)->set($what)->where($where);
+		$updateString = $this->db->getSqlStringForSqlObject($sql);
+		return ($this->adapter->query($updateString, 'execute'));
+	}
+	
 	public function getAdapter()
 	{		
 		return $this->adapter;

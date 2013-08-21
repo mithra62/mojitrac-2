@@ -87,9 +87,6 @@ class ForgotPassword extends AbstractModel
 			return FALSE;
 		}
 		
-		print_r($user_data);
-		exit;
-		
 		if($users->upatePasswordHash($user_data['id'], $guid))
 		{
 			$mail = new Model_Mail;

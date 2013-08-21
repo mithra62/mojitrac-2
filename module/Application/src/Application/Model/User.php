@@ -260,9 +260,13 @@ class User extends AbstractModel
 	 * @param int $id
 	 */
 	public function upateLoginTime($id)
-	{
-		$sql = array('last_login' => new Zend_Db_Expr('NOW()'), 'last_modified' => new Zend_Db_Expr('NOW()'));
-		return $this->db->update($sql, "id = '$id'");
+	{		
+		$sql = array(
+				'last_login' => new \Zend\Db\Sql\Expression("NOW()"),
+				'last_modified' => new \Zend\Db\Sql\Expression("NOW()")
+		);	
+		$where = array('id' => $id);
+		return $this->update('users', $sql, $where);
 	}
 	
 	/**
@@ -272,11 +276,13 @@ class User extends AbstractModel
 	public function upatePasswordHash($id, $hash)
 	{
 		$sql = array(
-				'pw_forgotten' => new Zend_Db_Expr('NOW()'), 
+				'pw_forgotten' => new \Zend\Db\Sql\Expression("NOW()"), 
 				'forgotten_hash' => $hash, 
-				'last_modified' => new Zend_Db_Expr('NOW()')
+				'last_modified' => new \Zend\Db\Sql\Expression("NOW()")
 		);
-		return $this->db->update($sql, "id = '$id'");
+		
+		$where = array('id' => $id);
+		return $this->update('users', $sql, $where);
 	}	
 	
 	/**

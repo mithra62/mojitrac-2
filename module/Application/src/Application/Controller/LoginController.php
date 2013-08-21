@@ -59,12 +59,14 @@ class LoginController extends AbstractController
 				switch ($result->getCode())
 				{
 					case AuthenticationResult::SUCCESS:
-						return TRUE;
 
+						$user->upateLoginTime($this->getServiceLocator()->get('AuthService')->getIdentity());
 						$this->getSessionStorage()->setRememberMe(1);
 						$this->getAuthService()->setStorage($this->getSessionStorage());	
 						$this->flashMessenger()->addMessage('Login Successful!');
-						return $this->redirect()->toRoute('forgot-password');											
+						
+						return $this->redirect()->toRoute('forgot-password');	
+																
 					break;
 				
 					case AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND:
