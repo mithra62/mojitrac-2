@@ -5,16 +5,15 @@
   
   	<div id="main_menu">
 	    <div id="login">
-	    <?php 
-        	$_user_data = new Model_DbTable_Member;
-        	$user_data = $_user_data->getMember(" id = '$identity'");
-            $username = $user_data['first_name'].' '.$user_data['last_name'];
+	    <?php
+	    /**
             $return  = '<p>Welcome Back <a href="'.$this->url(array('module'=> 'pm', 'controller'=>'users','action'=>'view', 'id' => $identity), null, TRUE).'" class="highlight">'.$username.'</a> | ';
             $return .= ' <a href="'.$this->url(array('module'=> 'pm', 'controller'=>'calendar','action'=>'index'), null, TRUE).'" class="highlight">Calendar</a> | ';
             
             $return .= ' <a href="'.$this->url(array('module'=> 'pm', 'controller'=>'settings','action'=>'index'), null, TRUE).'" class="highlight">Account</a>';
             $return .=' | <a href="'.$this->url(array('module'=> 'default', 'controller'=>'login','action'=>'logout'), null, TRUE).'" class="highlight">Logout</a></p>';
         echo $return;
+        */
 	    ?>
 		</div>
 		
@@ -81,15 +80,15 @@
 			switch($this->layout_style)
 			{
 				case 'left':
-					echo $this->partial('pm/left.phtml', $options); 
+					echo $this->partial('layout/pm/left', $options); 
 				break;
 				
 				case 'right':
-					echo $this->partial('pm/right.phtml', $options); 
+					echo $this->partial('layout/pm/right', $options); 
 				break;
 
 				default:
-					echo $this->partial('pm/single.phtml', $options); 
+					echo $this->partial('layout/pm/single', $options); 
 				break;				
 			}
 			
@@ -109,4 +108,4 @@
 <div id="footer">
     <p>&copy; <?php echo date('Y'); ?> <a href="http://mithra62.com" target="_blank" title="mithra62.com">mithra62</a> | Build: RC1 | <a href="#">Top</a></p>
 </div>
-<?php echo $this->partial('pm/footer.phtml'); ?>
+<?php echo $this->partial('layout/pm/footer'); ?>

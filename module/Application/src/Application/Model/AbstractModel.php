@@ -14,6 +14,8 @@ namespace Application\Model;
 
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
  /**
  * Model Abstract
@@ -24,7 +26,7 @@ use Zend\Db\Sql\Sql;
  * @author		Eric Lamb
  * @filesource 	./moji/application/models/Abstract.php
  */
-abstract class AbstractModel
+abstract class AbstractModel implements ServiceLocatorAwareInterface
 {
 	/**
 	 * The database object
@@ -94,23 +96,11 @@ abstract class AbstractModel
 		return $this->adapter;
 	}
 	
-	/**
-	 * Wraps up the Event functionality nice and tidy
-	 * @param Zend_EventManager_EventCollection $events
-	 * @return Ambigous <Zend_EventManager_EventManager, Zend_EventManager_EventCollection>
-	 */
-	public function events(Zend_EventManager_EventCollection $events = null)
-	{
-		if (null !== $events) {
-			$this->events = $events;
-		} elseif (null === $this->events) {
-			$this->events = Zend_Registry::get('event_manager');
-		}
-		return $this->events;
+	public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
+		$this->serviceLocator = $serviceLocator;
 	}
-
-	public function event($name, $obj, $argv)
-	{
-		return $this->events()->trigger($name, $obj, $argv);
-	}
+	
+	public function getServiceLocator() {
+		return $this->serviceLocator;
+	}	
 }

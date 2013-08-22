@@ -82,6 +82,7 @@ return array(
 	    'invokables' => array(
 	    	'StaticUrl' => 'Application\View\Helper\StaticUrl',
 	    	'GlobalAlerts' => 'PM\View\Helper\GlobalAlerts',
+	    	'CheckPermission' => 'PM\View\Helper\CheckPermission',
 	    ),
     ),    
     // Placeholder for console routes

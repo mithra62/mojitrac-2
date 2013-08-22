@@ -6,7 +6,7 @@
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
- * @version		1.0
+ * @version		2.0
  * @filesource 	./moji/application/controllers/AbstractPmController.php
  */
 
@@ -62,6 +62,12 @@ abstract class AbstractPmController extends AbstractController
 		
 		$settings = new Settings($this->getAdapter(), new Sql($this->getAdapter()));
 		$this->settings = $settings->getSettings();	
+		
+		$this->layout()->setVariable('messages',  $this->flashMessenger()->getMessages());
+		$this->layout()->setVariable('layout_style', 'left');
+		$this->layout()->setVariable('sidebar', 'dashboard');
+		$this->layout()->setVariable('active_nav', 'home');
+		$this->layout()->setVariable('sub_menu', 'dashboard');		
 		
 		return parent::onDispatch( $e );
 	}	

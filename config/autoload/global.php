@@ -32,5 +32,8 @@ return array(
 					'Zend\Db\Adapter\Adapter'
 					=> 'Zend\Db\Adapter\AdapterServiceFactory',
 			),
+			'invokables' => array(
+					'Zend\Authentication\AuthenticationService' => 'Zend\Authentication\AuthenticationService',
+			),			
 	),
 );

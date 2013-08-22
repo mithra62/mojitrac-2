@@ -1,5 +1,31 @@
 <?php
-class PM_Model_Permissions extends Model_Abstract
+ /**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		1.0
+ * @filesource 	./moji/application/modules/pm/models/User.php
+ */
+
+namespace Application\Model;
+
+use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Adapter\Adapter;
+use Application\Model\AbstractModel;
+use Application\Model\Hash;
+
+ /**
+ * PM - User Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./moji/application/modules/pm/models/User.php
+ */
+class PM_Model_Permissions extends AbstractModel
 {
 	private $permissions;
 	
