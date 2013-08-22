@@ -68,9 +68,18 @@ abstract class AbstractModel
 		}
 	}
 	
-	public function getRows()
+	public function getRows($sql)
 	{
-		
+		$selectString = $this->db->getSqlStringForSqlObject($sql);
+		$result = $this->adapter->query($selectString, 'execute')->toArray();
+		if(!empty($result))
+		{
+			return $result;
+		}
+		else
+		{
+			return array();
+		}		
 	}
 	
 	public function update($table, array $what = null, array $where = null)

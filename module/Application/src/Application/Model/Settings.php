@@ -6,18 +6,24 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/forms/Settings.php
+* @version		2.0
+ * @filesource 	./module/Application/src/Application/Model/Settings.php
 */
+
+namespace Application\Model;
+
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Adapter\Adapter;
 
 /**
 * Setting Model
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/models/Settings.php
+ * @filesource 	./module/Application/src/Application/Model/Settings.php
 */
-class Model_Settings
+class Settings extends AbstractModel
 {
 	/**
 	 * The link to the database object
@@ -70,19 +76,10 @@ class Model_Settings
 	/**
 	 * The Constructor
 	 */
-	public function __construct()
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db)
 	{
-		
-		$c = new Model_Cache;
-		// getting a Zend_Cache_Core object
-		$this->cache = Zend_Cache::factory(
-	                    $c->getFrontendType(),
-	                    $c->getBackendType(),
-	                    $c->getFrontendOptions(),
-	                    $c->getBackendOptions()
-		);		
-			
-		$this->db = new Model_DbTable_Settings;
+		parent::__construct($adapter);
+		$this->db = $db;
 	}
 	
 	/**
@@ -184,12 +181,8 @@ class Model_Settings
 	 */
 	public function getSettings()
 	{
-		if(!$settings = $this->cache->load('pm_settings')) {
-			$sql = $this->db->select()->from(array('s' => $this->db->getTableName()), array('option_name', 'option_value'));
-			$settings = $this->_translateSettings($this->db->getSettings($sql));
-			$this->cache->save($settings, 'pm_settings');
-		}
-				
+		$sql = $this->db->select()->from(array('s' => 'settings'))->columns( array('option_name', 'option_value'));
+		$settings = $this->_translateSettings($this->getRows($sql));
 		return $settings;
 	}
 	

@@ -12,7 +12,12 @@
 
 namespace PM\Controller;
 
+use Application\Adapter\AuthAdapter;
+use Zend\XmlRpc\Value\ArrayValue;
+use Zend\Db\Sql\Sql;
+
 use Application\Controller\AbstractController;
+use Application\Model\Settings;
 
  /**
  * Default - AbstractPmController Controller
@@ -23,6 +28,30 @@ use Application\Controller\AbstractController;
  */
 abstract class AbstractPmController extends AbstractController
 {	
+	/**
+	 * Session
+	 * @var object
+	 */
+	protected $session;
+	
+	/**
+	 * Permission Object
+	 * @var object
+	 */
+	protected $perm;
+	
+	/**
+	 * Settings array
+	 * @var array
+	 */
+	protected $settings;
+	
+	/**
+	 * Preferences array
+	 * @var array
+	 */
+	protected $prefs;
+		
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
 		$this->identity = $this->getServiceLocator()->get('AuthService')->getIdentity();
@@ -30,6 +59,9 @@ abstract class AbstractPmController extends AbstractController
 		{
 			return $this->redirect()->toRoute('login');
 		}
+		
+		$settings = new Settings($this->getAdapter(), new Sql($this->getAdapter()));
+		$this->settings = $settings->getSettings();	
 		
 		return parent::onDispatch( $e );
 	}	
