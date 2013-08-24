@@ -98,7 +98,7 @@ return array(
 	    	'GlobalAlerts' => 'PM\View\Helper\GlobalAlerts',
 	    	'CheckPermission' => 'PM\View\Helper\CheckPermission',
 	    	'DashboardTimeline' => 'PM\View\Helper\DashboardTimeline',
-	    	'ProjectStatus' => 'PM\View\Helper\ProjectStatus',
+	    	'InteractIcon' => 'PM\View\Helper\InteractIcon',
 	    ),
     ),    
     // Placeholder for console routes

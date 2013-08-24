@@ -1,16 +1,46 @@
-<?php
-class Zend_View_Helper_InteractIcon
+<?php 
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/View/Helper/InteractIcon.php
+ */
+
+namespace PM\View\Helper;
+
+use Zend\View\Helper\AbstractHelper;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Application\Model\Auth\AuthAdapter;
+use Application\View\Helper\AbstractViewHelper;
+
+ /**
+ * PM - Interact Icon View Helper
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/View/Helper/InteractIcon.php
+ */
+class InteractIcon extends AbstractViewHelper
 {
     public $view;
     
     private $return = array('img','url');
 
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->view = $view;
-    }
-    	
-	function InteractIcon($type, $alt, $atts = FALSE, $return = 'img')
+    /**
+     * Creates an icon image HTML tag (<img />) based on $type
+     * @param string $type
+     * @param string $alt
+     * @param string $atts
+     * @param string $return
+     * @return string
+     */
+	function __invoke($type, $alt, $atts = FALSE, $return = 'img')
 	{
 		if(!in_array($return, $this->return))
 		{
