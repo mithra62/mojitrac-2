@@ -61,7 +61,7 @@
         					 'type' => $this->type,
         					 'id' => $this->id
         	);
-        	echo (isset($this->sub_menu) ? $this->partial('pm/submenus/'.$this->sub_menu.'.phtml', $options) : ''); 
+        	echo (isset($this->sub_menu) ? $this->partial('layout/pm/submenus/'.$this->sub_menu, $options) : ''); 
         	?>
         </div>
     </div>

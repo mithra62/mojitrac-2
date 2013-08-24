@@ -6,25 +6,25 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/modules/pm/controllers/DocsController.php
+* @version		2.0
+* @filesource 	./module/PM/src/PM/Controller/DocsController.php
 */
 
-/**
- * Include the Abstract library
- */
-include_once 'Abstract.php';
+namespace PM\Controller;
 
+use PM\Controller\AbstractPmController;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 /**
-* PM - Docs Controller
+* PM - Index Controller
 *
-* Routes the Docs requests
+* Routes the Home requests
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/controllers/DocsController.php
+* @filesource 	./module/PM/src/PM/Controller/DocsController.php
 */
-class Pm_DocsController extends PM_Abstract
+class DocsController extends AbstractPmController
 {
 	
 	private $page;

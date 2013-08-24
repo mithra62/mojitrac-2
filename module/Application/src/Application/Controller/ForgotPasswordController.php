@@ -74,8 +74,8 @@ class ForgotPasswordController extends AbstractController
     
     public function indexAction()
     {
-    	$fp = new ForgotPassword($this->getAdapter());
-    	$form = new ForgotPasswordForm();
+    	$fp = $this->getServiceLocator()->get('Application\Model\ForgotPassword');
+    	$form = $this->getServiceLocator()->get('Application\Model\ForgotPasswordForm'); 
     	$request = $this->getRequest();
     	
     	if ($this->getRequest()->isPost()) 

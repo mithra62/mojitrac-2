@@ -40,12 +40,12 @@ class LoginController extends AbstractController
 	
     public function indexAction() 
     {   	
-    	$form = new LoginForm();
+    	$form = $this->getServiceLocator()->get('Application\Form\LoginForm');
     	$request = $this->getRequest();
     	if ($request->isPost())
     	{	
-    		$user = new User($this->getAdapter(), new Sql($this->getAdapter()));
-			$login = new Login($user);
+    		$user = $this->getServiceLocator()->get('Application\Model\User');
+			$login = $this->getServiceLocator()->get('Application\Model\Login');
 			$login->setAuthAdapter($this->getAdapter());
 			$form->setInputFilter($login->getInputFilter());
 			$form->setData($request->getPost());
@@ -53,8 +53,10 @@ class LoginController extends AbstractController
 			{
 				$data = $form->getData();
 				
-				$this->getAuthService()->getAdapter()->setIdentity($request->getPost('email'))
+				$this->getAuthService()->getAdapter()
+									   ->setIdentity($request->getPost('email'))
 									   ->setCredential($request->getPost('password'));
+				
 				$result = $this->getAuthService()->authenticate();
 				switch ($result->getCode())
 				{
@@ -65,7 +67,7 @@ class LoginController extends AbstractController
 						$this->getAuthService()->setStorage($this->getSessionStorage());	
 						$this->flashMessenger()->addMessage('Login Successful!');
 						
-						return $this->redirect()->toRoute('forgot-password');	
+						return $this->redirect()->toRoute('pm');	
 																
 					break;
 				

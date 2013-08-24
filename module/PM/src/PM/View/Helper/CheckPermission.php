@@ -7,56 +7,39 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/View//Helper/GlobalAlerts.php
+ * @filesource 	./module/PM/src/PM/View/Helper/CheckPermission.php
  */
 
 namespace PM\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Application\Model\Auth\AuthAdapter;
+use Application\View\Helper\AbstractViewHelper;
 
  /**
- * PM - Global Alerts View Helper
+ * PM - Check Permission View Helper
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/PM/View//Helper/GlobalAlerts.php
+ * @filesource 	./module/PM/src/PM/View/Helper/CheckPermission.php
  */
-class CheckPermission extends AbstractHelper 
+class CheckPermission extends AbstractViewHelper
 {
-	public $auth;
-	
-	function __invoke($permission)
+	public function __invoke($permission)
 	{
-		$view = $this->getView();
-		echo $view->identity;
-		exit;
-		$identity = Zend_Auth::getInstance()->getIdentity();
-		return $this->check($identity, $permission);
+		return $this->getPermissions()->check($this->getIdentity(), $permission);
 	}
-	
-	/**
-	 * Set the flash messenger plugin
-	 *
-	 * @param  PluginFlashMessenger $pluginFlashMessenger
-	 * @return FlashMessenger
-	 */
-	public function setPluginFlashMessenger(PluginFlashMessenger $pluginFlashMessenger)
+
+	public function getPermissions()
 	{
-		$this->pluginFlashMessenger = $pluginFlashMessenger;
-		return $this;
-	}
-	
-	/**
-	 * Get the flash messenger plugin
-	 *
-	 * @return PluginFlashMessenger
-	 */
-	public function getPluginFlashMessenger()
-	{
-		if (null === $this->pluginFlashMessenger) {
-			$this->setPluginFlashMessenger(new PluginFlashMessenger());
+		if (!$this->permissions) {
+			$helperPluginManager = $this->getServiceLocator();
+			$serviceManager = $helperPluginManager->getServiceLocator();
+			$this->permissions = $serviceManager->get('Application\Model\Permissions');
 		}
-	
-		return $this->pluginFlashMessenger;
+		return $this->permissions;
 	}
 }

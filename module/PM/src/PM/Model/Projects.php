@@ -7,17 +7,21 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		1.0
- * @filesource 	./moji/application/modules/pm/models/Projects.php
+ * @filesource 	./module/PM/src/PM/Model/Projects.php
  */
+
+namespace PM\Model;
+
+use Application\Model\AbstractModel;
 
  /**
  * PM - Projects Model
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/modules/pm/models/Projects.php
+ * @filesource 	./module/PM/src/PM/Model/Projects.php
  */
-class PM_Model_Projects extends Model_Abstract
+class Projects extends AbstractModel
 {
 	/**
 	 * The key to use for the cache items
@@ -28,10 +32,9 @@ class PM_Model_Projects extends Model_Abstract
 	/**
 	 * The PM Projects Model
 	 */
-	public function __construct(PM_Model_DbTable_Projects $db)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
-		parent::__construct();
-		$this->db = $db;
+		parent::__construct($adapter, $db);
 	}
 	
 	/**
@@ -153,17 +156,18 @@ class PM_Model_Projects extends Model_Abstract
 	 */
 	public function getAllProjects($view_type = FALSE)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('p'=>$this->db->getTableName()));
+		$sql = $this->db->select()->from(array('p'=> 'projects'));
 		
 		if(is_numeric($view_type))
 		{
-			$sql = $sql->where('p.status = ?', $view_type);
+			$sql = $sql->where(array('p.status' => $view_type));
 		} else {
-			$sql = $sql->where('p.status != ?', '6');
+			
+			$sql = $sql->where(array('p.status != 6'));
 		}
 		
-		$sql = $sql->joinLeft(array('companies'), 'p.company_id = companies.id', array('name AS company_name'));
-		return $this->db->getProjects($sql);		
+		$sql = $sql->join('companies', 'p.company_id = companies.id', array('company_name' => 'name'), 'left');
+		return $this->getRows($sql);		
 	}
 	
 	/**

@@ -6,25 +6,25 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/modules/pm/controllers/ActivityController.php
+* @version		2.0
+* @filesource 	./module/PM/src/PM/Controller/ActivityController.php
 */
 
-/**
- * Include the Abstract library
- */
-include_once 'Abstract.php';
+namespace PM\Controller;
 
+use PM\Controller\AbstractPmController;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 /**
-* PM - Activity Controller
+* PM - Activity Logs Controller
 *
-* Routes the Activity Monitor data
+* Routes the Activity Logs requests
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/controllers/ActivityController.php
+* @filesource 	./module/PM/src/PM/Controller/ActivityController.php
 */
-class PM_ActivityController extends PM_Abstract
+class ActivityController extends AbstractPmController
 {
 	/**
 	 * Class preDispatch

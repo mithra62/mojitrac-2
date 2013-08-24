@@ -40,13 +40,13 @@ class User extends AbstractModel
 	public static $permissions = FALSE;
 	
 	/**
-	 * The Users Model
-	 * @param PM_Model_DbTable_Users $db
+	 * The User Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param Sql $db
 	 */
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db)
 	{
-		parent::__construct($adapter);
-		$this->db = $db;
+		parent::__construct($adapter, $db);
 	}
 		
 	/**
@@ -180,9 +180,9 @@ class User extends AbstractModel
 	 */
 	public function getUserById($id)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('u'=>$this->db->getTableName()));
-		$sql = $sql->where('u.id = ?', $id);
-		return $this->db->getUser($sql);
+		$sql = $this->db->select()->from(array('u'=>'users'));
+		$sql = $sql->where(array('u.id' => $id));
+		return $this->getRows($sql);
 	}
 	
 	/**
@@ -453,15 +453,14 @@ class User extends AbstractModel
 	 */
 	public function getAssignedProjects($id, $start_date = FALSE)
 	{
-		$proj_team = new PM_Model_DbTable_Projects_Teams;
-		$sql = $proj_team->select()->setIntegrityCheck(false)->from(array('pt' =>$proj_team->getTableName()), array('project_id'))->where('pt.user_id = ?', $id);
-		$sql = $sql->join(array('p' => 'projects'), 'p.id = pt.project_id AND p.status != 6');	
+		$sql = $this->db->select()->from(array('pt' => 'project_teams'))->columns(array('project_id'))->where(array('pt.user_id' => $id));
+		$sql = $sql->join(array('p' => 'projects'), 'p.id = pt.project_id')->where(array('p.status != 6'));	
 		if($start_date)	
 		{
-			$sql = $sql->where('p.start_date = ?', $start_date);
+			$sql = $sql->where(array('p.start_date' => $start_date));
 		}
-		$sql = $sql->join(array('c' => 'companies'), 'p.company_id = c.id', array('name AS company_name'));
-		return $proj_team->getProjectTeamMembers($sql);
+		$sql = $sql->join(array('c' => 'companies'), 'p.company_id = c.id', array('company_name' => 'name'));
+		return $this->getRows($sql);
 	}
 	
 	/**
@@ -497,12 +496,13 @@ class User extends AbstractModel
 		$upcoming_date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d")+$upcoming, date("Y")));
 		$tomorrow_date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d")+1, date("Y")));
 		$week_date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d")+7, date("Y")));
-		$lambLib = new LambLib_Controller_Action_Helper_Utilities;
+		//$lambLib = new LambLib_Controller_Action_Helper_Utilities;
 
 		$open_tasks = $this->getOpenAssignedTasks($id);
 		foreach($open_tasks As $task)
 		{
-			$task_date = $lambLib->formatDate($task['end_date'], 'Y-m-d');
+			//$task_date = $lambLib->formatDate($task['end_date'], 'Y-m-d');
+			$task_date = $task['end_date'];
 			if($task_date == $today)
 			{
 				$user_tasks['today'][] = $task;
@@ -581,21 +581,21 @@ class User extends AbstractModel
 	 */
 	public function getOpenAssignedTasks($id, $project = FALSE, $overdue = FALSE)
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->select()->setIntegrityCheck(false)->from(array('t'=>$task->getTableName()));
-		$sql = $sql->where('assigned_to = ?', $id)->where('progress != 100 AND t.end_date != ?', '0000-00-00 00:00:00');
+		$sql = $this->db->select()->from(array('t'=> 'tasks'));
+		$sql = $sql->where(array('assigned_to' => $id))->where('progress != 100 AND t.end_date != ?', '0000-00-00 00:00:00');
 		if($project)
 		{
-			$sql = $sql->where('project_id = ?', $project);	
+			$sql = $sql->where('project_id = $project');	
 		}
-		$sql = $sql->where('t.status != ?', 4);
+		$sql = $sql->where('t.status != 4');
 		
-		$sql = $sql->joinRight(array('p' => 'projects'), 'p.id = t.project_id AND p.status NOT IN(4,5,6)', array('name AS project_name'));
-		$sql = $sql->joinLeft(array('u2' => 'users'), 'u2.id = t.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
-		$sql = $sql->joinLeft(array('u3' => 'users'), 'u3.id = t.assigned_to', array('first_name AS assigned_first_name', 'last_name AS assigned_last_name'));		
+		$sql = $sql->join(array('p' => 'projects'), 'p.id = t.project_id', array('project_name' => 'name'));
+		$sql = $sql->join(array('u2' => 'users'), 'u2.id = t.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), $sql::JOIN_LEFT);
+		$sql = $sql->join(array('u3' => 'users'), 'u3.id = t.assigned_to', array('assigned_first_name' => 'first_name','assigned_last_name' => 'last_name'), $sql::JOIN_LEFT);
 
+		$sql->where(array('p.status NOT IN(4,5,6)'));
 		$sql = $sql->order('t.end_date DESC');
-		return $task->getTasks($sql);		
+		return $this->getRows($sql);		
 	}
 	
 	private function getUsersWhere(array $where = null, array $not = null, array $orwhere = null, array $ornot = null)

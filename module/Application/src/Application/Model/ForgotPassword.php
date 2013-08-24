@@ -32,9 +32,9 @@ class ForgotPassword extends AbstractModel
 {
 	protected $inputFilter;
 	
-	public function __construct(\Zend\Db\Adapter\Adapter $db)
+	public function __construct(\Zend\Db\Adapter\Adapter $db, \Zend\Db\Sql\Sql $sql)
 	{
-		parent::__construct($db);
+		parent::__construct($db, $sql);
 	}
 
 	public function setInputFilter(InputFilterInterface $inputFilter)

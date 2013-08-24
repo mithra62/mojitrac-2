@@ -60,15 +60,72 @@ abstract class AbstractPmController extends AbstractController
 			return $this->redirect()->toRoute('login');
 		}
 		
-		$settings = new Settings($this->getAdapter(), new Sql($this->getAdapter()));
+		$settings = $this->getServiceLocator()->get('Application\Model\Settings'); 
 		$this->settings = $settings->getSettings();	
 		
+		$this->_initPrefs();
+		$this->perm = $this->getServiceLocator()->get('Application\Model\Permissions');
+				
 		$this->layout()->setVariable('messages',  $this->flashMessenger()->getMessages());
 		$this->layout()->setVariable('layout_style', 'left');
 		$this->layout()->setVariable('sidebar', 'dashboard');
 		$this->layout()->setVariable('active_nav', 'home');
-		$this->layout()->setVariable('sub_menu', 'dashboard');		
+		$this->layout()->setVariable('sub_menu', 'dashboard');	
+		$this->_initIpBlocker();
 		
 		return parent::onDispatch( $e );
+	}
+
+	/**
+	 * Provides oversight on permission dependant requsts
+	 * @param string $permission
+	 * @param string $url
+	 */
+	public function check_permission($permission, $url = FALSE)
+	{
+		if(!$this->perm->check($this->identity, $permission))
+		{
+			if(!$url)
+			{
+				$this->_helper->redirector('index', 'index', 'pm');
+			}
+			 
+			exit;
+		}
+	}
+	
+	/**
+	 * Start up the IP Blocker
+	 */
+	protected function _initIpBlocker()
+	{
+		if(array_key_exists('enable_ip', $this->settings) && $this->settings['enable_ip'] !== FALSE)
+		{
+			$ip = new PM_Model_Ips;
+			if(!$ip->isAllowed($_SERVER['REMOTE_ADDR']))
+			{
+				exit;
+			}
+		}
+	}
+	
+	/**
+	 * Start up the preferences and settings overrides
+	 */
+	protected function _initPrefs()
+	{
+		$ud = $this->getServiceLocator()->get('Application\Model\User\Data');
+		$this->prefs = $ud->getUsersData($this->identity);
+		foreach($this->settings AS $key => $value)
+		{
+			if(isset($this->prefs[$key]) && $this->prefs[$key] != '')
+			{
+				$this->settings[$key] = $this->prefs[$key];
+			}
+			else
+			{
+				$this->prefs[$key] = $this->settings[$key];
+			}
+		}
 	}	
 }

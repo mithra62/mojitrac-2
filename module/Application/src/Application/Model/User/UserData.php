@@ -1,5 +1,31 @@
 <?php
-class PM_Model_User_Data extends Model_Abstract
+ /**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		1.0
+ * @filesource 	./moji/application/modules/pm/models/User.php
+ */
+
+namespace Application\Model\User;
+
+use Zend\Db\TableGateway\TableGateway;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Adapter\Adapter;
+use Application\Model\AbstractModel;
+use Application\Model\Hash;
+
+ /**
+ * PM - User Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./moji/application/modules/pm/models/User.php
+ */
+class UserData extends AbstractModel
 {
 	/**
 	 * The link to the database object
@@ -37,12 +63,13 @@ class PM_Model_User_Data extends Model_Abstract
 			);			
 	
 	/**
-	 * The Constructor
+	 * The User UserData Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param Sql $db
 	 */
-	public function __construct()
-	{		
-		parent::__construct();		
-		$this->db = new PM_Model_DbTable_User_Data;
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db)
+	{
+		parent::__construct($adapter, $db);
 	}	
 	
 	/**
@@ -123,12 +150,9 @@ class PM_Model_User_Data extends Model_Abstract
 	 */
 	public function getUsersData($identity)
 	{
-		if(!$data = $this->cache->load($identity.'_user_data')) 
-		{
-			$sql = $this->db->select()->from(array('ud' => $this->db->getTableName()), array('option_name', 'option_value'))->where('user_id = ?', $identity);
-			$data = $this->_translateEntries($this->db->getUsersData($sql));
-			$this->cache->save($data, $identity.'_user_data');
-		}
+			$sql = $this->db->select()->from(array('ud' => 'user_data'), array('option_name', 'option_value'))->where('user_id = ?', $identity);
+			$data = $this->_translateEntries($this->getRows($sql));
+		
 		
 		return $data;
 	}

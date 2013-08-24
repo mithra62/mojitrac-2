@@ -1,11 +1,14 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
+ * mithra62 - MojiTrac
+*
+* @package		mithra62:Mojitrac
+* @author		Eric Lamb
+* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @link			http://mithra62.com/
+* @version		2.0
+* @filesource 	./module/PM/src/PM/Controller/ProjectsController.php
+*/
 
 return array(
     'router' => array(
@@ -19,45 +22,56 @@ return array(
                         'action'     => 'index',
                     ),
                 ),
-            ),          
-                        
-            // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
-            'application' => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'    => '/application',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                            ),
-                        ),
-                    ),
-                ),
             ),
+        	
+        	// Literal route named "blog", with child routes
+        	'projects' => array(
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/projects[/:company_id]',
+        			'constraints' => ['company_id' => '[0-9]*'],
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Projects',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			// Segment route for viewing one blog post
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/pm/projects/view/[:id]',
+        					'constraints' => array(
+        						'slug' => '[a-zA-Z0-9_-]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
+        			),
+        			// Literal route for viewing blog RSS feed
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'add[/:company_id]',
+        					'constraints' => ['company_id' => '[0-9]*'],
+        					'defaults' => array(
+        						'controller' => 'PM\Controller\Projects',
+        						'action' => 'add'
+        					)
+        				)
+        			)
+        		)
+        	)    		
         ),
     ),
     'controllers' => array(
         'invokables' => array(
+            'PM\Controller\Activity' => 'PM\Controller\ActivityController',
+            'PM\Controller\Admin' => 'PM\Controller\AdminController',
             'PM\Controller\Index' => 'PM\Controller\IndexController',
-            'Application\Controller\Login' => 'Application\Controller\LoginController',
-            'Application\Controller\ForgotPassword' => 'Application\Controller\ForgotPasswordController'
+            'PM\Controller\Projects' => 'PM\Controller\ProjectsController',
         ),
     ),
     'view_manager' => array(
@@ -83,6 +97,8 @@ return array(
 	    	'StaticUrl' => 'Application\View\Helper\StaticUrl',
 	    	'GlobalAlerts' => 'PM\View\Helper\GlobalAlerts',
 	    	'CheckPermission' => 'PM\View\Helper\CheckPermission',
+	    	'DashboardTimeline' => 'PM\View\Helper\DashboardTimeline',
+	    	'ProjectStatus' => 'PM\View\Helper\ProjectStatus',
 	    ),
     ),    
     // Placeholder for console routes

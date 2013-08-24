@@ -6,25 +6,26 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/modules/pm/controllers/ProjectsController.php
+* @version		2.0
+* @filesource 	./module/PM/src/PM/Controller/ProjectsController.php
 */
 
-/**
- * Include the Abstract library
- */
-include_once 'Abstract.php';
+namespace PM\Controller;
+
+use PM\Controller\AbstractPmController;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
 * PM - Projects Controller
 *
-* Routes the Projects requests
+* Routes the Project requests
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/controllers/ProjectsController.php
+* @filesource 	./module/PM/src/PM/Controller/ProjectsController.php
 */
-class Pm_ProjectsController extends PM_Abstract
+class ProjectsController extends AbstractPmController
 {
 
 	/**
@@ -51,7 +52,7 @@ class Pm_ProjectsController extends PM_Abstract
      */
 	public function indexAction()
 	{
-		$company_id = $this->_request->getParam('company', FALSE);
+		$company_id = $this->params()->fromRoute('company_id');
 		if($company_id)
 		{
 			$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
@@ -62,10 +63,10 @@ class Pm_ProjectsController extends PM_Abstract
 			}
 		}
 		
-	    $projects = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-		$view = $this->_getParam("view",FALSE);
-		$this->view->active_sub = $view;
-		$this->view->project_filter = ($view !== FALSE ? (string)$view : FALSE);
+	    $projects = $this->getServiceLocator()->get('PM\Model\Projects'); 
+		//$view = $this->_getParam("view",FALSE);
+		$this->layout()->setVariable('active_sub', $view);
+		$this->layout()->setVariable('project_filter', ($view !== FALSE ? (string)$view : FALSE));
 		if($company_id)
 		{
 			$this->view->projects = $projects->getProjectsByCompanyId($company_id);
@@ -81,7 +82,7 @@ class Pm_ProjectsController extends PM_Abstract
 		{
 			if($this->perm->check($this->identity, 'manage_projects'))
 	        {
-	        	$this->view->projects = $projects->getAllProjects($view);
+	        	$this->layout()->setVariable('projects', $projects->getAllProjects($view));
 	        }
 	        else
 	        {
@@ -247,7 +248,7 @@ class Pm_ProjectsController extends PM_Abstract
 	 */
 	public function addAction()
 	{
-		$company_id = $this->_request->getParam('company', FALSE);
+		$company_id = $this->params()->fromRoute('company_id');
 		$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
 		$form = $project->getProjectForm(array(
             'action' => '/pm/projects/add',

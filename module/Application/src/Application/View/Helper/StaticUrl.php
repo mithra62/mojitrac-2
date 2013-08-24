@@ -13,6 +13,11 @@
 namespace Application\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Application\Model\Auth\AuthAdapter;
+use Application\View\Helper\AbstractViewHelper;
 
  /**
  * Default - Abstract Controller
@@ -21,7 +26,7 @@ use Zend\View\Helper\AbstractHelper;
  * @author		Eric Lamb
  * @filesource 	./module/Application/view//helper/StaticUrl.php
  */
-class Staticurl extends AbstractHelper
+class Staticurl extends AbstractViewHelper
 {
 	public function __invoke()
 	{

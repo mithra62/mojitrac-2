@@ -26,7 +26,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @author		Eric Lamb
  * @filesource 	./moji/application/models/Abstract.php
  */
-abstract class AbstractModel implements ServiceLocatorAwareInterface
+abstract class AbstractModel
 {
 	/**
 	 * The database object
@@ -50,10 +50,10 @@ abstract class AbstractModel implements ServiceLocatorAwareInterface
 	
 	protected $adapter = null;
 	
-	public function __construct($adapter = null)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $sql)
 	{
 		$this->adapter = $adapter;
-		$this->db = new SQL($this->getAdapter());
+		$this->db = $sql;
 	}
 	
 	public function getRow($sql)
@@ -73,6 +73,8 @@ abstract class AbstractModel implements ServiceLocatorAwareInterface
 	public function getRows($sql)
 	{
 		$selectString = $this->db->getSqlStringForSqlObject($sql);
+		
+		//echo $selectString.'<br /><br />';
 		$result = $this->adapter->query($selectString, 'execute')->toArray();
 		if(!empty($result))
 		{
@@ -89,18 +91,15 @@ abstract class AbstractModel implements ServiceLocatorAwareInterface
 		$sql = $this->db->update($table)->set($what)->where($where);
 		$updateString = $this->db->getSqlStringForSqlObject($sql);
 		return ($this->adapter->query($updateString, 'execute'));
-	}
+	}	
 	
+
 	public function getAdapter()
-	{		
+	{
+		if (!$this->adapter) {
+			$sm = $this->getServiceLocator();
+			$this->adapter = $sm->get('Zend\Db\Adapter\Adapter');
+		}
 		return $this->adapter;
-	}
-	
-	public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
-		$this->serviceLocator = $serviceLocator;
-	}
-	
-	public function getServiceLocator() {
-		return $this->serviceLocator;
 	}	
 }

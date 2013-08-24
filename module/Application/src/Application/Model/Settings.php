@@ -78,8 +78,7 @@ class Settings extends AbstractModel
 	 */
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db)
 	{
-		parent::__construct($adapter);
-		$this->db = $db;
+		parent::__construct($adapter, $db);
 	}
 	
 	/**

@@ -1,5 +1,8 @@
 <?php
-abstract class PM_Model_Options_Abstract
+
+namespace PM\Model\Options;
+
+abstract class AbstractOptions
 {
 
 	static public function filterOptions($options)

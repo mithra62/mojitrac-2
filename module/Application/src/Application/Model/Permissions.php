@@ -15,6 +15,7 @@ namespace Application\Model;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Adapter;
+
 use Application\Model\AbstractModel;
 use Application\Model\Hash;
 
@@ -25,16 +26,15 @@ use Application\Model\Hash;
  * @author		Eric Lamb
  * @filesource 	./moji/application/modules/pm/models/User.php
  */
-class PM_Model_Permissions extends AbstractModel
+class Permissions extends AbstractModel
 {
 	private $permissions;
 	
 	public $cache_key = 'permissions';
 	
-	public function __construct()
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db)
 	{
-		parent::__construct();	
-		$this->db = new PM_Model_DbTable_User_Role_Permissions;
+		parent::__construct($adapter, $db);
 	}
 	
 	/**
@@ -49,25 +49,19 @@ class PM_Model_Permissions extends AbstractModel
 		// If I don't have any permissions, fetch them
 		if (!$this->permissions || !is_array($this->permissions)) 
 		{
-			if(!$this->permissions = $this->cache->load($id.'_permissions')) 
+			$this->permissions = array();
+			
+			$sql = $this->db->select()->from(array('urp'=>'user_role_permissions')) 
+					->columns(array('name'));
+			
+			$sql = $sql->join('user_role_2_permissions', 'user_role_2_permissions.permission_id = urp.id');
+			$sql = $sql->join('user2role', 'user2role.role_id = user_role_2_permissions.role_id');
+			
+			$sql = $sql->where(array('user2role.user_id' => $id));
+			$perms = $this->getRows($sql);
+			foreach($perms As $perm)
 			{
-				$this->permissions = array();
-				
-				$sql = $this->db->select()->setIntegrityCheck(false)->from(
-						array('urp'=>$this->db->getTableName()), 
-						array('permission' => 'name')
-				);
-				$sql = $sql->joinRight(array('user_role_2_permissions'), 'user_role_2_permissions.permission_id = urp.id', array());
-				$sql = $sql->joinRight(array('user2role'), 'user2role.role_id = user_role_2_permissions.role_id', array());
-				
-				$sql = $sql->where('user2role.user_id = ?', $id);
-				$perms = $this->db->getPermissions($sql);
-				foreach($perms As $perm)
-				{
-					$this->permissions[] = $perm['permission'];
-				}
-				
-				$this->cache->save($this->permissions, $id.'_permissions', array($this->cache_key));
+				$this->permissions[] = $perm['name'];
 			}
 		}
 

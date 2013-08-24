@@ -1,5 +1,25 @@
-<?php
-class PM_Model_Options_Projects extends PM_Model_Options_Abstract
+<?php 
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Model/Options/Projects.php
+ */
+
+namespace PM\Model\Options;
+
+/**
+ * PM - Projects Options Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Model/Options/Projects.php
+ */
+class Projects extends AbstractOptions
 {
 	static public function types()
 	{
@@ -25,7 +45,7 @@ class PM_Model_Options_Projects extends PM_Model_Options_Abstract
 	
 	static public function translateStatusId($id)
 	{
-		$status = PM_Model_Options_Projects::status();
+		$status = self::status();
 		return $status[$id];		
 	}
 	

@@ -6,8 +6,8 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/modules/pm/controllers/IndexController.php
+* @version		2.0
+* @filesource 	./module/PM/src/PM/Controller/IndexController.php
 */
 
 namespace PM\Controller;
@@ -18,11 +18,11 @@ use Zend\View\Model\ViewModel;
 /**
 * PM - Index Controller
 *
-* Routes the Index requests
+* Routes the Home requests
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/controllers/IndexController.php
+* @filesource 	./module/PM/src/PM/Controller/IndexController.php
 */
 class IndexController extends AbstractPmController
 {
@@ -33,11 +33,10 @@ class IndexController extends AbstractPmController
 		
     public function indexAction()
     {
-    	return array();
-        $user = new PM_Model_Users(new PM_Model_DbTable_Users);
+        $user = $this->getServiceLocator()->get('Application\Model\User');
 		
-		$this->view->projects = $user->getAssignedProjects($this->identity);
-		
+        $view = array();
+		$view['projects'] = $user->getAssignedProjects($this->identity);
 		$task_data = $user->getAssignedTasks($this->identity, 30);
 		
 		if ($this->getRequest()->isPost()) 
@@ -76,9 +75,11 @@ class IndexController extends AbstractPmController
     		}
 		}
 		
-		$this->view->user_data = $user->getUserById($this->identity);
-		$this->view->tasks = $task_data;
-		$this->view->identity = $this->identity;
+		$view['user_data'] = $user->getUserById($this->identity);
+		$view['tasks'] = $task_data;
+		$view['identity'] = $this->identity;
+		
+		return $view;
     }
     
     public function infoAction()

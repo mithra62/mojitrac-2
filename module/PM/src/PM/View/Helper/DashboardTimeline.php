@@ -1,16 +1,37 @@
-<?php
-class Zend_View_Helper_DashboardTimeline
-{
-	
-    public $view;
+<?php 
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/View/Helper/DashboardTimeline.php
+ */
 
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->view = $view;
-    }
+namespace PM\View\Helper;
+
+use Zend\View\Helper\AbstractHelper;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Application\Model\Auth\AuthAdapter;
+use Application\View\Helper\AbstractViewHelper;
+
+ /**
+ * PM - Global Alerts View Helper
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/View/Helper/DashboardTimeline.php
+ */
+class DashboardTimeline extends AbstractViewHelper
+{
     	
-	function DashboardTimeline()
+	public function __invoke()
 	{
+		return;
 		$filter = Zend_Registry::get('pm_activity_filter');
 
 		$identity = Zend_Auth::getInstance()->getIdentity();

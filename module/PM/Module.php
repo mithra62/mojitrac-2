@@ -5,6 +5,9 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\ModuleManager\ModuleManager;
+use Zend\Db\Sql\Sql;
+
+use PM\Model\Projects;
 
 class Module
 {
@@ -37,4 +40,17 @@ class Module
             ),
         );
     }
+    
+    public function getServiceConfig()
+    {
+    	return array(
+			'factories' => array(
+				'PM\Model\Projects' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Projects($adapter, $db);
+				}
+			),
+    	);
+    }    
 }
