@@ -1,19 +1,35 @@
-<?php
+<?php 
 /**
- * ProfileLink helper
+ * mithra62 - MojiTrac
  *
- * Call as $this->profileLink() in your layout script
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/View/Helper/ProfileMenu.php
  */
-class Zend_View_Helper_ProfileMenu
+
+namespace PM\View\Helper;
+
+use Zend\View\Helper\AbstractHelper;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Application\Model\Auth\AuthAdapter;
+use Application\View\Helper\AbstractViewHelper;
+
+/**
+ * PM - Profile Menu View Helper
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/View/Helper/ProfileMenu.php
+ */
+class ProfileMenu extends AbstractViewHelper
 {
-    public $view;
 
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->view = $view;
-    }
-
-    public function profileMenu()
+    public function __invoke()
     {
     	if(!isset($this->view->user_data))
     	{

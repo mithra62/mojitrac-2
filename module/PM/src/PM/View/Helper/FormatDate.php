@@ -1,20 +1,39 @@
-<?php
-class Zend_View_Helper_FormatDate 
-{
-    public $view;
+<?php 
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/View/Helper/FormatDate.php
+ */
 
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->view = $view;
-        $this->util = new LambLib_Controller_Action_Helper_Utilities;
-    }
-    	
+namespace PM\View\Helper;
+
+use Zend\View\Helper\AbstractHelper;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Application\Model\Auth\AuthAdapter;
+use Application\View\Helper\AbstractViewHelper;
+
+/**
+ * PM - Format Date View Helper
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/View/Helper/FormatDate.php
+ */
+class FormatDate extends AbstractViewHelper
+{   	
 	/**
 	 * Returns the human readable date if under week old
 	 * @param string $date
 	 * @return string
 	 */
-	function FormatDate($date, $include_time = FALSE)
+	function __invoke($date, $include_time = FALSE)
 	{	
 		if ( '0000-00-00 00:00:00' == $date || '0000-00-00' == $date || null == $date) 
 		{

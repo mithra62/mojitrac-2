@@ -1,5 +1,32 @@
-<?php
-class Zend_View_Helper_MakeLink
+<?php 
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/View/Helper/MakeLink.php
+ */
+
+namespace PM\View\Helper;
+
+use Zend\View\Helper\AbstractHelper;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Application\Model\Auth\AuthAdapter;
+use Application\View\Helper\AbstractViewHelper;
+
+/**
+ * PM - Make Link View Helper
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/View/Helper/MakeLink.php
+ */
+class MakeLink extends AbstractViewHelper
 {
     public $view;
     

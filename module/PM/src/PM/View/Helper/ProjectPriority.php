@@ -21,7 +21,7 @@ use Application\View\Helper\AbstractViewHelper;
 use PM\Model\Options\Projects;
 
  /**
- * PM - Check Permission View Helper
+ * PM - Project Priority View Helper
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb

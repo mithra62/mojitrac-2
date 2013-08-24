@@ -1,19 +1,35 @@
-<?php
+<?php 
 /**
- * ProfileLink helper
+ * mithra62 - MojiTrac
  *
- * Call as $this->profileLink() in your layout script
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/View/Helper/FileTypeImage.php
  */
-class Zend_View_Helper_FileTypeImage
-{
-    public $view;
 
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->view = $view;
-    }
+namespace PM\View\Helper;
+
+use Zend\View\Helper\AbstractHelper;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Application\Model\Auth\AuthAdapter;
+use Application\View\Helper\AbstractViewHelper;
+
+/**
+ * PM - File Type Image View Helper
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/View/Helper/FileTypeImage.php
+ */
+class FileTypeImage extends AbstractViewHelper
+{
     
-    public function FileTypeImage($mime)
+    public function __invoke($mime)
     {
     	
     	switch($mime)

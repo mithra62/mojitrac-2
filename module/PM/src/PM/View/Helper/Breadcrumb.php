@@ -1,10 +1,27 @@
-<?php
+<?php 
 /**
- * Breadcrumb helper
+ * mithra62 - MojiTrac
  *
- * Call as $this->Breadcrumb() in your layout script
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/View/Helper/Breadcrumb.php
  */
-class Zend_View_Helper_Breadcrumb
+
+namespace PM\View\Helper;
+
+use Zend\View\Helper\AbstractHelper;
+
+/**
+ * PM - Breadcrumb View Helper
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/View/Helper/Breadcrumb.php
+ */
+class Breadcrumb extends AbstractHelper
 {
 	/**
 	 * Contains our nav data 
@@ -63,7 +80,7 @@ class Zend_View_Helper_Breadcrumb
      * @param string $type
      * @param int $pk
      */
-    public function Breadcrumb($type, $pk)
+    public function __invoke($type, $pk)
     {
     	if(!in_array($type, $this->avail_types))
     	{

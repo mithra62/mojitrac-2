@@ -1,7 +1,29 @@
-<?php
-class Zend_View_Helper_ConfirmPageUnload
+<?php 
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/View/Helper/ConfirmPageUnload.php
+ */
+
+namespace PM\View\Helper;
+
+use Zend\View\Helper\AbstractHelper;
+
+/**
+ * PM - Confirm Page Unload View Helper
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/View/Helper/ConfirmPageUnload.php
+ */
+class ConfirmPageUnload
 {
-	function ConfirmPageUnload($id)
+	function __invoke($id)
 	{
 		$doc_id = 'document.'.str_replace('#', '', $id);
 		$data = <<<HTML

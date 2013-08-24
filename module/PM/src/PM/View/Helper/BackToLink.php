@@ -1,14 +1,29 @@
-<?php
-class Zend_View_Helper_BackToLink
-{
-    public $view;
+<?php 
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/View/Helper/BackToLink.php
+ */
 
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->view = $view;
-    }
-    
-	public function BackToLink(array $options)
+namespace PM\View\Helper;
+
+use Zend\View\Helper\AbstractHelper;
+
+ /**
+ * PM - Back To Link View Helper
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/View/Helper/BackToLink.php
+ */
+class BackToLink extends AbstractHelper
+{
+	public function __invoke(array $options)
 	{	
 		if($this->view->ajax_mode)
 		{

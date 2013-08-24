@@ -7,7 +7,7 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/View//Helper/GlobalAlerts.php
+ * @filesource 	./module/PM/View/Helper/GlobalAlerts.php
  */
 
 namespace PM\View\Helper;
@@ -19,7 +19,7 @@ use Zend\View\Helper\AbstractHelper;
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/PM/View//Helper/GlobalAlerts.php
+ * @filesource 	./module/PM/View/Helper/GlobalAlerts.php
  */
 class GlobalAlerts extends AbstractHelper
 {   	

@@ -1,7 +1,29 @@
-<?php
-class Zend_View_Helper_Calendar
+<?php 
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/View/Helper/Calendar.php
+ */
+
+namespace PM\View\Helper;
+
+use Zend\View\Helper\AbstractHelper;
+
+/**
+ * PM - Calendar View Helper
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/View/Helper/Calendar.php
+ */
+class Calendar extends AbstractHelper
 {
-	function Calendar($calendar_data = FALSE, $base_url = FALSE, $date_key = FALSE, $link_rel = 'facebox')
+	public function __invoke($calendar_data = FALSE, $base_url = FALSE, $date_key = FALSE, $link_rel = 'facebox')
 	{
 		//set the locale
 		$locale = "en_US";
