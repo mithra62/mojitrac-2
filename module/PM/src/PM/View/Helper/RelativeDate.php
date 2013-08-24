@@ -1,20 +1,42 @@
-<?php
-class Zend_View_Helper_RelativeDate extends LambLib_Controller_Action_Helper_Utilities
-{
-    public $view;
+<?php 
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/View/Helper/RelativeDate.php
+ */
 
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->view = $view;
-    }
+namespace PM\View\Helper;
+
+use Zend\View\Helper\AbstractHelper;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Application\Model\Auth\AuthAdapter;
+use Application\View\Helper\AbstractViewHelper;
+
+ /**
+ * PM - Check Permission View Helper
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/View/Helper/RelativeDate.php
+ */
+class RelativeDate extends AbstractViewHelper
+{
     	
 	/**
 	 * Returns the human readable date if under week old
 	 * @param string $date
 	 * @return string
 	 */
-	function RelativeDate($date, $include_time = FALSE)
+	function __invoke($date, $include_time = FALSE)
 	{	
+		return $date;
 		if ( '0000-00-00 00:00:00' == $date || '0000-00-00' == $date || null == $date) 
 		{
 			return 'N/A';

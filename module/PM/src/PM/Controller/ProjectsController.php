@@ -31,19 +31,19 @@ class ProjectsController extends AbstractPmController
 	/**
 	 * Class preDispatch
 	 */
-	public function preDispatch()
-	{ 
-		parent::preDispatch();
+	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
+	{
+		parent::onDispatch( $e );
         parent::check_permission('view_projects');
-        $this->view->headTitle('Projects', 'PREPEND');
-        $this->view->layout_style = 'single';
-        $this->view->sidebar = 'dashboard';
-        $this->view->sub_menu = 'projects';
-        $this->view->active_nav = 'projects';
-        $this->view->sub_menu_options = PM_Model_Options_Projects::status();
-        $this->view->uri = $this->_request->getPathInfo();
-		$this->view->active_sub = 'None';
-		$this->view->title = FALSE;          
+        $this->layout()->setVariable('layout_style', 'single');
+        $this->layout()->setVariable('sidebar', 'dashboard');
+        $this->layout()->setVariable('sub_menu', 'projects');
+        $this->layout()->setVariable('active_nav', 'projects');
+        $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
+        $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
+		$this->layout()->setVariable('active_sub', 'None');
+		    
+		return parent::onDispatch( $e );
 	}
     
     /**
@@ -82,7 +82,8 @@ class ProjectsController extends AbstractPmController
 		{
 			if($this->perm->check($this->identity, 'manage_projects'))
 	        {
-	        	$this->layout()->setVariable('projects', $projects->getAllProjects($view));
+	        	$project_data = $projects->getAllProjects(FALSE);
+	        	$this->layout()->setVariable('projects', $project_data);
 	        }
 	        else
 	        {
@@ -90,6 +91,8 @@ class ProjectsController extends AbstractPmController
 				$this->view->projects = $user->getAssignedProjects($this->identity);	    		
 	        }
 		}
+		
+		return array('projects' => $project_data);
 	}
 	
 	/**

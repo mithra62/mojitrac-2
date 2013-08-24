@@ -41,9 +41,9 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/pm/projects/view/[:id]',
+        					'route' => 'view/[:project_id]',
         					'constraints' => array(
-        						'slug' => '[a-zA-Z0-9_-]+'
+        						'slug' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'view'
@@ -99,6 +99,9 @@ return array(
 	    	'CheckPermission' => 'PM\View\Helper\CheckPermission',
 	    	'DashboardTimeline' => 'PM\View\Helper\DashboardTimeline',
 	    	'InteractIcon' => 'PM\View\Helper\InteractIcon',
+	    	'ProjectStatus' => 'PM\View\Helper\ProjectStatus',
+	    	'RelativeDate' => 'PM\View\Helper\RelativeDate',
+	    	'ProjectPriority' => 'PM\View\Helper\ProjectPriority',
 	    ),
     ),    
     // Placeholder for console routes

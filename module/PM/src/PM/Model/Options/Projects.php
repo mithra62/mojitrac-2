@@ -29,7 +29,7 @@ class Projects extends AbstractOptions
 	
 	static public function translatePriorityId($id)
 	{
-		$priority = PM_Model_Options_Projects::priorities();
+		$priority = self::priorities();
 		return $priority[$id];		
 	}
 	

@@ -26,7 +26,7 @@
 		?>
 		<tr>
 			<td>
-			<a title="<?php echo $project['name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=> $project['id']), null, TRUE); ?>"><?php echo $project['name']; ?></a>
+			<a title="<?php echo $project['name']; ?>" href="<?php echo $this->url('projects/view', array('project_id'=> $project['id'], 'company_id' => FALSE)); ?>"><?php echo $project['name']; ?></a>
 			<?php echo (!$this->enable_company && array_key_exists('company_name', $project) ? '('.$project['company_name'].')' : ''); ?>
 			</td>
 			<?php if($this->enable_company):?>
@@ -41,12 +41,12 @@
 			<td nowrap><?php echo $this->ProjectPriority($project['priority']); ?></td>
 			<?php if($this->enable_actions):?>
 			<td nowrap>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'index', 'project'=> $project['id']), null, TRUE); ?>" title="Files"><?php echo $this->InteractIcon('folder', 'Project Files');?></a>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'manage-team', 'project'=> $project['id']), null, TRUE); ?>" title="View Project Team"><?php echo $this->InteractIcon('user', 'Project Team');?></a>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'reports','action'=>'gantt', 'project'=> $project['id']), null, TRUE); ?>" title="Task Gantt" rel="facebox"><?php echo $this->InteractIcon('chart', 'Task Gantt');?></a>
+			<a href="<?php //echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'index', 'project'=> $project['id']), null, TRUE); ?>" title="Files"><?php echo $this->InteractIcon('folder', 'Project Files');?></a>
+			<a href="<?php //echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'manage-team', 'project'=> $project['id']), null, TRUE); ?>" title="View Project Team"><?php echo $this->InteractIcon('user', 'Project Team');?></a>
+			<a href="<?php //echo $this->url(array('module' => 'pm','controller'=>'reports','action'=>'gantt', 'project'=> $project['id']), null, TRUE); ?>" title="Task Gantt" rel="facebox"><?php echo $this->InteractIcon('chart', 'Task Gantt');?></a>
 			<?php if($this->CheckPermission('manage_projects')):?>
-				<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'edit', 'id'=> $project['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit');?></a>
-				<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'remove', 'id'=> $project['id']), null, TRUE); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> title="Delete"><?php echo $this->InteractIcon('cross', 'Delete');?></a>
+				<a href="<?php //echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'edit', 'id'=> $project['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit');?></a>
+				<a href="<?php //echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'remove', 'id'=> $project['id']), null, TRUE); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> title="Delete"><?php echo $this->InteractIcon('cross', 'Delete');?></a>
 			<?php endif; ?>
 			</td>
 			<?php endif; ?>	

@@ -43,10 +43,47 @@ class Module
 {
     public function onBootstrap(MvcEvent $e)
     {
-        $eventManager        = $e->getApplication()->getEventManager();
+        $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+        
+        $app = $e->getParam('application');
+        $app->getEventManager()->attach('render', array($this, 'setLayoutTitle'));        
     }
+    
+
+    /**
+     * @param  \Zend\Mvc\MvcEvent $e The MvcEvent instance
+     * @return void
+     */
+    public function setLayoutTitle($e)
+    {
+    	$matches    = $e->getRouteMatch();
+    	if(!$matches)
+    	{
+    		return;
+    	}
+    	
+    	$action     = $matches->getParam('action');
+    	$controller = $matches->getParam('controller');
+    	$module     = __NAMESPACE__;
+    	$siteName   = 'MojiTrac';
+    
+    	// Getting the view helper manager from the application service manager
+    	$viewHelperManager = $e->getApplication()->getServiceManager()->get('viewHelperManager');
+    
+    	// Getting the headTitle helper from the view helper manager
+    	$headTitleHelper   = $viewHelperManager->get('headTitle');
+    
+    	// Setting a separator string for segments
+    	$headTitleHelper->setSeparator(' - ');
+    
+    	// Setting the action, controller, module and site name as title segments
+    	$headTitleHelper->append($action);
+    	$headTitleHelper->append($controller);
+    	$headTitleHelper->append($module);
+    	$headTitleHelper->append($siteName);
+    }    
 
     public function getConfig()
     {

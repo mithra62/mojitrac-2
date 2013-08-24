@@ -29,7 +29,7 @@ if($this->projects):
 		echo $this->BackToLink($options); 	
 	endif;
 	$options = array('projects' => $this->projects, 'enable_actions' => 'yes', 'facebox' => 'yes');
-	echo $this->partial('projects/partials/projects.phtml', $options); 
+	echo $this->partial('pm/projects/partials/projects', $options); 
 
 else: 
 ?>
@@ -40,7 +40,7 @@ else:
 	<?php echo $this->ProjectStatus($this->project_filter); ?>
 	<?php endif; ?>	
 	
-projects setup yet. <?php if($this->CheckPermission('manage_projects')): ?>Want to <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'projects','action'=>'add'), null, TRUE); ?>">add</a> one?.<?php endif; ?></div>
+projects setup yet. <?php if($this->CheckPermission('manage_projects')): ?>Want to <a href="<?php echo $this->url('projects/add', array('company_id' => FALSE)); ?>">add</a> one?.<?php endif; ?></div>
 
 <?php 
 endif; ?>
