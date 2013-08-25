@@ -6,25 +6,26 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/modules/pm/controllers/SettingsController.php
+* @version		2.0
+* @filesource 	./module/PM/src/PM/Controller/SettingsController.php
 */
 
-/**
- * Include the Abstract library
- */
-include_once 'Abstract.php';
+namespace PM\Controller;
+
+use PM\Controller\AbstractPmController;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
 * PM - Settings Controller
 *
-* Routes the Settings requests
+* Routes the Home requests
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/controllers/SettingsController.php
+* @filesource 	./module/PM/src/PM/Controller/SettingsController.php
 */
-class Pm_SettingsController extends PM_Abstract
+class SettingsController extends AbstractPmController
 {
 	/**
 	 * Class preDispatch

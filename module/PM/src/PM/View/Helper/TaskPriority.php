@@ -31,7 +31,7 @@ class TaskPriority extends AbstractViewHelper
 {   	
 	function __invoke($priority)
 	{
-		$return = PM_Model_Options_Projects::translatePriorityId($priority); 
+		$return = Projects::translatePriorityId($priority); 
 		$return = '<img src="'.$this->view->StaticUrl().'/images/priorities/'.$priority.'.gif" alt="'.$return.'" title="'.$return.'" /> '.$return;
 		return $return;
 	}

@@ -6,14 +6,15 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/modules/pm/controllers/FilesController.php
+* @version		2.0
+* @filesource 	./module/PM/src/PM/Controller/FilesController.php
 */
 
-/**
- * Include the Abstract library
- */
-include_once 'Abstract.php';
+namespace PM\Controller;
+
+use PM\Controller\AbstractPmController;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
 * PM - Files Controller
@@ -22,9 +23,9 @@ include_once 'Abstract.php';
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/controllers/FilesController.php
+* @filesource 	./module/PM/src/PM/Controller/FilesController.php
 */
-class PM_FilesController extends PM_Abstract
+class FilesController extends AbstractPmController
 {
 	
 	/**
@@ -518,8 +519,10 @@ class PM_FilesController extends PM_Abstract
 		$this->view->form = $form;
 	}
 	
-	function removeAction()
+	public function removeAction()
 	{   		
+		echo 'fdsa';
+		exit;
 		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
 		$id = $this->_request->getParam('id', FALSE);
 		$confirm = $this->_getParam("confirm",FALSE);

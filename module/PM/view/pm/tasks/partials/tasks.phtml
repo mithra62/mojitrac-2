@@ -51,9 +51,9 @@
 			<?php if($this->enable_checkbox):?>
 			<td><input type="checkbox" name="task_completed[<?php echo $task['id']; ?>]" /></td>
 			<?php endif; ?>
-			<td><a title="<?php echo $task['name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id'=> $task['id']), null, TRUE); ?>"><?php echo $task['name']; ?></a></td>
+			<td><a title="<?php echo $task['name']; ?>" href="<?php echo $this->url('tasks/view', array('task_id'=> $task['id'])); ?>"><?php echo $task['name']; ?></a></td>
 			<?php if($this->enable_project):?>
-			<td><a title="<?php echo $task['project_name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=> $task['project_id']), null, TRUE); ?>"><?php echo $task['project_name']; ?></a></td>
+			<td><a title="<?php echo $task['project_name']; ?>" href="<?php echo $this->url('projects/view', array('company_id' => false, 'project_id'=> $task['project_id']), null, TRUE); ?>"><?php echo $task['project_name']; ?></a></td>
 			<?php endif; ?>
 			<td><?php echo $this->TaskPriority($task['priority']); ?></td>
 			<?php if($this->enable_status):?>

@@ -38,7 +38,6 @@ class IndexController extends AbstractPmController
         $view = array();
 		$view['projects'] = $user->getAssignedProjects($this->identity);
 		$task_data = $user->getAssignedTasks($this->identity, 30);
-		
 		if ($this->getRequest()->isPost()) 
 		{
     		$formData = $this->getRequest()->getPost();

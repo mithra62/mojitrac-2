@@ -13,6 +13,11 @@
 namespace PM\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Application\Model\Auth\AuthAdapter;
+use Application\View\Helper\AbstractViewHelper;
 
  /**
  * PM - Action Block View Helper
@@ -21,14 +26,14 @@ use Zend\View\Helper\AbstractHelper;
  * @author		Eric Lamb
  * @filesource 	./module/PM/View/Helper/ActionBlock.php
  */
-class ActionBlock extends AbstractHelper
+class ActionBlock extends AbstractViewHelper
 {
     
     public function __invoke($icon, $copy, $url, $rel = false)
     {
     	if($icon == 'help')
     	{
-    		$prefs = Zend_Registry::get('pm_prefs');
+    		//$prefs = Zend_Registry::get('pm_prefs');
     		if(isset($prefs['enable_contextual_help']) && $prefs['enable_contextual_help'] == '0')
     		{
     			return;

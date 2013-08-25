@@ -6,14 +6,15 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/modules/pm/controllers/NotesController.php
+* @version		2.0
+* @filesource 	./module/PM/src/PM/Controller/NotesController.php
 */
 
-/**
- * Include the Abstract library
- */
-include_once 'Abstract.php';
+namespace PM\Controller;
+
+use PM\Controller\AbstractPmController;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
 * PM - Notes Controller
@@ -22,9 +23,9 @@ include_once 'Abstract.php';
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/controllers/NotesController.php
+* @filesource 	./module/PM/src/PM/Controller/NotesController.php
 */
-class Pm_NotesController extends PM_Abstract
+class NotesController extends AbstractPmController
 {
 	/**
 	 * Class preDispatch

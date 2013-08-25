@@ -7,7 +7,7 @@
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
-* @filesource 	./module/PM/src/PM/Controller/ProjectsController.php
+* @filesource 	./module/PM/config/module.config.php
 */
 
 return array(
@@ -32,12 +32,520 @@ return array(
         				'action' => 'index',
         			),
         		),
-        	),        		
-        	'projects' => array(
+        	),
+        	'bookmarks' => array( //Bookmarks Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/bookmarks',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Bookmarks',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/[:bookmark_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit/[:bookmark_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),
+        		)
+        	), //end Bookmarks Routes
+			
+        	'companies' => array( //Companies Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/companies',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Companies',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/[:company_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit/[:company_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),        			
+        			'map' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/map/[:company_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'map'
+        					)
+        				)
+        			),
+        		)
+        	), //end Companies Routes
+
+        	'contacts' => array( //Contacts Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/contacts',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Contacts',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/[:contact_id]',
+        					'constraints' => array(
+        						'contact_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add/[:company_id]',
+        					'constraints' => array(
+        						'company_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit/[:contact_id]',
+        					'constraints' => array(
+        						'contact_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),
+        		)
+        	), //end Contacts Routes
+
+			'docs' => array( //Docs Routes
+				'type' => 'segment',
+				'options' => array(
+					'route' => '/pm/docs[/:action][/:type][/:page]',
+					'constraints' => array(
+						'action' => '[a-zA-Z][a-zA-Z0-9_-]*', 
+						'type' => '[a-zA-Z][a-zA-Z0-9_-]*',
+						'page' => '[a-zA-Z][a-zA-Z0-9_-]*',
+					),
+					'defaults' => array(
+						'controller' => 'PM\Controller\Docs',
+						'action' => 'index',
+					),
+				),
+			), //end Docs Routes
+
+        	'files' => array( //Files Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/files',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Files',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/[:file_id]',
+        					'constraints' => array(
+        						'file_id' => '[0-9]+'
+        					),
+        					'defaults' => array( 
+        						'controller' => 'PM\Controller\Files',
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add/[:company_id]',
+        					'constraints' => array(
+        						'company_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit/[:file_id]',
+        					'constraints' => array(
+        						'file_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),      			
+        			'download-revision' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/download-revision/[:file_id]',
+        					'constraints' => array(
+        						'file_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'downloadRevision'
+        					)
+        				)
+        			),    			
+        			'preview-revision' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/preview-revision/[:file_id]',
+        					'constraints' => array(
+        						'file_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'previewRevision'
+        					)
+        				)
+        			),    			
+        			'view-review' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view-review/[:file_id]',
+        					'constraints' => array(
+        						'file_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'viewReview'
+        					)
+        				)
+        			),
+        		)
+        	), //end Files Routes
+
+
+
+
+        	'ips' => array( //Ips Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/ips',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Ips',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/[:ip_id]',
+        					'constraints' => array(
+        						'file_id' => '[0-9]+'
+        					),
+        					'defaults' => array( 
+        						'controller' => 'PM\Controller\Ips',
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add',
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit/[:ip_id]',
+        					'constraints' => array(
+        						'ip_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),      			
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/[:ip_id]',
+        					'constraints' => array(
+        						'ip_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
+        			),    			
+        			'enable' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/enable',
+        					'defaults' => array(
+        						'action' => 'enable'
+        					)
+        				)
+        			),
+        		)
+        	), //end IP Routes
+
+
+
+        	'json' => array( //Json Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/json',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Json',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'chain-projects' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/chain-projects/[:_value]',
+        					'constraints' => array(
+        						'_value' => '[0-9]+'
+        					),
+        					'defaults' => array( 
+        						'action' => 'chainProjects'
+        					)
+        				)
+        			),
+        			'chain-tasks' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/chain-tasks/[:_value]',
+        					'defaults' => array(
+        						'action' => 'chain-tasks'
+        					)
+        				)
+        			),
+        		)
+        	), //end Json Routes
+
+
+
+
+        	'notes' => array( //Notes Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/notes',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Notes',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/[:note_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit/[:note_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),       			
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/[:note_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
+        			),
+        		)
+        	), //end Notes Routes
+
+
+        	'options' => array( //Options Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/options',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Options',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/[:option_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit/[:option_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),       			
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/[:option_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
+        			),
+        		)
+        	), //end Option Routes
+
+
+
+
+
+        	'projects' => array( //Project Routes
         		'type' => 'segment',
         		'options' => array(
         			'route' => '/pm/projects[/:company_id]',
-        			'constraints' => ['company_id' => '[0-9]*'],
+        			'constraints' => array(
+        				'company_id' => '[0-9]+'
+        			),
         			'defaults' => array(
         				'controller' => 'PM\Controller\Projects',
         				'action' => 'index'
@@ -104,8 +612,280 @@ return array(
         				)
         			)
         		)
-        	),
-        	'users' => array(
+        	), //end Project Routes
+
+
+
+        	'roles' => array( //Roles Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/roles',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Roles',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/[:role_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit/[:role_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),       			
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/[:role_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
+        			),
+        		)
+        	), //end Roles Routes
+
+        	'settings' => array( //Settings Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/settings',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Settings',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'password' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/password',
+        					'defaults' => array(
+        						'action' => 'password'
+        					)
+        				)
+        			),
+        			'prefs' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/prefs',
+        					'defaults' => array(
+        						'action' => 'prefs'
+        					)
+        				)
+        			)
+        		)
+        	), //end Settings Routes
+
+
+        	'tasks' => array( //Tasks Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/tasks',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Tasks',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/[:task_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add/[:project_id]',
+        					'constraints' => array(
+        						'project_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit/[:task_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),       			
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/[:task_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
+        			),
+        			'update-progress' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/[:task_id]/[:progress]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'updateProgress'
+        					)
+        				)
+        			),
+        		)
+        	), //end Tasks Routes
+
+
+        	'timers' => array( //Timers Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/timers',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Timers',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/[:timer_id]',
+        					'constraints' => array(
+        						'timer_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'start' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add/[:project_id]',
+        					'constraints' => array(
+        						'project_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'stop' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit/[:task_id]',
+        					'constraints' => array(
+        						'note_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),
+        		)
+        	), //end Timers Routes
+
+
+
+        	'times' => array( //Times Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/times',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Times',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/[:user_id]',
+        					'constraints' => array(
+        						'user_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
+        			),
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/[:user_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add',
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			)
+        		)
+        	), //End Times Routes
+
+        	'users' => array( //User Routes
         		'type' => 'segment',
         		'options' => array(
         			'route' => '/pm/users',
@@ -131,7 +911,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => 'remove/[:user_id]',
+        					'route' => '/remove/[:user_id]',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
@@ -143,208 +923,18 @@ return array(
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => 'add',
+        					'route' => '/add',
         					'defaults' => array(
         						'action' => 'add'
         					)
         				)
         			)
         		)
-        	),
-        	
-        	'settings' => array( //Settings Routes
-        		'type' => 'segment',
-        		'options' => array(
-        			'route' => '/pm/settings',
-        			'defaults' => array(
-        				'controller' => 'PM\Controller\Settings',
-        				'action' => 'index'
-        			),
-        		),
-        		'may_terminate' => true,
-        		'child_routes' => array(
-        			'password' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => 'password',
-        					'defaults' => array(
-        						'action' => 'password'
-        					)
-        				)
-        			),
-        			'prefs' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => 'prefs',
-        					'defaults' => array(
-        						'action' => 'prefs'
-        					)
-        				)
-        			)
-        		)
-        	), //end Settings Routes
-        	
-        	'bookmarks' => array( //Bookmarks Routes
-        		'type' => 'segment',
-        		'options' => array(
-        			'route' => '/pm/bookmarks',
-        			'defaults' => array(
-        				'controller' => 'PM\Controller\Bookmarks',
-        				'action' => 'index'
-        			),
-        		),
-        		'may_terminate' => true,
-        		'child_routes' => array(
-        			'remove' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => 'remove/[:bookmark_id]',
-        					'constraints' => array(
-        						'slug' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'remove'
-        					)
-        				)
-        			),
-        			'add' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => 'add',
-        					'constraints' => array(
-        						'slug' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'add'
-        					)
-        				)
-        			),        			
-        			'edit' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => 'edit/[:bookmark_id]',
-        					'constraints' => array(
-        						'slug' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'edit'
-        					)
-        				)
-        			),
-        		)
-        	), //end Bookmarks Routes
-			
-        	'companies' => array( //Companies Routes
-        		'type' => 'segment',
-        		'options' => array(
-        			'route' => '/pm/companies',
-        			'defaults' => array(
-        				'controller' => 'PM\Controller\Companies',
-        				'action' => 'index'
-        			),
-        		),
-        		'may_terminate' => true,
-        		'child_routes' => array(
-        			'remove' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => 'remove/[:company_id]',
-        					'constraints' => array(
-        						'slug' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'remove'
-        					)
-        				)
-        			),
-        			'add' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => 'add',
-        					'constraints' => array(
-        						'slug' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'add'
-        					)
-        				)
-        			),        			
-        			'edit' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => 'edit/[:company_id]',
-        					'constraints' => array(
-        						'slug' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'edit'
-        					)
-        				)
-        			),        			
-        			'map' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => 'map/[:company_id]',
-        					'constraints' => array(
-        						'slug' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'map'
-        					)
-        				)
-        			),
-        		)
-        	), //end Companies Routes
+        	), //End User Routes
 
-        	'contacts' => array( //Contacts Routes
-        		'type' => 'segment',
-        		'options' => array(
-        			'route' => '/pm/contacts',
-        			'defaults' => array(
-        				'controller' => 'PM\Controller\Contacts',
-        				'action' => 'index'
-        			),
-        		),
-        		'may_terminate' => true,
-        		'child_routes' => array(
-        			'remove' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => 'remove/[:contact_id]',
-        					'constraints' => array(
-        						'contact_id' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'remove'
-        					)
-        				)
-        			),
-        			'add' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => 'add/[:company_id]',
-        					'constraints' => array(
-        						'company_id' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'add'
-        					)
-        				)
-        			),        			
-        			'edit' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => 'edit/[:contact_id]',
-        					'constraints' => array(
-        						'contact_id' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'edit'
-        					)
-        				)
-        			),
-        		)
-        	), //end Contacts Routes
+
+
+
         ),
     ),
     'controllers' => array(

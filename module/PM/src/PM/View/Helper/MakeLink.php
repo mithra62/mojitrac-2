@@ -31,7 +31,6 @@ class MakeLink extends AbstractViewHelper
     	
 	public function __invoke($type, array $info)
 	{
-		return;
 		switch($type)
 		{
 			case 'user':
@@ -73,12 +72,12 @@ class MakeLink extends AbstractViewHelper
 	
 	private function makeUserLink(array $info)
 	{
-		return $this->view->url(array('module' => 'pm','controller' => 'users','action'=>'view', 'id' => $info['id']), null, TRUE);
+		return $this->view->url('users/view', array('user_id' => $info['id']));
 	}
 
 	private function makeRoleLink(array $info)
 	{
-		return $this->view->url(array('module' => 'pm','controller' => 'roles','action'=>'view', 'id' => $info['id']), null, TRUE);
+		return $this->view->url('roles/view',array('module' => 'pm','controller' => 'roles','action'=>'view', 'user_id' => $info['id']), null, TRUE);
 	}	
 	
 	private function makeUserLinkBody(array $info)

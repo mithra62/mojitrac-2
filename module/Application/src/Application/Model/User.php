@@ -587,7 +587,7 @@ class User extends AbstractModel
 	public function getOpenAssignedTasks($id, $project = FALSE, $overdue = FALSE)
 	{
 		$sql = $this->db->select()->from(array('t'=> 'tasks'));
-		$sql = $sql->where(array('assigned_to' => $id))->where('progress != 100 AND t.end_date != ?', '0000-00-00 00:00:00');
+		$sql = $sql->where(array('assigned_to' => $id,'progress != 100', 't.end_date != \'0000-00-00 00:00:00\''));
 		if($project)
 		{
 			$sql = $sql->where('project_id = $project');	

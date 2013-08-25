@@ -6,9 +6,15 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/modules/pm/controllers/JsonController.php
+* @version		2.0
+* @filesource 	./module/PM/src/PM/Controller/JsonController.php
 */
+
+namespace PM\Controller;
+
+use PM\Controller\AbstractPmController;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
 * PM - Json Controller
@@ -17,9 +23,9 @@
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/controllers/JsonController.php
+* @filesource 	./module/PM/src/PM/Controller/JsonController.php
 */
-class PM_JsonController extends Zend_Controller_Action
+class JsonController extends AbstractPmController
 {
 	/**
 	 * Handle the preDispatch

@@ -22,13 +22,13 @@ switch($this->page)
 	case 'progress':
 	case 'duration':
 	case 'type':
-		$page = $this->page.'.phtml';
+		$page = $this->page;
 	break;	
 	
 	default:
-		$page = 'main.phtml';
+		$page = 'main';
 	break;
 }
 
-echo $this->partial('docs/tasks/'.$page, $options); 
+echo $this->partial('pm/docs/tasks/'.$page, $options); 
 ?>

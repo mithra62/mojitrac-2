@@ -11,12 +11,12 @@ if($interval->days <= 30):
 	<div class="fail png_bg">You have overdue tasks!</div>
 	<div class="content_headers" style="padding-top:0px;">
 		<div class="task_header">Your Overdue Tasks</div>
-		<?php echo $this->ActionBlock('help', 'Help', $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'your-overdue-tasks'), null, TRUE), 'facebox'); ?>
+		<?php echo $this->ActionBlock('help', 'Help', $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'your-overdue-tasks'), null, TRUE), 'facebox'); ?>
 	</div>
 	<form action="" method="POST">
 	<?php 
 		$options = array('tasks' => $this->tasks['overdue'], 'enable_checkbox' => 'yes', 'enable_due' => 'yes', 'enable_project' => 'yes', 'tableid' => 'tasks_overdue');
-		echo $this->partial('tasks/partials/tasks.phtml', $options);
+		echo $this->partial('pm/tasks/partials/tasks', $options);
 	?>
 	<p>
 		<input type="submit" class="submit" value="Mark Completed" />
@@ -92,12 +92,12 @@ if($interval->days <= 30):
 <?php if(count($this->tasks['upcoming']) >= 1): ?>
 	<div class="content_headers" style="padding-top:0px;">
 		<div class="task_header">Your Upcoming Tasks</div>	
-		<?php echo $this->ActionBlock('help', 'Help', $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'your-upcoming-tasks'), null, TRUE), 'facebox'); ?>		
+		<?php echo $this->ActionBlock('help', 'Help', $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'your-upcoming-tasks'), null, TRUE), 'facebox'); ?>		
 	</div>
 	<form action="" method="POST">
 	<?php 
 		$options = array('tasks' => $this->tasks['upcoming'], 'enable_checkbox' => 'yes', 'enable_due' => 'yes', 'enable_project' => 'yes', 'tableid' => 'tasks_upcoming');
-		echo $this->partial('tasks/partials/tasks.phtml', $options);
+		echo $this->partial('pm/tasks/partials/tasks', $options);
 	?>
 	<p>
 		<input type="submit" class="submit" value="Mark Completed" />
