@@ -1,5 +1,27 @@
 <?php
-class PM_Model_Options extends Model_Abstract
+ /**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Model/Options.php
+ */
+
+namespace PM\Model;
+
+use Application\Model\AbstractModel;
+
+ /**
+ * PM - Options Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Model/Options.php
+ */
+class Options extends AbstractModel
 {
 	public $cache_key = 'options';
 	
@@ -12,26 +34,25 @@ class PM_Model_Options extends Model_Abstract
 						 'task_type' => 'task_type'
 	);
 	
-	public function __construct()
-	{	
-		parent::__construct();
-		$this->db = new PM_Model_DbTable_Options;
+	/**
+	 * The System Options
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $db
+	 */
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
+	{
+		parent::__construct($adapter, $db);
 	}
 	
 	/**
 	 * Returns all the options for the project types
 	 */
 	public function getAllProjectTypes()
-	{
-		$key = 'options_'.$this->areas['project_type'];
-		if(!$types = $this->cache->load($key)) 
-		{			
-			$sql = $this->db->select()->from(array($this->db->getTableName()), array('id', 'name'))
-									  ->where('area = ?', $this->areas['project_type'])
+	{		
+			$sql = $this->db->select()->from('options')->columns(array('id', 'name'))
+									  ->where(array('area' => $this->areas['project_type']))
 									  ->order('name ASC');
-			$types = $this->db->getOptions($sql);
-			$this->cache->save($types, $key, array($this->cache_key));
-		}
+			$types = $this->getRows($sql);
 		return $types;
 	}
 	

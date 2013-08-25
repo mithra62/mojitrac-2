@@ -1,4 +1,15 @@
 <?php
+ /**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/Module.php
+ */
+
 namespace PM;
 
 use Zend\Mvc\ModuleRouteListener;
@@ -10,7 +21,20 @@ use Zend\Db\Sql\Sql;
 use PM\Model\Projects;
 use PM\Model\Timers;
 use PM\Model\Charts;
+use PM\Model\Files;
+use PM\Model\Tasks;
+use PM\Model\Times;
+use PM\Model\Bookmarks;
+use PM\Model\Notes;
+use PM\Model\Options;
 
+/**
+ * PM - Module Object
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/Module.php
+ */
 class Module
 {
 	/**
@@ -61,7 +85,37 @@ class Module
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					return new Charts($adapter, $db);
-				}					
+				},
+				'PM\Model\Files' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Files($adapter, $db);
+				},
+				'PM\Model\Tasks' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Tasks($adapter, $db);
+				},
+				'PM\Model\Times' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Times($adapter, $db);
+				},
+				'PM\Model\Bookmarks' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Bookmarks($adapter, $db);
+				},
+				'PM\Model\Notes' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Notes($adapter, $db);
+				},
+				'PM\Model\Options' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Options($adapter, $db);
+				}							
 			),
     	);
     }    

@@ -7,17 +7,21 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		1.0
- * @filesource 	./moji/application/modules/pm/models/Task.php
+ * @filesource 	./module/PM/src/PM/Model/Tasks.php
  */
+
+namespace PM\Model;
+
+use Application\Model\AbstractModel;
 
  /**
  * PM - Tasks Model
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/modules/pm/models/Task.php
+ * @filesource 	./module/PM/src/PM/Model/Tasks.php
  */
-class PM_Model_Tasks extends Model_Abstract
+class Tasks extends AbstractModel
 {
 	/**
 	 * For passing to the DB
@@ -36,15 +40,15 @@ class PM_Model_Tasks extends Model_Abstract
 	 * @var string
 	 */
 	public $cache_key = 'tasks';
-		
+
 	/**
 	 * The Tasks Model
-	 * @param PM_Model_DbTable_Tasks $db
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $db
 	 */
-	public function __construct(PM_Model_DbTable_Tasks $db)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
-		parent::__construct();
-		$this->db = $db;
+		parent::__construct($adapter, $db);
 	}
 	
 	/**
@@ -248,8 +252,7 @@ class PM_Model_Tasks extends Model_Abstract
 
 	private function getTasksWhere(array $where = null, array $not = null, array $orwhere = null, array $ornot = null)
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->select()->setIntegrityCheck(false)->from(array('t'=>$task->getTableName()));
+		$sql = $this->db->select()->from(array('t'=> 'tasks'));
 		
 		if(is_array($where))
 		{
@@ -283,9 +286,9 @@ class PM_Model_Tasks extends Model_Abstract
 			}
 		}		
 		
-		$sql = $sql->joinLeft(array('u2' => 'users'), 'u2.id = t.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
-		$sql = $sql->joinLeft(array('u3' => 'users'), 'u3.id = t.assigned_to', array('first_name AS assigned_first_name', 'last_name AS assigned_last_name'));		
-		return $task->getTasks($sql);
+		$sql = $sql->join(array('u2' => 'users'), 'u2.id = t.creator', array('creator_first_name' => 'first_name','creator_last_name' => 'last_name'), 'left');
+		$sql = $sql->join(array('u3' => 'users'), 'u3.id = t.assigned_to', array('assigned_first_name' => 'first_name','assigned_last_name' => 'last_name'), 'left');
+		return $this->getRows($sql);
 		
 	}
 
@@ -564,13 +567,12 @@ class PM_Model_Tasks extends Model_Abstract
 	
 	public function getProjectEstimatedTime($id)
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->select()
-					->from(array('t' => $task->getTableName()), array(new Zend_Db_Expr('SUM(duration) AS estimate_time')))
-					->where('project_id = ?', $id)
-					->where('t.status != ?', 4);
+		$sql = $this->db->select()
+					->from(array('t' => 'tasks'), array('estimate_time' => new \Zend\Db\Sql\Expression('SUM(duration)')))
+					->where(array('project_id' => $id))
+					->where(array('t.status' => 4));
 					
-		$data = $task->getTask($sql);
+		$data = $this->getRow($sql);
 		if($data && is_array($data))
 		{
 			return $data['estimate_time'];

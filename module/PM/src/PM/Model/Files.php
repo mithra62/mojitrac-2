@@ -1,40 +1,37 @@
 <?php
-/**
+ /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/modules/pm/models/Files.php
-*/
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		1.0
+ * @filesource 	./module/PM/src/PM/Model/Files.php
+ */
 
-/**
-* PM - Files Model
-*
-* Returns the files model
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/models/Files.php
-*/
-class PM_Model_Files extends Model_Abstract
+namespace PM\Model;
+
+use Application\Model\AbstractModel;
+
+ /**
+ * PM - Files Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Model/Files.php
+ */
+class Files extends AbstractModel
 {
-	/**
-	 * The file datbase model
-	 * @var PM_Model_DbTable_Files
-	 */
-	public $db;
 	
 	/**
-	 * The Files fmodel
-	 * @param PM_Model_DbTable_Files $db
+	 * The Files model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $db
 	 */
-	public function __construct(PM_Model_DbTable_Files $db)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
-		parent::__construct();
-		$this->db = $db;
+		parent::__construct($adapter, $db);
 	}
 		
 	/**
@@ -186,13 +183,13 @@ class PM_Model_Files extends Model_Abstract
 	
 	private function getFilesWhere(array $where = null, array $not = null, array $orwhere = null, array $ornot = null)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('f'=>$this->db->getTableName()));
+		$sql = $this->db->select()->from(array('f'=> 'files'));
 		
 		if(is_array($where))
 		{
 			foreach($where AS $key => $value)
 			{
-				$sql = $sql->where("$key = ? ", $value);
+				$sql = $sql->where(array($key => $value));
 			}
 		}
 		
@@ -220,12 +217,12 @@ class PM_Model_Files extends Model_Abstract
 			}
 		}		
 		
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = f.project_id', array('name AS project_name'));
-		$sql = $sql->joinLeft(array('t' => 'tasks'), 't.id = f.task_id', array('name AS task_name'));
-		$sql = $sql->joinLeft(array('c' => 'companies'), 'c.id = f.company_id', array('name AS company_name'));
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = f.owner', array('first_name AS file_owner_first_name', 'last_name AS file_owner_last_name'));
+		$sql = $sql->join(array('p' => 'projects'), 'p.id = f.project_id', array('project_name' => 'name'), 'left');
+		$sql = $sql->join(array('t' => 'tasks'), 't.id = f.task_id', array('task_name' => 'name'), 'left');
+		$sql = $sql->join(array('c' => 'companies'), 'c.id = f.company_id', array('company_name' => 'name'), 'left');
+		$sql = $sql->join(array('u' => 'users'), 'u.id = f.owner', array('file_owner_first_name' => 'first_name', 'file_owner_last_name' => 'last_name'), 'left');
 		
-		return $this->db->getFiles($sql);	
+		return $this->getRows($sql);	
 		
 	}	
 

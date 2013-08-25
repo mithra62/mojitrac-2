@@ -29,8 +29,12 @@ use PM\Model\Options\Projects;
  */
 class ProjectType extends AbstractViewHelper
 {
-	function __invoke($type)
+	public function __invoke($type)
 	{
-		return PM_Model_Options_Projects::translateTypeId($type); 
+		$helperPluginManager = $this->getServiceLocator();
+		$serviceManager = $helperPluginManager->getServiceLocator();
+
+		$options = $serviceManager->get('PM\Model\Options');
+		return Projects::translateTypeId($type, $options); 
 	}
 }

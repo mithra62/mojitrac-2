@@ -1,10 +1,27 @@
 <?php
-/**
- * Times Model
- * @author Eric
+ /**
+ * mithra62 - MojiTrac
  *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		1.0
+ * @filesource 	./module/PM/src/PM/Model/Times.php
  */
-class PM_Model_Times extends Model_Abstract
+
+namespace PM\Model;
+
+use Application\Model\AbstractModel;
+
+ /**
+ * PM - Times Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Model/Times.php
+ */
+class Times extends AbstractModel
 {
 	/**
 	 * The key to use for the cache items
@@ -12,10 +29,14 @@ class PM_Model_Times extends Model_Abstract
 	 */
 	public $cache_key = 'times';
 			
-	public function __construct()
+	/**
+	 * The Times Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $db
+	 */
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
-		parent::__construct();
-		$this->db = new PM_Model_DbTable_Times;
+		parent::__construct($adapter, $db);
 	}
 	
 	/**
@@ -169,13 +190,13 @@ class PM_Model_Times extends Model_Abstract
 	 */
 	private function getTimesWhere(array $where = null, array $not = null, array $orwhere = null, array $ornot = null)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('i'=>$this->db->getTableName()));
+		$sql = $this->db->select()->from(array('i'=> 'times'));
 		
 		if(is_array($where))
 		{
 			foreach($where AS $key => $value)
 			{
-				$sql = $sql->where("$key = ? ", $value);
+				$sql = $sql->where(array($key => $value));
 			}
 		}
 		
@@ -203,12 +224,12 @@ class PM_Model_Times extends Model_Abstract
 			}
 		}		
 		
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = i.project_id', array('name AS project_name'));
-		$sql = $sql->joinLeft(array('t' => 'tasks'), 't.id = i.task_id', array('name AS task_name'));
-		$sql = $sql->joinLeft(array('c' => 'companies'), 'c.id = i.company_id', array('name AS company_name'));
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = i.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
+		$sql = $sql->join(array('p' => 'projects'), 'p.id = i.project_id', array('project_name' => 'name'));
+		$sql = $sql->join(array('t' => 'tasks'), 't.id = i.task_id', array('task_name' => 'name'));
+		$sql = $sql->join(array('c' => 'companies'), 'c.id = i.company_id', array('company_name' => 'name'));
+		$sql = $sql->join(array('u' => 'users'), 'u.id = i.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'));
 		
-		return $this->db->getTimes($sql);
+		return $this->getRows($sql);
 	}	
 	
 	/**
@@ -253,7 +274,7 @@ class PM_Model_Times extends Model_Abstract
 	 */
 	public function getTotalTimesWhere($company_id = FALSE, $user_id = FALSE, $project_id = FALSE, $task_id = FALSE)
 	{		
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('i'=>$this->db->getTableName()), array(new Zend_Db_Expr('SUM(hours) AS hours')));
+		$sql = $this->db->select()->from(array('i'=>'times'))->columns(array('hours' => new \Zend\Db\Sql\Expression('SUM(hours)')));
 		if($company_id)
 		{
 			$sql->where('i.company_id = ?', $company_id);
@@ -273,11 +294,11 @@ class PM_Model_Times extends Model_Abstract
 		{
 			$sql->where('i.task_id = ?', $task_id);
 		}		
-		$total = $this->db->getTime($sql);
+		$total = $this->getRow($sql);
 
 		
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('i'=>$this->db->getTableName()), array(new Zend_Db_Expr('SUM(hours) AS hours')));
-		$sql = $sql->where('bill_status = ?', 'sent')->where('billable = ?', 1);
+		$sql = $this->db->select()->from(array('i'=>'times'), array('hours' => new \Zend\Db\Sql\Expression('SUM(hours)')));
+		$sql = $sql->where(array('bill_status' => 'sent', 'billable' => 1));
 		if($company_id)
 		{
 			$sql->where('i.company_id = ?', $company_id);
@@ -297,10 +318,10 @@ class PM_Model_Times extends Model_Abstract
 		{
 			$sql->where('i.task_id = ?', $task_id);
 		}		
-		$sent = $this->db->getTime($sql);
+		$sent = $this->getRow($sql);
 		
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('i'=>$this->db->getTableName()), array(new Zend_Db_Expr('SUM(hours) AS hours')));
-		$sql = $sql->where('bill_status = ?', '')->where('billable = ?', 1);
+		$sql = $this->db->select()->from(array('i'=> 'times'), array('hours' => new \Zend\Db\Sql\Expression('SUM(hours)')));
+		$sql = $sql->where(array('bill_status' => '', 'billable' => 1));
 		if($company_id)
 		{
 			$sql->where('i.company_id = ?', $company_id);
@@ -320,10 +341,10 @@ class PM_Model_Times extends Model_Abstract
 		{
 			$sql->where('i.task_id = ?', $task_id);
 		}			
-		$unsent = $this->db->getTime($sql);
+		$unsent = $this->getRow($sql);
 		
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('i'=>$this->db->getTableName()), array(new Zend_Db_Expr('SUM(hours) AS hours')));
-		$sql = $sql->where('bill_status = ?', 'paid')->where('billable = ?', 1);
+		$sql = $this->db->select()->from(array('i'=>'times'), array('hours' => new \Zend\Db\Sql\Expression('SUM(hours)')));
+		$sql = $sql->where(array('bill_status' => 'paid', 'billable' => '1'));
 		if($company_id)
 		{
 			$sql->where('i.company_id = ?', $company_id);
@@ -343,7 +364,7 @@ class PM_Model_Times extends Model_Abstract
 		{
 			$sql->where('i.task_id = ?', $task_id);
 		}			
-		$paid = $this->db->getTime($sql);
+		$paid = $this->getRow($sql);
 
 		return array('total' => $total['hours'], 'sent' => $sent['hours'], 'unsent' => $unsent['hours'], 'paid' => $paid['hours']);				
 	}	

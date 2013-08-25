@@ -101,16 +101,17 @@ class ProjectsController extends AbstractPmController
 	 */
 	public function viewAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('project_id');
 		if (!$id) 
 		{
 			$this->_helper->redirector('index','projects');
 			exit;
 		}
 		
-		$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-		$this->view->project = $project->getProjectById($id);
-		if(!$this->view->project)
+		$view = array();
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+		$view['project'] = $project->getProjectById($id);
+		if(!$view['project'])
 		{
 			$this->_helper->redirector('index','projects');
 			exit;
@@ -123,42 +124,44 @@ class ProjectsController extends AbstractPmController
 			$this->_helper->redirector('index','projects');
 			exit;			
 		}
-		
-		$this->view->proj_team = $proj_team;
-		$this->view->user_is_on_team = $on_team;
-		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-		$times = new PM_Model_Times;
+	
+		$view['proj_team'] = $proj_team;
+		$view['user_is_on_team'] = $on_team;
+		$file = $this->getServiceLocator()->get('PM\Model\Files');
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+		$times = $this->getServiceLocator()->get('PM\Model\Times');
 
 		if($this->perm->check($this->identity, 'view_tasks'))
 		{		
-			$this->view->tasks = $task->getTasksByProjectId($id, null, array('status' => 6));
+			$view['tasks'] = $task->getTasksByProjectId($id, null, array('status' => 6));
 		}
 
 		if($this->perm->check($this->identity, 'view_files'))
 		{		
-			$this->view->files = $file->getFilesByProjectId($id);
+			$view['files'] = $file->getFilesByProjectId($id);
 		}
 		
 		if($this->perm->check($this->identity, 'view_time'))
 		{	
 			$not = array('bill_status' => 'paid');
-			$this->view->times = $times->getTimesByProjectId($id, null, $not);
-			$this->view->hours = $times->getTotalTimesByProjectId($id);	
+			$view['times'] = $times->getTimesByProjectId($id, null, $not);
+			$view['hours'] = $times->getTotalTimesByProjectId($id);	
 			
-			$this->view->estimated_time = $task->getProjectEstimatedTime($id);
+			$view['estimated_time'] = $task->getProjectEstimatedTime($id);
 		}		
 
-		$bookmarks = new PM_Model_Bookmarks(new PM_Model_DbTable_Bookmarks);
-		$this->view->bookmarks = $bookmarks->getBookmarksByProjectId($id);	
+		$bookmarks = $this->getServiceLocator()->get('PM\Model\Bookmarks');
+		$view['bookmarks'] = $bookmarks->getBookmarksByProjectId($id);	
 
-		$notes = new PM_Model_Notes;
-		$this->view->notes = $notes->getNotesByProjectId($id);	
+		$notes = $this->getServiceLocator()->get('PM\Model\Notes');
+		$view['notes'] = $notes->getNotesByProjectId($id);	
 
-		$this->view->active_sub = $this->view->project['status'];
-		$this->view->identity = $this->identity;
-		$this->view->headTitle('Viewing Project: '. $this->view->project['name'], 'PREPEND');
-		$this->view->id = $id;
+		$view['active_sub'] = $view['project']['status'];
+		$view['identity'] = $this->identity;
+		///$this->view->headTitle('Viewing Project: '. $this->view->project['name'], 'PREPEND');
+		$view['id'] = $id;
+		
+		return $view;
 	}
 	
 	/**

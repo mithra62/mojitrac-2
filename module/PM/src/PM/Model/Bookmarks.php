@@ -7,26 +7,30 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		1.0
- * @filesource 	./moji/application/modules/pm/models/Bookmarks.php
+ * @filesource 	./module/PM/src/PM/Model/Times.php
  */
 
+namespace PM\Model;
+
+use Application\Model\AbstractModel;
+
  /**
- * PM - Bookmarks Model
+ * PM - Times Model
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/modules/pm/models/Bookmarks.php
+ * @filesource 	./module/PM/src/PM/Model/Times.php
  */
-class PM_Model_Bookmarks extends Model_Abstract
+class Bookmarks extends AbstractModel
 {	
 	/**
-	 * 
-	 * @param PM_Model_DbTable_Bookmarks $db
+	 * The Times Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $db
 	 */
-	public function __construct(PM_Model_DbTable_Bookmarks $db)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
-		parent::__construct();
-		$this->db = $db;
+		parent::__construct($adapter, $db);
 	}
 	
 	/**
@@ -167,13 +171,13 @@ class PM_Model_Bookmarks extends Model_Abstract
 	
 	private function getBookmarksWhere(array $where = null, array $not = null, array $orwhere = null, array $ornot = null)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('bk'=>$this->db->getTableName()));
+		$sql = $this->db->select()->from(array('bk'=> 'bookmarks'));
 		
 		if(is_array($where))
 		{
 			foreach($where AS $key => $value)
 			{
-				$sql = $sql->where("$key = ? ", $value);
+				$sql = $sql->where(array($key => $value));
 			}
 		}
 		
@@ -201,9 +205,9 @@ class PM_Model_Bookmarks extends Model_Abstract
 			}
 		}		
 		
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = bk.project_id', array('name AS project_name', 'id AS project_id'));
-		$sql = $sql->joinLeft(array('t' => 'tasks'), 't.id = bk.task_id', array('name AS task_name'));
-		return $this->db->getBookmarks($sql);	
+		$sql = $sql->join(array('p' => 'projects'), 'p.id = bk.project_id', array('project_name' => 'name', 'project_id' => 'id'), 'left');
+		$sql = $sql->join(array('t' => 'tasks'), 't.id = bk.task_id', array('task_name' => 'name'), 'left');
+		return $this->getRows($sql);	
 	}	
 
 	

@@ -6,7 +6,7 @@
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
- * @version		1.0
+ * @version		2.0
  * @filesource 	./module/PM/src/PM/Model/Projects.php
  */
 
@@ -30,7 +30,9 @@ class Projects extends AbstractModel
 	public $cache_key = 'projects';
 	
 	/**
-	 * The PM Projects Model
+	 * The Projects Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $db
 	 */
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
@@ -78,21 +80,21 @@ class Projects extends AbstractModel
 	 */
 	public function getProjectById($id, $what = null)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false);
+		$sql = $this->db->select();
 		if(is_array($what))
 		{
-			$sql->from(array('p'=>$this->db->getTableName()), $what);
+			$sql->from(array('p'=> 'projects'))->columns($what);
 		}
 		else
 		{
-			$sql->from(array('p'=>$this->db->getTableName()));
+			$sql->from(array('p'=> 'projects'));
 		}
 				
-		$sql = $sql->where('p.id = ?', $id);
+		$sql = $sql->where(array('p.id' => $id));
 		
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = p.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
-		$sql = $sql->joinLeft(array('c' => 'companies'), 'c.id = p.company_id', array('name AS company_name'));
-		return $this->db->getProject($sql);
+		$sql = $sql->join(array('u' => 'users'), 'u.id = p.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), 'left');
+		$sql = $sql->join(array('c' => 'companies'), 'c.id = p.company_id', array('company_name' => 'name'), 'left');
+		return $this->getRow($sql);
 	}
 	
 	/**
@@ -375,11 +377,10 @@ class Projects extends AbstractModel
 	 */
 	public function getProjectTeamMembers($project_id)
 	{
-		$team = new PM_Model_DbTable_Projects_Teams;
-		$sql = $team->select()->setIntegrityCheck(false)->from(array('pt'=>$team->getTableName()));
-		$sql = $sql->where('project_id = ?', $project_id);
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = pt.user_id', array('first_name AS first_name', 'last_name AS last_name', 'email', 'job_title', 'u.id AS user_id'));
-		return $team->getProjectTeamMembers($sql);
+		$sql = $this->db->select()->from(array('pt'=> 'project_teams'));
+		$sql = $sql->where(array('project_id' => $project_id));
+		$sql = $sql->join(array('u' => 'users'), 'u.id = pt.user_id', array('first_name', 'last_name', 'email', 'job_title', 'user_id' => 'id'), 'left');
+		return $this->getRows($sql);
 	}
 	
 	/**

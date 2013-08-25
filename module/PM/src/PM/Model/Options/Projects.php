@@ -23,7 +23,8 @@ class Projects extends AbstractOptions
 {
 	static public function types()
 	{
-		$options = new PM_Model_Options(new PM_Model_DbTable_Options);
+		$sm = self::getServiceLocator();
+		$options = $sm->get('PM\Model\Options');
 		return parent::filterOptions($options->getAllProjectTypes());
 	}
 	
@@ -33,9 +34,9 @@ class Projects extends AbstractOptions
 		return $priority[$id];		
 	}
 	
-	static public function translateTypeId($id)
+	static public function translateTypeId($id, \PM\Model\Options $options)
 	{
-		$types = PM_Model_Options_Projects::types();
+		$types = $options->getAllProjectTypes();
 		if(!isset($types[$id]))
 		{
 			$id = 0;

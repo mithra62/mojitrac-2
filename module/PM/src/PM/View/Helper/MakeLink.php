@@ -28,18 +28,10 @@ use Application\View\Helper\AbstractViewHelper;
  */
 class MakeLink extends AbstractViewHelper
 {
-    public $view;
-    
-    private $identity;
-
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->view = $view;
-        $this->identity = Zend_Auth::getInstance()->getIdentity();
-    }
     	
-	public function MakeLink($type, array $info)
+	public function __invoke($type, array $info)
 	{
+		return;
 		switch($type)
 		{
 			case 'user':

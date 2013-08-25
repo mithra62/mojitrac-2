@@ -1,12 +1,37 @@
 <?php
-/**
- * Bookmark Model
- * @author Eric
- * @copyright JIVEtrac 2009
+ /**
+ * mithra62 - MojiTrac
  *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		1.0
+ * @filesource 	./module/PM/src/PM/Model/Notes.php
  */
-class PM_Model_Notes
+
+namespace PM\Model;
+
+use Application\Model\AbstractModel;
+
+ /**
+ * PM - Times Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Model/Notes.php
+ */
+class Notes extends AbstractModel
 {
+	/**
+	 * The Notes Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $db
+	 */
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
+	{
+		parent::__construct($adapter, $db);
+	}	
 	
 	/**
 	 * Returns the Bookmark Form
@@ -130,8 +155,7 @@ class PM_Model_Notes
 
 	private function getNotesWhere(array $where = null, array $not = null, array $orwhere = null, array $ornot = null)
 	{
-		$note = new PM_Model_DbTable_Notes;
-		$sql = $note->select()->setIntegrityCheck(false)->from(array('n'=>$note->getTableName()));
+		$sql = $this->db->select()->from(array('n'=> 'notes'));
 		
 		if(is_array($where))
 		{
@@ -165,9 +189,9 @@ class PM_Model_Notes
 			}
 		}		
 		
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = n.project_id', array('name AS project_name', 'id AS project_id'));
-		$sql = $sql->joinLeft(array('t' => 'tasks'), 't.id = n.task_id', array('name AS task_name'));
-		return $note->getNotes($sql);
+		$sql = $sql->join(array('p' => 'projects'), 'p.id = n.project_id', array('project_name' => 'name', 'project_id' => 'id'), 'left');
+		$sql = $sql->join(array('t' => 'tasks'), 't.id = n.task_id', array('task_name' => 'name'), 'left');
+		return $this->getRows($sql);
 	}	
 
 	

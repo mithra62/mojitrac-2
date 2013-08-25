@@ -13,6 +13,11 @@
 namespace PM\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Application\Model\Auth\AuthAdapter;
+use Application\View\Helper\AbstractViewHelper;
 
 /**
  * PM - Breadcrumb View Helper
@@ -21,7 +26,7 @@ use Zend\View\Helper\AbstractHelper;
  * @author		Eric Lamb
  * @filesource 	./module/PM/View/Helper/Breadcrumb.php
  */
-class Breadcrumb extends AbstractHelper
+class Breadcrumb extends AbstractViewHelper
 {
 	/**
 	 * Contains our nav data 
@@ -64,16 +69,6 @@ class Breadcrumb extends AbstractHelper
 	 * @var array
 	 */
 	private $avail_types = array('task', 'project', 'company', 'file');
-	
-	/**
-	 * Sets up the view object for the helper class
-	 * @param Zend_View_Interface $view
-	 */
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->view = $view;
-        $this->identity = Zend_Auth::getInstance()->getIdentity();
-    }
     
     /**
      * The main method
@@ -127,14 +122,16 @@ class Breadcrumb extends AbstractHelper
     
     private function add_project()
     {
-        $this->db = new PM_Model_DbTable_Projects();
-    	$sql = $this->db->select()->setIntegrityCheck(false)->from(array('p'=>$this->db->getTableName()), array('p.name AS project_name', 'p.id AS project_id'));
-    	$sql = $sql->join(array('c' => 'companies'), "p.company_id = c.id AND p.id = '".$this->pk."'", array('c.name AS company_name', 'c.id AS company_id'));
-    	$result = $this->db->getProject($sql);	
+
+    	$helperPluginManager = $this->getServiceLocator();
+    	$serviceManager = $helperPluginManager->getServiceLocator();
+    	
+    	$projects = $serviceManager->get('PM/Model/Projects');
+    	$result = $projects->getProjectById($this->pk);	
     	if($result)
     	{
-    		$company_url = $this->view->url(array('module' => 'pm','controller' => 'companies','action'=>'view', 'id' => $result['company_id']), null, TRUE);
-    		$project_url = $this->view->url(array('module' => 'pm','controller' => 'projects','action'=>'view', 'id' => $result['project_id']), null, TRUE);
+    		$company_url = $this->view->url('pm', array('module' => 'pm','controller' => 'companies','action'=>'view', 'id' => $result['company_id']), null, TRUE);
+    		$project_url = $this->view->url('pm', array('module' => 'pm','controller' => 'projects','action'=>'view', 'id' => $result['project_id']), null, TRUE);
     		
     		$this->add_breadcrumb($company_url, $result['company_name']);
     		$this->add_breadcrumb($project_url, $result['project_name'], TRUE);

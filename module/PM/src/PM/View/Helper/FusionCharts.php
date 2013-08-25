@@ -30,6 +30,7 @@ class FusionCharts extends AbstractViewHelper
 {
 	public function __invoke($chart, $chartType = 'column2d', $width="400", $height="300", $chartID="", $isTransparent="")
 	{
+		//now gonna port this just yet since the chart frontend will have to be redone by Imrie anyway
 		return;
 		$helperPluginManager = $this->getServiceLocator();
 		$serviceManager = $helperPluginManager->getServiceLocator();
