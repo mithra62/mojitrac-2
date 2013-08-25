@@ -77,7 +77,7 @@ if($interval->days <= 30):
 <?php if($this->CheckPermission('view_projects')): ?>
 	<div class="content_headers" style="padding-top:0px;">
 		<div class="project_header">Your Projects</div>
-		<?php echo $this->ActionBlock('help', 'Help', $this->url(array('module' => 'pm','controller' => 'docs','action'=>'projects', 'page' => 'your-projects'), null, TRUE), 'facebox'); ?>		
+		<?php //echo $this->ActionBlock('help', 'Help', $this->url(array('module' => 'pm','controller' => 'docs','action'=>'projects', 'page' => 'your-projects'), null, TRUE), 'facebox'); ?>		
 	</div>
 	<?php 
 	if($this->projects):

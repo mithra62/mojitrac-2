@@ -1,19 +1,21 @@
 <?php echo $this->partial('layout/pm/header'); ?>
-<?php echo $this->GlobalAlerts($this->identity); echo $this->identity; ?>
+<?php echo $this->GlobalAlerts($this->identity); ?>
 <div id="header" class="png_bg">
   <div id="head_wrap">
   
   	<div id="main_menu">
 	    <div id="login">
 	    <?php
-	    /**
-            $return  = '<p>Welcome Back <a href="'.$this->url(array('module'=> 'pm', 'controller'=>'users','action'=>'view', 'id' => $identity), null, TRUE).'" class="highlight">'.$username.'</a> | ';
-            $return .= ' <a href="'.$this->url(array('module'=> 'pm', 'controller'=>'calendar','action'=>'index'), null, TRUE).'" class="highlight">Calendar</a> | ';
+	    //echo $this->identity;
+	    	$user_data = $this->UserInfo($this->identity);
+	    	$username = $user_data['first_name'].' '.$user_data['last_name'];
+            $return  = '<p>Welcome Back <a href="'.$this->url('users/view', array('user_id' => $this->identity), null, TRUE).'" class="highlight">'.$username.'</a> | ';
+            $return .= ' <a href="'.$this->url('calendar').'" class="highlight">Calendar</a> | ';
             
-            $return .= ' <a href="'.$this->url(array('module'=> 'pm', 'controller'=>'settings','action'=>'index'), null, TRUE).'" class="highlight">Account</a>';
-            $return .=' | <a href="'.$this->url(array('module'=> 'default', 'controller'=>'login','action'=>'logout'), null, TRUE).'" class="highlight">Logout</a></p>';
-        echo $return;
-        */
+            $return .= ' <a href="'.$this->url('settings').'" class="highlight">Account</a>';
+            //$return .=' | <a href="'.$this->url('login/logout', array('module'=> 'default', 'controller'=>'login','action'=>'logout'), null, TRUE).'" class="highlight">Logout</a></p>';
+        	echo $return;
+        
 	    ?>
 		</div>
 		
@@ -77,6 +79,7 @@
 				'sidbar_title'=>$this->sidbar_title,
 				'header_class'=>$this->header_class
 			);
+
 			switch($this->layout_style)
 			{
 				case 'left':

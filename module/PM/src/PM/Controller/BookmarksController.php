@@ -6,25 +6,26 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/modules/pm/controllers/BookmarksController.php
+* @version		2.0
+* @filesource 	./module/PM/src/PM/Controller/BookmarksController.php
 */
 
-/**
- * Include the Abstract library
- */
-include_once 'Abstract.php';
+namespace PM\Controller;
+
+use PM\Controller\AbstractPmController;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
 /**
 * PM - Bookmarks Controller
 *
-* Routes the Bookmarks requests
+* Routes the bookmark requests
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/controllers/BookmarksController.php
+* @filesource 	./module/PM/src/PM/Controller/BookmarksController.php
 */
-class Pm_BookmarksController extends PM_Abstract
+class BookmarksController extends AbstractPmController
 {
 	
 	/**

@@ -8,6 +8,8 @@ use Zend\ModuleManager\ModuleManager;
 use Zend\Db\Sql\Sql;
 
 use PM\Model\Projects;
+use PM\Model\Timers;
+use PM\Model\Charts;
 
 class Module
 {
@@ -49,7 +51,17 @@ class Module
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					return new Projects($adapter, $db);
-				}
+				},
+				'PM\Model\Timers' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Timers($adapter, $db);
+				},
+				'PM\Model\Charts' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Charts($adapter, $db);
+				}					
 			),
     	);
     }    

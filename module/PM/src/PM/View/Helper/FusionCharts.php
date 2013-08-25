@@ -28,25 +28,14 @@ use Application\View\Helper\AbstractViewHelper;
  */
 class FusionCharts extends AbstractViewHelper
 {
-	
-    public $view;
-    
-    private $chart;
-    
-    private $data;
-    
-    private $utils;
-        
-    private $identity;
-
-    public function setView(Zend_View_Interface $view)
-    {
-        $this->view = $view;
-    }
-    	
-	public function FusionCharts($chart, $chartType = 'column2d', $width="400", $height="300", $chartID="", $isTransparent="")
+	public function __invoke($chart, $chartType = 'column2d', $width="400", $height="300", $chartID="", $isTransparent="")
 	{
-		$this->data = new PM_Model_Charts;	
+		return;
+		$helperPluginManager = $this->getServiceLocator();
+		$serviceManager = $helperPluginManager->getServiceLocator();
+		
+		$this->data = $serviceManager->get('PM\Model\Charts');
+				
 		$this->chart = new LambLib_Views_Helpers_FusionCharts($chartType, $width, $height, $chartID, 'yes');
 		$this->utils = new LambLib_Controller_Action_Helper_Utilities;
 		$this->identity = Zend_Auth::getInstance()->getIdentity();

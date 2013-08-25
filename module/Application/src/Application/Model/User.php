@@ -182,7 +182,7 @@ class User extends AbstractModel
 	{
 		$sql = $this->db->select()->from(array('u'=>'users'));
 		$sql = $sql->where(array('u.id' => $id));
-		return $this->getRows($sql);
+		return $this->getRow($sql);
 	}
 	
 	/**
@@ -469,13 +469,18 @@ class User extends AbstractModel
 	 */
 	public function userHasOverdueTasks($id)
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->select()->setIntegrityCheck(false)
-			   ->from(array('t'=>$task->getTableName()), array(new Zend_Db_Expr("COUNT(t.id) AS total_count")))
-			   ->joinRight(array('p' => 'projects'), 'p.id = t.project_id', array(''))
-			   ->where('assigned_to = ?', $id)->where('progress != 100 AND t.end_date != ?', '0000-00-00 00:00:00')
-			   ->where('p.status NOT IN(4,5,6)')->where('t.status != ?', 4)->where('t.end_date <= NOW()');
-		return $task->getTask($sql);				
+		$where = array(
+			'assigned_to' => $id,
+			'progress != 100 AND t.end_date != \'0000-00-00 00:00:00\'',
+			'p.status NOT IN(4,5,6)',
+			't.status != 4',
+			't.end_date <= NOW() ',
+		);
+		$sql = $this->db->select()->from(array('t'=> 'tasks'))
+					->columns( array('total_count' => new \Zend\Db\Sql\Expression("COUNT(t.id)")))
+			   		->join(array('p' => 'projects'), 'p.id = t.project_id')
+			   		->where($where);
+		return $this->getRow($sql);				
 	}
 	
 	/**

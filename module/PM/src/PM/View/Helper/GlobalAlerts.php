@@ -12,7 +12,11 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Zend\Db\Sql\Sql;
+use Zend\Db\Adapter\Adapter;
+
+use Application\Model\Auth\AuthAdapter;
+use Application\View\Helper\AbstractViewHelper;
 
  /**
  * PM - Global Alerts View Helper
@@ -21,7 +25,7 @@ use Zend\View\Helper\AbstractHelper;
  * @author		Eric Lamb
  * @filesource 	./module/PM/View/Helper/GlobalAlerts.php
  */
-class GlobalAlerts extends AbstractHelper
+class GlobalAlerts extends AbstractViewHelper
 {   	
 	function __invoke($id)
 	{
@@ -31,14 +35,19 @@ class GlobalAlerts extends AbstractHelper
 		}
 		
 		$return = '';
-		$user = new PM_Model_Users(new PM_Model_DbTable_Users);
+		
+		$helperPluginManager = $this->getServiceLocator();
+		$serviceManager = $helperPluginManager->getServiceLocator();
+		
+		$user = $serviceManager->get('Application\Model\User');
 		$overdue_tasks = $user->userHasOverdueTasks($id);
 		if($overdue_tasks && is_array($overdue_tasks) && $overdue_tasks['total_count'] >= 1)
 		{
 			$return .= '<div class="global-alert global-fail"><div>You have <a href="'.$this->view->url(array('module' => 'pm','controller'=>'index','action'=>'index'), null, TRUE).'" style="text-decoration:none; color: #CC3300">'.$overdue_tasks['total_count'].' overdue tasks</a>.</div></div>';
 		}
 		
-		$prefs = Zend_Registry::get('pm_prefs');
+		$prefs = $serviceManager->get('PM\Model\Timers');
+		/*
 		if(isset($prefs['timer_data']) && $prefs['timer_data'] != '')
 		{
 			$timer = new PM_Model_Timers;
@@ -49,6 +58,7 @@ class GlobalAlerts extends AbstractHelper
 				$return .= "<script>$('#timer_countdown').countdown({since: new Date('".$timer->makeCountdownDate($data['start_time'])."'), compact: true, format: 'yowdhmS', description: ''});</script>";					
 			}
 		}
+		*/
 		
 		return $return;
 		//return $return;

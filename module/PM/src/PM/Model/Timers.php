@@ -1,5 +1,27 @@
 <?php
-class PM_Model_Timers extends PM_Model_User_Data
+ /**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		1.0
+ * @filesource 	./module/PM/src/PM/Model/Timers.php
+ */
+
+namespace PM\Model;
+
+use Application\Model\AbstractModel;
+
+ /**
+ * PM - Projects Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Model/Timers.php
+ */
+class Timers extends AbstractModel
 {
 	private $options = array('task_id' => 0, 'project_id' => 0, 'company_id' => 0, 'start_time' => FALSE);
 	
@@ -9,9 +31,9 @@ class PM_Model_Timers extends PM_Model_User_Data
 	 */
 	public $cache_key = 'timers';
 	
-	public function __construct()
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
-		parent::__construct();	
+		parent::__construct($adapter, $db);
 	}
 	
 	/**

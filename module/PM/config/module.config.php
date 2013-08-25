@@ -24,7 +24,6 @@ return array(
                 ),
             ),
         	
-        	// Literal route named "blog", with child routes
         	'projects' => array(
         		'type' => 'segment',
         		'options' => array(
@@ -63,7 +62,133 @@ return array(
         				)
         			)
         		)
-        	)    		
+        	),
+
+        	// Literal route named "blog", with child routes
+        	'users' => array(
+        			'type' => 'segment',
+        			'options' => array(
+        					'route' => '/pm/users',
+        					'defaults' => array(
+        							'controller' => 'PM\Controller\Users',
+        							'action' => 'index'
+        					),
+        			),
+        			'may_terminate' => true,
+        			'child_routes' => array(
+        					// Segment route for viewing one blog post
+        					'view' => array(
+        							'type' => 'segment',
+        							'options' => array(
+        									'route' => '/view/[:user_id]',
+        									'constraints' => array(
+        											'user_id' => '[0-9]+'
+        									),
+        									'defaults' => array(
+        											'action' => 'view'
+        									)
+        							)
+        					),
+        					// Literal route for viewing blog RSS feed
+        					'add' => array(
+        							'type' => 'segment',
+        							'options' => array(
+        									'route' => 'add',
+        									'defaults' => array(
+        											'controller' => 'PM\Controller\Users',
+        											'action' => 'add'
+        													)
+        							)
+        					)
+        			)
+        	),
+
+        	
+        	'calendar' => array(
+        			'type' => 'segment',
+        			'options' => array(
+        					'route' => '/pm/calendar',
+        					'defaults' => array(
+        							'controller' => 'PM\Controller\Calendar',
+        							'action' => 'index'
+        					),
+        			),
+        			'may_terminate' => true,
+        			'child_routes' => array(
+        					// Segment route for viewing one blog post
+        					'view' => array(
+        							'type' => 'segment',
+        							'options' => array(
+        									'route' => 'view/[:user_id]',
+        									'constraints' => array(
+        											'user_id' => '[0-9]+'
+        									),
+        									'defaults' => array(
+        											'action' => 'view'
+        									)
+        							)
+        					),
+        					// Literal route for viewing blog RSS feed
+        					'add' => array(
+        							'type' => 'segment',
+        							'options' => array(
+        									'route' => 'add',
+        									'defaults' => array(
+        											'controller' => 'PM\Controller\Users',
+        											'action' => 'add'
+        									)
+        							)
+        					)
+        			)
+        	),     
+
+        	
+        	
+        	
+
+        	'settings' => array(
+        			'type' => 'segment',
+        			'options' => array(
+        					'route' => '/pm/settings',
+        					'defaults' => array(
+        							'controller' => 'PM\Controller\Calendar',
+        							'action' => 'index'
+        					),
+        			),
+        			'may_terminate' => true,
+        			'child_routes' => array(
+        					// Segment route for viewing one blog post
+        					'view' => array(
+        							'type' => 'segment',
+        							'options' => array(
+        									'route' => 'view/[:user_id]',
+        									'constraints' => array(
+        											'user_id' => '[0-9]+'
+        									),
+        									'defaults' => array(
+        											'action' => 'view'
+        									)
+        							)
+        					),
+        					// Literal route for viewing blog RSS feed
+        					'add' => array(
+        							'type' => 'segment',
+        							'options' => array(
+        									'route' => 'add',
+        									'defaults' => array(
+        											'controller' => 'PM\Controller\Users',
+        											'action' => 'add'
+        									)
+        							)
+        					)
+        			)
+        	),        	
+        	
+        	
+        	
+        	
+        	
+        	
         ),
     ),
     'controllers' => array(
@@ -71,6 +196,8 @@ return array(
             'PM\Controller\Activity' => 'PM\Controller\ActivityController',
             'PM\Controller\Admin' => 'PM\Controller\AdminController',
             'PM\Controller\Index' => 'PM\Controller\IndexController',
+            'PM\Controller\Bookmarks' => 'PM\Controller\BookmarksController',
+
             'PM\Controller\Projects' => 'PM\Controller\ProjectsController',
         ),
     ),
@@ -123,6 +250,7 @@ return array(
 	    	'TaskStatus' => 'PM\View\Helper\TaskStatus',
 	    	'TaskType' => 'PM\View\Helper\TaskType',
 	    	'Truncate' => 'PM\View\Helper\Truncate',
+	    	'UserInfo' => 'PM\View\Helper\UserInfo',
 	    ),
     ),    
     // Placeholder for console routes

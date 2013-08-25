@@ -1,5 +1,27 @@
 <?php
-class PM_Model_Charts
+ /**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		1.0
+ * @filesource 	./module/PM/src/PM/Model/Charts.php
+ */
+
+namespace PM\Model;
+
+use Application\Model\AbstractModel;
+
+ /**
+ * PM - Charts Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Model/Charts.php
+ */
+class Charts extends AbstractModel
 {
 	/**
 	 * The cache object
@@ -7,16 +29,9 @@ class PM_Model_Charts
 	 */
 	public $cache;
 	
-	public function __construct()
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
-		$c = new Model_Cache;
-		// getting a Zend_Cache_Core object
-		$this->cache = Zend_Cache::factory(
-	                    $c->getFrontendType(),
-	                    $c->getBackendType(),
-	                    $c->getFrontendOptions(),
-	                    $c->getBackendOptions()
-		);				
+		parent::__construct($adapter, $db);
 	}
 	
 	public function getProjectGantt($id)

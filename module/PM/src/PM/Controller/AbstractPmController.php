@@ -70,7 +70,8 @@ abstract class AbstractPmController extends AbstractController
 		$this->layout()->setVariable('layout_style', 'left');
 		$this->layout()->setVariable('sidebar', 'dashboard');
 		$this->layout()->setVariable('active_nav', 'home');
-		$this->layout()->setVariable('sub_menu', 'dashboard');	
+		$this->layout()->setVariable('sub_menu', 'dashboard');
+		$this->layout()->setVariable('identity', $this->identity);
 		$this->_initIpBlocker();
 		
 		return parent::onDispatch( $e );
