@@ -46,18 +46,36 @@ abstract class AbstractModel
 	 * @var string
 	 */
 	public $cache_key = null;
-		
+	
+	/**
+	 * The Event Manager Object
+	 * @var \Zend\EventManager\EventManager
+	 */
 	public $events = null;
 	
+	/**
+	 * The Database Adapter
+	 * @var \Zend\Db\Adapter\Adapter
+	 */
 	protected $adapter = null;
 	
+	/**
+	 * Moji Abstract Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $sql
+	 */
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $sql)
 	{
 		$this->adapter = $adapter;
 		$this->db = $sql;
 	}
-	
-	public function getRow($sql)
+
+	/**
+	 * Returns single row from $sql
+	 * @param \Zend\Db\Sql\Select $sql
+	 * @return array:
+	 */
+	public function getRow(\Zend\Db\Sql\Select $sql)
 	{
 		$selectString = $this->db->getSqlStringForSqlObject($sql);
 		$result = $this->adapter->query($selectString, 'execute')->toArray();
@@ -71,7 +89,12 @@ abstract class AbstractModel
 		}
 	}
 	
-	public function getRows($sql)
+	/**
+	 * Returns multiple rows from $sql
+	 * @param \Zend\Db\Sql\Select $sql
+	 * @return array:
+	 */
+	public function getRows(\Zend\Db\Sql\Select $sql)
 	{
 		$selectString = $this->db->getSqlStringForSqlObject($sql);
 		
@@ -87,6 +110,12 @@ abstract class AbstractModel
 		}		
 	}
 	
+	/**
+	 * Updates $table with $what based on $where
+	 * @param string $table
+	 * @param array $what
+	 * @param array $where
+	 */
 	public function update($table, array $what = null, array $where = null)
 	{
 		$sql = $this->db->update($table)->set($what)->where($where);
@@ -94,6 +123,12 @@ abstract class AbstractModel
 		return ($this->adapter->query($updateString, 'execute'));
 	}
 
+	/**
+	 * Creates a new entry in $table
+	 * @param string $table
+	 * @param array $data
+	 * @return Ambigous <\Zend\Db\Adapter\Driver\mixed, NULL>
+	 */
 	public function insert($table, array $data)
 	{
 		$sql = $this->db->insert($table)->values($data);
@@ -102,7 +137,9 @@ abstract class AbstractModel
 		return $result->getGeneratedValue(); 
 	}
 	
-
+	/**
+	 * Returns the databse adapter or lazy loads it if it doesn't exist
+	 */
 	public function getAdapter()
 	{
 		if (!$this->adapter) {
@@ -110,5 +147,28 @@ abstract class AbstractModel
 			$this->adapter = $sm->get('Zend\Db\Adapter\Adapter');
 		}
 		return $this->adapter;
+	}	
+	
+	/**
+	 * Creates an instance of the Event Manager
+	 * @param EventManagerInterface $events
+	 * @return \Application\Model\AbstractModel
+	 */
+	public function setEventManager(EventManagerInterface $events)
+	{
+		$events->setIdentifiers(array(
+				__CLASS__,
+				get_called_class(),
+		));
+		$this->events = $events;
+		return $this;
+	}
+	
+	public function getEventManager()
+	{
+		if (null === $this->events) {
+			$this->setEventManager(new EventManager());
+		}
+		return $this->events;
 	}	
 }
