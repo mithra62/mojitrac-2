@@ -23,7 +23,16 @@ return array(
                     ),
                 ),
             ),
-        	
+        	'calendar' => array(
+        		'type' => 'Zend\Mvc\Router\Http\Literal',
+        		'options' => array(
+        			'route'    => '/calendar',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Calendar',
+        				'action' => 'index',
+        			),
+        		),
+        	),        		
         	'projects' => array(
         		'type' => 'segment',
         		'options' => array(
@@ -36,7 +45,6 @@ return array(
         		),
         		'may_terminate' => true,
         		'child_routes' => array(
-        			// Segment route for viewing one blog post
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
@@ -49,156 +57,322 @@ return array(
         					)
         				)
         			),
-        			// Literal route for viewing blog RSS feed
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'edit/[:project_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'remove/[:project_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),  
+        			'manage-team' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'manage-team/[:project_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'manageTeam'
+        					)
+        				)
+        			),        			      			
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
         					'route' => 'add[/:company_id]',
         					'constraints' => ['company_id' => '[0-9]*'],
         					'defaults' => array(
-        						'controller' => 'PM\Controller\Projects',
         						'action' => 'add'
         					)
         				)
         			)
         		)
         	),
-
-        	// Literal route named "blog", with child routes
         	'users' => array(
-        			'type' => 'segment',
-        			'options' => array(
-        					'route' => '/pm/users',
-        					'defaults' => array(
-        							'controller' => 'PM\Controller\Users',
-        							'action' => 'index'
-        					),
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/users',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Users',
+        				'action' => 'index'
         			),
-        			'may_terminate' => true,
-        			'child_routes' => array(
-        					// Segment route for viewing one blog post
-        					'view' => array(
-        							'type' => 'segment',
-        							'options' => array(
-        									'route' => '/view/[:user_id]',
-        									'constraints' => array(
-        											'user_id' => '[0-9]+'
-        									),
-        									'defaults' => array(
-        											'action' => 'view'
-        									)
-        							)
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/[:user_id]',
+        					'constraints' => array(
+        						'user_id' => '[0-9]+'
         					),
-        					// Literal route for viewing blog RSS feed
-        					'add' => array(
-        							'type' => 'segment',
-        							'options' => array(
-        									'route' => 'add',
-        									'defaults' => array(
-        											'controller' => 'PM\Controller\Users',
-        											'action' => 'add'
-        													)
-        							)
+        					'defaults' => array(
+        						'action' => 'view'
         					)
+        				)
+        			),
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'remove/[:user_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'add',
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
         			)
+        		)
         	),
-
         	
-        	'calendar' => array(
-        			'type' => 'segment',
-        			'options' => array(
-        					'route' => '/pm/calendar',
-        					'defaults' => array(
-        							'controller' => 'PM\Controller\Calendar',
-        							'action' => 'index'
-        					),
+        	'settings' => array( //Settings Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/settings',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Settings',
+        				'action' => 'index'
         			),
-        			'may_terminate' => true,
-        			'child_routes' => array(
-        					// Segment route for viewing one blog post
-        					'view' => array(
-        							'type' => 'segment',
-        							'options' => array(
-        									'route' => 'view/[:user_id]',
-        									'constraints' => array(
-        											'user_id' => '[0-9]+'
-        									),
-        									'defaults' => array(
-        											'action' => 'view'
-        									)
-        							)
-        					),
-        					// Literal route for viewing blog RSS feed
-        					'add' => array(
-        							'type' => 'segment',
-        							'options' => array(
-        									'route' => 'add',
-        									'defaults' => array(
-        											'controller' => 'PM\Controller\Users',
-        											'action' => 'add'
-        									)
-        							)
-        					)
-        			)
-        	),     
-
-        	
-        	
-        	
-
-        	'settings' => array(
-        			'type' => 'segment',
-        			'options' => array(
-        					'route' => '/pm/settings',
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'password' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'password',
         					'defaults' => array(
-        							'controller' => 'PM\Controller\Calendar',
-        							'action' => 'index'
-        					),
-        			),
-        			'may_terminate' => true,
-        			'child_routes' => array(
-        					// Segment route for viewing one blog post
-        					'view' => array(
-        							'type' => 'segment',
-        							'options' => array(
-        									'route' => 'view/[:user_id]',
-        									'constraints' => array(
-        											'user_id' => '[0-9]+'
-        									),
-        									'defaults' => array(
-        											'action' => 'view'
-        									)
-        							)
-        					),
-        					// Literal route for viewing blog RSS feed
-        					'add' => array(
-        							'type' => 'segment',
-        							'options' => array(
-        									'route' => 'add',
-        									'defaults' => array(
-        											'controller' => 'PM\Controller\Users',
-        											'action' => 'add'
-        									)
-        							)
+        						'action' => 'password'
         					)
+        				)
+        			),
+        			'prefs' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'prefs',
+        					'defaults' => array(
+        						'action' => 'prefs'
+        					)
+        				)
         			)
-        	),        	
+        		)
+        	), //end Settings Routes
         	
-        	
-        	
-        	
-        	
-        	
+        	'bookmarks' => array( //Bookmarks Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/bookmarks',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Bookmarks',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'remove/[:bookmark_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'add',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'edit/[:bookmark_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),
+        		)
+        	), //end Bookmarks Routes
+			
+        	'companies' => array( //Companies Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/companies',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Companies',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'remove/[:company_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'add',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'edit/[:company_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),        			
+        			'map' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'map/[:company_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'map'
+        					)
+        				)
+        			),
+        		)
+        	), //end Companies Routes
+
+        	'contacts' => array( //Contacts Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/contacts',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Contacts',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'remove/[:contact_id]',
+        					'constraints' => array(
+        						'contact_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'add/[:company_id]',
+        					'constraints' => array(
+        						'company_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => 'edit/[:contact_id]',
+        					'constraints' => array(
+        						'contact_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),
+        		)
+        	), //end Contacts Routes
         ),
     ),
     'controllers' => array(
         'invokables' => array(
             'PM\Controller\Activity' => 'PM\Controller\ActivityController',
             'PM\Controller\Admin' => 'PM\Controller\AdminController',
-            'PM\Controller\Index' => 'PM\Controller\IndexController',
             'PM\Controller\Bookmarks' => 'PM\Controller\BookmarksController',
-
+            'PM\Controller\Calendar' => 'PM\Controller\CalendarController',
+            'PM\Controller\Companies' => 'PM\Controller\CompaniesController',
+            'PM\Controller\Contacts' => 'PM\Controller\ContactsController',
+            'PM\Controller\Docs' => 'PM\Controller\DocsController',
+            'PM\Controller\Files' => 'PM\Controller\FilesController',
+            'PM\Controller\Import' => 'PM\Controller\ImportController',
+            'PM\Controller\Index' => 'PM\Controller\IndexController',
+            'PM\Controller\Ips' => 'PM\Controller\IpsController',
+            'PM\Controller\Json' => 'PM\Controller\JsonController',
+            'PM\Controller\Notes' => 'PM\Controller\NotesController',
+            'PM\Controller\Notifications' => 'PM\Controller\NotificationsController',
+            'PM\Controller\Options' => 'PM\Controller\OptionsController',
             'PM\Controller\Projects' => 'PM\Controller\ProjectsController',
+            'PM\Controller\Reports' => 'PM\Controller\ReportsController',
+            'PM\Controller\Roles' => 'PM\Controller\RolesController',
+            'PM\Controller\Settings' => 'PM\Controller\SettingsController',
+            'PM\Controller\Tasks' => 'PM\Controller\TasksController',
+            'PM\Controller\Timers' => 'PM\Controller\TimersController',
+            'PM\Controller\Times' => 'PM\Controller\TimesController',
+            'PM\Controller\Users' => 'PM\Controller\UsersController',
+
         ),
     ),
     'view_manager' => array(
