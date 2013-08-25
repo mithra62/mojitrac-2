@@ -25,12 +25,12 @@
 		{			
 		?>		
 		<tr>
-			<td><a title="<?php echo $file['name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'view', 'id'=> $file['id']), null, TRUE); ?>"><?php echo $file['name']; ?></a></td>
+			<td><a title="<?php echo $file['name']; ?>" href="<?php echo $this->url('files/view', array('module' => 'pm','controller'=>'files','action'=>'view', 'id'=> $file['id']), null, TRUE); ?>"><?php echo $file['name']; ?></a></td>
 			
 			<?php if($this->enable_project): ?>
 			<td>
 				<?php if($file['project_name']):?>
-					<a title="<?php echo $file['project_name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=> $file['project_id']), null, TRUE); ?>" ><?php echo $file['project_name']; ?></a>
+					<a title="<?php echo $file['project_name']; ?>" href="<?php echo $this->url('projects/view', array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=> $file['project_id']), null, TRUE); ?>" ><?php echo $file['project_name']; ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif;?>
@@ -40,7 +40,7 @@
 			<?php if($this->enable_task): ?>
 			<td>
 				<?php if($file['task_name']):?>
-					<a title="<?php echo $file['task_name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id'=> $file['task_id']), null, TRUE); ?>" ><?php echo $file['task_name']; ?></a>
+					<a title="<?php echo $file['task_name']; ?>" href="<?php echo $this->url('tasks/view', array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id'=> $file['task_id']), null, TRUE); ?>" ><?php echo $file['task_name']; ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif;?>			
@@ -51,8 +51,8 @@
 			<td><?php echo $this->RelativeDate($file['last_modified']); ?></td>
 			<?php if($this->enable_actions && $this->CheckPermission('manage_files')):?>
 			<td>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'edit', 'id'=> $file['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit Bookmark');?></a>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'remove', 'id'=> $file['id']), null, TRUE); ?>" title="Delete" rel="facebox"><?php echo $this->InteractIcon('cross', 'Remove Bookmark');?></a>
+			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'edit', 'id'=> $file['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit File');?></a>
+			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'remove', 'id'=> $file['id']), null, TRUE); ?>" title="Delete" rel="facebox"><?php echo $this->InteractIcon('cross', 'Remove File');?></a>
 			</td>
 			<?php endif; ?>
 		</tr>

@@ -10,7 +10,7 @@
 		</div>	
 		<?php if($this->CheckPermission('track_time')):?>
 		<div class="actions">
-			<a href="<?php //echo $this->url(array('module' => 'pm','controller' => 'timers','action'=>'view', 'project' => $this->id), null, TRUE); ?>" title="Timer" rel="facebox">
+			<a href="<?php echo $this->url('timers/view', array('type' => 'project', 'id' => $this->id), null, TRUE); ?>" title="Timer" rel="facebox">
 				<?php echo $this->InteractIcon('timer', 'Timer');?>
 				<div class="action_text">Timer</div>
 			</a>
@@ -19,13 +19,13 @@
 					
 		<?php if($this->CheckPermission('manage_projects')):?>
 		<div class="actions">
-			<a href="<?php //echo $this->url(array('module' => 'pm','controller' => 'projects','action'=>'remove', 'id' => $this->id), null, TRUE); ?>" rel="facebox" title="Delete">
+			<a href="<?php echo $this->url('projects/remove', array('company_id' => FALSE, 'project_id' => $this->id), null, TRUE); ?>" rel="facebox" title="Delete">
 				<?php echo $this->InteractIcon('cross', 'Delete');?>
 				<div class="action_text">Delete</div>
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php //echo $this->url(array('module' => 'pm','controller' => 'projects','action'=>'edit', 'id' => $this->id), null, TRUE); ?>">
+			<a href="<?php echo $this->url('projects/edit', array('company_id' => FALSE, 'project_id' => $this->id), null, TRUE); ?>">
 				<?php echo $this->InteractIcon('pencil', 'Edit');?>
 				<div class="action_text">Edit</div>
 			</a> 
@@ -173,7 +173,7 @@ endif;
 	<?php 
 	if($this->files):
 		$options = array('files' => $this->files, 'enable_task' => 'yes');
-		echo $this->partial('files/partials/files.phtml', $options); 
+		echo $this->partial('pm/files/partials/files', $options); 
 	else: 
 	?>
 	<div class="information png_bg">There aren't any files uploaded yet. <?php if($this->CheckPermission('manage_files')): ?>Want to <a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'files','action'=>'add', 'project' => $this->id), null, TRUE); ?>" rel="facebox">add</a> one?<?php endif; ?></div>
@@ -208,7 +208,7 @@ endif;
 <?php 
 if($this->notes):
 	$options = array('notes' => $this->notes, 'facebox' => 'yes', 'enable_task' => 'yes');
-	echo $this->partial('notes/partials/notes.phtml', $options); 
+	echo $this->partial('pm/notes/partials/notes', $options); 
 else: 
 ?>
 <div class="information png_bg">There aren't any notes added yet. Want to <a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'notes','action'=>'add', 'project' => $this->id), null, TRUE); ?>" rel="facebox">add</a> one?</div>
@@ -242,7 +242,7 @@ endif;
 <?php 
 if($this->bookmarks):
 	$options = array('bookmarks' => $this->bookmarks, 'facebox' => 'yes', 'enable_task' => 'yes');
-	echo $this->partial('bookmarks/partials/bookmarks.phtml', $options); 
+	echo $this->partial('pm/bookmarks/partials/bookmarks', $options); 
 else: 
 ?>
 <div class="information png_bg">There aren't any bookmarks added yet. Want to <a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'bookmarks','action'=>'add', 'project' => $this->id), null, TRUE); ?>" rel="facebox">add</a> one?</div>
@@ -269,7 +269,7 @@ endif;
 	<?php 
 	if($this->times): 
 		$options = array('times' => $this->times, 'enable_task' => 'yes', 'enable_date' => 'yes');
-		echo $this->partial('times/partials/times.phtml', $options); 
+		echo $this->partial('pm/times/partials/times', $options); 
 	else: 
 	?>
 	<div class="information png_bg">There aren't any times added yet.</div>

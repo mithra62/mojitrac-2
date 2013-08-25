@@ -18,6 +18,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 use Application\Model\Auth\AuthAdapter;
 use Application\View\Helper\AbstractViewHelper;
+use PM\Model\Options\Notes;
 
 /**
  * PM - Note Topic View Helper
@@ -30,6 +31,6 @@ class NoteTopic extends AbstractViewHelper
 {
 	function __invoke($status)
 	{
-		return PM_Model_Options_Notes::translateTopicId($status); 
+		return Notes::translateTopicId($status); 
 	}
 }

@@ -18,6 +18,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 use Application\Model\Auth\AuthAdapter;
 use Application\View\Helper\AbstractViewHelper;
+use PM\Model\Options\Files;
 
 /**
  * PM - FileStatus View Helper
@@ -30,6 +31,6 @@ class FileStatus extends AbstractViewHelper
 {
 	public function __invoke($status)
 	{
-		return PM_Model_Options_Files::translateStatusId($status); 
+		return Files::translateStatusId($status); 
 	}
 }

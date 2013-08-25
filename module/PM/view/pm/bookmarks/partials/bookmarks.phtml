@@ -24,13 +24,13 @@
 		{
 		?>
 		<tr>
-			<td><a title="<?php echo $bookmark['name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'bookmarks','action'=>'view', 'id'=>$bookmark['id']), null, TRUE); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $bookmark['name']; ?></a></td>
+			<td><a title="<?php echo $bookmark['name']; ?>" href="<?php echo $this->url('bookmarks/view', array('module' => 'pm','controller'=>'bookmarks','action'=>'view', 'id'=>$bookmark['id']), null, TRUE); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $bookmark['name']; ?></a></td>
 			<td><a title="<?php echo $bookmark['url']; ?>" href="<?php echo $bookmark['url']; ?>"><?php echo $this->Truncate($bookmark['url'], 50); ?></a></td>
 			
 			<?php if($this->enable_project): ?>
 			<td>
 				<?php if($bookmark['project_name']):?>
-					<a title="<?php echo $bookmark['project_name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=> $bookmark['project_id']), null, TRUE); ?>" ><?php echo $bookmark['project_name']; ?></a>
+					<a title="<?php echo $bookmark['project_name']; ?>" href="<?php echo $this->url('projects/view', array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=> $bookmark['project_id']), null, TRUE); ?>" ><?php echo $bookmark['project_name']; ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif;?>
@@ -40,7 +40,7 @@
 			<?php if($this->enable_task): ?>
 			<td>
 				<?php if($bookmark['task_name']):?>
-					<a title="<?php echo $bookmark['task_name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id'=> $bookmark['task_id']), null, TRUE); ?>" ><?php echo $bookmark['task_name']; ?></a>
+					<a title="<?php echo $bookmark['task_name']; ?>" href="<?php echo $this->url('tasks/view', array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id'=> $bookmark['task_id']), null, TRUE); ?>" ><?php echo $bookmark['task_name']; ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif;?>			
@@ -51,8 +51,8 @@
 			<td><?php echo $this->RelativeDate($bookmark['last_modified']); ?></td>
 			<?php if($this->enable_actions):?>
 			<td>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'bookmarks','action'=>'edit', 'id'=>$bookmark['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit Bookmark');?></a>
-			<a <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> href="<?php echo $this->url(array('module' => 'pm','controller'=>'bookmarks','action'=>'remove', 'id'=>$bookmark['id']), null, TRUE); ?>" title="Delete"><?php echo $this->InteractIcon('cross', 'Remove Bookmark');?></a>
+			<a href="<?php echo $this->url('bookmarks/edit', array('module' => 'pm','controller'=>'bookmarks','action'=>'edit', 'id'=>$bookmark['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit Bookmark');?></a>
+			<a <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> href="<?php echo $this->url('bookmarks/remove', array('module' => 'pm','controller'=>'bookmarks','action'=>'remove', 'id'=>$bookmark['id']), null, TRUE); ?>" title="Delete"><?php echo $this->InteractIcon('cross', 'Remove Bookmark');?></a>
 			</td>
 			<?php endif; ?>
 		</tr>

@@ -79,6 +79,18 @@ return array(
         						'action' => 'edit'
         					)
         				)
+        			),       			
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/[:bookmark_id]',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
         			),
         		)
         	), //end Bookmarks Routes
@@ -256,6 +268,18 @@ return array(
         					),
         					'defaults' => array(
         						'action' => 'edit'
+        					)
+        				)
+        			),       			
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/[:file_id]',
+        					'constraints' => array(
+        						'file_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
         					)
         				)
         			),      			
@@ -604,7 +628,7 @@ return array(
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => 'add[/:company_id]',
+        					'route' => '/add[/:company_id]',
         					'constraints' => ['company_id' => '[0-9]*'],
         					'defaults' => array(
         						'action' => 'add'
@@ -809,6 +833,19 @@ return array(
         					)
         				)
         			),
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/:type/:id',
+        					'constraints' => array(
+        						'id' => '[0-9]+',
+        						'type' => '[a-zA-Z][a-zA-Z0-9_-]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
+        			),  
         			'start' => array(
         				'type' => 'segment',
         				'options' => array(
