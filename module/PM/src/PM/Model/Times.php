@@ -199,12 +199,12 @@ class Times extends AbstractModel
 				$sql = $sql->where(array($key => $value));
 			}
 		}
-		
+
 		if(is_array($not))
 		{
 			foreach($not AS $key => $value)
 			{
-				$sql = $sql->where("$key != ? ", $value);
+				$sql = $sql->where("$key != '$value'");
 			}
 		}
 		
@@ -212,7 +212,7 @@ class Times extends AbstractModel
 		{
 			foreach($orwhere AS $key => $value)
 			{
-				$sql = $sql->orwhere("$key = ? ", $value);
+				$sql = $sql->orwhere(array($key => $value), 'OR');
 			}
 		}
 		
@@ -224,10 +224,10 @@ class Times extends AbstractModel
 			}
 		}		
 		
-		$sql = $sql->join(array('p' => 'projects'), 'p.id = i.project_id', array('project_name' => 'name'));
-		$sql = $sql->join(array('t' => 'tasks'), 't.id = i.task_id', array('task_name' => 'name'));
-		$sql = $sql->join(array('c' => 'companies'), 'c.id = i.company_id', array('company_name' => 'name'));
-		$sql = $sql->join(array('u' => 'users'), 'u.id = i.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'));
+		$sql = $sql->join(array('p' => 'projects'), 'p.id = i.project_id', array('project_name' => 'name'), 'left');
+		$sql = $sql->join(array('t' => 'tasks'), 't.id = i.task_id', array('task_name' => 'name'), 'left');
+		$sql = $sql->join(array('c' => 'companies'), 'c.id = i.company_id', array('company_name' => 'name'), 'left');
+		$sql = $sql->join(array('u' => 'users'), 'u.id = i.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), 'left');
 		
 		return $this->getRows($sql);
 	}	
@@ -277,23 +277,24 @@ class Times extends AbstractModel
 		$sql = $this->db->select()->from(array('i'=>'times'))->columns(array('hours' => new \Zend\Db\Sql\Expression('SUM(hours)')));
 		if($company_id)
 		{
-			$sql->where('i.company_id = ?', $company_id);
+			$sql->where(array('company_id' => $company_id));
 		}
 		
 		if($user_id)
 		{
-			$sql->where('i.user_id = ?', $user_id);
+			$sql->where(array('user_id' => $user_id));
 		}
 
 		if($project_id)
 		{
-			$sql->where('i.project_id = ?', $project_id);
+			$sql->where(array('project_id' => $project_id));
 		}
 
 		if($task_id)
 		{
-			$sql->where('i.task_id = ?', $task_id);
-		}		
+			$sql->where(array('task_id' => $task_id));
+		}
+				
 		$total = $this->getRow($sql);
 
 		
@@ -301,22 +302,22 @@ class Times extends AbstractModel
 		$sql = $sql->where(array('bill_status' => 'sent', 'billable' => 1));
 		if($company_id)
 		{
-			$sql->where('i.company_id = ?', $company_id);
+			$sql->where(array('company_id' => $company_id));
 		}
 		
 		if($user_id)
 		{
-			$sql->where('i.user_id = ?', $user_id);
+			$sql->where(array('user_id' => $user_id));
 		}
 
 		if($project_id)
 		{
-			$sql->where('i.project_id = ?', $project_id);
+			$sql->where(array('project_id' => $project_id));
 		}
 
 		if($task_id)
 		{
-			$sql->where('i.task_id = ?', $task_id);
+			$sql->where(array('task_id' => $task_id));
 		}		
 		$sent = $this->getRow($sql);
 		
@@ -324,22 +325,22 @@ class Times extends AbstractModel
 		$sql = $sql->where(array('bill_status' => '', 'billable' => 1));
 		if($company_id)
 		{
-			$sql->where('i.company_id = ?', $company_id);
+			$sql->where(array('company_id' => $company_id));
 		}
 		
 		if($user_id)
 		{
-			$sql->where('i.user_id = ?', $user_id);
+			$sql->where(array('user_id' => $user_id));
 		}
 
 		if($project_id)
 		{
-			$sql->where('i.project_id = ?', $project_id);
+			$sql->where(array('project_id' => $project_id));
 		}
 
 		if($task_id)
 		{
-			$sql->where('i.task_id = ?', $task_id);
+			$sql->where(array('task_id' => $task_id));
 		}			
 		$unsent = $this->getRow($sql);
 		
@@ -347,22 +348,22 @@ class Times extends AbstractModel
 		$sql = $sql->where(array('bill_status' => 'paid', 'billable' => '1'));
 		if($company_id)
 		{
-			$sql->where('i.company_id = ?', $company_id);
+			$sql->where(array('company_id' => $company_id));
 		}
 		
 		if($user_id)
 		{
-			$sql->where('i.user_id = ?', $user_id);
+			$sql->where(array('user_id' => $user_id));
 		}
 
 		if($project_id)
 		{
-			$sql->where('i.project_id = ?', $project_id);
+			$sql->where(array('project_id' => $project_id));
 		}
 
 		if($task_id)
 		{
-			$sql->where('i.task_id = ?', $task_id);
+			$sql->where(array('task_id' => $task_id));
 		}			
 		$paid = $this->getRow($sql);
 

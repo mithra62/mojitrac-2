@@ -201,13 +201,14 @@ class User extends AbstractModel
 	 */
 	public function getAllUsers($status = FALSE)
 	{
-		$sql = $this->db->select();
+		$sql = $this->db->select()->from('users');
 		
 		if($status != '')
 		{
-			$sql = $sql->where('user_status = ?', $status);
+			$sql = $sql->where(array('user_status' => $status));
 		}
-		return $this->db->getUsers($sql);		
+		
+		return $this->getRows($sql);		
 	}
 	
 	/**

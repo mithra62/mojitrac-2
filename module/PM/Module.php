@@ -27,6 +27,7 @@ use PM\Model\Times;
 use PM\Model\Bookmarks;
 use PM\Model\Notes;
 use PM\Model\Options;
+use PM\Model\Notifications;
 
 /**
  * PM - Module Object
@@ -112,6 +113,11 @@ class Module
 					return new Notes($adapter, $db);
 				},
 				'PM\Model\Options' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Options($adapter, $db);
+				},
+				'PM\Model\Notifications' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					return new Options($adapter, $db);

@@ -130,11 +130,11 @@ class Breadcrumb extends AbstractViewHelper
     	$result = $projects->getProjectById($this->pk);	
     	if($result)
     	{
-    		$company_url = $this->view->url('pm', array('module' => 'pm','controller' => 'companies','action'=>'view', 'id' => $result['company_id']), null, TRUE);
-    		$project_url = $this->view->url('pm', array('module' => 'pm','controller' => 'projects','action'=>'view', 'id' => $result['project_id']), null, TRUE);
+    		$company_url = $this->view->url('companies/view', array('company_id' => $result['company_id']));
+    		$project_url = $this->view->url('projects/view', array('company_id' => FALSE, 'project_id' => $result['id']));
     		
     		$this->add_breadcrumb($company_url, $result['company_name']);
-    		$this->add_breadcrumb($project_url, $result['project_name'], TRUE);
+    		$this->add_breadcrumb($project_url, $result['name'], TRUE);
     	}
     }
 

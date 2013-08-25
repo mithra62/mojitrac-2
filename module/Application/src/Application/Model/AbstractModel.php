@@ -14,8 +14,9 @@ namespace Application\Model;
 
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\EventManager;
+use Zend\EventManager\EventManagerAwareInterface;
 
  /**
  * Model Abstract
@@ -91,7 +92,15 @@ abstract class AbstractModel
 		$sql = $this->db->update($table)->set($what)->where($where);
 		$updateString = $this->db->getSqlStringForSqlObject($sql);
 		return ($this->adapter->query($updateString, 'execute'));
-	}	
+	}
+
+	public function insert($table, array $data)
+	{
+		$sql = $this->db->insert($table)->values($data);
+		$insertString = $this->db->getSqlStringForSqlObject($sql);		
+		$result = ($this->adapter->query($insertString, 'execute'));
+		return $result->getGeneratedValue(); 
+	}
 	
 
 	public function getAdapter()

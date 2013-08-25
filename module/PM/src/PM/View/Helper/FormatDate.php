@@ -42,7 +42,7 @@ class FormatDate extends AbstractViewHelper
 		else 
 		{	
 			$str_date = strtotime($date);
-			$settings = Zend_Registry::get('pm_settings');
+			$settings = $prefs = $this->getUserData();
 			if($settings['date_format'] == 'custom')
 			{
 				$settings['date_format'] = $settings['date_format_custom'];

@@ -24,7 +24,7 @@
 		{
 		?>
 		<tr>
-			<td><a title="<?php echo $bookmark['name']; ?>" href="<?php echo $this->url('bookmarks/view', array('module' => 'pm','controller'=>'bookmarks','action'=>'view', 'id'=>$bookmark['id']), null, TRUE); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $bookmark['name']; ?></a></td>
+			<td><a title="<?php echo $bookmark['name']; ?>" href="<?php echo $this->url('bookmarks/view', array('type' => FALSE, 'bookmark_id' => $bookmark['id']), null, TRUE); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $bookmark['name']; ?></a></td>
 			<td><a title="<?php echo $bookmark['url']; ?>" href="<?php echo $bookmark['url']; ?>"><?php echo $this->Truncate($bookmark['url'], 50); ?></a></td>
 			
 			<?php if($this->enable_project): ?>

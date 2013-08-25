@@ -7,7 +7,7 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/View//Helper/GlobalAlerts.php
+ * @filesource 	./module/PM/View//Helper/AbstractViewHelper.php
  */
 
 namespace Application\View\Helper;
@@ -19,17 +19,19 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Application\Model\Auth\AuthAdapter;
 
  /**
- * PM - Global Alerts View Helper
+ * PM - Abstract View Helper
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/PM/View//Helper/GlobalAlerts.php
+ * @filesource 	./module/PM/View/Helper/AbstractViewHelper.php
  */
 class AbstractViewHelper extends ZFAbstract implements ServiceLocatorAwareInterface 
 {
 	public $identity;
 	
 	public $serviceLocator;
+	
+	public $userData;
 	
 	public function getIdentity()
 	{
@@ -41,6 +43,18 @@ class AbstractViewHelper extends ZFAbstract implements ServiceLocatorAwareInterf
 		}
 		return $this->identity;
 	}	
+	
+	public function getUserData()
+	{
+		if(!$this->userData)
+		{
+			$helperPluginManager = $this->getServiceLocator();
+			$serviceManager = $helperPluginManager->getServiceLocator();
+			$ud = $serviceManager->get('Application\Model\UserData');	
+			$this->userData = $ud->getUsersData($this->getIdentity());
+		}
+		return $this->userData;
+	}
 	
 	/**
 	 * Set the service locator.

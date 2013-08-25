@@ -21,13 +21,13 @@
 		
 	    <div id="nav">
 	        <ul>
-	            <li><a href="/pm/" class="<?php echo ($this->active_nav == 'home' ? 'active' : '');?> png_bg">Home</a></li>
+	            <li><a href="<?php echo $this->url('pm'); ?>" class="<?php echo ($this->active_nav == 'home' ? 'active' : '');?> png_bg">Home</a></li>
 	            <!-- <li><a href="/pm/calendar/" class="<?php echo ($this->active_nav == 'calendar' ? 'active' : '');?> png_bg">Calendar</a></li> -->
 	            <?php if($this->CheckPermission('view_companies')):?> 
-	            	<li><a href="/pm/companies/" class="<?php echo ($this->active_nav == 'companies' ? 'active' : '');?> png_bg">Companies</a></li>
+	            	<li><a href="<?php echo $this->url('companies'); ?>" class="<?php echo ($this->active_nav == 'companies' ? 'active' : '');?> png_bg">Companies</a></li>
 	   		 	<?php endif; ?>
 	   		 	<?php if($this->CheckPermission('view_projects')):?> 
-	   		 		<li><a href="/pm/projects" class="<?php echo ($this->active_nav == 'projects' ? 'active' : '');?> png_bg">Projects</a></li>
+	   		 		<li><a href="<?php echo $this->url('projects'); ?>" class="<?php echo ($this->active_nav == 'projects' ? 'active' : '');?> png_bg">Projects</a></li>
 	            <?php endif; ?>
 	            <!-- 
 	            <li><a href="/pm/tasks" class="<?php echo ($this->active_nav == 'tasks' ? 'active' : '');?> png_bg">Tasks</a></li>
@@ -35,10 +35,10 @@
 	             -->
 	            
 	            <?php if($this->CheckPermission('view_time')):?> 
-	            	<li><a href="/pm/times" class="<?php echo ($this->active_nav == 'time' ? 'active' : '');?> png_bg">Time</a></li>
+	            	<li><a href="<?php echo $this->url('times'); ?>" class="<?php echo ($this->active_nav == 'time' ? 'active' : '');?> png_bg">Time</a></li>
 	            <?php endif; ?>
 	            <?php if($this->CheckPermission('admin_access')):?> 
-	            	<li><a href="/pm/admin" class="<?php echo ($this->active_nav == 'admin' ? 'active' : '');?> png_bg">Admin</a></li>
+	            	<li><a href="<?php echo $this->url('admin'); ?>" class="<?php echo ($this->active_nav == 'admin' ? 'active' : '');?> png_bg">Admin</a></li>
 	            <?php endif; ?>
 	        </ul>
 	    </div>

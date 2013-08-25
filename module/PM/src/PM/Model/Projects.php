@@ -198,11 +198,10 @@ class Projects extends AbstractModel
 	 */
 	public function getTaskCount($id, $status = FALSE)
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->select()
-					->from($task->getTableName(), array(new Zend_Db_Expr('COUNT(id) AS count')))
-					->where('project_id = ?', $id);
-		$data = $task->getTask($sql);
+		$sql = $this->db->select()
+					->from('tasks')->columns(array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
+					->where(array('project_id' => $id));
+		$data = $this->getRow($sql);
 		if(is_array($data))
 		{
 			return $data['count'];
@@ -217,11 +216,10 @@ class Projects extends AbstractModel
 	 */
 	public function getFileCount($id, $status = FALSE)
 	{
-		$file = new PM_Model_DbTable_Files;
-		$sql = $file->select()
-					->from($file->getTableName(), array(new Zend_Db_Expr('COUNT(id) AS count')))
-					->where('project_id = ?', $id);
-		$data = $file->getFile($sql);
+		$sql = $this->db->select()
+					->from('files')->columns( array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
+					->where(array('project_id' => $id));
+		$data = $this->getRow($sql);
 		if(is_array($data))
 		{
 			return $data['count'];
@@ -390,9 +388,8 @@ class Projects extends AbstractModel
 	 */
 	public function getProjectTeamMemberIds($id)
 	{
-		$team = new PM_Model_DbTable_Projects_Teams;
-		$sql = $team->select()->from(array('pt'=>$team->getTableName()), 'user_id')->where('pt.project_id = ?', $id);
-		$members = $team->getProjectTeamMembers($sql);
+		$sql = $this->db->select()->from(array('pt'=> 'project_teams'))->columns(array('user_id'))->where(array('project_id' => $id));
+		$members = $this->getRows($sql);
 		$_members = array();
 		foreach($members AS $member)
 		{
@@ -409,9 +406,14 @@ class Projects extends AbstractModel
 	 */
 	public function addProjectTeamMember($id, $project)
 	{
-		$team = new PM_Model_DbTable_Projects_Teams;
-		$sql = $team->getSQL(array('user_id' => $id, 'project_id' => $project));
-		return $team->addProjectTeamMember($sql);
+		$sql = array(
+			'project_id' => $project,
+			'user_id' => $id,
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()'),
+			'created_date' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+		
+		return $this->insert('project_teams', $sql);
 	}
 	
 	/**

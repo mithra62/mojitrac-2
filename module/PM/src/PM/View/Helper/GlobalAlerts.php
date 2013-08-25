@@ -43,7 +43,7 @@ class GlobalAlerts extends AbstractViewHelper
 		$overdue_tasks = $user->userHasOverdueTasks($id);
 		if($overdue_tasks && is_array($overdue_tasks) && $overdue_tasks['total_count'] >= 1)
 		{
-			//$return .= '<div class="global-alert global-fail"><div>You have <a href="'.$this->view->url(array('module' => 'pm','controller'=>'index','action'=>'index'), null, TRUE).'" style="text-decoration:none; color: #CC3300">'.$overdue_tasks['total_count'].' overdue tasks</a>.</div></div>';
+			$return .= '<div class="global-alert global-fail"><div>You have <a href="'.$this->view->url('pm', array('module' => 'pm','controller'=>'index','action'=>'index'), null, TRUE).'" style="text-decoration:none; color: #CC3300">'.$overdue_tasks['total_count'].' overdue tasks</a>.</div></div>';
 		}
 		
 		$prefs = $serviceManager->get('PM\Model\Timers');

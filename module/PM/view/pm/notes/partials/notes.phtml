@@ -29,7 +29,7 @@
 			<?php if($this->enable_project): ?>
 			<td>
 				<?php if($note['project_name']):?>
-					<a title="<?php echo $note['project_name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=> $note['project_id']), null, TRUE); ?>" ><?php echo $note['project_name']; ?></a>
+					<a title="<?php echo $note['project_name']; ?>" href="<?php echo $this->url('projects/view', array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=> $note['project_id']), null, TRUE); ?>" ><?php echo $note['project_name']; ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif;?>
@@ -39,7 +39,7 @@
 			<?php if($this->enable_task): ?>
 			<td>
 				<?php if($note['task_name']):?>
-					<a title="<?php echo $note['task_name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id'=> $note['task_id']), null, TRUE); ?>" ><?php echo $note['task_name']; ?></a>
+					<a title="<?php echo $note['task_name']; ?>" href="<?php echo $this->url('tasks/view', array('task_id'=> $note['task_id'])); ?>" ><?php echo $note['task_name']; ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif;?>			

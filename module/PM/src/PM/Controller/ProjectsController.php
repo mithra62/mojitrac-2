@@ -156,7 +156,7 @@ class ProjectsController extends AbstractPmController
 		$notes = $this->getServiceLocator()->get('PM\Model\Notes');
 		$view['notes'] = $notes->getNotesByProjectId($id);	
 
-		$view['active_sub'] = $view['project']['status'];
+		$this->layout()->setVariable('active_sub', $view['project']['status']);
 		$view['identity'] = $this->identity;
 		///$this->view->headTitle('Viewing Project: '. $this->view->project['name'], 'PREPEND');
 		$view['id'] = $id;
@@ -307,12 +307,12 @@ class ProjectsController extends AbstractPmController
 		$this->view->form = $form;
 	}
 	
-	function removeAction()
+	public function removeAction()
 	{
-		$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-		$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+		$id = $this->params()->fromRoute('project_id');
+		$confirm = $this->params()->fromPost('confirm');
+		$fail = $this->params()->fromPost('fail');
 		
     	if(!$id)
     	{
@@ -321,8 +321,8 @@ class ProjectsController extends AbstractPmController
     	}
     	
     	$project_data = $project->getProjectById($id);
-    	$this->view->project = $project_data;
-    	if(!$this->view->project)
+    	$view['project'] = $project_data;
+    	if(!$view['project'])
     	{
 			$this->_helper->redirector('index','projects');
 			exit;
@@ -330,8 +330,7 @@ class ProjectsController extends AbstractPmController
 
     	if($fail)
     	{
-			$this->_helper->redirector('view','projects', 'pm', array('id' => $id));
-			exit;   		
+    		return $this->redirect()->toRoute('projects/view', array('project_id' => $id));
     	}
     	
     	if($confirm)
@@ -347,11 +346,13 @@ class ProjectsController extends AbstractPmController
     		}
     	}
     	
-    	$this->view->task_count = $project->getTaskCount($id);
-    	$this->view->file_count = $project->getFileCount($id);
+    	$view['task_count'] = $project->getTaskCount($id);
+    	$view['file_count'] = $project->getFileCount($id);
     	
-		$this->view->headTitle('Delete Project: '. $this->view->project['name'], 'PREPEND');
-		$this->view->id = $id;    	
+		//$this->view->headTitle('Delete Project: '. $this->view->project['name'], 'PREPEND');
+		$view['id'] = $id;  
+
+		return $view;
 	}
 	
 	/**
@@ -361,13 +362,13 @@ class ProjectsController extends AbstractPmController
 	public function manageTeamAction()
 	{
 		
-		$id = $this->_request->getParam('project', FALSE);
+		$id = $this->params()->fromRoute('project_id');
 		if (!$id) 
 		{
-			$this->_helper->redirector('index','projects');
+			return $this->redirect()->toRoute('projects');
 		}
 		
-		$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
 		$project_data = $project->getProjectById($id);
 		if(!$project_data)
 		{
@@ -419,12 +420,13 @@ class ProjectsController extends AbstractPmController
 			}
 		}
 		
-		$this->view->id = $id;
-		$this->view->project = $project_data;
+		$view['id'] = $id;
+		$view['project'] = $project_data;
 
-		$this->view->proj_team = $proj_team;
-		$users = new PM_Model_Users(new PM_Model_DbTable_Users);
-		$this->view->users = $users->getAllUsers('d');
-		$this->view->title = FALSE;
+		$view['proj_team'] = $proj_team;
+		$users = $this->getServiceLocator()->get('Application\Model\User');
+		$view['users'] = $users->getAllUsers('d');
+		
+		return $view;
 	}
 }

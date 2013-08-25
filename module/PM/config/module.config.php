@@ -33,10 +33,50 @@ return array(
         			),
         		),
         	),
+
+        	'admin' => array( //Admin Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/admin',
+        			'constraints' => array(
+        				'id' => '[0-9]+'
+        			),
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Admin',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'settings' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/settings',
+        					'defaults' => array(
+        						'action' => 'settings'
+        					)
+        				)
+        			),
+        			'system-reset' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/system-reset',
+        					'defaults' => array(
+        						'action' => 'systemReset'
+        					)
+        				)
+        			),
+        		)
+        	), //end Admin Routes
+
+
         	'bookmarks' => array( //Bookmarks Routes
         		'type' => 'segment',
         		'options' => array(
         			'route' => '/pm/bookmarks',
+        			'constraints' => array(
+        				'id' => '[0-9]+'
+        			),
         			'defaults' => array(
         				'controller' => 'PM\Controller\Bookmarks',
         				'action' => 'index'
@@ -59,7 +99,7 @@ return array(
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/add',
+        					'route' => '/add[/:type][/:id]',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
@@ -85,7 +125,7 @@ return array(
         				'options' => array(
         					'route' => '/view/[:bookmark_id]',
         					'constraints' => array(
-        						'slug' => '[0-9]+'
+        						'bookmark_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'view'
@@ -141,7 +181,19 @@ return array(
         						'action' => 'edit'
         					)
         				)
-        			),        			
+        			),      			
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/[:company_id]',
+        					'constraints' => array(
+        						'company_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
+        			),           			
         			'map' => array(
         				'type' => 'segment',
         				'options' => array(
@@ -566,10 +618,7 @@ return array(
         	'projects' => array( //Project Routes
         		'type' => 'segment',
         		'options' => array(
-        			'route' => '/pm/projects[:company_id]',
-        			'constraints' => array(
-        				'company_id' => '[0-9]+'
-        			),
+        			'route' => '/pm/projects',
         			'defaults' => array(
         				'controller' => 'PM\Controller\Projects',
         				'action' => 'index'
@@ -582,7 +631,7 @@ return array(
         				'options' => array(
         					'route' => '/view/[:project_id]',
         					'constraints' => array(
-        						'slug' => '[0-9]+'
+        						'project_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'view'

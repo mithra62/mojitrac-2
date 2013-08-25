@@ -37,10 +37,14 @@ class Projects extends AbstractOptions
 	static public function translateTypeId($id, \PM\Model\Options $options)
 	{
 		$types = $options->getAllProjectTypes();
-		if(!isset($types[$id]))
+		foreach($types AS $key => $value)
 		{
-			$id = 0;
+			if($value['id'] == $id)
+			{
+				return $value['name'];
+			}
 		}
+		
 		return $types[$id];
 	}
 	

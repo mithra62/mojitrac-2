@@ -150,10 +150,8 @@ class UserData extends AbstractModel
 	 */
 	public function getUsersData($identity)
 	{
-			$sql = $this->db->select()->from(array('ud' => 'user_data'), array('option_name', 'option_value'))->where('user_id = ?', $identity);
-			$data = $this->_translateEntries($this->getRows($sql));
-		
-		
+		$sql = $this->db->select()->from(array('ud' => 'user_data'))->columns(array('option_name', 'option_value'))->where(array('user_id' => $identity));
+		$data = $this->_translateEntries($this->getRows($sql));
 		return $data;
 	}
 	

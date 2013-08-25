@@ -3,7 +3,7 @@
 </div>
 
 <div class="back_link_content">
-	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=>$this->project['id']), null, TRUE); ?>" title="Back to <?php echo $this->project['name']; ?>">
+	<a href="<?php echo $this->url('projects/view', array('project_id'=>$this->project['id'])); ?>" title="Back to <?php echo $this->project['name']; ?>">
 		Back to <?php echo $this->project['name']; ?>	
 	</a><div><?php echo $this->InteractIcon('left-arrow', 'Back to '.$this->project['name']);?></div>
 </div>
@@ -15,7 +15,7 @@ if($this->users):
 ?>
  
 <form action="" method="POST">
-	<?php echo $this->partial('users/partials/users.phtml', $options); ?>
+	<?php echo $this->partial('pm/users/partials/users', $options); ?>
 	<p>
 		<input type="submit" class="submit" value="Modify Project Team" />
 	</p> 

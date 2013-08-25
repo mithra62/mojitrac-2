@@ -161,7 +161,7 @@ class Notes extends AbstractModel
 		{
 			foreach($where AS $key => $value)
 			{
-				$sql = $sql->where("$key = ? ", $value);
+				$sql = $sql->where(array($key => $value));
 			}
 		}
 		
