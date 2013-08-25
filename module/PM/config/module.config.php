@@ -542,7 +542,7 @@ return array(
         	'projects' => array( //Project Routes
         		'type' => 'segment',
         		'options' => array(
-        			'route' => '/pm/projects[/:company_id]',
+        			'route' => '/pm/projects[:company_id]',
         			'constraints' => array(
         				'company_id' => '[0-9]+'
         			),
@@ -556,7 +556,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => 'view/[:project_id]',
+        					'route' => '/view/[:project_id]',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
@@ -568,7 +568,7 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => 'edit/[:project_id]',
+        					'route' => '/edit/[:project_id]',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
@@ -580,7 +580,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => 'remove/[:project_id]',
+        					'route' => '/remove/[:project_id]',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
@@ -592,7 +592,7 @@ return array(
         			'manage-team' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => 'manage-team/[:project_id]',
+        					'route' => '/manage-team/[:project_id]',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),

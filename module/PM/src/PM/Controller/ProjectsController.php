@@ -43,7 +43,7 @@ class ProjectsController extends AbstractPmController
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
 		$this->layout()->setVariable('active_sub', 'None');
 		    
-		return parent::onDispatch( $e );
+		return $e;
 	}
     
     /**
