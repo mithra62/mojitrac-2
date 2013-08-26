@@ -179,12 +179,12 @@ class Projects extends AbstractModel
 	 */
 	public function getProjectsByCompanyId($id, $exclude_archive = FALSE)
 	{
-		$sql = $this->db->select()->where('company_id = ?', $id);
+		$sql = $this->db->select()->from('projects')->where(array('company_id' => $id));
 		if($exclude_archive)
 		{
-			$sql = $sql->where('status != ?', '6');
+			$sql = $sql->where(array('status' => '6'));
 		}		
-		return $this->db->getProjects($sql);
+		return $this->getRows($sql);
 	}
 
 	/**

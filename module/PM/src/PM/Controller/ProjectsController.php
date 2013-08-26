@@ -105,7 +105,6 @@ class ProjectsController extends AbstractPmController
 		if (!$id) 
 		{
 			return $this->redirect()->toRoute('projects');			
-			exit;
 		}
 		
 		$view = array();
@@ -113,16 +112,14 @@ class ProjectsController extends AbstractPmController
 		$view['project'] = $project->getProjectById($id);
 		if(!$view['project'])
 		{
-			$this->_helper->redirector('index','projects');
-			exit;
+			return $this->redirect()->toRoute('projects');	
 		}
 		
 		$proj_team = $project->getProjectTeamMembers($id);
 		$on_team = $project->isUserOnProjectTeam($this->identity, $id, $proj_team);
 		if(!$on_team && !$this->perm->check($this->identity, 'manage_projects'))
 		{
-			$this->_helper->redirector('index','projects');
-			exit;			
+			return $this->redirect()->toRoute('projects');				
 		}
 	
 		$view['proj_team'] = $proj_team;
@@ -158,6 +155,8 @@ class ProjectsController extends AbstractPmController
 
 		$this->layout()->setVariable('active_sub', $view['project']['status']);
 		$view['identity'] = $this->identity;
+		$view['layout_style'] = 'single';
+		$this->layout()->setVariable('layout_style', 'single');
 		///$this->view->headTitle('Viewing Project: '. $this->view->project['name'], 'PREPEND');
 		$view['id'] = $id;
 		

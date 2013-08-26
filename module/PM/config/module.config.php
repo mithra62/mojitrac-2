@@ -197,9 +197,9 @@ return array(
         			'map' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/map/[:company_id]',
+        					'route' => '/map/:company_id',
         					'constraints' => array(
-        						'slug' => '[0-9]+'
+        						'company_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'map'

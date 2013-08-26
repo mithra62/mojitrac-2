@@ -25,6 +25,7 @@ use PM\Model\Bookmarks;
 use PM\Model\Notes;
 use PM\Model\Options;
 use PM\Model\Notifications;
+use PM\Model\Contacts;
 use PM\Form\ProjectForm;
 
 /**
@@ -124,6 +125,11 @@ class Module
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					return new Notifications($adapter, $db);
+				},
+				'PM\Model\Contacts' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Contacts($adapter, $db);
 				},
 				'PM\Form\ProjectForm' => function($sm) {
 					return new ProjectForm('project', $sm->get('PM\Model\Companies'), $sm->get('PM\Model\Options'));

@@ -1,12 +1,85 @@
 <?php
-/**
- * Contacts Model
- * @author Eric
+ /**
+ * mithra62 - MojiTrac
  *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Model/Projects.php
  */
-class PM_Model_Contacts
+
+namespace PM\Model;
+
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+
+use Application\Model\AbstractModel;
+
+ /**
+ * PM - ProjectForm Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Model/Projects.php
+ */
+class Contacts extends AbstractModel
 {
 	
+	/**
+	 * The form validation filering
+	 * @var \Zend\InputFilter\InputFilter
+	 */
+	protected $inputFilter;
+
+	/**
+	 * The Project Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $db
+	 */
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
+	{
+		parent::__construct($adapter, $db);
+	}
+	
+	/**
+	 * Sets the input filter to use
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
+	 */
+	public function setInputFilter(InputFilterInterface $inputFilter)
+	{
+		throw new \Exception("Not used");
+	}
+	
+	/**
+	 * Returns the InputFilter
+	 * @return \Zend\InputFilter\InputFilter
+	 */
+	public function getInputFilter()
+	{
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+					'name'     => 'name',
+					'required' => true,
+					'filters'  => array(
+							array('name' => 'StripTags'),
+							array('name' => 'StringTrim'),
+					),
+			)));
+	
+			$this->inputFilter = $inputFilter;
+		}
+	
+		return $this->inputFilter;
+	}
+		
 	/**
 	 * Returns the Contact Form
 	 * @return object
@@ -23,8 +96,7 @@ class PM_Model_Contacts
 	 */
 	public function getContactIdByName($name)
 	{
-		$contact = new PM_Model_DbTable_Contacts;
-		$sql = $contact->select()
+		$sql = $this->db->select()
 					  ->from($contact->getTableName(), array('id'))
 					  ->where('name LIKE ?', $name);
 					  
@@ -33,7 +105,6 @@ class PM_Model_Contacts
 	
 	public function getContactById($id)
 	{
-		$contact = new PM_Model_DbTable_Contacts;
 		$sql = $contact->select()->setIntegrityCheck(false)->from(array('c'=>$contact->getTableName()));
 		$sql = $sql->where('c.id = ?', $id);
 		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = c.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
@@ -75,13 +146,12 @@ class PM_Model_Contacts
 	 */
 	public function getContactsByCompanyId($id)
 	{
-		$contact = new PM_Model_DbTable_Contacts();
-		$sql = $contact->select()->setIntegrityCheck(false)->from(array('c'=>$contact->getTableName()));
+		$sql = $this->db->select()->from(array('c'=>'company_contacts'));
 		
 		$sql = $sql->where('c.company_id = ?', $id);
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = c.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
+		$sql = $sql->join(array('u' => 'users'), 'u.id = c.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), 'left');
 		
-		return $contact->getContacts($sql);			
+		return $this->getRows($sql);			
 	}	
 	
 	/**

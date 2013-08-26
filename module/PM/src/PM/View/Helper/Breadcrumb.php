@@ -110,12 +110,14 @@ class Breadcrumb extends AbstractViewHelper
     
     private function add_company()
     {
-        $this->db = new PM_Model_DbTable_Companies();
-    	$sql = $this->db->select()->setIntegrityCheck(false)->from(array('c'=>$this->db->getTableName()), array('c.name AS company_name', 'c.id AS company_id'))->where('id = ?', $this->pk);
-    	$result = $this->db->getCompany($sql);	
+    	$helperPluginManager = $this->getServiceLocator();
+    	$serviceManager = $helperPluginManager->getServiceLocator();
+    	$company = $serviceManager->get('PM/Model/Companies');
+    	
+    	$result = $company->getCompanyById($this->pk);	
     	if($result)
     	{
-    		$company_url = $this->view->url(array('module' => 'pm','controller' => 'companies','action'=>'view', 'id' => $result['company_id']), null, TRUE);
+    		$company_url = $this->view->url('companies/view', array('company_id' => $result['company_id']));
     		$this->add_breadcrumb($company_url, $result['company_name'], TRUE);
     	}    	
     }

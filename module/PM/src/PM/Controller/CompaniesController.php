@@ -34,7 +34,7 @@ class CompaniesController extends AbstractPmController
 	{
 		parent::onDispatch( $e );
 		parent::check_permission('view_companies');
-		//$this->layout()->setVariable('layout_style', 'single');
+		$this->layout()->setVariable('layout_style', 'single');
 		$this->layout()->setVariable('sidebar', 'dashboard');
 		$this->layout()->setVariable('sub_menu', 'companies');
 		$this->layout()->setVariable('active_nav', 'companies');
@@ -76,65 +76,65 @@ class CompaniesController extends AbstractPmController
 	 */
 	public function viewAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('company_id');
 		if (!$id) 
 		{
-			$this->_helper->redirector('index','companies');
-			exit;
+			return $this->redirect()->toRoute('companies');	
 		}
 		
-		$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
-		$this->view->company = $company->getCompanyById($id);
-		if(!$this->view->company)
+		$company = $this->getServiceLocator()->get('PM\Model\Companies');
+		$view['company'] = $company->getCompanyById($id);
+		if(!$view['company'])
 		{
-			$this->_helper->redirector('index','companies');
-			exit;
+			return $this->redirect()->toRoute('companies');
 		}
 		
 		if($this->perm->check($this->identity, 'view_projects'))
 		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-			$this->view->projects = $project->getProjectsByCompanyId($id, TRUE);
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
+			$view['projects'] = $project->getProjectsByCompanyId($id, TRUE);
 		}
 		
 		if($this->perm->check($this->identity, 'view_tasks'))
 		{		
-			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-			$this->view->tasks = $task->getTasksByCompanyId($id);
+			$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+			$view['tasks'] = $task->getTasksByCompanyId($id);
 		}
 
 		if($this->perm->check($this->identity, 'view_files'))
 		{
-			$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-			$this->view->files = $file->getFilesByCompanyId($id);
+			$file = $this->getServiceLocator()->get('PM\Model\Files');
+			$view['files'] = $file->getFilesByCompanyId($id);
 		}
 		
 		if($this->perm->check($this->identity, 'view_company_contacts'))
 		{		
-			$contacts = new PM_Model_Contacts;
-			$this->view->contacts = $contacts->getContactsByCompanyId($id);
+			$contacts = $this->getServiceLocator()->get('PM\Model\Contacts');
+			$view['contacts'] = $contacts->getContactsByCompanyId($id);
 		}
 		
 		if($this->perm->check($this->identity, 'view_time'))
 		{		
-			$times = new PM_Model_Times;
+			$times = $this->getServiceLocator()->get('PM\Model\Times');
 			$not = array('bill_status' => 'paid');
-			$this->view->times = $times->getTimesByCompanyId($id, $where, $not);
-			$this->view->hours = $times->getTotalTimesByCompanyId($id);
+			$view['times'] = $times->getTimesByCompanyId($id, $where, $not);
+			$view['hours'] = $times->getTotalTimesByCompanyId($id);
 		}
 
-		$bookmarks = new PM_Model_Bookmarks(new PM_Model_DbTable_Bookmarks);
-		$this->view->bookmarks = $bookmarks->getBookmarksByCompanyId($id);
+		$bookmarks = $this->getServiceLocator()->get('PM\Model\Bookmarks');
+		$view['bookmarks'] = $bookmarks->getBookmarksByCompanyId($id);
 		
-		$notes = new PM_Model_Notes;
-		$this->view->notes = $notes->getNotesByCompanyId($id);
+		$notes = $this->getServiceLocator()->get('PM\Model\Notes');
+		$view['notes'] = $notes->getNotesByCompanyId($id);
 		
 		//$this->view->layout_style = 'right';
 		
-		$this->view->sub_menu = 'company';
-		$this->view->active_sub = $this->view->company['type'];		
-		$this->view->headTitle('Viewing Company: '. $this->view->company['name'], 'PREPEND');
-		$this->view->id = $this->view->company_id = $id;
+		$view['sub_menu'] = 'company';
+		$view['active_sub'] = $this->view->company['type'];		
+		//$this->view->headTitle('Viewing Company: '. $this->view->company['name'], 'PREPEND');
+		$view['id'] = $view['company_id'] = $id;
+		
+		return $view;
 	}
 	
 	/**

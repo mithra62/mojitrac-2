@@ -123,15 +123,15 @@ class Companies extends AbstractModel
 		$sql = $this->db->select();
 		if(is_array($what))
 		{
-			$sql->from(array('c'=>$this->db->getTableName()), $what);
+			$sql->from(array('c'=> 'companies'), $what);
 		}
 		else
 		{
-			$sql->from(array('c'=>$this->db->getTableName()));
+			$sql->from(array('c'=> 'companies'));
 		}
 				
-		$sql->where('id = ?', $id);
-		return $this->db->getCompany($sql);
+		$sql->where(array('id' => $id));
+		return $this->getRow($sql);
 	}
 	
 	/**
