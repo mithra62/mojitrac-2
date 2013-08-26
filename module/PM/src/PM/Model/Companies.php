@@ -1,35 +1,82 @@
 <?php
-/**
+ /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/modules/pm/models/Companies.php
-*/
-
-/**
- * PM - Companies Model
  *
- * Handles interacting with Companies
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Model/Companies.php
+ */
+
+namespace PM\Model;
+
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+
+use Application\Model\AbstractModel;
+
+ /**
+ * PM - Companies Model
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/models/Companies.php
+ * @filesource 	./module/PM/src/PM/Model/Companies.php
  */
-class PM_Model_Companies extends Model_Abstract
+class Companies extends AbstractModel
 {
 	/**
-	 * The PM Companies Model
-	 * @param PM_Model_DbTable_Companies $db
-	 */	
-	public function __construct(PM_Model_DbTable_Companies $db)
+	 * The Companies Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $db
+	 */
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
-		parent::__construct();
-		$this->db = $db;		
+		parent::__construct($adapter, $db);
 	}
+	
+	public function setInputFilter(InputFilterInterface $inputFilter)
+	{
+		throw new \Exception("Not used");
+	}
+	
+	public function getInputFilter()
+	{
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'email',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+				'validators' => array(
+					array(
+						'name' => 'EmailAddress',
+					),
+					array(
+						'name' => 'Db\RecordExists',
+						'options' => array(
+							'table' => 'users',
+							'field' => 'email',
+							'adapter' => $this->authAdapter
+						)
+					),
+				),
+			)));
+	
+			$this->inputFilter = $inputFilter;
+		}
+	
+		return $this->inputFilter;
+	}	
+	
 	/**
 	 * Returns the Artist Form
 	 * @return object
@@ -93,7 +140,7 @@ class PM_Model_Companies extends Model_Abstract
 	 */
 	public function getAllCompanyNames($type = FALSE, $ids = FALSE)
 	{
-		$sql = $this->db->select()->from($this->db->getTableName(), array('id','name'));
+		$sql = $this->db->select()->from('companies', array('id','name'));
 		if($type && is_array($type))
 		{ 
 			foreach($type AS $t)
@@ -108,7 +155,7 @@ class PM_Model_Companies extends Model_Abstract
 		}
 		
 		$sql = $sql->order('name ASC');
-		return $this->db->getCompanies($sql);
+		return $this->getRows($sql);
 	}
 	
 	/**
@@ -117,13 +164,13 @@ class PM_Model_Companies extends Model_Abstract
 	 */
 	public function getAllCompanies($view_type = FALSE)
 	{
-		$sql = $this->db->select();
-		
+		$sql = $this->db->select()->from('companies');
 		if(is_numeric($view_type))
 		{
-			$sql = $sql->where('type = ?', $view_type);
+			$sql = $sql->where(array('type' => $view_type));
 		}
-		return $this->db->getCompanies($sql);		
+		
+		return $this->getRows($sql);		
 	}
 	
 	/**
@@ -135,7 +182,7 @@ class PM_Model_Companies extends Model_Abstract
 	{
 		$proj = new PM_Model_DbTable_Projects;
 		$sql = $proj->select()
-					->from($proj->getTableName(), array(new Zend_Db_Expr('COUNT(id) AS count')))
+					->from($proj->getTableName(), array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
 					->where('company_id = ?', $id);
 		$data = $proj->getProject($sql);
 		if(is_array($data))
@@ -154,7 +201,7 @@ class PM_Model_Companies extends Model_Abstract
 	{
 		$task = new PM_Model_DbTable_Tasks;
 		$sql = $task->select()
-					->from($task->getTableName(), array(new Zend_Db_Expr('COUNT(id) AS count')))
+					->from($task->getTableName(), array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
 					->where('company_id = ?', $id);
 		$data = $task->getTask($sql);
 		if(is_array($data))
@@ -173,7 +220,7 @@ class PM_Model_Companies extends Model_Abstract
 	{
 		$file = new PM_Model_DbTable_Files;
 		$sql = $file->select()
-					->from($file->getTableName(), array(new Zend_Db_Expr('COUNT(id) AS count')))
+					->from($file->getTableName(), array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
 					->where('company_id = ?', $id);
 		$data = $file->getFile($sql);
 		if(is_array($data))
@@ -216,8 +263,8 @@ class PM_Model_Companies extends Model_Abstract
 	 */
 	public function updateCompanyProjectCount($id, $count = 1, $col = 'active_projects')
 	{
-		$sql = array($col => new Zend_Db_Expr($col.'='.$col.'+'.$count));
-		return $this->db->updateCompany($sql, $id);
+		$sql = array($col => new \Zend\Db\Sql\Expression($col.'='.$col.'+'.$count));
+		return $this->update('companies', $sql, array('id' => $id));
 	}	
 	
 	/**

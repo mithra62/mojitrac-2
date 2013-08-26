@@ -12,13 +12,10 @@
 
 namespace PM;
 
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
-use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\ModuleManager\ModuleManager;
-use Zend\Db\Sql\Sql;
 
 use PM\Model\Projects;
+use PM\Model\Companies;
 use PM\Model\Timers;
 use PM\Model\Charts;
 use PM\Model\Files;
@@ -28,6 +25,7 @@ use PM\Model\Bookmarks;
 use PM\Model\Notes;
 use PM\Model\Options;
 use PM\Model\Notifications;
+use PM\Form\ProjectForm;
 
 /**
  * PM - Module Object
@@ -77,6 +75,11 @@ class Module
 					$db = $sm->get('SqlObject');
 					return new Projects($adapter, $db);
 				},
+				'PM\Model\Companies' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Companies($adapter, $db);
+				},				
 				'PM\Model\Timers' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
@@ -120,8 +123,11 @@ class Module
 				'PM\Model\Notifications' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Options($adapter, $db);
-				}							
+					return new Notifications($adapter, $db);
+				},
+				'PM\Form\ProjectForm' => function($sm) {
+					return new ProjectForm('project', $sm->get('PM\Model\Companies'), $sm->get('PM\Model\Options'));
+				},											
 			),
     	);
     }    

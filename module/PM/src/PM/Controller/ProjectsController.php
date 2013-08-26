@@ -35,7 +35,7 @@ class ProjectsController extends AbstractPmController
 	{
 		parent::onDispatch( $e );
         parent::check_permission('view_projects');
-        $this->layout()->setVariable('layout_style', 'single');
+        //$this->layout()->setVariable('layout_style', 'single');
         $this->layout()->setVariable('sidebar', 'dashboard');
         $this->layout()->setVariable('sub_menu', 'projects');
         $this->layout()->setVariable('active_nav', 'projects');
@@ -55,7 +55,7 @@ class ProjectsController extends AbstractPmController
 		$company_id = $this->params()->fromRoute('company_id');
 		if($company_id)
 		{
-			$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
+			$company = $this->getServiceLocator()->get('PM\Model\Companies'); 
 			$company_data = $company->getCompanyById($company_id);
 			if(!$company_data)
 			{
@@ -104,7 +104,7 @@ class ProjectsController extends AbstractPmController
 		$id = $this->params()->fromRoute('project_id');
 		if (!$id) 
 		{
-			$this->_helper->redirector('index','projects');
+			return $this->redirect()->toRoute('projects');			
 			exit;
 		}
 		
@@ -171,33 +171,27 @@ class ProjectsController extends AbstractPmController
 	public function editAction()
 	{
         		
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('project_id');
 		if (!$id) 
 		{
-			$this->_helper->redirector('index','projects');
-			exit;
+			return $this->redirect()->toRoute('projects');
 		}		
 		
-		$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+		$form = $this->getServiceLocator()->get('PM\Form\ProjectForm');
+		
 		$project_data = $project->getProjectById($id);
 		if (!$project_data) 
 		{
-			$this->_helper->redirector('index','projects');
-			exit;
+			return $this->redirect()->toRoute('projects');
 		}
 		
 		if(!$this->perm->check($this->identity, 'manage_projects'))
         {
-        	$this->_helper->redirector('view', 'projects', 'pm', array('id'=>$id));
-        	exit;
+        	return $this->redirect()->toRoute('projects/view', array('project_id'=>$id));
         }		
-		
-		$form = $project->getProjectForm(array(
-            'action' => '/pm/projects/edit/',
-            'method' => 'post',
-        ), array('id' => $id));
-        
-        $this->view->id = $id;
+	
+        $view['id'] = $id;
         
         if($project_data['start_date'] == '0000-00-00')
         {
@@ -209,43 +203,46 @@ class ProjectsController extends AbstractPmController
         	$project_data['end_date'] = '';
         }
         
-        $form->populate($project_data);	
-        
-        $this->view->form = $form;
-        
+        $request = $this->getRequest();
+        $form->setData($project_data);
         if ($this->getRequest()->isPost()) 
         {
             $formData = $this->getRequest()->getPost();
+            $form->setInputFilter($project->getInputFilter());  
+            $form->setData($request->getPost());
             if ($form->isValid($formData)) 
             {
-            	if($project->updateProject($formData, $id))
+            	if($project->updateProject($formData->toArray(), $id))
 	            {
-	            	PM_Model_ActivityLog::logProjectUpdate($formData, $id, $this->identity);
-			    	$this->_flashMessenger->addMessage('Project updated!');
-					$this->_helper->redirector('view', 'projects', 'pm', array('id' => $id));    
+	            	//PM_Model_ActivityLog::logProjectUpdate($formData, $id, $this->identity);
+					$this->flashMessenger()->addMessage('Project updated!');
+					return $this->redirect()->toRoute('projects/view', array('project_id' => $id));					  
 					        		
             	} 
             	else 
             	{
-            		$this->view->errors = array('Couldn\'t update company...');
-            		$form->populate($formData);
+            		$view['errors'] = array('Couldn\'t update company...');
+            		$form->setData($formData);
             	}
                 
             } 
             else 
             {
-            	$this->view->errors = array('Please fix the errors below.');
-                $form->populate($formData);
+            	$view['errors'] = array('Please fix the errors below.');
+                $form->setData($formData);
             }
             
 	    }
 	    
-	    Zend_Registry::set('pm_activity_filter', array('project_id' => $id));
-	    $this->view->project_data = $project_data;
-	    $this->view->active_sub = $project_data['status'];
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';	
-		$this->view->headTitle('Edit Project', 'PREPEND');     	
+	    //Zend_Registry::set('pm_activity_filter', array('project_id' => $id));
+	    $view['form'] = $form;
+	    $view['project_data'] = $project_data;
+	    $view['active_sub'] = $project_data['status'];
+        $view['layout_style'] = 'right';
+        $view['sidebar'] = 'dashboard';	
+		//$this->view->headTitle('Edit Project', 'PREPEND');   
+
+        return $view;
 	}
 	
 	/**
@@ -255,56 +252,56 @@ class ProjectsController extends AbstractPmController
 	public function addAction()
 	{
 		$company_id = $this->params()->fromRoute('company_id');
-		$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-		$form = $project->getProjectForm(array(
-            'action' => '/pm/projects/add',
-            'method' => 'post',
-        ));
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+		$form = $this->getServiceLocator()->get('PM\Form\ProjectForm');
         
         if($company_id)
         {
-        	$form->populate(array('company_id' => $company_id));
+        	$form->setData(array('company_id' => $company_id));
         }        
 		
-		 if ($this->getRequest()->isPost()) 
-		 {
+        $request = $this->getRequest();
+		if ($request->isPost()) 
+		{
     		$formData = $this->getRequest()->getPost();
+    		$form->setInputFilter($project->getInputFilter());
+    		$form->setData($request->getPost());
+    		    		
 			if ($form->isValid($formData)) 
 			{
 				$formData['creator'] = $this->identity;
-				if($id = $project->addProject($formData))
+				$id = $project->addProject($formData->toArray());
+				if($id)
 				{
-					PM_Model_ActivityLog::logProjectAdd($formData, $id, $this->identity);
+					//PM_Model_ActivityLog::logProjectAdd($formData, $id, $this->identity);
 					if($project->addProjectTeamMember($this->identity, $id))
 					{
-						PM_Model_ActivityLog::logProjectTeamAdd(array('first_user'), $id, $this->identity);
+						//PM_Model_ActivityLog::logProjectTeamAdd(array('first_user'), $id, $this->identity);
 					}
 					
 					if(is_numeric($formData['company_id']))
 					{
-						$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
+						$company = $this->getServiceLocator()->get('PM\Model\Companies');
 						$company->updateCompanyProjectCount($formData['company_id']);
 					}
 					
-			    	$this->_flashMessenger->addMessage('Project Added!');
-					$this->_helper->redirector('view','projects', 'pm', array('id' => $id));					
-					exit;
+					$this->flashMessenger()->addMessage('Project Added!');
+			    	return $this->redirect()->toRoute('projects/view', array('project_id' => $id));
 				}
 				
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
+				$view['errors'] = array('Please fix the errors below.');
 			}
 
 		 }
 		
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		
-		$this->view->title = FALSE;
-		$this->view->headTitle('Add Project', 'PREPEND');
+        $this->layout()->setVariable('layout_style', 'left');
+        $view['sidebar'] = 'dashboard';
 
-		$this->view->form = $form;
+		$view['form'] = $form;
+		return $view;
 	}
 	
 	public function removeAction()

@@ -21,10 +21,8 @@ namespace PM\Model\Options;
  */
 class Projects extends AbstractOptions
 {
-	static public function types()
+	static public function types($options)
 	{
-		$sm = self::getServiceLocator();
-		$options = $sm->get('PM\Model\Options');
 		return parent::filterOptions($options->getAllProjectTypes());
 	}
 	

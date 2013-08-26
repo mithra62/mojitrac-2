@@ -1,5 +1,11 @@
-
-<form action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod()) ?>" id="proj_form">
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'proj_form');
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>
 <input type="hidden" name="start_date_default" id="start_date_default" value="<?php echo date('Y-m-d'); ?>" />
 <input type="hidden" name="end_date_default" id="end_date_default" value="<?php echo date('Y-m-d'); ?>" />
 <?php 
@@ -16,32 +22,33 @@ if($this->id > 0)
 	
 		<p>
 			<label for="name">Name</label>
-			<?php echo $this->form->name; ?>
+					<?php $name = $form->get('name'); echo $this->formRow($name); ?>
 		</p>
 		
 		<p>
 			<label for="company_id">Company</label>
-			<?php echo $this->form->company_id; ?>
+			<?php $company_id = $form->get('company_id'); echo $this->formRow($company_id); ?>
 		</p>
 		
 		<p>
 			<label for="status">Status</label>
-			<?php echo $this->form->status; ?>
+			<?php $status = $form->get('status'); echo $this->formRow($status); ?>
+			
 		</p>
 		
 		<p>
 			<label for="priority">Priority</label>
-			<?php echo $this->form->priority; ?>
+			<?php $field = $form->get('priority'); echo $this->formRow($field); ?>
 		</p>
 		
 		<p>
 			<label for="type">Type</label>
-			<?php echo $this->form->type; ?>
+			<?php $field = $form->get('type'); echo $this->formRow($field); ?>
 		</p>								
 		
 		<p>
 			<label for="description">Description</label>
-			<?php echo $this->form->description; ?>
+			<?php $field = $form->get('description'); echo $this->formRow($field); ?>
 		</p>
 		
 		<p>
@@ -54,11 +61,11 @@ if($this->id > 0)
 	
 		<p>
 			<label for="start_date">Start Date</label>
-			<?php echo $this->form->start_date; ?>
+			<?php $field = $form->get('start_date'); echo $this->formRow($field); ?>
 		</p>
 		<p>
 			<label for="end_date">End Date</label>
-			<?php echo $this->form->end_date; ?>
+			<?php $field = $form->get('end_date'); echo $this->formRow($field); ?>
 		</p>
 		
 		<p>
@@ -68,7 +75,7 @@ if($this->id > 0)
 	</div>
 </div>
 <?php echo $this->ConfirmPageUnload('#proj_form')?>
-</form>	
+<?php echo $this->form()->closeTag() ?>
 
 <script type="text/javascript">
 $.validator.setDefaults({

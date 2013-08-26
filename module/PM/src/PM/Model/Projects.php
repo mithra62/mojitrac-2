@@ -12,10 +12,15 @@
 
 namespace PM\Model;
 
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+
 use Application\Model\AbstractModel;
 
  /**
- * PM - Projects Model
+ * PM - ProjectForm Model
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
@@ -24,13 +29,19 @@ use Application\Model\AbstractModel;
 class Projects extends AbstractModel
 {
 	/**
+	 * The form validation filering
+	 * @var \Zend\InputFilter\InputFilter
+	 */
+	protected $inputFilter;
+	
+	/**
 	 * The key to use for the cache items
 	 * @var string
 	 */
 	public $cache_key = 'projects';
 	
 	/**
-	 * The Projects Model
+	 * The Project Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $db
 	 */
@@ -40,12 +51,62 @@ class Projects extends AbstractModel
 	}
 	
 	/**
-	 * Returns the Project Form
-	 * @return object
+	 * Sets the input filter to use
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
 	 */
-	public function getProjectForm($options = array(), $hidden = array())
+	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
-        return new PM_Form_Project($options, $hidden);		
+		throw new \Exception("Not used");
+	}
+	
+	/**
+	 * Returns the InputFilter
+	 * @return \Zend\InputFilter\InputFilter
+	 */
+	public function getInputFilter()
+	{
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'name',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+			)));
+	
+			$this->inputFilter = $inputFilter;
+		}
+	
+		return $this->inputFilter;
+	}
+	
+	/**
+	 * Creates the array for modifying the DB
+	 * @param array $data
+	 * @return multitype:\PM\Model\Zend_Db_Expr unknown
+	 */
+	private function getSQL($data){
+		return array(
+				'name' => $data['name'],
+				'company_id' => $data['company_id'],
+				'start_date' => $data['start_date'],
+				'end_date' => $data['end_date'],
+				'actual_end_date' => $data['actual_end_date'],
+				'status' => $data['status'],
+				'percent_complete' => $data['percent_complete'],
+				'description' => $data['description'],
+				'target_budget' => $data['target_budget'],
+				'actual_budget' => $data['actual_budget'],
+				'creator' => $data['creator'],
+				'priority' => $data['priority'],
+				'type' => $data['type'],
+				'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
 	}	
 	
 	/**
@@ -245,22 +306,24 @@ class Projects extends AbstractModel
 
 	
 	/**
-	 * Inserts or updates a Company
+	 * Inserts or updates a Project
 	 * @param $data
 	 * @param $bypass_update
 	 * @return mixed
 	 */
 	public function addProject($data, $bypass_update = FALSE)
 	{
+		/*
 		$ext = $this->event('pre.moji_project_add', $this, compact('data'));
 		if($ext->stopped()) return $ext->last();
-				
-		$sql = $this->db->getSQL($data);
-		$project_id = $this->db->addProject($sql);
+		*/		
+		$sql = $this->getSQL($data);
+		$project_id = $this->insert('projects', $sql);
 		
+		/*
 		$ext = $this->event('post.moji_project_add', $this, compact('project_id', 'data'));
 		if($ext->stopped()) return $ext->last();
-				
+		*/	
 		return $project_id;
 	}
 	
@@ -272,15 +335,19 @@ class Projects extends AbstractModel
 	 */
 	public function updateProject($data, $id)
 	{
+		/*
 		$ext = $this->event('pre.moji_project_update', $this, compact('data', 'id'));
 		if($ext->stopped()) return $ext->last();
-				
-		$sql = $this->db->getSQL($data);
-		$return = $this->db->update($sql, "id = '$id'");
+		*/
 		
+		$sql = $this->getSQL($data);
+		$return = $this->update('projects', $sql, array('id' => $id));
+		
+		/*
 		$ext = $this->event('post.moji_project_update', $this, compact('data', 'id'));
 		if($ext->stopped()) return $ext->last();	
-
+		*/
+		
 		return $return;
 	}
 	

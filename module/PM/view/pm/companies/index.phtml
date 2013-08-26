@@ -9,9 +9,9 @@
 	</div>
 		
 		<?php 
-		echo $this->ActionBlock('help', 'Help', $this->url(array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'main'), null, TRUE), 'facebox');
+		echo $this->ActionBlock('help', 'Help', $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'main'), null, TRUE), 'facebox');
 		if($this->CheckPermission('manage_companies')):
-			echo $this->ActionBlock('add', 'Add Company', $this->url(array('module' => 'pm','controller' => 'companies','action'=>'add'), null, TRUE));
+			echo $this->ActionBlock('add', 'Add Company', $this->url('companies/add'));
 		endif; 
 		?>
 		<br clear="all" />		
@@ -38,7 +38,7 @@ if($this->companies):
 		{
 		?>
 		<tr>
-			<td><a title="<?php echo $company['name']; ?>" href="<?php echo $this->url(array('controller'=>'companies','action'=>'view', 'id'=> $company['id'])); ?>"><?php echo $company['name']; ?></a></td>
+			<td><a title="<?php echo $company['name']; ?>" href="<?php echo $this->url('companies/view', array('company_id'=> $company['id'])); ?>"><?php echo $company['name']; ?></a></td>
 			<td>
 			<?php 
 			if($company['phone1'])
@@ -63,12 +63,12 @@ if($this->companies):
 			<?php endif; ?>
 			
 			<?php if($this->CheckPermission('view_company_contacts')):?>				
-				<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'contacts','action'=>'index', 'company'=>$company['id']), null, TRUE); ?>" title="Contacts"><?php echo $this->InteractIcon('user', 'View Company Users');?></a>
+				<a href="<?php echo $this->url('contacts', array('module' => 'pm','controller' => 'contacts','action'=>'index', 'company'=>$company['id']), null, TRUE); ?>" title="Contacts"><?php echo $this->InteractIcon('user', 'View Company Users');?></a>
 			<?php endif; ?>
 			
 			<?php if($this->CheckPermission('manage_companies')):?>
-				<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'companies','action'=>'edit', 'id' => $company['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit Company');?></a>
-				<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'companies','action'=>'remove', 'id' => $company['id']), null, TRUE); ?>" title="Delete" rel="facebox"><?php echo $this->InteractIcon('cross', 'Delete Company');?></a>
+				<a href="<?php echo $this->url('companies/edit', array('company_id' => $company['id'])); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit Company');?></a>
+				<a href="<?php echo $this->url('companies/remove', array('company_id' => $company['id'])); ?>" title="Delete" rel="facebox"><?php echo $this->InteractIcon('cross', 'Delete Company');?></a>
 			<?php endif; ?>
 			</td>
 		</tr>
@@ -86,6 +86,6 @@ if($this->companies):
 	<?php endif; ?>
 	companies
 	
- setup. <?php if($this->CheckPermission('manage_companies')):?>Want to <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'companies','action'=>'add'), null, TRUE); ?>">add</a> one?<?php endif; ?></div>
+ setup. <?php if($this->CheckPermission('manage_companies')):?>Want to <a href="<?php echo $this->url('companies/add', array('module' => 'pm','controller' => 'companies','action'=>'add'), null, TRUE); ?>">add</a> one?<?php endif; ?></div>
 
 <?php endif; ?>

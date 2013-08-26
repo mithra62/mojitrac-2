@@ -26,24 +26,24 @@ use Zend\View\Model\ViewModel;
 * @filesource 	./module/PM/src/PM/Controller/CompaniesController.php
 */
 class CompaniesController extends AbstractPmController
-{
-
+{	
 	/**
 	 * Class preDispatch
 	 */
-	public function preDispatch()
+	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
-        parent::preDispatch();
-        parent::check_permission('view_companies');
-        $this->view->headTitle('Companies', 'PREPEND');
-        $this->view->layout_style = 'single';
-        $this->view->sidebar = 'dashboard';
-        $this->view->sub_menu = 'companies';
-        $this->view->active_nav = 'companies';
-        $this->view->sub_menu_options = PM_Model_Options_Companies::types();
-		$this->view->active_sub = 'None';
-		$this->view->title = FALSE;          
-	}
+		parent::onDispatch( $e );
+		parent::check_permission('view_companies');
+		//$this->layout()->setVariable('layout_style', 'single');
+		$this->layout()->setVariable('sidebar', 'dashboard');
+		$this->layout()->setVariable('sub_menu', 'companies');
+		$this->layout()->setVariable('active_nav', 'companies');
+		$this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Companies::types());
+		$this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
+		$this->layout()->setVariable('active_sub', 'None');
+	
+		return $e;
+	}	
     
     /**
      * Main Page
@@ -51,20 +51,23 @@ class CompaniesController extends AbstractPmController
      */
 	public function indexAction()
 	{		
-		$view = $this->_getParam("view",FALSE);
-		$this->view->active_sub = $view;
-		$this->view->company_filter = $view;		
+		//$param = $this->_getParam("view",FALSE);
+		$param = $this->params()->fromRoute('company_id');
+		$view['active_sub'] = $param;
+		$view['company_filter'] = $param;		
 		if($this->perm->check($this->identity, 'manage_companies'))
 		{
-			$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
+			$company = $this->getServiceLocator()->get('PM\Model\Companies'); 
 			$companies = $company->getAllCompanies($view);
-			$this->view->companies = $companies;
+			$view['companies'] = $companies;
 		}
 		else
 		{
-			$user = new PM_Model_Users(new PM_Model_DbTable_Users);
-			$this->view->companies = $user->getAssignedProjectCompanies($this->identity);
+			$user = $this->getServiceLocator()->get('PM\Model\Users'); 
+			$view['companies'] = $user->getAssignedProjectCompanies($this->identity);
 		}
+		
+		return $view;
 	}
 	
 	/**

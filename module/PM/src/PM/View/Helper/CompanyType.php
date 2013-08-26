@@ -18,6 +18,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 use Application\Model\Auth\AuthAdapter;
 use Application\View\Helper\AbstractViewHelper;
+use PM\Model\Options\Companies;
 
  /**
  * PM - Company Type View Helper
@@ -30,6 +31,6 @@ class CompanyType extends AbstractViewHelper
 {
 	function __invoke($type)
 	{
-		return PM_Model_Options_Companies::translateTypeId($type); 
+		return Companies::translateTypeId($type); 
 	}
 }

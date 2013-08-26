@@ -1,5 +1,25 @@
-<?php
-class PM_Model_Options_Companies
+<?php 
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Model/Options/Companies.php
+ */
+
+namespace PM\Model\Options;
+
+/**
+ * PM - Companies Options Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Model/Options/Companies.php
+ */
+class Companies extends AbstractOptions
 {
 	static public function types()
 	{
@@ -17,18 +37,17 @@ class PM_Model_Options_Companies
 	
 	static public function translateTypeId($id)
 	{
-		$types = PM_Model_Options_Companies::types();
+		$types = self::types();
 		return $types[$id];
 	}
 	
-	static public function companies($blank = FALSE, $empty = FALSE, $types = FALSE, $ids = FALSE)
+	static public function companies(\PM\Model\Companies $companies, $blank = FALSE, $empty = FALSE, $types = FALSE, $ids = FALSE)
 	{
 		if($empty)
 		{
 			return array();
 		}
 		
-		$companies = new PM_Model_Companies(new PM_Model_DbTable_Companies);
 		$arr = $companies->getAllCompanyNames($types, $ids);
 		$_new = array();
 		if($blank)
