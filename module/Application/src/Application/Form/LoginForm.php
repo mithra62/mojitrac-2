@@ -6,24 +6,22 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
+* @version		2.0
 * @filesource 	./moji/application/forms/LoginForm.php
 */
 
 namespace Application\Form;
 
-use Zend\Form\Form;
-
 /**
-* LoginForm Form
+* Login Form
 *
-* Generates the LoginForm form
+* Generates the Login Form
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
 * @filesource 	./moji/application/forms/LoginForm.php
 */
-class LoginForm extends Form
+class LoginForm extends AbstractForm
 {
 	/**
 	 * Generates the LoginForm form
@@ -49,15 +47,7 @@ class LoginForm extends Form
 					'class' => 'input large',
 				),
 		));
-		$this->add(array(
-				'name' => '_x',
-				'type' => 'Csrf',
-				'options' => array(
-						'csrf_options' => array(
-								'timeout' => 600
-						)
-				)
-		));		
+	
 		$this->add(array(
 				'name' => 'submit',
 				'type' => 'Submit',

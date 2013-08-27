@@ -6,38 +6,32 @@
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
- * @version		1.0
- * @filesource 	./moji/application/modules/pm/models/User.php
+ * @version		2.0
+ * @filesource 	./modules/Application/src/Application/Model/User/UserData.php
  */
 
 namespace Application\Model\User;
 
-use Zend\Db\TableGateway\TableGateway;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
 use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
 use Application\Model\AbstractModel;
-use Application\Model\Hash;
 
  /**
- * PM - User Model
+ * Application - User Data Model
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/modules/pm/models/User.php
+ * @filesource 	./modules/Application/src/Application/Model/User/UserData.php
  */
 class UserData extends AbstractModel
 {
 	/**
-	 * The link to the database object
-	 * @var object
+	 * The form validation filering
+	 * @var \Zend\InputFilter\InputFilter
 	 */
-	public $db;
-	
-	/**
-	 * The cache object
-	 * @var object
-	 */
-	public $cache;
+	protected $inputFilter;
 			
 	/**
 	 * Contains all the keys for the global settings
@@ -70,6 +64,45 @@ class UserData extends AbstractModel
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db)
 	{
 		parent::__construct($adapter, $db);
+	}
+	
+	/**
+	 * Sets the input filter to use
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
+	 */
+	public function setInputFilter(InputFilterInterface $inputFilter)
+	{
+		throw new \Exception("Not used");
+	}
+	
+	/**
+	 * Returns the InputFilter
+	 * @return \Zend\InputFilter\InputFilter
+	 */
+	public function getInputFilter()
+	{
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$this->inputFilter = $inputFilter;
+		}
+	
+		return $this->inputFilter;
+	}
+	
+	/**
+	 * Creates the array for modifying the DB
+	 * @param array $data
+	 * @return multitype:\PM\Model\Zend_Db_Expr unknown
+	 */
+	private function getSQL($data){
+		return array(
+		'option_value' => $data['option_value'],
+		'option_name' => $data['option_name'],
+		'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
 	}	
 	
 	/**
@@ -78,6 +111,8 @@ class UserData extends AbstractModel
 	 */
 	private function _checkEntry($data, $identity)
 	{
+		
+		//exit;
 		if(in_array($data, $this->defaults))
 		{
 			if(!$this->getUserData($data, $identity))
@@ -97,7 +132,7 @@ class UserData extends AbstractModel
 	{
 		$sql = $this->db->getSQL(array('option_name' => $data));
 		$sql['user_id'] = $identity;
-		return $this->db->addUserData($sql);
+		return $this->insert('user_data', $sql);
 	}
 	
 	/**
@@ -106,8 +141,9 @@ class UserData extends AbstractModel
 	 */
 	public function getUserData($data, $identity)
 	{
-		$sql = $this->db->select()->from($this->db->getTableName(), array('id'))->where('option_name = ?', $data)->where('user_id = ?', $identity);
-		return $this->db->getUserData($sql);
+		$sql = $this->db->select()->from('user_data')->columns(array('id'))
+					->where(array('option_name' => $data, 'user_id' => $identity));
+		return $this->getRow($sql);
 	}
 	
 	/**
@@ -122,10 +158,9 @@ class UserData extends AbstractModel
 			return FALSE;
 		}
 		
-		$sql = $this->db->getSQL(array('option_name' => $key, 'option_value' => $value));
-		if($this->db->update($sql, "option_name = '".$key."' AND user_id = '$identity'"))
+		$sql = $this->getSQL(array('option_name' => $key, 'option_value' => $value));
+		if($this->update('user_data', $sql, array('option_name' => $key, 'user_id' => $identity)))
 		{
-			$this->cache->remove($identity.'_user_data');
 			return TRUE;
 		}
 		
@@ -141,7 +176,7 @@ class UserData extends AbstractModel
 		{
 			$this->updateUserDataEntry($key, $value, $identity);
 		}
-		$this->cache->remove($identity.'_user_data');
+		
 		return TRUE;
 	}
 

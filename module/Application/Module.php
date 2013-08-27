@@ -28,6 +28,8 @@ use Application\Model\Login;
 use Application\Form\ForgotPasswordForm;
 use Application\Model\ForgotPassword;
 use Application\Model\Settings;
+use Application\Form\UserForm;
+use Application\Form\PrefsForm;
 
 /**
  * Default - Module Loader
@@ -168,6 +170,9 @@ class Module
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					return new UserData($adapter, $db);					
+				},
+				'Application\Form\PrefsForm' => function($sm) {
+					return new PrefsForm('preferences');
 				}
 			),
     	);

@@ -13,8 +13,6 @@
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 
 /**
 * PM - Settings Controller
@@ -30,15 +28,17 @@ class SettingsController extends AbstractPmController
 	/**
 	 * Class preDispatch
 	 */
-	public function preDispatch()
-	{ 
-		parent::preDispatch();
-        $this->view->headTitle('Settings', 'PREPEND'); 
-        $this->view->layout_style = 'single';
-        $this->view->sidebar = 'dashboard';
-		$this->view->active_sub = 'settings';
-		$this->view->title = FALSE;	
-		$this->view->active_nav = 'none';
+	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
+	{
+		parent::onDispatch( $e );
+        //parent::check_permission('view_projects');
+        //$this->layout()->setVariable('layout_style', 'single');
+        $this->layout()->setVariable('sidebar', 'dashboard');
+        $this->layout()->setVariable('sub_menu', 'settings');
+        $this->layout()->setVariable('active_nav', 'settings');
+        $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
+		    
+		return $e;
 	}
     
     /**
@@ -56,7 +56,8 @@ class SettingsController extends AbstractPmController
      */
     public function indexAction()
     {
-    	$this->view->sub_menu = 'settings';
+    	$view['sub_menu'] = 'settings';
+    	return $view;
     }
     
     /**
@@ -80,9 +81,8 @@ class SettingsController extends AbstractPmController
 			{
 				if($user->changePassword($this->identity, $formData['new_password']))
 				{
-			    	$this->_flashMessenger->addMessage('Password changed!');
-					$this->_helper->redirector('index','settings');
-					exit;		
+			    	$this->flashMessenger()->addMessage('Password changed!');
+					return $this->redirect()->toRoute('projects/view', array('project_id' => $id));		
 				}
 			}   
 		} 
@@ -103,34 +103,34 @@ class SettingsController extends AbstractPmController
     
     public function prefsAction()
     {
-    	$this->view->sub_menu = 'settings';
-    	$this->view->active_sub = 'prefs'; 
-		$this->view->layout_style = 'right';
-		$this->view->sidebar = 'dashboard';
+    	$view['sub_menu'] = 'settings';
+    	$view['active_sub'] = 'prefs'; 
+		$view['layout_style'] = 'right';
+		$view['sidebar'] = 'dashboard';
 		
-		$user = new PM_Model_Users(new PM_Model_DbTable_Users);
-		$form = $user->getPrefsForm(array(
-            'action' => '/pm/settings/prefs',
-            'method' => 'post',
-        ));
-        
-        
-        $form->populate($this->prefs);
-        if ($this->getRequest()->isPost()) 
+		$request = $this->getRequest();
+		$form = $this->getServiceLocator()->get('Application\Form\PrefsForm'); 
+        if ($request->isPost()) 
 		{
-    		$formData = $this->getRequest()->getPost();
+			$ud = $this->getServiceLocator()->get('Application\Model\User\Data');
+			$formData = $this->getRequest()->getPost();
+			$form->setInputFilter($ud->getInputFilter());
+			$form->setData($formData);
 			if ($form->isValid($formData)) 
 			{
-				$ud = new PM_Model_User_Data;
-				if($ud->updateUserData($formData, $this->identity))
+				if($ud->updateUserData($formData->toArray(), $this->identity))
 				{
-			    	$this->_flashMessenger->addMessage('Preferences updated!');
-					$this->_helper->redirector('prefs','settings');
-					exit;		
+			    	$this->flashMessenger()->addMessage('Preferences updated!');
+					return $this->redirect()->toRoute('settings/prefs');			
 				}
 			}   
 		}        
 
-        $this->view->form = $form;
+		$form->setData($this->prefs);
+        $view['form'] = $form;
+        $view['layout_style'] = 'right';
+        $this->layout()->setVariable('layout_style', 'right');
+        $this->layout()->setVariable('active_sub', 'prefs');
+        return $view;
     }
 }

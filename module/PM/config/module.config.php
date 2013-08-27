@@ -779,6 +779,15 @@ return array(
         						'action' => 'prefs'
         					)
         				)
+        			),
+        			'notifications' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/prefs',
+        					'defaults' => array(
+        						'action' => 'prefs'
+        					)
+        				)
         			)
         		)
         	), //end Settings Routes
@@ -999,7 +1008,7 @@ return array(
         				'options' => array(
         					'route' => '/remove/[:user_id]',
         					'constraints' => array(
-        						'slug' => '[0-9]+'
+        						'user_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'remove'
@@ -1012,6 +1021,18 @@ return array(
         					'route' => '/add',
         					'defaults' => array(
         						'action' => 'add'
+        					)
+        				)
+        			),
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit[/:user_id]',
+        					'constraints' => array(
+        						'user_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
         					)
         				)
         			)

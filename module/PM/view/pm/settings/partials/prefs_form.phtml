@@ -1,6 +1,11 @@
-
-<form action="<?php echo $this->escape($this->form->getAction()); ?>" id="form_settings" method="<?php echo $this->escape($this->form->getMethod()) ?>"> 
-
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'company_form');
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>
 <div id="form_tabs">
 	<ul>
 
@@ -12,14 +17,14 @@
 	<div id="notifications">
 		<p class="user_role_boxes">
 			Select the events that you want to receive E-mail notifications for:<br /><br />
-			<label for="noti_assigned_task"><?php echo $this->form->noti_assigned_task; ?> When I am assigned to a new task.</label><br />
-			<label for="noti_status_task"><?php echo $this->form->noti_status_task; ?> When the status of one of my tasks changes.</label><br />
-			<label for="noti_priority_task"><?php echo $this->form->noti_priority_task; ?> When the priority of one of my tasks changes.</label><br />
-			<label for="noti_daily_task_reminder"><?php echo $this->form->noti_daily_task_reminder; ?> Daily task reminder.</label><br />
-			<label for="noti_add_proj_team"><?php echo $this->form->noti_add_proj_team; ?> When I am added to a project team.</label><br />
-			<label for="noti_remove_proj_team"><?php echo $this->form->noti_remove_proj_team; ?> When I am removed from a project team.</label><br />
-			<label for="noti_file_uploaded"><?php echo $this->form->noti_file_uploaded; ?> When a file is uploaded.</label><br />
-			<label for="noti_file_revision_uploaded"><?php echo $this->form->noti_file_revision_uploaded; ?> When a file revision is uploaded.</label>					
+			<label for="noti_assigned_task"><?php $name = $form->get('noti_assigned_task'); echo $this->formRow($name); ?> When I am assigned to a new task.</label><br />
+			<label for="noti_status_task"><?php $name = $form->get('noti_status_task'); echo $this->formRow($name); ?> When the status of one of my tasks changes.</label><br />
+			<label for="noti_priority_task"><?php $name = $form->get('noti_priority_task'); echo $this->formRow($name); ?> When the priority of one of my tasks changes.</label><br />
+			<label for="noti_daily_task_reminder"><?php $name = $form->get('noti_daily_task_reminder'); echo $this->formRow($name); ?> Daily task reminder.</label><br />
+			<label for="noti_add_proj_team"><?php $name = $form->get('noti_add_proj_team'); echo $this->formRow($name); ?> When I am added to a project team.</label><br />
+			<label for="noti_remove_proj_team"><?php $name = $form->get('noti_remove_proj_team'); echo $this->formRow($name); ?> When I am removed from a project team.</label><br />
+			<label for="noti_file_uploaded"><?php $name = $form->get('noti_file_uploaded'); echo $this->formRow($name); ?> When a file is uploaded.</label><br />
+			<label for="noti_file_revision_uploaded"><?php $name = $form->get('noti_file_revision_uploaded'); echo $this->formRow($name); ?> When a file revision is uploaded.</label>					
 		</p>
 		
 		<p>
@@ -28,32 +33,8 @@
 	</div>	
 	
 	<div id="date_time">
-		<p>
-			<label for="timezone">Timezone</label>
-			<?php echo $this->form->timezone; ?>
-		</p>
 		
-		<p>
-			<label for="date_format">Date Format</label>
-			<?php echo $this->form->date_format; ?>
-		</p>	
-		
-		<p style="display: none" id="date_format_custom_p">
-			<label for="date_format_customt">Custom Date Format</label>
-			<?php echo $this->form->date_format_custom; ?> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'settings', 'page' => 'date_format'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Date Formats');?></a> 
-		</p>			
-		
-		<p>
-			<label for="time_format">Time Format</label>
-			<?php echo $this->form->time_format; ?> 
-		</p>
-		
-		<p style="display: none" id="time_format_custom_p">
-			<label for="time_format_customt">Custom Time Format</label>
-			<?php echo $this->form->time_format_custom; ?> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'settings', 'page' => 'time_format'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Time Formats');?></a> 
-		</p>
-		
-		<p><label for="enable_rel_time"><?php echo $this->form->enable_rel_time; ?> Enable relative time.</label></p>
+		<p><label for="enable_rel_time"><?php $name = $form->get('enable_rel_time'); echo $this->formRow($name); ?> Enable relative time.</label></p>
 		
 		<p>
 			<input type="submit" class="submit" value="Submit" />
@@ -61,7 +42,7 @@
 	</div>
 	
 	<div id="misc">
-		<p><label for="enable_contextual_help"><?php echo $this->form->enable_contextual_help; ?> Enable contextual help.</label></p>
+		<p><label for="enable_contextual_help"><?php $name = $form->get('enable_contextual_help'); echo $this->formRow($name); ?> Enable contextual help.</label></p>
 	
 		<p>
 			<input type="submit" class="submit" value="Submit" />
@@ -137,4 +118,4 @@ jQuery(document).ready(function($){
 		
 });
 </script>		
-</form>	
+<?php echo $this->form()->closeTag() ?>

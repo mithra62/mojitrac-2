@@ -6,24 +6,22 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/forms/LoginForm.php
+* @version		2.0
+* @filesource 	./moji/application/forms/ForgotPasswordForm.php
 */
 
 namespace Application\Form;
 
-use Zend\Form\Form;
-
 /**
 * LoginForm Form
 *
-* Generates the LoginForm form
+* Generates the Forgot Password form
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/forms/LoginForm.php
+* @filesource 	./moji/application/forms/ForgotPasswordForm.php
 */
-class ForgotPasswordForm extends Form
+class ForgotPasswordForm extends AbstractForm
 {
 	/**
 	 * Generates the LoginForm form
@@ -42,15 +40,7 @@ class ForgotPasswordForm extends Form
 					'class' => 'input large',
 				),
 		));
-		$this->add(array(
-				'name' => '_x',
-				'type' => 'Csrf',
-				'options' => array(
-						'csrf_options' => array(
-								'timeout' => 600
-						)
-				)
-		));		
+	
 		$this->add(array(
 				'name' => 'submit',
 				'type' => 'Submit',

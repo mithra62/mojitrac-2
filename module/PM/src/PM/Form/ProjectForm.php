@@ -36,12 +36,12 @@ class ProjectForm extends AbstractForm
 		parent::__construct($name);
 		
 		$this->add(array(
-				'name' => 'name',
-				'type' => 'Text',
-				'attributes' => array(
-					'class' => 'input large',
-					'id' => 'name'
-				),
+			'name' => 'name',
+			'type' => 'Text',
+			'attributes' => array(
+				'class' => 'input large',
+				'id' => 'name'
+			),
 		));
 		
 		$this->add(array(

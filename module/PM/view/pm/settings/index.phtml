@@ -2,10 +2,10 @@
 	<div class="user_header">Account Settings</div>	
 </div>
 <dl>
-	<dt><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'users','action'=>'edit'), null, TRUE); ?>">Modify Account Info</a></dt>
+	<dt><a href="<?php echo $this->url('users/edit'); ?>">Modify Account Info</a></dt>
 	<dd>Modify the information about your account.</dd>
-	<dt><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'settings','action'=>'password'), null, TRUE); ?>">Change Password</a></dt>
+	<dt><a href="<?php echo $this->url('settings/password'); ?>">Change Password</a></dt>
 	<dd>Change the password you use to login with.</dd>
-	<dt><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'settings','action'=>'prefs'), null, TRUE); ?>">Preferences</a></dt>
+	<dt><a href="<?php echo $this->url('settings/prefs'); ?>">Preferences</a></dt>
 	<dd>Update how MojiTRAC works just for you.</dd>	
 </dl>

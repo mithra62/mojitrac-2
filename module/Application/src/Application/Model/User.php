@@ -67,15 +67,6 @@ class User extends AbstractModel
         return new PM_Form_Password($options, $confirm);		
 	}
 	
-	/**
-	 * Returns the Prefernces Form
-	 * @return object
-	 */
-	public function getPrefsForm($options = array(), $confirm = TRUE)
-	{
-        return new PM_Form_Prefs($options, $confirm);		
-	}	
-	
 	public function changePassword($id, $password)
 	{
 		$hash = new Hash;
