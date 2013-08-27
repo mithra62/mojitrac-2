@@ -40,6 +40,7 @@ abstract class AbstractForm extends Form
 	public function __construct($form_name, array $options = array())
 	{
 		parent::__construct($form_name, $options);
+		$this->setAttribute('method', 'post');
 		
 		$this->add(array(
 			'name' => '_x',

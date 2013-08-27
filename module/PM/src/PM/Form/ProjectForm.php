@@ -7,12 +7,11 @@
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		1.0
-* @filesource 	./moji/application/forms/LoginForm.php
+* @filesource 	./module/PM/src/PM/Forms/ProjectForm.php
 */
 
 namespace PM\Form;
 
-use Zend\Form\Form;
 use PM\Model\Options\Projects;
 use PM\Model\Options\Companies;
 use Application\Form\AbstractForm;
@@ -24,7 +23,7 @@ use Application\Form\AbstractForm;
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/forms/LoginForm.php
+* @filesource 	./module/PM/src/PM/Forms/ProjectForm.php
 */
 class ProjectForm extends AbstractForm
 {
@@ -34,9 +33,7 @@ class ProjectForm extends AbstractForm
 	 */	
 	public function __construct($name, \PM\Model\Companies $companies, \PM\Model\Options $options) 
 	{				
-		// we want to ignore the name passed
 		parent::__construct($name);
-		$this->setAttribute('method', 'post');
 		
 		$this->add(array(
 				'name' => 'name',

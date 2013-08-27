@@ -27,6 +27,7 @@ use PM\Model\Options;
 use PM\Model\Notifications;
 use PM\Model\Contacts;
 use PM\Form\ProjectForm;
+use PM\Form\CompanyForm;
 
 /**
  * PM - Module Object
@@ -133,6 +134,9 @@ class Module
 				},
 				'PM\Form\ProjectForm' => function($sm) {
 					return new ProjectForm('project', $sm->get('PM\Model\Companies'), $sm->get('PM\Model\Options'));
+				},	
+				'PM\Form\CompanyForm' => function($sm) {
+					return new CompanyForm('company', $sm->get('PM\Model\Companies'), $sm->get('PM\Model\Options'));
 				},											
 			),
     	);

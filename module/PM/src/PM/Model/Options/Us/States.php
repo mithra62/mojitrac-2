@@ -1,10 +1,30 @@
-<?php
-class PM_Model_Options_Us_States
+<?php 
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Model/Options/Us/States.php
+ */
+
+namespace PM\Model\Options\Us;
+
+/**
+ * PM - Companies Options Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Model/Options/Us/States.php
+ */
+class States
 {
 	static public function states($blank = FALSE)
 	{	
 		$states = array(
-			null => '',
+			null => null,
 			'AL'=>"Alabama",  
 			'AK'=>"Alaska",  
 			'AZ'=>"Arizona",  

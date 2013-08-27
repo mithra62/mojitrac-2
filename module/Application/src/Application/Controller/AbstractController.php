@@ -6,28 +6,20 @@
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
- * @version		1.0
- * @filesource 	./moji/application/controllers/AbstractController.php
+ * @version		2.0
+ * @filesource 	./module/Application/src/Application/Controllers/AbstractController.php
  */
 
 namespace Application\Controller;
 
-
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Authentication\Storage\Session;
-use Zend\Authentication\AuthenticationService;
-
-use Application\Adapter\AuthAdapter;
-use Zend\XmlRpc\Value\ArrayValue;
-use Zend\Db\Sql\Sql;
 
  /**
  * Default - AbstractController Controller
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/controllers/AbstractController.php
+ * @filesource 	./module/Application/src/Application/Controllers/AbstractController.php
  */
 abstract class AbstractController extends AbstractActionController
 {
@@ -38,8 +30,16 @@ abstract class AbstractController extends AbstractActionController
 	 */
 	public $config = array();
 	
+	/**
+	 * The database adapter connection
+	 * @var \Zend\Db\Adapter\Adapter
+	 */
 	protected $adapter;
 	
+	/**
+	 * The actual SQL object for making queries with 
+	 * @var unknown
+	 */
 	protected $db;
 	
 	protected $_flashMessenger = null;

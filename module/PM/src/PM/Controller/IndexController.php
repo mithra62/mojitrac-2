@@ -77,6 +77,7 @@ class IndexController extends AbstractPmController
 		$view['user_data'] = $user->getUserById($this->identity);
 		$view['tasks'] = $task_data;
 		$view['identity'] = $this->identity;
+		$this->layout()->setVariable('layout_style', 'left');
 		
 		return $view;
     }

@@ -6,7 +6,7 @@ Are you sure you want to remove "<?php echo $this->company['name']?>"? This can 
 </div>
 
 <p>
-<form action="<?php echo $this->url(array('module' => 'pm','controller'=>'companies','action'=>'remove', 'id' => $this->id), null, TRUE); ?>" method="POST">
+<form action="<?php echo $this->url('companies/remove', array('company_id' => $this->id), null, TRUE); ?>" method="POST">
 	<input type="submit" class="submit" value="Yes" name="confirm" /> <input type="submit" class="submit" value="No" name="fail"/>
 </form>
 </p>

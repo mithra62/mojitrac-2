@@ -28,6 +28,8 @@ use Application\Model\AbstractModel;
  */
 class Companies extends AbstractModel
 {
+	protected $inputFilter;
+	
 	/**
 	 * The Companies Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
@@ -50,24 +52,11 @@ class Companies extends AbstractModel
 			$factory = new InputFactory();
 	
 			$inputFilter->add($factory->createInput(array(
-				'name'     => 'email',
+				'name'     => 'name',
 				'required' => true,
 				'filters'  => array(
 					array('name' => 'StripTags'),
 					array('name' => 'StringTrim'),
-				),
-				'validators' => array(
-					array(
-						'name' => 'EmailAddress',
-					),
-					array(
-						'name' => 'Db\RecordExists',
-						'options' => array(
-							'table' => 'users',
-							'field' => 'email',
-							'adapter' => $this->authAdapter
-						)
-					),
 				),
 			)));
 	
@@ -75,15 +64,30 @@ class Companies extends AbstractModel
 		}
 	
 		return $this->inputFilter;
-	}	
+	}
 	
 	/**
-	 * Returns the Artist Form
-	 * @return object
+	 * Returns an array for modifying $_name
+	 * @param $data
+	 * @return array
 	 */
-	public function getCompanyForm($options = array(), $hidden = array())
-	{
-        return new PM_Form_Company($options, $hidden);		
+	public function getSQL($data){
+		return array(
+			'name' => $data['name'],
+			'phone1' => $data['phone1'],
+			'phone2' => $data['phone2'],
+			'fax' => $data['fax'],
+			'address1' => $data['address1'],
+			'address2' => $data['address2'],
+			'city' => $data['city'],
+			'state' => $data['state'],
+			'zip' => $data['zip'],
+			'primary_url' => $data['primary_url'],
+			'description' => $data['description'],
+			'type' => $data['type'],
+			'custom' => $data['custom'],
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
 	}	
 	
 	/**
@@ -180,14 +184,13 @@ class Companies extends AbstractModel
 	 */
 	public function getProjectCount($id, $status = FALSE)
 	{
-		$proj = new PM_Model_DbTable_Projects;
-		$sql = $proj->select()
-					->from($proj->getTableName(), array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
-					->where('company_id = ?', $id);
-		$data = $proj->getProject($sql);
+		$sql = $this->db->select()
+					->from('projects', array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
+					->where(array('company_id' => $id));
+		$data = $this->getRow($sql);
 		if(is_array($data))
 		{
-			return $data['count'];
+			return (!empty($data['count']) ? $data['count'] : '0');
 		}
 	}
 	
@@ -199,14 +202,13 @@ class Companies extends AbstractModel
 	 */
 	public function getTaskCount($id, $status = FALSE)
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->select()
-					->from($task->getTableName(), array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
-					->where('company_id = ?', $id);
-		$data = $task->getTask($sql);
+		$sql = $this->db->select()
+					->from('tasks', array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
+					->where(array('company_id' => $id));
+		$data = $this->getRow($sql);
 		if(is_array($data))
 		{
-			return $data['count'];
+			return (!empty($data['count']) ? $data['count'] : '0');
 		}		
 	}
 	
@@ -218,14 +220,13 @@ class Companies extends AbstractModel
 	 */
 	public function getFileCount($id, $status = FALSE)
 	{
-		$file = new PM_Model_DbTable_Files;
-		$sql = $file->select()
-					->from($file->getTableName(), array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
-					->where('company_id = ?', $id);
-		$data = $file->getFile($sql);
+		$sql = $this->db->select()
+					->from('files', array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
+					->where(array('company_id' => $id));
+		$data = $this->getRow($sql);
 		if(is_array($data))
 		{
-			return $data['count'];
+			return (!empty($data['count']) ? $data['count'] : '0');
 		}		
 	}
 	
@@ -237,8 +238,8 @@ class Companies extends AbstractModel
 	 */
 	public function addCompany($data)
 	{
-		$sql = $this->db->getSQL($data);
-		$company_id = $this->db->addCompany($sql);
+		$sql = $this->getSQL($data);
+		$company_id = $this->insert('companies', $sql);
 		return $company_id;
 	}
 	
@@ -250,8 +251,8 @@ class Companies extends AbstractModel
 	 */
 	public function updateCompany($data, $id)
 	{
-		$sql = $this->db->getSQL($data);
-		return $this->db->update($sql, "id = '$id'");
+		$sql = $this->getSQL($data);
+		return $this->update('companies', $sql, array('id' => $id));
 	}
 	
 	/**

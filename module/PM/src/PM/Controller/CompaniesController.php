@@ -13,8 +13,6 @@
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 
 /**
 * PM - Companies Controller
@@ -34,7 +32,7 @@ class CompaniesController extends AbstractPmController
 	{
 		parent::onDispatch( $e );
 		parent::check_permission('view_companies');
-		$this->layout()->setVariable('layout_style', 'single');
+		//$this->layout()->setVariable('layout_style', 'single');
 		$this->layout()->setVariable('sidebar', 'dashboard');
 		$this->layout()->setVariable('sub_menu', 'companies');
 		$this->layout()->setVariable('active_nav', 'companies');
@@ -92,7 +90,7 @@ class CompaniesController extends AbstractPmController
 		if($this->perm->check($this->identity, 'view_projects'))
 		{
 			$project = $this->getServiceLocator()->get('PM\Model\Projects');
-			$view['projects'] = $project->getProjectsByCompanyId($id, TRUE);
+			$view['projects'] = $project->getProjectsByCompanyId($id, FALSE);
 		}
 		
 		if($this->perm->check($this->identity, 'view_tasks'))
@@ -129,7 +127,9 @@ class CompaniesController extends AbstractPmController
 		
 		//$this->view->layout_style = 'right';
 		
+		
 		$view['sub_menu'] = 'company';
+		$view['layout_style'] = 'single';
 		$view['active_sub'] = $this->view->company['type'];		
 		//$this->view->headTitle('Viewing Company: '. $this->view->company['name'], 'PREPEND');
 		$view['id'] = $view['company_id'] = $id;
@@ -143,63 +143,64 @@ class CompaniesController extends AbstractPmController
 	 */
 	public function editAction()
 	{
-		
 		if(!$this->perm->check($this->identity, 'manage_companies'))
         {
-        	$this->_helper->redirector('index', 'companies', 'pm');
-        	exit;
+        	return $this->redirect()->toRoute('companies');
         }
         		
-		$id = $this->_request->getParam('id', FALSE);
-		if (!$id) {
-			$this->_helper->redirector('index','companies');
-			exit;
+		$id = $this->params()->fromRoute('company_id');
+		if (!$id) 
+		{
+			return $this->redirect()->toRoute('companies');
 		}
 		
-		$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
-		$form = $company->getCompanyForm(array(
-            'action' => '/pm/companies/edit/',
-            'method' => 'post',
-        ), array('id' => $id));
+		$company = $this->getServiceLocator()->get('PM\Model\Companies');
+		$form = $this->getServiceLocator()->get('PM\Form\CompanyForm');
         
-        $this->view->id = $id;
+		$view = array();
+        $view['id'] = $id;
         
         $company_data = $company->getCompanyById($id);
-        $form->populate($company_data);	
-        	
-        $this->view->form = $form;
-        
-        if ($this->getRequest()->isPost()) {
+        $request = $this->getRequest();
+        $form->setData($company_data);        
+        if ($this->getRequest()->isPost()) 
+        {
             $formData = $this->getRequest()->getPost();
-            if ($form->isValid($formData)) {
+            $form->setInputFilter($company->getInputFilter());  
+            $form->setData($request->getPost());
             
+            if ($form->isValid($formData)) 
+            {        
             	if($company->updateCompany($formData, $id))
 	            {	
-			    	$this->_flashMessenger->addMessage('Company updated!');
-					$this->_helper->redirector('view','companies', 'pm', array('id' => $id));
+			    	$this->flashMessenger()->addMessage('Company updated!');
+			    	return $this->redirect()->toRoute('companies/view', array('company_id' => $id));
 					        		
             	} else {
-            		$this->view->errors = array('Couldn\'t update company...');
-            		$form->populate($formData);
+            		$view['errors'] = array('Couldn\'t update company...');
+            		$form->setData($formData);
             	}
                 
             } else {
-            	$this->view->errors = array('Please fix the errors below.');
-                $form->populate($formData);
+            	$view['errors'] = array('Please fix the errors below.');
+                $form->setData($formData);
             }
             
 	    }
 	    
-	    $this->view->company_data = $company_data;
+	    $view['company_data'] = $company_data;
 	    if($company_data['type'] == '1' || $company_data['type'] == '6')
 	    {
-	    	Zend_Registry::set('pm_activity_filter', array('company_id' => $id));
+	    	//Zend_Registry::set('pm_activity_filter', array('company_id' => $id));
 	    }
 	    
-	    $this->view->active_sub = $company_data['type'];	
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		    
-		$this->view->headTitle('Edit Company', 'PREPEND');     	
+	    $view['form'] = $form;
+	    $view['active_sub'] = $company_data['type'];	
+        //$view['layout_style'] = 'right';
+        $view['sidebar'] = 'dashboard';		
+		$this->layout()->setVariable('layout_style', 'left');    
+		//$this->view->headTitle('Edit Company', 'PREPEND');  
+		return $view;   	
 	}
 	
 	/**
@@ -211,43 +212,47 @@ class CompaniesController extends AbstractPmController
 		
 	    if(!$this->perm->check($this->identity, 'manage_companies'))
         {
-        	$this->_helper->redirector('index', 'companies', 'pm');
-        	exit;
+        	return $this->redirect()->toRoute('companies');
         }
         		
-		$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
-		$form = $company->getCompanyForm(array(
-            'action' => '/pm/companies/add',
-            'method' => 'post',
-        ));
-		
-		 if ($this->getRequest()->isPost()) {
-    		
-    		$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData)) {
+		$company = $this->getServiceLocator()->get('PM\Model\Companies');
+		$form = $this->getServiceLocator()->get('PM\Form\CompanyForm');
+		$request = $this->getRequest();
+		if ($request->isPost()) 
+		{
+            $formData = $this->getRequest()->getPost();
+            $form->setInputFilter($company->getInputFilter());  
+            $form->setData($request->getPost());
+            
+			if ($form->isValid($formData)) 
+			{
+				
 				$formData['owner'] = $this->identity;
-				if($id = $company->addCompany($formData)){
-			    	$this->_flashMessenger->addMessage('Company Added!');
-					$this->_helper->redirector('view','companies', 'pm', array('id' => $id));
-					exit;
+				$company_id = $company->addCompany($formData);
+				if($company_id)
+				{
+			    	$this->flashMessenger()->addMessage('Company Added!');
+					return $this->redirect()->toRoute('companies/view', array('company_id' => $company_id));
 				} 
 				else 
 				{	
-					$this->view->errors = array('Something went wrong...');
+					$view['errors'] = array('Something went wrong...');
 				}
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
+				$view['errors'] = array('Please fix the errors below.');
 			}
 
 		 }
 		
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		
-		$this->view->headTitle('Add Company', 'PREPEND');
+        $view['layout_style'] = 'right';
+        $view['sidebar'] = 'dashboard';		
+		//$this->view->headTitle('Add Company', 'PREPEND');
 
-		$this->view->form = $form;
+		$view['form'] = $form;
+		$this->layout()->setVariable('layout_style', 'left');
+		return $view;
 	}
 	
 	function removeAction()
@@ -255,50 +260,48 @@ class CompaniesController extends AbstractPmController
 		
 		if(!$this->perm->check($this->identity, 'manage_companies'))
         {
-        	$this->_helper->redirector('index', 'companies', 'pm');
+        	return $this->redirect()->toRoute('companies');
         }
-        		
-		$companies = new PM_Model_Companies(new PM_Model_DbTable_Companies);
-		$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
+        
+		$companies = $this->getServiceLocator()->get('PM\Model\Companies');
+		$id = $this->params()->fromRoute('company_id');
+		$confirm = $this->params()->fromPost('confirm');
+		$fail = $this->params()->fromPost('fail');
 		
     	if(!$id)
     	{
-    		$this->_helper->redirector('index','companies');
-    		exit;
+    		return $this->redirect()->toRoute('companies');
     	}
     	
-    	$this->view->company = $companies->getCompanyById($id);
-    	if(!$this->view->company)
+    	$view = array();
+    	$view['company'] = $companies->getCompanyById($id);
+    	if(!$view['company'])
     	{
-			$this->_helper->redirector('index','companies');
-			exit;
+			return $this->redirect()->toRoute('companies');
     	}
 
     	if($fail)
     	{
-			$this->_helper->redirector('view','companies', 'pm', array('id' => $id));
-			exit;   		
+    		return $this->redirect()->toRoute('companies/view',  array('company_id' => $id));
     	}
     	
     	if($confirm)
     	{
     	   	if($companies->removeCompany($id))
     		{	
-				$this->_flashMessenger->addMessage('Company Removed');
-				$this->_helper->redirector('index','companies');
-				exit;
-				
+				$this->flashMessenger()->addMessage('Company Removed');
+				return $this->redirect()->toRoute('companies');
     		} 
     	}
     	
-    	$this->view->project_count = $companies->getProjectCount($id);
-    	$this->view->task_count = $companies->getTaskCount($id);
-    	$this->view->file_count = $companies->getFileCount($id);
+    	$view['project_count'] = $companies->getProjectCount($id);
+    	$view['task_count'] = $companies->getTaskCount($id);
+    	$view['file_count'] = $companies->getFileCount($id);
     	
-		$this->view->headTitle('Delete Company: '. $this->view->company['name'], 'PREPEND');
-		$this->view->id = $id;    	
+		//$this->view->headTitle('Delete Company: '. $this->view->company['name'], 'PREPEND');
+		$view['id'] = $id;
+
+		return $view;
 	}
 	
 	public function mapAction()

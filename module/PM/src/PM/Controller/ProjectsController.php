@@ -13,8 +13,6 @@
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 
 /**
 * PM - Projects Controller

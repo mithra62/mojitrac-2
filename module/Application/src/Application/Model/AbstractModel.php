@@ -12,8 +12,6 @@
 
 namespace Application\Model;
 
-use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Sql;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerAwareInterface;
@@ -27,7 +25,7 @@ use Zend\EventManager\EventManagerAwareInterface;
  * @author		Eric Lamb
  * @filesource 	./moji/application/models/Abstract.php
  */
-abstract class AbstractModel
+abstract class AbstractModel implements EventManagerAwareInterface
 {
 	/**
 	 * The database object
@@ -135,6 +133,11 @@ abstract class AbstractModel
 		$insertString = $this->db->getSqlStringForSqlObject($sql);		
 		$result = ($this->adapter->query($insertString, 'execute'));
 		return $result->getGeneratedValue(); 
+	}
+	
+	public function remove($table, array $where)
+	{
+		
 	}
 	
 	/**

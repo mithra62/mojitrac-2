@@ -12,12 +12,7 @@
 
 namespace PM\Controller;
 
-use Application\Adapter\AuthAdapter;
-use Zend\XmlRpc\Value\ArrayValue;
-use Zend\Db\Sql\Sql;
-
 use Application\Controller\AbstractController;
-use Application\Model\Settings;
 
  /**
  * Default - AbstractPmController Controller
@@ -67,7 +62,7 @@ abstract class AbstractPmController extends AbstractController
 		$this->perm = $this->getServiceLocator()->get('Application\Model\Permissions');
 				
 		$this->layout()->setVariable('messages',  $this->flashMessenger()->getMessages());
-		$this->layout()->setVariable('layout_style', 'left');
+		//$this->layout()->setVariable('layout_style', 'left');
 		$this->layout()->setVariable('sidebar', 'dashboard');
 		$this->layout()->setVariable('active_nav', 'home');
 		$this->layout()->setVariable('sub_menu', 'dashboard');
