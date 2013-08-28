@@ -28,7 +28,7 @@ use Application\Model\Login;
 use Application\Form\ForgotPasswordForm;
 use Application\Model\ForgotPassword;
 use Application\Model\Settings;
-use Application\Form\UserForm;
+use Application\Form\PasswordForm;
 use Application\Form\PrefsForm;
 
 /**
@@ -173,6 +173,9 @@ class Module
 				},
 				'Application\Form\PrefsForm' => function($sm) {
 					return new PrefsForm('preferences');
+				},
+				'Application\Form\PasswordForm' => function($sm) {
+					return new PasswordForm('password');
 				}
 			),
     	);

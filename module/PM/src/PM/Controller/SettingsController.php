@@ -64,19 +64,16 @@ class SettingsController extends AbstractPmController
      * Handles modifying a password
      */
     public function passwordAction()
-    {
-    	$this->view->sub_menu = 'settings';
-    	$this->view->active_sub = 'password';
-    	
-    	$user = new PM_Model_Users(new PM_Model_DbTable_Users);
-		$form = $user->getPasswordForm(array(
-            'action' => '/pm/settings/password',
-            'method' => 'post',
-        ));
+    {	
+    	$user = $this->getServiceLocator()->get('Application\Model\User');
+		$form = $this->getServiceLocator()->get('Application\Form\PasswordForm');
         
-        if ($this->getRequest()->isPost()) 
+		$request = $this->getRequest();
+        if ($request->isPost()) 
 		{
-    		$formData = $this->getRequest()->getPost();
+			$formData = $this->getRequest()->getPost();
+			$form->setInputFilter($user->getPasswordInputFilter());
+			$form->setData($formData);
 			if ($form->isValid($formData)) 
 			{
 				if($user->changePassword($this->identity, $formData['new_password']))
@@ -86,10 +83,12 @@ class SettingsController extends AbstractPmController
 				}
 			}   
 		} 
-
-		$this->view->layout_style = 'right';
-		$this->view->sidebar = 'dashboard';		
-		$this->view->form = $form;
+		
+		$this->layout()->setVariable('layout_style', 'right');
+		$this->layout()->setVariable('active_sub', 'password');	
+		$this->layout()->setVariable('sub_menu', 'settings');	
+		$view['form'] = $form;
+		return $view;
     }
     
     /**

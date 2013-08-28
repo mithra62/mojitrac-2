@@ -7,19 +7,19 @@
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
-* @filesource 	./moji/application/modules/pm/forms/Prefs.php
+* @filesource 	./module/Application/src/Application/Form/PrefsForm.php
 */
 
 namespace Application\Form;
 
 /**
-* PM - Preferences Form
+* PrefsForm Form
 *
-* Returns the Preferences form 
+* Generates the Preferences form
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/forms/Prefs.php
+* @filesource 	./module/Application/src/Application/Form/PrefsForm.php
 */
 class PrefsForm extends AbstractForm
 {
