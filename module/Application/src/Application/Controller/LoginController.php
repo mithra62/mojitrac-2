@@ -13,16 +13,7 @@
 namespace Application\Controller;
 
 use Application\Controller\AbstractController;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Db\Sql\Sql;
 use Zend\Authentication\Result as AuthenticationResult;
-
-use Application\Adapter\AuthAdapter;
-use Application\Model\Login;
-use Application\Form\LoginForm;
-use Application\Model\User;
-use Application\Model\DbTable\UserTable;
 
 
  /**
@@ -38,6 +29,21 @@ class LoginController extends AbstractController
 {   
 	protected $usersTable;
 	
+	/**
+	 * Sets up the Login defaults
+	 * @see \Zend\Mvc\Controller\AbstractActionController::onDispatch()
+	 */
+	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
+	{
+		$response = parent::onDispatch( $e );
+		if($this->identity && $this->params('action') != 'logout')
+		{
+			return $this->redirect()->toRoute('pm');
+		}
+		
+		return $response;
+	}
+		
     public function indexAction() 
     {   	
     	$form = $this->getServiceLocator()->get('Application\Form\LoginForm');
@@ -67,7 +73,7 @@ class LoginController extends AbstractController
 						$this->getAuthService()->setStorage($this->getSessionStorage());	
 						$this->flashMessenger()->addMessage('Login Successful!');
 						
-						return $this->redirect()->toRoute('pm');	
+						return $this->redirect()->toRoute('pm');
 																
 					break;
 				
@@ -88,20 +94,5 @@ class LoginController extends AbstractController
 		//$this->view->headTitle('Login', 'PREPEND');
         $view['form'] = $form;
         return $view;
-    }
-    
-    public function getUsersTable()
-    {
-    	if (!$this->usersTable) {
-    		$sm = $this->getServiceLocator();
-    		$this->usersTable = $sm->get('Application\Model\DbTable\UserTable');
-    	}
-    	return $this->usersTable;
-    }    
-
-    public function logoutAction()
-    {
-        Zend_Auth::getInstance()->clearIdentity();
-        $this->_helper->redirector('index'); // back to login page
-    }    
+    }  
 }

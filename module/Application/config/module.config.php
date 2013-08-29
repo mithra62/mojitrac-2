@@ -1,11 +1,15 @@
 <?php
 /**
- * Zend Framework (http://framework.zend.com/)
- *
- * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
- * @copyright Copyright (c) 2005-2013 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
- */
+ * mithra62 - MojiTrac
+*
+* @package		mithra62:Mojitrac
+* @author		Eric Lamb
+* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @link			http://mithra62.com/
+* @version		2.0
+* @filesource 	./module/Application/config/module.config.php
+*/
+
 
 return array(
     'router' => array(
@@ -30,37 +34,42 @@ return array(
                     ),
                 ),
             ),
+
+        	'login' => array( //Login Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/login',
+        			'constraints' => array(
+        				'id' => '[0-9]+'
+        			),
+        			'defaults' => array(
+        				'controller' => 'Application\Controller\Login',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'process' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/process',
+        					'defaults' => array(
+        						'action' => 'process'
+        					)
+        				)
+        			),
+        			'logout' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/logout',
+        					'defaults' => array(
+        						'action' => 'logout'
+        					)
+        				)
+        			),
+        		)
+        	), //end Login Routes
             
-            'login' => array(
-            		'type' => 'Zend\Mvc\Router\Http\Literal',
-            		'options' => array(
-            				'route'    => '/login',
-            				'defaults' => array(
-            						'controller' => 'Application\Controller\Login',
-            						'action'     => 'index',
-            				),
-            		),
-            ),
-            'login/process' => array(
-            		'type' => 'Zend\Mvc\Router\Http\Literal',
-            		'options' => array(
-            				'route'    => '/login/process',
-            				'defaults' => array(
-            						'controller' => 'Application\Controller\Login',
-            						'action'     => 'process',
-            				),
-            		),
-            ),
-            'login/logout' => array(
-            		'type' => 'Zend\Mvc\Router\Http\Literal',
-            		'options' => array(
-            				'route'    => '/login/logout',
-            				'defaults' => array(
-            						'controller' => 'Application\Controller\Login',
-            						'action'     => 'logout',
-            				),
-            		),
-            ),
             'forgot-password' => array(
             		'type' => 'Zend\Mvc\Router\Http\Literal',
             		'options' => array(
@@ -80,38 +89,7 @@ return array(
             						'action'     => 'reset',
             				),
             		),
-            ),            
-                        
-            // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
-            'application' => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'    => '/application',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                            ),
-                        ),
-                    ),
-                ),
-            ),
+            ), 
         ),
     ),
     'service_manager' => array(
@@ -158,15 +136,6 @@ return array(
     ),
 
     'view_helpers' => array(
-    	/*
-	    'factories' => array(
-	    		'showmessages' => function($sm) {
-	    			$helper = new ModuleName\Helper\MessageShower();
-	    			// do stuff with $sm or the $helper
-	    			return $helper;
-	    		},
-	    ),
-	   */
 	    'invokables' => array(
 	    	'StaticUrl' => 'Application\View\Helper\StaticUrl',
 	    ),

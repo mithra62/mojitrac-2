@@ -173,5 +173,10 @@ abstract class AbstractModel implements EventManagerAwareInterface
 			$this->setEventManager(new EventManager());
 		}
 		return $this->events;
+	}
+
+	public function event($name, $obj, $argv)
+	{
+		return $this->getEventManager()->trigger($name, $obj, $argv);
 	}	
 }

@@ -42,8 +42,10 @@ abstract class AbstractController extends AbstractActionController
 	 */
 	protected $db;
 	
-	protected $_flashMessenger = null;
-	
+	/**
+	 * Sets up the Controller defaults
+	 * @see \Zend\Mvc\Controller\AbstractActionController::onDispatch()
+	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
 		$this->config = $this->getServiceLocator()->get('Config');	

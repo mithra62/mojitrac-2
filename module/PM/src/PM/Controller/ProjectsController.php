@@ -99,6 +99,8 @@ class ProjectsController extends AbstractPmController
 	 */
 	public function viewAction()
 	{
+		$this->getEventManager()->trigger('moji.project_view.pre', $this);
+		
 		$id = $this->params()->fromRoute('project_id');
 		if (!$id) 
 		{
@@ -237,6 +239,7 @@ class ProjectsController extends AbstractPmController
 	    $view['active_sub'] = $project_data['status'];
         $view['layout_style'] = 'right';
         $view['sidebar'] = 'dashboard';	
+        $this->layout()->setVariable('layout_style', 'left');
 		//$this->view->headTitle('Edit Project', 'PREPEND');   
 
         return $view;

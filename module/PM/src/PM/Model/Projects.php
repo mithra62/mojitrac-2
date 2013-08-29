@@ -14,7 +14,6 @@ namespace PM\Model;
 
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
 use Application\Model\AbstractModel;
@@ -335,18 +334,20 @@ class Projects extends AbstractModel
 	 */
 	public function updateProject($data, $id)
 	{
-		/*
+		
 		$ext = $this->event('pre.moji_project_update', $this, compact('data', 'id'));
 		if($ext->stopped()) return $ext->last();
-		*/
+		
 		
 		$sql = $this->getSQL($data);
 		$return = $this->update('projects', $sql, array('id' => $id));
 		
-		/*
+		
 		$ext = $this->event('post.moji_project_update', $this, compact('data', 'id'));
 		if($ext->stopped()) return $ext->last();	
-		*/
+		
+		echo 'fdsa';
+		exit;
 		
 		return $return;
 	}
