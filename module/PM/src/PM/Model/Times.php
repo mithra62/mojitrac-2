@@ -298,7 +298,7 @@ class Times extends AbstractModel
 		$total = $this->getRow($sql);
 
 		
-		$sql = $this->db->select()->from(array('i'=>'times'), array('hours' => new \Zend\Db\Sql\Expression('SUM(hours)')));
+		$sql = $this->db->select()->from(array('i'=>'times'))->columns(array('hours' => new \Zend\Db\Sql\Expression('SUM(hours)')));
 		$sql = $sql->where(array('bill_status' => 'sent', 'billable' => 1));
 		if($company_id)
 		{
@@ -321,7 +321,7 @@ class Times extends AbstractModel
 		}		
 		$sent = $this->getRow($sql);
 		
-		$sql = $this->db->select()->from(array('i'=> 'times'), array('hours' => new \Zend\Db\Sql\Expression('SUM(hours)')));
+		$sql = $this->db->select()->from(array('i'=> 'times'))->columns( array('hours' => new \Zend\Db\Sql\Expression('SUM(hours)')));
 		$sql = $sql->where(array('bill_status' => '', 'billable' => 1));
 		if($company_id)
 		{
@@ -344,7 +344,7 @@ class Times extends AbstractModel
 		}			
 		$unsent = $this->getRow($sql);
 		
-		$sql = $this->db->select()->from(array('i'=>'times'), array('hours' => new \Zend\Db\Sql\Expression('SUM(hours)')));
+		$sql = $this->db->select()->from(array('i'=>'times'))->columns( array('hours' => new \Zend\Db\Sql\Expression('SUM(hours)')));
 		$sql = $sql->where(array('bill_status' => 'paid', 'billable' => '1'));
 		if($company_id)
 		{
@@ -366,7 +366,6 @@ class Times extends AbstractModel
 			$sql->where(array('task_id' => $task_id));
 		}			
 		$paid = $this->getRow($sql);
-
 		return array('total' => $total['hours'], 'sent' => $sent['hours'], 'unsent' => $unsent['hours'], 'paid' => $paid['hours']);				
 	}	
 	

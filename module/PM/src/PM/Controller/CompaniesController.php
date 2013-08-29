@@ -115,7 +115,7 @@ class CompaniesController extends AbstractPmController
 		{		
 			$times = $this->getServiceLocator()->get('PM\Model\Times');
 			$not = array('bill_status' => 'paid');
-			$view['times'] = $times->getTimesByCompanyId($id, $where, $not);
+			$view['times'] = $times->getTimesByCompanyId($id, null, $not);
 			$view['hours'] = $times->getTotalTimesByCompanyId($id);
 		}
 
