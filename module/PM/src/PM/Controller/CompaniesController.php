@@ -28,9 +28,9 @@ class CompaniesController extends AbstractPmController
 	/**
 	 * Class preDispatch
 	 */
-	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
+	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{
-		parent::onDispatch( $e );
+		$e = parent::onDispatch( $e );
 		parent::check_permission('view_companies');
 		//$this->layout()->setVariable('layout_style', 'single');
 		$this->layout()->setVariable('sidebar', 'dashboard');

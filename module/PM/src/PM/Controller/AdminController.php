@@ -13,8 +13,7 @@
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+
 /**
 * PM - Admin Controller
 *
@@ -29,19 +28,16 @@ class AdminController extends AbstractPmController
 	/**
 	 * Class preDispatch
 	 */
-	public function preDispatch()
+	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{
-        parent::preDispatch();
+		$e = parent::onDispatch( $e );
         parent::check_permission('admin_access');
-        $this->view->headTitle('Administration', 'PREPEND');  
-        $this->view->layout_style = 'single';
-        $this->view->sidebar = 'dashboard';
-        $this->view->sub_menu = 'admin';
-        $this->view->active_nav = 'admin';
-        $this->view->sub_menu_options = PM_Model_Options_Companies::types();
-        $this->view->uri = $this->_request->getPathInfo();
-		$this->view->active_sub = 'None';
-		$this->view->title = FALSE;          
+        //$this->view->headTitle('Administration', 'PREPEND');  
+        //$this->view->uri = $this->_request->getPathInfo();
+		$this->layout()->setVariable('active_nav', 'admin');
+		$this->layout()->setVariable('sub_menu', 'admin');
+
+		return $e;
 	}
     
     public function indexAction()

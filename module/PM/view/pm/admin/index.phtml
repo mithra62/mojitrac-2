@@ -2,9 +2,9 @@
 	<div class="users_header">Users</div>	
 </div>
 <dl>
-	<dt><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'users','action'=>'index'), null, TRUE); ?>">Users</a></dt>
+	<dt><a href="<?php echo $this->url('users', array('module' => 'pm','controller' => 'users','action'=>'index'), null, TRUE); ?>">Users</a></dt>
 	<dd>Add new users or update existing MojiTrac users.</dd>
-	<dt><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'roles','action'=>'index'), null, TRUE); ?>">Roles</a></dt>
+	<dt><a href="<?php echo $this->url('roles', array('module' => 'pm','controller' => 'roles','action'=>'index'), null, TRUE); ?>">Roles</a></dt>
 	<dd>Decide who can, and can not, do certain activities within MojiTrac.</dd>
 </dl>
 <br clear="all" />
@@ -14,9 +14,9 @@
 	<div class="reports_header">Reports</div>	
 </div>
 <dl>
-	<dt><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'reports','action'=>'times', 'chart' => 'date-history'), null, TRUE); ?>" rel="facebox">Time History</a></dt>
+	<dt><a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'reports','action'=>'times', 'chart' => 'date-history'), null, TRUE); ?>" rel="facebox">Time History</a></dt>
 	<dd>Chart of all the times grouped by date.</dd>
-	<dt><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'reports','action'=>'times', 'chart' => 'user-history'), null, TRUE); ?>" rel="facebox">User Times</a></dt>
+	<dt><a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'reports','action'=>'times', 'chart' => 'user-history'), null, TRUE); ?>" rel="facebox">User Times</a></dt>
 	<dd>Chart of all the times grouped by user.</dd>
 </dl>
 <br clear="all" />
@@ -25,12 +25,12 @@
 	<div class="admin_header">Configure System</div>	
 </div>
 <dl>
-	<dt><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'admin','action'=>'settings'), null, TRUE); ?>">Global Settings</a></dt>
+	<dt><a href="<?php echo $this->url('admin/settings'); ?>">Global Settings</a></dt>
 	<dd>Configure the system settings.</dd>
-	<dt><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'import','action'=>'index'), null, TRUE); ?>">Import Data</a></dt>
+	<dt><a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'import','action'=>'index'), null, TRUE); ?>">Import Data</a></dt>
 	<dd>Here you can update the system with information from other programs into MojiTrac.</dd>
-	<dt><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'ips','action'=>'index'), null, TRUE); ?>">IP Access</a></dt>
+	<dt><a href="<?php echo $this->url('ips'); ?>">IP Access</a></dt>
 	<dd>Set MojiTrac to only allow access from certain IP addresses.</dd>
-	<dt><a href="<?php echo $this->url(array('module' => 'pm','controller' => 'options','action'=>'index'), null, TRUE); ?>">Type Options</a></dt>
+	<dt><a href="<?php echo $this->url('options', array('module' => 'pm','controller' => 'options','action'=>'index'), null, TRUE); ?>">Type Options</a></dt>
 	<dd>Configure the available options and types MojiTrac will use for classifying projects and tasks.</dd>	
 </dl>
