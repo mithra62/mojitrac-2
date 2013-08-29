@@ -308,25 +308,23 @@ class CompaniesController extends AbstractPmController
 	{
 		if(!$this->perm->check($this->identity, 'view_companies'))
 		{
-			$this->_helper->redirector('index','index');
-			exit;			
+			return $this->redirect()->toRoute('pm');			
 		}	
 				
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('company_id');
 		if (!$id) 
 		{
-			$this->_helper->redirector('index','companies');
-			exit;
+			return $this->redirect()->toRoute('companies');
 		}
 		
-		$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
+		$company = $this->getServiceLocator()->get('PM\Model\Companies');
 		$company_data = $company->getCompanyById($id);
 		if(!$company_data)
 		{
-			$this->_helper->redirector('index','companies');
-			exit;
+			return $this->redirect()->toRoute('companies');
 		}
 		
-		$this->view->company = $company_data;
+		$view['company'] = $company_data;
+		return $view;
 	}
 }
