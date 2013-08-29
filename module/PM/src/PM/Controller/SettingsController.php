@@ -30,7 +30,7 @@ class SettingsController extends AbstractPmController
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
-		parent::onDispatch( $e );
+		$e = parent::onDispatch( $e );
         //parent::check_permission('view_projects');
         //$this->layout()->setVariable('layout_style', 'single');
         $this->layout()->setVariable('sidebar', 'dashboard');
@@ -67,19 +67,20 @@ class SettingsController extends AbstractPmController
     {	
     	$user = $this->getServiceLocator()->get('Application\Model\User');
 		$form = $this->getServiceLocator()->get('Application\Form\PasswordForm');
+		$hash = $this->getServiceLocator()->get('Application\Model\Hash');
         
 		$request = $this->getRequest();
         if ($request->isPost()) 
 		{
 			$formData = $this->getRequest()->getPost();
-			$form->setInputFilter($user->getPasswordInputFilter());
+			$form->setInputFilter($user->getPasswordInputFilter($this->identity, $hash));
 			$form->setData($formData);
 			if ($form->isValid($formData)) 
 			{
 				if($user->changePassword($this->identity, $formData['new_password']))
 				{
 			    	$this->flashMessenger()->addMessage('Password changed!');
-					return $this->redirect()->toRoute('projects/view', array('project_id' => $id));		
+					return $this->redirect()->toRoute('settings/password');		
 				}
 			}   
 		} 

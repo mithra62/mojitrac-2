@@ -12,9 +12,11 @@
 
 namespace Application\Model;
 
-use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
+
 use Application\Model\AbstractModel;
 use Application\Model\Hash;
 
@@ -40,6 +42,12 @@ class User extends AbstractModel
 	public static $permissions = FALSE;
 	
 	/**
+	 * The validation filters
+	 * @var object
+	 */
+	protected $inputFilter;
+	
+	/**
 	 * The User Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param Sql $db
@@ -48,31 +56,78 @@ class User extends AbstractModel
 	{
 		parent::__construct($adapter, $db);
 	}
-		
-	/**
-	 * Returns the User Form
-	 * @return object
-	 */
-	public function getUsersForm($options = array(), $add_password = FALSE, $add_terms = FALSE, $unique_email = TRUE, $add_roles = FALSE)
-	{
-        return new PM_Form_Users($options, $add_password, $add_terms, $unique_email, $add_roles);		
-	}	
 	
-	/**
-	 * Returns the Password Form
-	 * @return object
-	 */
-	public function getPasswordForm($options = array(), $confirm = TRUE)
+	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
-        return new PM_Form_Password($options, $confirm);		
+		throw new \Exception("Not used");
 	}
+	
+	public function getPasswordInputFilter($identity, \Application\Model\Hash $hash)
+	{
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'old_password',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+				'validators' => array(
+					array(
+						'name' => '\PM\Validate\Password\Match',
+						'options' => array(
+							'identity' => $identity,
+							'users' => $this,
+							'hash' => $hash
+						)
+					),
+				),
+			)));
+			
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'new_password',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+				'validators' => array(
+					array(
+						'name' => 'Identical',
+						'options' => array(
+							'token' => 'confirm_password',
+							'strict' => FALSE
+						)
+					),
+				),
+			)));
+
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'confirm_password',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				)
+			)));			
+			
+			//array('identical', false, array('token' => 'elementOne'))			
+	
+			$this->inputFilter = $inputFilter;
+		}
+	
+		return $this->inputFilter;
+	}	
 	
 	public function changePassword($id, $password)
 	{
 		$hash = new Hash;
 		$salt = $hash->gen_salt();
 		$sql = array('hash' => $salt, 'password' => $hash->password($password, $salt), 'forgotten_hash' => '');
-		return $this->db->updateUser($sql, $id);
+		return $this->update('users', $sql, array('id' => $id) );
 	}
 	
 	/**

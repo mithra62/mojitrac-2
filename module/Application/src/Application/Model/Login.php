@@ -14,8 +14,8 @@ namespace Application\Model;
 
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
+use Zend\Cache\Pattern\ObjectCache;
 
 /**
  * Application - Login Model
@@ -29,8 +29,8 @@ use Zend\InputFilter\InputFilterInterface;
 class Login
 {
 	/**
-	 * The 
-	 * @var unknown
+	 * The validation filters
+	 * @var object
 	 */
 	protected $inputFilter;
 	
@@ -67,10 +67,10 @@ class Login
 					array(
 						'name' => 'Db\RecordExists',
 						'options' => array(
-						        'table' => 'users',
-						        'field' => 'email',
-								'adapter' => $this->authAdapter
-						    )
+							'table' => 'users',
+						    'field' => 'email',
+							'adapter' => $this->authAdapter
+						)
 					),
 				),
 			)));

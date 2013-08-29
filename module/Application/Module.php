@@ -30,6 +30,7 @@ use Application\Model\ForgotPassword;
 use Application\Model\Settings;
 use Application\Form\PasswordForm;
 use Application\Form\PrefsForm;
+use Application\Model\Hash;
 
 /**
  * Default - Module Loader
@@ -176,6 +177,9 @@ class Module
 				},
 				'Application\Form\PasswordForm' => function($sm) {
 					return new PasswordForm('password');
+				},
+				'Application\Model\Hash' => function($sm) {
+					return new Hash();
 				}
 			),
     	);
