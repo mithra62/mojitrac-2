@@ -57,35 +57,50 @@ class User extends AbstractModel
 		parent::__construct($adapter, $db);
 	}
 	
+	/**
+	 * Sets the InputFilter
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
+	 */
 	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
 		throw new \Exception("Not used");
 	}
 	
-	public function getPasswordInputFilter($identity, \Application\Model\Hash $hash)
+	/**
+	 * Change Password specific validation logic
+	 * @param int $identity
+	 * @param \Application\Model\Hash $hash
+	 * @param bool $confirm
+	 * @return object
+	 */
+	public function getPasswordInputFilter($identity, \Application\Model\Hash $hash, $confirm = TRUE)
 	{
 		if (!$this->inputFilter) {
 			$inputFilter = new InputFilter();
 			$factory = new InputFactory();
 	
-			$inputFilter->add($factory->createInput(array(
-				'name'     => 'old_password',
-				'required' => true,
-				'filters'  => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-				'validators' => array(
-					array(
-						'name' => '\PM\Validate\Password\Match',
-						'options' => array(
-							'identity' => $identity,
-							'users' => $this,
-							'hash' => $hash
-						)
+			if($confirm)
+			{
+				$inputFilter->add($factory->createInput(array(
+					'name'     => 'old_password',
+					'required' => true,
+					'filters'  => array(
+						array('name' => 'StripTags'),
+						array('name' => 'StringTrim'),
 					),
-				),
-			)));
+					'validators' => array(
+						array(
+							'name' => '\PM\Validate\Password\Match',
+							'options' => array(
+								'identity' => $identity,
+								'users' => $this,
+								'hash' => $hash
+							)
+						),
+					),
+				)));
+			}
 			
 			$inputFilter->add($factory->createInput(array(
 				'name'     => 'new_password',
@@ -114,14 +129,18 @@ class User extends AbstractModel
 				)
 			)));			
 			
-			//array('identical', false, array('token' => 'elementOne'))			
-	
 			$this->inputFilter = $inputFilter;
 		}
 	
 		return $this->inputFilter;
 	}	
 	
+	/**
+	 * Changes a users password
+	 * @param int $id
+	 * @param string $password
+	 * @return Ambigous <\Zend\Db\Adapter\Driver\StatementInterface, \Zend\Db\ResultSet\Zend\Db\ResultSet, \Zend\Db\Adapter\Driver\ResultInterface, \Zend\Db\ResultSet\Zend\Db\ResultSetInterface>
+	 */
 	public function changePassword($id, $password)
 	{
 		$hash = new Hash;
