@@ -33,7 +33,7 @@ class BackToLink extends AbstractHelper
 		$this->options = $options;
 		$return = '<div class="back_link_content">';
 		$data = $this->_parseOptions();
-		$return .= $this->template($data['id'], $data['name'], $data['controller']);
+		$return .= $this->template($data['route'], $data['options'], $data['name']);
 		$return .= '<div>'.$this->view->InteractIcon('left-arrow', 'Back').'</div>';
 		$return .= '</div><br clear="all" />';
 		
@@ -70,9 +70,8 @@ class BackToLink extends AbstractHelper
 		elseif($this->options['company'])
 		{
 			$return['name'] = $this->options['company']['name'];
-			$return['id'] = $this->options['company']['id'];
-			$return['controller'] = 'companies';
-			$return['action'] = 'view';
+			$return['options'] = array('company_id' => $this->options['company']['id']);
+			$return['route'] = 'companies/view';
 		}
 		elseif($this->options['user'])
 		{
@@ -83,10 +82,10 @@ class BackToLink extends AbstractHelper
 		}		
 		return $return;		
 	}
-    private function template($id, $name, $controller = 'tasks', $action = 'view')
+    private function template($route, $options, $name)
     {
     	$return = '';
-		$return .= '<a href="'.$this->view->url(array('module' => 'pm','controller'=>$controller,'action'=>$action, 'id' => $id), null, TRUE).'" title="Back to '.$name.'">';
+		$return .= '<a href="'.$this->view->url($route, $options).'" title="Back to '.$name.'">';
 		$return .= 'Back to '.$name;
 		$return .= '</a>';
 		return $return;

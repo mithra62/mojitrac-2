@@ -61,7 +61,7 @@ class AdminController extends AbstractPmController
         $this->view->layout_style = 'right';
         
         $this->view->phrase = 'Yes, I want to reset MojiTrac to the default system.';
-    	$setting = new Model_Settings;
+    	$setting = $this->getServiceLocator()->get('Application\Model\Settings');
 		$form = $setting->getResetForm(array(
             'action' => '/pm/admin/system-reset',
             'method' => 'post',
@@ -76,8 +76,7 @@ class AdminController extends AbstractPmController
 				if($admin->systemReset())
 				{
 			    	$this->_flashMessenger->addMessage('System Reset!');
-					$this->_helper->redirector('index','admin');  
-					exit;					
+					return $this->redirect()->toRoute('admin');					
 				}
 			}   
 
@@ -91,37 +90,30 @@ class AdminController extends AbstractPmController
      */
     public function settingsAction()
     {
-        $this->view->sub_menu = 'admin';
-        $this->view->active_nav = 'admin';
-        $this->view->active_sub = 'global';
-        $this->view->layout_style = 'right';
+        $this->layout()->setVariable('sub_menu', 'admin');
+        $this->layout()->setVariable('active_nav', 'admin');
+        $this->layout()->setVariable('active_sub', 'global');
+        $this->layout()->setVariable('layout_style','right');
             	
-    	$setting = new Model_Settings;
-		$form = $setting->getSettingForm(array(
-            'action' => '/pm/admin/settings',
-            'method' => 'post',
-        ));
+    	$setting = $this->getServiceLocator()->get('Application\Model\Settings');
+		$form = $this->getServiceLocator()->get('Application\Form\SettingsForm');
         
         $settings = $setting->getSettings();
-        $form->populate($settings);
-        $this->view->settings = $this->settings;
+        $form->setData($settings);
+        $view['settings'] = $this->settings;
         
        	if ($this->getRequest()->isPost()) 
 		{
     		$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData)) 
+			if($setting->updateSettings($formData))
 			{
-				if($setting->updateSettings($formData))
-				{
-					$setting->cache->remove('pm_settings');
-			    	$this->_flashMessenger->addMessage('Settings updated!');
-					$this->_helper->redirector('settings','admin');  
-					exit;
-				}
+		    	$this->flashMessenger()->addMessage('Settings updated!');
+				return $this->redirect()->toRoute('admin/settings');	
 			}
 		}
 		
-		$this->view->form = $form;
+		$view['form'] = $form;
+		return $view;
     }
     
     public function optionsAction()

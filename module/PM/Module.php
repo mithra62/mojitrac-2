@@ -28,7 +28,7 @@ use PM\Model\Notifications;
 use PM\Model\Contacts;
 use PM\Form\ProjectForm;
 use PM\Form\CompanyForm;
-
+use PM\Form\BookmarkForm;
 /**
  * PM - Module Object
  *
@@ -137,6 +137,9 @@ class Module
 				},	
 				'PM\Form\CompanyForm' => function($sm) {
 					return new CompanyForm('company', $sm->get('PM\Model\Companies'), $sm->get('PM\Model\Options'));
+				},	
+				'PM\Form\BookmarkForm' => function($sm) {
+					return new BookmarkForm('bookmark');
 				},											
 			),
     	);

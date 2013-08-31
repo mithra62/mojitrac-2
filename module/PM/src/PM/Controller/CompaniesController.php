@@ -130,7 +130,7 @@ class CompaniesController extends AbstractPmController
 		
 		$view['sub_menu'] = 'company';
 		$view['layout_style'] = 'single';
-		$view['active_sub'] = $this->view->company['type'];		
+		$view['active_sub'] = $view['company']['type'];		
 		//$this->view->headTitle('Viewing Company: '. $this->view->company['name'], 'PREPEND');
 		$view['id'] = $view['company_id'] = $id;
 		

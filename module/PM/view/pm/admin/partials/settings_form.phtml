@@ -1,60 +1,33 @@
-
-<form action="<?php echo $this->escape($this->form->getAction()); ?>" id="form_settings" method="<?php echo $this->escape($this->form->getMethod()) ?>"> 
-
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'form_settings');
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>
 <div id="form_tabs">
 	<ul>
 		<li><a href="#general">General</a></li>
-		<li><a href="#date_time">Date/Time</a></li>
 		<li><a href="#files">Files</a></li>
 	</ul>
 	<div id="general">
 		<p>
 			<label for="master_company">Master Company</label>
-			<?php echo $this->form->master_company; ?>
+			<?php $field = $form->get('master_company'); echo $this->formRow($field); ?>
 		</p>
 		<p>
-			<label for="enable_ip"><?php echo $this->form->enable_ip; ?> Enable Ip Locker</label>
+			<label for="enable_ip"><?php $field = $form->get('enable_ip'); echo $this->formRow($field); ?> Enable Ip Locker</label>
 		</p>
 		<p>
 			<input type="submit" class="submit" value="Submit" />
 		</p>
-	</div>
-	
-	<div id="date_time">
-		<p>
-			<label for="timezone">Global Timezone</label>
-			<?php echo $this->form->timezone; ?>
-		</p>
-		
-		<p>
-			<label for="date_format">Date Format</label>
-			<?php echo $this->form->date_format; ?>
-		</p>	
-		
-		<p style="display: none" id="date_format_custom_p">
-			<label for="date_format_customt">Custom Date Format</label>
-			<?php echo $this->form->date_format_custom; ?> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'settings', 'page' => 'date_format'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Date Formats');?></a> 
-		</p>			
-		
-		<p>
-			<label for="time_format">Time Format</label>
-			<?php echo $this->form->time_format; ?> 
-		</p>
-		
-		<p style="display: none" id="time_format_custom_p">
-			<label for="time_format_customt">Custom Time Format</label>
-			<?php echo $this->form->time_format_custom; ?> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'settings', 'page' => 'time_format'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Time Formats');?></a> 
-		</p>
-		
-		<p>
-			<input type="submit" class="submit" value="Submit" />
-		</p>	
 	</div>
 	
 	<div id="files">
 		<p>
-			<label for="allowed_file_formats">Allowed File Formats <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'settings', 'page' => 'allowed_file_formats'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Allowed File Formats');?></a></label>
-			<?php echo $this->form->allowed_file_formats; ?>
+			<label for="allowed_file_formats">Allowed File Formats <a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'settings', 'page' => 'allowed_file_formats'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Allowed File Formats');?></a></label>
+			<?php $field = $form->get('allowed_file_formats'); echo $this->formRow($field); ?>
 		</p>
 		<p>
 			<input type="submit" class="submit" value="Submit" />
@@ -130,4 +103,5 @@ jQuery(document).ready(function($){
 		
 });
 </script>		
-</form>	
+<?php echo $this->ConfirmPageUnload('#form_settings')?>
+<?php echo $this->form()->closeTag() ?>

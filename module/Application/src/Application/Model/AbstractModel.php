@@ -14,7 +14,6 @@ namespace Application\Model;
 
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
-use Zend\EventManager\EventManagerAwareInterface;
 
  /**
  * Model Abstract
@@ -25,7 +24,7 @@ use Zend\EventManager\EventManagerAwareInterface;
  * @author		Eric Lamb
  * @filesource 	./moji/application/models/Abstract.php
  */
-abstract class AbstractModel implements EventManagerAwareInterface
+abstract class AbstractModel implements EventManagerInterfaceConstants
 {
 	/**
 	 * The database object

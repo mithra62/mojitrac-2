@@ -1,3 +1,15 @@
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'bookmark_form');
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+
+	if($this->id > 0)
+		echo '<input type="hidden" value="'.$this->id.'" name="id" />';
+?>	
+
 <style>
 #loading
 {
@@ -5,13 +17,6 @@
 }
 </style>
 <div id="oputput"></div>
-<form action="<?php echo $this->escape($this->form->getAction()); ?>" 
-method="<?php echo $this->escape($this->form->getMethod()) ?>" id="bookmark_form" enctype="<?php echo $this->escape($this->form->getEnctype()); ?>">
-
-<?php 
-if($this->id > 0)
-	echo '<input type="hidden" value="'.$this->id.'" name="id" />';
-?>
 <p>
 	<label for="url">URL</label>
 	<?php echo $this->form->url; ?>
@@ -53,7 +58,8 @@ if($this->id > 0)
 <p>
 	<input type="submit" class="submit" value="Submit" />
 </p>
-</form>	
+<?php echo $this->ConfirmPageUnload('#bookmark_form')?>
+<?php echo $this->form()->closeTag() ?>
 <script type="text/javascript">
 jQuery(document).ready(function($){
 

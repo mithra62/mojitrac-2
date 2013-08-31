@@ -31,6 +31,7 @@ use Application\Model\Settings;
 use Application\Form\PasswordForm;
 use Application\Form\PrefsForm;
 use Application\Model\Hash;
+use Application\Form\SettingsForm;
 
 /**
  * Default - Module Loader
@@ -180,6 +181,9 @@ class Module
 				},
 				'Application\Model\Hash' => function($sm) {
 					return new Hash();
+				},
+				'Application\Form\SettingsForm' => function($sm) {
+					return new SettingsForm('settings', $sm->get('PM\Model\Companies'));
 				}
 			),
     	);

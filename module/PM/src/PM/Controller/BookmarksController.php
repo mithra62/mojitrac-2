@@ -13,8 +13,6 @@
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 
 /**
 * PM - Bookmarks Controller
@@ -43,6 +41,20 @@ class BookmarksController extends AbstractPmController
 		$this->view->sub_menu_options = PM_Model_Options_Projects::status();
 		$this->view->title = FALSE;          
 	}
+	
+	public function onDispatch( \Zend\Mvc\MvcEvent $e )
+	{
+		$e = parent::onDispatch( $e );
+		//$this->layout()->setVariable('layout_style', 'single');
+		$this->layout()->setVariable('sidebar', 'dashboard');
+		$this->layout()->setVariable('sub_menu', 'tasks');
+		$this->layout()->setVariable('active_nav', 'bookmarks');
+		$this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
+		$this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
+		$this->layout()->setVariable('active_sub', 'None');
+	
+		return $e;
+	}	
     
     /**
      * Main Page
@@ -238,22 +250,23 @@ class BookmarksController extends AbstractPmController
 	public function addAction()
 	{
 		
-		$company_id = $this->_request->getParam('company', FALSE);
-		if($company_id) 
+		$id = $this->params()->fromRoute('id');
+		$type = $this->params()->fromRoute('type');
+		$view = array();
+		if($type == 'companies') 
 		{
-			$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
+			$company_id = $id;
+			$company = $this->getServiceLocator()->get('PM\Model\Companies');
 			$company_data = $company->getCompanyById($company_id);
 			if(!$company_data)
 			{
-				$this->_helper->redirector('index','companies');
-				exit;				
+				return $this->redirect()->toRoute('companies');				
 			}
 			
-			$this->view->company = $company_data;
+			$view['company'] = $company_data;
 		}
 
-		$project_id = $this->_request->getParam('project', FALSE);
-		if($project_id) 
+		if($type == 'projects') 
 		{
 			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
 			$project_data = $project->getProjectById($project_id);
@@ -265,8 +278,7 @@ class BookmarksController extends AbstractPmController
 			$this->view->project = $project_data;
 		}
 
-		$task_id = $this->_request->getParam('task', FALSE);
-		if($task_id) 
+		if($type == 'tasks') 
 		{
 			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
 			$task_data = $task->getTaskById($task_id);
@@ -278,11 +290,8 @@ class BookmarksController extends AbstractPmController
 			$this->view->task = $task_data;
 		}			
 
-		$bookmark = new PM_Model_Bookmarks(new PM_Model_DbTable_Bookmarks);
-		$form = $bookmark->getBookmarkForm(array(
-            'action' => '/pm/bookmarks/add',
-            'method' => 'post',
-        ));
+		$bookmark = $this->getServiceLocator()->get('PM\Model\Bookmarks');
+		$form = $this->getServiceLocator()->get('PM\Form\BookmarkForm');
         		
 		 if ($this->getRequest()->isPost()) 
 		 {
@@ -321,10 +330,11 @@ class BookmarksController extends AbstractPmController
 
 		 }
 		
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		
-		$this->view->headTitle('Add Bookmark', 'PREPEND');
-		$this->view->form = $form;
+        $this->layout()->setVariable('sidebar', 'dashboard');
+        $this->layout()->setVariable('layout_style', 'right');
+		//$this->view->headTitle('Add Bookmark', 'PREPEND');
+		$view['form'] = $form;
+		return $view;
 	}
 	
 	function removeAction()
