@@ -12,7 +12,7 @@
 
 namespace PM\Form;
 
-use Application\Form\AbstractForm;
+use Base\Form\BaseForm;
 
 /**
 * Compnany Form
@@ -23,7 +23,7 @@ use Application\Form\AbstractForm;
 * @author		Eric Lamb
 * @filesource 	./module/PM/src/PM/Forms/BookmarkForm.php
 */
-class BookmarkForm extends AbstractForm
+class BookmarkForm extends BaseForm
 {
 	/**
 	 * Returns the form for Bookmarks

@@ -12,8 +12,8 @@
 
 namespace PM\Controller;
 
+
 use Application\Controller\AbstractController;
-use PM\Event\ActivityLogEvent; 
 
  /**
  * Default - AbstractPmController Controller
@@ -54,7 +54,7 @@ abstract class AbstractPmController extends AbstractController
 		if( empty($this->identity) )
 		{
 			return $this->redirect()->toRoute('login');
-		}
+		}	
 		
 		$settings = $this->getServiceLocator()->get('Application\Model\Settings'); 
 		$this->settings = $settings->getSettings();	
@@ -69,7 +69,7 @@ abstract class AbstractPmController extends AbstractController
 		$this->layout()->setVariable('sub_menu', 'dashboard');
 		$this->layout()->setVariable('identity', $this->identity);
 		$this->_initIpBlocker();
-		$this->_initEvents();
+		$this->_initEvents();		
 		
 		return parent::onDispatch( $e );
 	}
@@ -84,7 +84,7 @@ abstract class AbstractPmController extends AbstractController
 			$this->getEventManager()
 				 ->getSharedManager()
 				 ->attach('Application\Model\AbstractModel', $key, array($al, $value));	
-		}
+		}		
 	}
 	
 	/**

@@ -249,7 +249,6 @@ class BookmarksController extends AbstractPmController
 	 */
 	public function addAction()
 	{
-		
 		$id = $this->params()->fromRoute('id');
 		$type = $this->params()->fromRoute('type');
 		$view = array();
@@ -328,13 +327,13 @@ class BookmarksController extends AbstractPmController
 				$this->view->errors = array('Please fix the errors below.');
 			}
 
-		 }
+		}
 		
         $this->layout()->setVariable('sidebar', 'dashboard');
         $this->layout()->setVariable('layout_style', 'right');
 		//$this->view->headTitle('Add Bookmark', 'PREPEND');
-		$view['form'] = $form;
-		return $view;
+		$view['form'] = $form;		
+		return $this->ajax_output($view);
 	}
 	
 	function removeAction()

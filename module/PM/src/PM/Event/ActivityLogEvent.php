@@ -55,7 +55,7 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logTaskAdd(array $data, $task_id, $project_id, $performed_by)
 	{
-		self::logEvent(self::setDate(), 'task_add', $performed_by, $data, $project_id, 0, $task_id);
+		$this->al->logActivity(self::setDate(), 'task_add', $performed_by, $data, $project_id, 0, $task_id);
 	}
 	
 	/**
@@ -67,7 +67,7 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logTaskUpdate(array $data, $task_id, $project_id, $performed_by)
 	{
-		self::logEvent(self::setDate(), 'task_update', $performed_by, $data, $project_id, 0, $task_id);
+		$this->al->logActivity(self::setDate(), 'task_update', $performed_by, $data, $project_id, 0, $task_id);
 	}	
 	
 	/**
@@ -79,7 +79,7 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logTaskAssignment(array $data, $task_id, $project_id, $performed_by)
 	{
-		self::logEvent(self::setDate(), 'task_assigned', $performed_by, $data, $project_id, 0, $task_id, 0, 0, $data['assigned_to']);
+		$this->al->logActivity(self::setDate(), 'task_assigned', $performed_by, $data, $project_id, 0, $task_id, 0, 0, $data['assigned_to']);
 	}
 	
 	/**
@@ -91,7 +91,7 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logTaskRemove(array $data, $task_id, $project_id, $performed_by)
 	{
-		self::logEvent(self::setDate(), 'task_remove', $performed_by, $data, $project_id, 0, $task_id);
+		$this->al->logActivity(self::setDate(), 'task_remove', $performed_by, $data, $project_id, 0, $task_id);
 	}	
 	
 	/**
@@ -105,7 +105,7 @@ class ActivityLogEvent extends BaseEvent
 	{
 		$data = $event->getParam('data');
 		$project_id = $event->getParam('project_id');
-		self::logEvent(self::setDate(), 'project_add', $data['creator'], $data, $id);
+		$this->al->logActivity(self::setDate(), 'project_add', $data['creator'], $data, $id);
 	}
 	
 	/**
@@ -130,7 +130,7 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logProjectRemove(array $data, $id, $performed_by)
 	{
-		self::logEvent(self::setDate(), 'project_remove', $performed_by, $data, $id);
+		$this->al->logActivity(self::setDate(), 'project_remove', $performed_by, $data, $id);
 	}
 	
 	/**
@@ -142,7 +142,7 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logProjectTeamRemove(array $data, $id, $performed_by)
 	{
-		self::logEvent(self::setDate(), 'project_team_remove', $performed_by, $data, $id);
+		$this->al->logActivity(self::setDate(), 'project_team_remove', $performed_by, $data, $id);
 	}
 
 	/**
@@ -154,7 +154,7 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logProjectTeamAdd(array $data, $id, $performed_by)
 	{
-		self::logEvent(self::setDate(), 'project_team_add', $performed_by, $data, $id);
+		$this->al->logActivity(self::setDate(), 'project_team_add', $performed_by, $data, $id);
 	}
 	
 	/**
@@ -166,8 +166,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logNoteAdd(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'note_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'note_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], $id);
 	}
 	
 	/**
@@ -179,8 +179,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logNoteUpdate(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'note_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'note_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], $id);
 	}
 	
 	/**
@@ -192,8 +192,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logNoteRemove(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'note_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'note_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], $id);
 	}
 	
 	/**
@@ -205,8 +205,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logBookmarkAdd(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'bookmark_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'bookmark_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, $id);
 	}
 	
 	/**
@@ -218,8 +218,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logBookmarkUpdate(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'bookmark_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'bookmark_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, $id);
 	}
 	
 	/**
@@ -231,8 +231,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logBookmarkRemove(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'bookmark_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'bookmark_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, $id);
 	}
 
 	/**
@@ -244,8 +244,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logFileAdd(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'],0, 0, 0, $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'file_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'],0, 0, 0, $id);
 	}
 	
 	/**
@@ -257,8 +257,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logFileUpdate(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'file_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $id);
 	}
 	
 	/**
@@ -270,8 +270,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logFileRemove(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'file_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $id);
 	}
 	
 	/**
@@ -283,8 +283,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logFileRevisionAdd(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_revision_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'],0, 0, 0, $data['file_id'], $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'file_revision_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'],0, 0, 0, $data['file_id'], $id);
 	}
 	
 	/**
@@ -296,8 +296,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logFileRevisionUpdate(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_revision_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'file_revision_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $id);
 	}
 	
 	/**
@@ -309,8 +309,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logFileRevisionRemove(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_revision_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'file_revision_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $id);
 	}
 
 	/**
@@ -322,8 +322,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logFileReviewAdd(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_review_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'],0, 0, 0, $data['file_id'], $data['revision_id'], $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'file_review_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'],0, 0, 0, $data['file_id'], $data['revision_id'], $id);
 	}
 	
 	/**
@@ -335,8 +335,8 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logFileReviewUpdate(array $data, $id, $performed_by)
 	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_review_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $data['revision_id'], $id);
+		$data = $this->filterForKeys($data);
+		$this->al->logActivity(self::setDate(), 'file_review_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $data['revision_id'], $id);
 	}
 	
 	/**
@@ -349,7 +349,7 @@ class ActivityLogEvent extends BaseEvent
 	public function logFileReviewRemove(array $data, $id, $performed_by)
 	{
 		$data = $this->filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_review_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $data['revision_id'], $id);
+		$this->al->logActivity(self::setDate(), 'file_review_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $data['revision_id'], $id);
 	}	
 	
 

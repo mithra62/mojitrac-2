@@ -13,6 +13,7 @@
 namespace Base\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
 
  /**
  * Default - AbstractController Controller
@@ -78,5 +79,24 @@ abstract class BaseController extends AbstractActionController
 			$this->adapter = $sm->get('Zend\Db\Adapter\Adapter');
 		}
 		return $this->adapter;
+	}
+	
+	/**
+	 * Wraps up Ajax capable Action returns 
+	 * @param array $view
+	 * @return \Zend\View\Model\ViewModel|boolean
+	 */
+	public function ajax_output(array $view = array())
+	{
+	    if ($this->getRequest()->isXmlHttpRequest())
+	    {
+	    	$result = new ViewModel();
+	    	$result->setTerminal(true);
+	    	$view['ajax_mode'] = true;
+	    	$result->setVariables($view);
+	    	return $result;
+	    }
+
+	    return $view;
 	}
 }
