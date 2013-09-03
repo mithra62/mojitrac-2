@@ -215,14 +215,11 @@ class ProjectsController extends AbstractPmController
 	            {
 	            	//PM_Model_ActivityLog::logProjectUpdate($formData, $id, $this->identity);
 					$this->flashMessenger()->addMessage('Project updated!');
-					return $this->redirect()->toRoute('projects/view', array('project_id' => $id));					  
-					        		
+					return $this->redirect()->toRoute('projects/view', array('project_id' => $id));      		
             	} 
-            	else 
-            	{
-            		$view['errors'] = array('Couldn\'t update company...');
-            		$form->setData($formData);
-            	}
+
+            	$view['errors'] = array('Couldn\'t update project...');
+            	$form->setData($formData);            	
                 
             } 
             else 
@@ -233,7 +230,6 @@ class ProjectsController extends AbstractPmController
             
 	    }
 	    
-	    //Zend_Registry::set('pm_activity_filter', array('project_id' => $id));
 	    $view['form'] = $form;
 	    $view['project_data'] = $project_data;
 	    $view['active_sub'] = $project_data['status'];

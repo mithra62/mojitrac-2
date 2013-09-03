@@ -12,11 +12,6 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
 use Application\View\Helper\AbstractViewHelper;
 
  /**
@@ -31,11 +26,12 @@ class DashboardTimeline extends AbstractViewHelper
     	
 	public function __invoke()
 	{
-		return;
-		$filter = Zend_Registry::get('pm_activity_filter');
+	    $helperPluginManager = $this->getServiceLocator();
+	    $serviceManager = $helperPluginManager->getServiceLocator();
+	    $activity = $serviceManager->get('PM\Model\ActivityLog');
 
-		$identity = Zend_Auth::getInstance()->getIdentity();
-		$activity = new PM_Model_ActivityLog;
+	    $filter = false;
+		$identity = $this->getIdentity();
 		$logs = $activity->getUsersProjectActivity($identity, $filter);
 		if(count($logs) >= 1)
 		{
@@ -206,7 +202,7 @@ class DashboardTimeline extends AbstractViewHelper
 				case 'bookmark_update':
 					if(isset($data['bookmark_name']) && $data['bookmark_name'] != '')
 					{
-						return $this->view->url(array('module'=> 'pm', 'controller'=>'bookmarks','action'=>'view', 'id' => $data['bookmark_id']), null, TRUE);
+						return $this->view->url('bookmarks/view', array('bookmark_id' => $data['bookmark_id']));
 					}
 				break;
 	
@@ -215,7 +211,7 @@ class DashboardTimeline extends AbstractViewHelper
 				case 'note_update':
 					if(isset($data['note_subject']) && $data['note_subject'] != '')
 					{
-						return $this->view->url(array('module'=> 'pm', 'controller'=>'notes','action'=>'view', 'id' => $data['note_id']), null, TRUE);
+						return $this->view->url('pm', array('module'=> 'pm', 'controller'=>'notes','action'=>'view', 'id' => $data['note_id']), null, TRUE);
 					}
 				break;
 	
@@ -225,7 +221,7 @@ class DashboardTimeline extends AbstractViewHelper
 				case 'project_team_add':
 					if(isset($data['project_name']) && $data['project_name'] != '')
 					{
-						return $this->view->url(array('module'=> 'pm', 'controller'=>'projects','action'=>'view', 'id' => $data['project_id']), null, TRUE);
+						return $this->view->url('projects/view', array('project_id' => $data['project_id']));
 					}
 				break;
 				
@@ -235,7 +231,7 @@ class DashboardTimeline extends AbstractViewHelper
 				case 'task_assigned':
 					if(isset($data['task_name']) && $data['task_name'] != '')
 					{
-						return $this->view->url(array('module'=> 'pm', 'controller'=>'tasks','action'=>'view', 'id' => $data['task_id']), null, TRUE);
+						return $this->view->url('pm', array('module'=> 'pm', 'controller'=>'tasks','action'=>'view', 'id' => $data['task_id']), null, TRUE);
 					}
 				break;
 				
@@ -244,7 +240,7 @@ class DashboardTimeline extends AbstractViewHelper
 				case 'file_update':
 					if(isset($data['file_name']) && $data['file_name'] != '')
 					{
-						return $this->view->url(array('module'=> 'pm', 'controller'=>'files','action'=>'view', 'id' => $data['file_id']), null, TRUE);
+						return $this->view->url('pm', array('module'=> 'pm', 'controller'=>'files','action'=>'view', 'id' => $data['file_id']), null, TRUE);
 					} 
 					$data['stuff'] = Zend_Json::decode($data['stuff']);
 
@@ -261,12 +257,12 @@ class DashboardTimeline extends AbstractViewHelper
 				case 'file_revision_add':	
 					if(isset($data['file_name']) && $data['file_name'] != '')
 					{
-						return $this->view->url(array('module'=> 'pm', 'controller'=>'files','action'=>'preview-revision', 'id' => $data['file_rev_id']), null, TRUE);
+						return $this->view->url('pm', array('module'=> 'pm', 'controller'=>'files','action'=>'preview-revision', 'id' => $data['file_rev_id']), null, TRUE);
 					} 
 					$data['stuff'] = Zend_Json::decode($data['stuff']);
 				break;					
 			}
-			return $this->view->url(array('module'=> 'pm', 'controller'=>'activity','action'=>'view', 'id' => $data['id']), null, TRUE);
+			return $this->view->url('pm', array('module'=> 'pm', 'controller'=>'activity','action'=>'view', 'id' => $data['id']), null, TRUE);
 		}
 	}
 	

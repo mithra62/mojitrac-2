@@ -18,6 +18,7 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Sql;
 use Zend\Authentication\AuthenticationService;
+use Zend\ModuleManager\ModuleManager;
 
 use Application\Model\Auth\AuthAdapter;
 use Application\Model\User;
@@ -51,7 +52,6 @@ class Module
         $app = $e->getParam('application');
         $app->getEventManager()->attach('render', array($this, 'setLayoutTitle'));        
     }
-    
 
     /**
      * @param  \Zend\Mvc\MvcEvent $e The MvcEvent instance

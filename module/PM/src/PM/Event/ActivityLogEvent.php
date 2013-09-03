@@ -7,33 +7,22 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/src/PM/Model/ActivityLog.php
+ * @filesource 	./module/PM/src/PM/Event/ActivityLog.php
  */
 
-namespace PM\Model;
+namespace PM\Event;
 
-use Application\Model\AbstractModel;
+use PM\Model\ActivityLog;
 
  /**
- * PM - ProjectForm Model
+ * PM - Event Activity Log
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/PM/src/PM/Model/ActivityLog.php
+ * @filesource 	./module/PM/src/PM/Event/ActivityLog.php
  */
-class ActivityLog extends AbstractModel
-{
-    
-    /**
-     * The Activity Log Model
-     * @param \Zend\Db\Adapter\Adapter $adapter
-     * @param \Zend\Db\Sql\Sql $db
-     */
-    public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
-    {
-    	parent::__construct($adapter, $db);
-    }
-    
+class ActivityLogEvent
+{	
 	/**
 	 * Wrapper to log a task add entry
 	 * @param array $data
@@ -89,9 +78,11 @@ class ActivityLog extends AbstractModel
 	 * @param int $performed_by
 	 * @return void
 	 */
-	static public function logProjectAdd(array $data, $id, $performed_by)
+	static public function logProjectAdd($event)
 	{
-		self::logEvent(self::setDate(), 'project_add', $performed_by, $data, $id);
+		$data = $event->getParam('data');
+		$project_id = $event->getParam('project_id');
+		self::logEvent(self::setDate(), 'project_add', $data['creator'], $data, $id);
 	}
 	
 	/**
@@ -101,9 +92,14 @@ class ActivityLog extends AbstractModel
 	 * @param int $performed_by
 	 * @return void
 	 */
-	static public function logProjectUpdate(array $data, $id, $performed_by)
+	static public function logProjectUpdate($event)
 	{
-		self::logEvent(self::setDate(), 'project_update', $performed_by, $data, $id);
+	    $data = $event->getParam('data');
+	    print_r($data);
+	    echo $project_id = $event->getParam('project_id');	    
+	    echo 'fdsa';
+	    exit;
+		self::logEvent(self::setDate(), 'project_update', $performed_by, $data, $project_id);
 	}
 	
 	/**
@@ -352,17 +348,17 @@ class ActivityLog extends AbstractModel
 	 */
 	public function getUsersProjectActivity($id, $filter = FALSE, $limit = 20)
 	{
-		$sql = $this->db->select()->from(array('a'=>'activity_logs'));
-		$sql->join(array('pt' => 'project_teams'), 'pt.project_id = a.project_id', array());
-
-		
-		$sql = $sql->join(array('p' => 'projects'), 'p.id = a.project_id', array('project_name' => 'name', 'project_id' => 'id'), 'left');
-		$sql = $sql->join(array('t' => 'tasks'), 't.id = a.task_id', array('task_name' => 'name'), 'left');
-		$sql = $sql->join(array('n' => 'notes'), 'n.id = a.note_id AND pt.project_id = n.project_id', array('note_subject' => 'subject'), 'left');
-		$sql = $sql->join(array('u' => 'users'), 'u.id = a.user_id', array('user_first_name' => 'first_name', 'user_last_name' => 'last_name'), 'left');
-		$sql = $sql->join(array('u2' => 'users'), 'u2.id = a.performed_by', array('performed_by_first_name' => 'first_name', 'performed_by_last_name' => 'last_name'), 'left');
-		$sql = $sql->join(array('b' => 'bookmarks'), 'b.id = a.bookmark_id AND pt.project_id = b.project_id', array('bookmark_name' => 'name'), 'left');
-		$sql = $sql->join(array('f' => 'files'), 'f.id = a.file_id', array('file_name' => 'name'), 'left');
+		$activity = new PM_Model_DbTable_ActivityLog;
+		$sql = $activity->select()->setIntegrityCheck(false)->from(array('a'=>$activity->getTableName()));
+		$sql->join(array('pt' => 'project_teams'), 'pt.project_id = a.project_id AND pt.user_id = '.$id, array());
+				
+		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = a.project_id', array('name AS project_name', 'id AS project_id'));
+		$sql = $sql->joinLeft(array('t' => 'tasks'), 't.id = a.task_id', array('t.name AS task_name'));
+		$sql = $sql->joinLeft(array('n' => 'notes'), 'n.id = a.note_id AND pt.project_id = n.project_id', array('subject AS note_subject'));
+		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = a.user_id', array('first_name AS user_first_name', 'last_name AS user_last_name'));
+		$sql = $sql->joinLeft(array('u2' => 'users'), 'u2.id = a.performed_by', array('first_name AS performed_by_first_name', 'last_name AS performed_by_last_name'));
+		$sql = $sql->joinLeft(array('b' => 'bookmarks'), 'b.id = a.bookmark_id AND pt.project_id = b.project_id', array('name AS bookmark_name'));
+		$sql = $sql->joinLeft(array('f' => 'files'), 'f.id = a.file_id', array('name AS file_name'));
 		
 		if($filter && is_array($filter))
 		{
@@ -377,10 +373,9 @@ class ActivityLog extends AbstractModel
 			}			
 		}
 		
-		$sql = $sql->where(array('pt.user_id' => $id));
 		$sql = $sql->order('a.date DESC');
 		$sql = $sql->limit($limit);
-		return $this->getRows($sql);
+		return $activity->getLogs($sql);
 	}
 	
 	public function getActivityById($id, $filter_teams = FALSE)

@@ -16,7 +16,7 @@ if(count($logs) >= 1)
 		
 		if($project_name != $log['project_name'])
 		{
-			$url = $this->url(array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=>$log['project_id']), null, TRUE);
+			$url = $this->url('projects/view', array('project_id'=>$log['project_id']));
 			echo '<h3><a href="'.$url.'" class="project_dashboard" title="'.$log['project_name'].'">'.$log['project_name'].'</a></h3><ul style="padding-bottom:10px;">';
 			$project_name = $log['project_name'];
 		}

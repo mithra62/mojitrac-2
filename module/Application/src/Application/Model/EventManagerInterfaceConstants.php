@@ -25,48 +25,73 @@ use Zend\EventManager\EventManagerAwareInterface;
  */
 interface EventManagerInterfaceConstants extends EventManagerAwareInterface
 {
-	const EventInitPasswordUpdate = 'init.password.update';
-	const EventPostPasswordUpdate = 'post.password.update';
+	const EventPasswordUpdatePre = 'password.update.pre';
+	const EventPasswordUpdatePost = 'password.update.post';
 	
-	const EventInitProjectUpdate = 'init.project.update';
-	const EventPostProjectUpdate = 'post.project.update';
-	const EventInitProjectRemove = 'init.project.remove';
-	const EventPostProjectRemove = 'post.project.remove';
-	const EventInitProjectAdd = 'init.project.add';
-	const EventPostProjectAdd = 'post.project.add';
+	//context ids (company.X, project.X)
+	const EventProjectUpdatePre = 'project.update.pre';
+	const EventProjectUpdatePost = 'project.update.post';
+	const EventProjectRemovePre = 'project.remove.pre';
+	const EventProjectRemovePost = 'project.remove.post';
+	const EventProjectAddPre = 'project.add.pre';
+	const EventProjectAddPost = 'project.add.post';
+	const EventProjectAddTeamPre = 'project.addteam.pre';
+	const EventProjectAddTeamPost = 'project.addteam.post';
+	const EventProjectRemoveTeamPre = 'project.removeteam.pre';
+	const EventProjectRemoveTeamPost = 'project.removeteam.post';
 	
-	const EventInitTaskUpdate = 'init.task.update';
-	const EventPostTaskUpdate = 'post.task.update';
-	const EventInitTaskAdd = 'init.task.add';
-	const EventPostTaskAdd = 'post.task.add';
-	const EventInitTaskRemove = 'init.task.remove';
-	const EventPostTaskRemove = 'post.task.remove';	
+	const EventTaskUpdatePre = 'task.update.pre';
+	const EventTaskUpdatePost = 'task.update.post';
+	const EventTaskAddPre = 'task.add.pre';
+	const EventTaskAddPost = 'task.add.post';
+	const EventTaskRemovePre = 'task.remove.pre';
+	const EventTaskRemovePost = 'task.remove.post';	
 	
-	const EventInitCompanyUpdate = 'init.company.update';
-	const EventPostCompanyUpdate = 'post.company.update';
-	const EventInitCompanyAdd = 'init.company.add';
-	const EventPostCompanyAdd = 'post.company.add';
-	const EventInitCompanyRemove = 'init.company.remove';
-	const EventPostCompanyRemove = 'post.company.remove';	
+	const EventCompanyUpdatePre = 'company.update.pre';
+	const EventCompanyUpdatePost = 'company.update.post';
+	const EventCompanyAddPre = 'company.add.pre';
+	const EventCompanyAddPost = 'company.add.post';
+	const EventCompanyRemovePre = 'company.remove.pre';
+	const EventCompanyRemovePost = 'company.remove.post';
 	
-	const EventInitFileUpdate = 'init.file.update';
-	const EventPostFileUpdate = 'post.file.update';
-	const EventInitFileAdd = 'init.file.add';
-	const EventPostFileAdd = 'post.file.add';
-	const EventInitFileRemove = 'init.file.remove';
-	const EventPostFileRemove = 'post.file.remove';	
+	const EventFileUpdatePre = 'file.update.pre';
+	const EventFileUpdatePost = 'file.update.post';
+	const EventFileAddPre = 'file.add.pre';
+	const EventFileAddPost = 'file.add.post';
+	const EventFileRemovePre = 'file.remove.pre';
+	const EventFileRemovePost = 'file.remove.post';	
 	
-	const EventInitNoteUpdate = 'init.note.update';
-	const EventPostNoteUpdate = 'post.note.update';
-	const EventInitNoteAdd = 'init.file.add';
-	const EventPostNoteAdd = 'post.note.add';
-	const EventInitNoteRemove = 'init.note.remove';
-	const EventPostNoteRemove = 'post.note.remove';		
+	const EventNoteUpdatePre = 'note.update.pre';
+	const EventNoteUpdatePost = 'note.update.post';
+	const EventNoteAddPre = 'file.add.pre';
+	const EventNoteAddPost = 'note.add.post';
+	const EventNoteRemovePre = 'note.remove.pre';
+	const EventNoteRemovePost = 'note.remove.post';		
 	
-	const EventInitBookmarkUpdate = 'init.bookmark.update';
-	const EventPostBookmarkUpdate = 'post.bookmark.update';
-	const EventInitBookmarkAdd = 'init.bookmark.add';
-	const EventPostBookmarkAdd = 'post.bookmark.add';
-	const EventInitBookmarkRemove = 'init.bookmark.remove';
-	const EventPostBookmarkRemove = 'post.bookmark.remove';	
+	const EventBookmarkUpdatePre = 'bookmark.update.pre';
+	const EventBookmarkUpdatePost = 'bookmark.update.post';
+	const EventBookmarkAddPre = 'bookmark.add.pre';
+	const EventBookmarkAddPost = 'bookmark.add.post';
+	const EventBookmarkRemovePre = 'bookmark.remove.pre';
+	const EventBookmarkRemovePost = 'bookmark.remove.post';	
+	
+	const EventUserAddPre = 'user.add.pre';
+	const EventUserAddPost = 'user.add.post';
+	const EventUserUpdatePre = 'user.update.pre';
+	const EventUserUpdatePost = 'user.update.post';
+	const EventUserRemovePre = 'user.remove.pre';
+	const EventUserRemovePost = 'user.remove.post';
+	const EventUserLogoutPre = 'user.logout.pre';
+	const EventUserLogoutPost = 'user.logout.post';	
+	
+	const EventUserRoleAddPre = '';
+	const EventUserRoleAddPost = '';
+	const EventUserRoleUpdatePre = '';
+	const EventUserRoleUpdatePost = '';
+	const EventUserRoleRemovePre = '';
+	const EventUserRoleRemovePost = '';	
+	
+	const EventSettingsUpdatePre = '';
+	const EventSettingsUpdatePost = '';
+
 }

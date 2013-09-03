@@ -26,9 +26,11 @@ use PM\Model\Notes;
 use PM\Model\Options;
 use PM\Model\Notifications;
 use PM\Model\Contacts;
+use PM\Model\ActivityLog;
 use PM\Form\ProjectForm;
 use PM\Form\CompanyForm;
 use PM\Form\BookmarkForm;
+
 /**
  * PM - Module Object
  *
@@ -38,19 +40,16 @@ use PM\Form\BookmarkForm;
  */
 class Module
 {
-	/**
-	 * Sets the layout to use the PM special one
-	 * @param ModuleManager $moduleManager
-	 */
 	public function init(ModuleManager $moduleManager)
 	{
+		//sets the layout
 		$sharedEvents = $moduleManager->getEventManager()->getSharedManager();
 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', function($e) {
 			// This event will only be fired when an ActionController under the MyModule namespace is dispatched.
 			$controller = $e->getTarget();
 			$controller->layout('layout/pm');
-		}, 100);
-	}
+		}, 100);	
+	}	
 		
     public function getConfig()
     {
@@ -126,6 +125,11 @@ class Module
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					return new Notifications($adapter, $db);
+				},
+				'PM\Model\ActivityLog' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new ActivityLog($adapter, $db);
 				},
 				'PM\Model\Contacts' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');

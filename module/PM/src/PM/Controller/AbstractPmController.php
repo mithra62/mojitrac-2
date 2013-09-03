@@ -13,6 +13,7 @@
 namespace PM\Controller;
 
 use Application\Controller\AbstractController;
+use PM\Event\ActivityLogEvent; 
 
  /**
  * Default - AbstractPmController Controller
@@ -68,10 +69,24 @@ abstract class AbstractPmController extends AbstractController
 		$this->layout()->setVariable('sub_menu', 'dashboard');
 		$this->layout()->setVariable('identity', $this->identity);
 		$this->_initIpBlocker();
+		$this->_initEvents();
 		
 		return parent::onDispatch( $e );
 	}
 
+	private function _initEvents()
+	{
+		//setup the Activity Log
+		$hooks = array('project.update.pre' => 'logProjectUpdate');
+		$al = new ActivityLogEvent();
+		foreach($hooks AS $key => $value)
+		{
+			$this->getEventManager()
+				 ->getSharedManager()
+				 ->attach('Application\Model\AbstractModel', $key, array($al, $value));	
+		}		
+	}
+	
 	/**
 	 * Provides oversight on permission dependant requsts
 	 * @param string $permission

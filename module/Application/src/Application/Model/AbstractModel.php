@@ -161,11 +161,16 @@ abstract class AbstractModel implements EventManagerInterfaceConstants
 		$events->setIdentifiers(array(
 				__CLASS__,
 				get_called_class(),
+		        'Moji',
 		));
 		$this->events = $events;
 		return $this;
 	}
 	
+	/**
+	 * Returns an instance of the Event Manager (or creates one if it doesn't exist yet)
+	 * @see \Zend\EventManager\EventsCapableInterface::getEventManager()
+	 */
 	public function getEventManager()
 	{
 		if (null === $this->events) {
@@ -174,8 +179,41 @@ abstract class AbstractModel implements EventManagerInterfaceConstants
 		return $this->events;
 	}
 
-	public function event($name, $obj, $argv)
+	/**
+	 * Wrapper for trigger Event Manager hooks
+	 * @param mixed $names
+	 * @param object $obj
+	 * @param array $argv
+	 * @param array $xhooks
+	 * @return object
+	 */
+	public function trigger($names, $obj, array $argv, array $xhooks = array())
 	{
-		return $this->getEventManager()->trigger($name, $obj, $argv);
-	}	
+	    if(!is_array($names))
+	    {
+	        $names = array($names);
+	    }
+	    
+	    //setup the "special" context sensitive hooks
+	    foreach($names AS $name)
+	    {
+	        foreach($xhooks AS $key => $value)
+	            foreach($value As $context => $pk)
+	               $names[] = $name.'['.$context.'.'.$pk.']';
+	    }
+	    
+	    $names = (array_reverse($names));
+	    
+		$argv = $this->getEventManager()->prepareArgs($argv);
+		foreach($names AS $event)
+		{
+            $ext = $this->getEventManager()->trigger($event, $obj, $argv);
+            if($ext->stopped()) 
+            {
+                return $ext; 
+            }
+		}
+		
+		return $ext;
+	}
 }

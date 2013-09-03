@@ -91,7 +91,7 @@ class Projects extends AbstractModel
 	 */
 	private function getSQL($data){
 		return array(
-				'name' => $data['name'],
+				'name' => (!empty($data['name']) ? $data['name'] : ''), 
 				'company_id' => $data['company_id'],
 				'start_date' => $data['start_date'],
 				'end_date' => $data['end_date'],
@@ -305,25 +305,22 @@ class Projects extends AbstractModel
 
 	
 	/**
-	 * Inserts or updates a Project
+	 * Inserts a Project
 	 * @param $data
-	 * @param $bypass_update
 	 * @return mixed
 	 */
 	public function addProject($data, $bypass_update = FALSE)
 	{
-		/*
-		$ext = $this->event('pre.moji_project_add', $this, compact('data'));
-		if($ext->stopped()) return $ext->last();
-		*/		
+		$ext = $this->trigger(self::EventProjectAddPre, $this, compact('data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+
 		$sql = $this->getSQL($data);
-		$project_id = $this->insert('projects', $sql);
+		$data['project_id'] = $this->insert('projects', $sql);
 		
-		/*
-		$ext = $this->event('post.moji_project_add', $this, compact('project_id', 'data'));
-		if($ext->stopped()) return $ext->last();
-		*/	
-		return $project_id;
+		$ext = $this->trigger(self::EventProjectAddPost, $this, compact('project_id', 'data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $project_id = $ext->last();		
+			
+		return $data['project_id'];
 	}
 	
 	/**
@@ -332,22 +329,16 @@ class Projects extends AbstractModel
 	 * @param int	 $id
 	 * @return bool
 	 */
-	public function updateProject($data, $id)
+	public function updateProject($data, $project_id)
 	{
-		
-		$ext = $this->event('pre.moji_project_update', $this, compact('data', 'id'));
-		if($ext->stopped()) return $ext->last();
-		
+		$ext = $this->trigger(self::EventProjectUpdatePre, $this, compact('data', 'project_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 		
 		$sql = $this->getSQL($data);
-		$return = $this->update('projects', $sql, array('id' => $id));
+		$return = $this->update('projects', $sql, array('id' => $project_id));
 		
-		
-		$ext = $this->event('post.moji_project_update', $this, compact('data', 'id'));
-		if($ext->stopped()) return $ext->last();	
-		
-		echo 'fdsa';
-		exit;
+		$ext = $this->trigger(self::EventProjectUpdatePost, $this, compact('data', 'project_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $return = $ext->last();
 		
 		return $return;
 	}
@@ -398,12 +389,14 @@ class Projects extends AbstractModel
 	 */
 	public function removeProject($id)
 	{	
-		$ext = $this->event('pre.moji_project_remove', $this, compact('id'));
-		if($ext->stopped()) return $ext->last();
+		$ext = $this->event(self::EventProjectRemovePre, $this, compact('id'), $this->setXhooks(array('id' => $id)));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $id = $ext->last();	
 				
 		$company_id = $this->getCompanyId($id);
 		if($this->db->deleteProject($id))
 		{
+		    $success = TRUE;
+		    /*
 			$tasks = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
 			$tasks->removeTasksByProject($id);
 			
@@ -418,11 +411,12 @@ class Projects extends AbstractModel
 			
 			$companies = new PM_Model_Companies(new PM_Model_DbTable_Companies);
 			$companies->updateCompanyProjectCount($company_id, -1, 'active_projects');
+			*/
 			
-			$ext = $this->event('post.moji_project_remove', $this, compact('id'));
-			if($ext->stopped()) return $ext->last();
+			$ext = $this->event(self::EventProjectRemovePost, $this, compact('id'), $this->setXhooks(array('id' => $id)));
+			if($ext->stopped()) return $ext->last(); elseif($ext->last()) $success = $ext->last();
 						
-			return TRUE;
+			return $success;
 		}
 	}
 	
@@ -474,6 +468,9 @@ class Projects extends AbstractModel
 	 */
 	public function addProjectTeamMember($id, $project)
 	{
+	    $ext = $this->trigger(self::EventProjectAddTeamPre, $this, compact('id', 'project'), $this->setXhooks(array('id' => $project)));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $project = $ext->last();
+	    	    
 		$sql = array(
 			'project_id' => $project,
 			'user_id' => $id,
@@ -481,7 +478,12 @@ class Projects extends AbstractModel
 			'created_date' => new \Zend\Db\Sql\Expression('NOW()')
 		);
 		
-		return $this->insert('project_teams', $sql);
+		$insert = $this->insert('project_teams', $sql);
+
+		$ext = $this->trigger(self::EventProjectAddTeamPost, $this, compact('id', 'project'), $this->setXhooks(array('id' => $project)));
+		if($ext->stopped()) return $ext->last();
+
+		return $insert;
 	}
 	
 	/**
@@ -492,9 +494,17 @@ class Projects extends AbstractModel
 	 */
 	public function removeProjectTeamMember($id, $project)
 	{
+	    $ext = $this->trigger(self::EventProjectRemoveTeamPre, $this, compact('id', 'project'), $this->setXhooks(array('id' => $project)));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $project = $ext->last();
+	    	    
 		$team = new PM_Model_DbTable_Projects_Teams;
 		$where = "user_id = '$id' AND project_id = '$project'";
-		return $team->delete($where);
+		$delete = $team->delete($where);
+		
+		$ext = $this->trigger(self::EventProjectRemoveTeamPost, $this, compact('id', 'project'), $this->setXhooks(array('id' => $project)));
+		if($ext->stopped()) return $ext->last();
+
+		return $delete;
 	}
 	
 	/**
@@ -533,5 +543,34 @@ class Projects extends AbstractModel
 	{
 		$sql = $this->db->select()->from(array('p' => $this->db->getTableName()), array('id'))->where('company_id = ?', $company_id)->where('name LIKE ?', $name);
 		return $this->db->getProject($sql);
+	}
+	
+	/**
+	 * Sets up the contextual hooks based on $data
+	 * @param array $data
+	 * @return array
+	 */
+	public function setXhooks(array $data = array())
+	{
+        $return = array();
+        if(!empty($data['company_id']))
+            $return[] = array('company' => $data['company_id']);
+            
+        if(!empty($data['id']))
+            $return[] = array('project' => $data['id']);  
+                  
+        if(!empty($data['project_id']))
+            $return[] = array('project' => $data['project_id']);
+
+        if(!empty($data['priority']))
+        	$return[] = array('priority' => $data['priority']);
+        
+        if(!empty($data['type']))
+        	$return[] = array('type' => $data['type']);
+
+        if(!empty($data['status']))
+        	$return[] = array('status' => $data['status']);
+                        
+        return $return;        
 	}
 }
