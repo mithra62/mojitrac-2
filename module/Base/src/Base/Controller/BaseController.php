@@ -79,13 +79,4 @@ abstract class BaseController extends AbstractActionController
 		}
 		return $this->adapter;
 	}
-	
-	public function logoutAction()
-	{
-		$this->getSessionStorage()->forgetMe();
-		$this->getAuthService()->clearIdentity();
-	
-		$this->flashmessenger()->addMessage("You've been logged out");
-		return $this->redirect()->toRoute('login');
-	}	
 }

@@ -27,9 +27,12 @@ use PM\Model\Options;
 use PM\Model\Notifications;
 use PM\Model\Contacts;
 use PM\Model\ActivityLog;
+
 use PM\Form\ProjectForm;
 use PM\Form\CompanyForm;
 use PM\Form\BookmarkForm;
+
+use PM\Event\ActivityLogEvent;
 
 /**
  * PM - Module Object
@@ -144,6 +147,11 @@ class Module
 				},	
 				'PM\Form\BookmarkForm' => function($sm) {
 					return new BookmarkForm('bookmark');
+				},
+				'PM\Event\ActivityLogEvent' => function($sm) {
+				    $auth = $sm->get('AuthService');
+				    $al = $sm->get('PM\Model\ActivityLog');
+					return new ActivityLogEvent($al, $auth->getIdentity());
 				},											
 			),
     	);

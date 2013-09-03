@@ -61,10 +61,13 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $sql
 	 */
-	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $sql)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter = null, \Zend\Db\Sql\Sql $sql = null)
 	{
-		$this->adapter = $adapter;
-		$this->db = $sql;
+	    if($adapter && $sql)
+	    {
+            $this->adapter = $adapter;
+            $this->db = $sql;
+	    }
 	}
 
 	/**

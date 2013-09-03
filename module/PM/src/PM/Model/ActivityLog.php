@@ -33,309 +33,31 @@ class ActivityLog extends AbstractModel
     {
     	parent::__construct($adapter, $db);
     }
-    
-	/**
-	 * Wrapper to log a task add entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logTaskAdd(array $data, $task_id, $project_id, $performed_by)
-	{
-		self::logEvent(self::setDate(), 'task_add', $performed_by, $data, $project_id, 0, $task_id);
-	}
-	
-	/**
-	 * Wrapper to log a task update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logTaskUpdate(array $data, $task_id, $project_id, $performed_by)
-	{
-		self::logEvent(self::setDate(), 'task_update', $performed_by, $data, $project_id, 0, $task_id);
-	}	
-	
-	/**
-	 * Wrapper to log a task assignment entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logTaskAssignment(array $data, $task_id, $project_id, $performed_by)
-	{
-		self::logEvent(self::setDate(), 'task_assigned', $performed_by, $data, $project_id, 0, $task_id, 0, 0, $data['assigned_to']);
-	}
-	
-	/**
-	 * Wrapper to log a project removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logTaskRemove(array $data, $task_id, $project_id, $performed_by)
-	{
-		self::logEvent(self::setDate(), 'task_remove', $performed_by, $data, $project_id, 0, $task_id);
-	}	
-	
-	/**
-	 * Wrapper to log a project update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logProjectAdd(array $data, $id, $performed_by)
-	{
-		self::logEvent(self::setDate(), 'project_add', $performed_by, $data, $id);
-	}
-	
-	/**
-	 * Wrapper to log a project update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logProjectUpdate(array $data, $id, $performed_by)
-	{
-		self::logEvent(self::setDate(), 'project_update', $performed_by, $data, $id);
-	}
-	
-	/**
-	 * Wrapper to log a project removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logProjectRemove(array $data, $id, $performed_by)
-	{
-		self::logEvent(self::setDate(), 'project_remove', $performed_by, $data, $id);
-	}
-	
-	/**
-	 * Wrapper to log a project removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logProjectTeamRemove(array $data, $id, $performed_by)
-	{
-		self::logEvent(self::setDate(), 'project_team_remove', $performed_by, $data, $id);
-	}
 
-	/**
-	 * Wrapper to log a project removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logProjectTeamAdd(array $data, $id, $performed_by)
-	{
-		self::logEvent(self::setDate(), 'project_team_add', $performed_by, $data, $id);
-	}
-	
-	/**
-	 * Wrapper to log a note update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logNoteAdd(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'note_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], $id);
-	}
-	
-	/**
-	 * Wrapper to log a note update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logNoteUpdate(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'note_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], $id);
-	}
-	
-	/**
-	 * Wrapper to log a note removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logNoteRemove(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'note_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], $id);
-	}
-	
-	/**
-	 * Wrapper to log a bookmark update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logBookmarkAdd(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'bookmark_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, $id);
-	}
-	
-	/**
-	 * Wrapper to log a bookmark update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logBookmarkUpdate(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'bookmark_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, $id);
-	}
-	
-	/**
-	 * Wrapper to log a bookmark removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logBookmarkRemove(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'bookmark_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, $id);
-	}
-
-	/**
-	 * Wrapper to log a file entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logFileAdd(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'],0, 0, 0, $id);
-	}
-	
-	/**
-	 * Wrapper to log a file update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logFileUpdate(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $id);
-	}
-	
-	/**
-	 * Wrapper to log a file removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logFileRemove(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $id);
-	}
-	
-	/**
-	 * Wrapper to log a file revision entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logFileRevisionAdd(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_revision_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'],0, 0, 0, $data['file_id'], $id);
-	}
-	
-	/**
-	 * Wrapper to log a file revision update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logFileRevisionUpdate(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_revision_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $id);
-	}
-	
-	/**
-	 * Wrapper to log a file revision removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logFileRevisionRemove(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_revision_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $id);
-	}
-
-	/**
-	 * Wrapper to log a file revision entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logFileReviewAdd(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_review_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'],0, 0, 0, $data['file_id'], $data['revision_id'], $id);
-	}
-	
-	/**
-	 * Wrapper to log a file revision update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logFileReviewUpdate(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_review_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $data['revision_id'], $id);
-	}
-	
-	/**
-	 * Wrapper to log a file revision removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	static public function logFileReviewRemove(array $data, $id, $performed_by)
-	{
-		$data = self::filterForKeys($data);
-		self::logEvent(self::setDate(), 'file_review_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $data['revision_id'], $id);
-	}	
+    /**
+     * The database SQL array
+     * @param array $data
+     * @return multitype:Ambigous <string, unknown>
+     */
+    public function getSQL(array $data = array())
+    {
+        return array(
+    		'date' => (!empty($data['date']) ? $data['date'] : ''),
+    		'type' => (!empty($data['type']) ? $data['type'] : ''),
+    		'performed_by' => (!empty($data['performed_by']) ? $data['performed_by'] : ''),
+    		'stuff' => (!empty($data['stuff']) ? json_encode($data['stuff']) : ''),
+    		'company_id' => (!empty($data['company_id']) ? $data['company_id'] : '0'),
+    		'project_id' => (!empty($data['project_id']) ? $data['project_id'] : '0'),
+    		'task_id' => (!empty($data['task_id']) ? $data['task_id'] : '0'),
+    		'note_id' => (!empty($data['note_id']) ? $data['note_id'] : '0'),
+    		'bookmark_id' => (!empty($data['bookmark_id']) ? $data['bookmark_id'] : '0'),
+    		'user_id' => (!empty($data['user_id']) ? $data['user_id'] : '0'),
+    		'file_id' => (!empty($data['file_id']) ? $data['file_id'] : '0'),
+    		'file_rev_id' => (!empty($data['file_rev_id']) ? $data['file_rev_id'] : '0'),
+    		'file_review_id' => (!empty($data['file_review_id']) ? $data['file_review_id'] : '0'),
+    		'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+        );      
+    }
 	
 	/**
 	 * Returns the mysql formatted timestamp
@@ -440,92 +162,48 @@ class ActivityLog extends AbstractModel
 		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = a.user_id', array('first_name AS user_first_name', 'last_name AS user_last_name'));
 		return $activity->getLogs($sql);	
 	}	
-	
-	/**
-	 * Takes the array and verifies the existance of the primary keys
-	 * @param $data
-	 */
-	static private function filterForKeys(array $data)
-	{
-		if(array_key_exists('company', $data))
-		{
-			$data['company_id'] = $data['company'];
-		}
-		else
-		{
-			$data['company_id'] = 0;
-		}
-		
-		if(array_key_exists('project', $data))
-		{
-			$data['project_id'] = $data['project'];
-		}
-		else
-		{
-			$data['project_id'] = 0;
-		}
-		
-		
-		if(array_key_exists('task', $data))
-		{
-			$data['task_id'] = $data['task'];
-		}
-		else
-		{
-			$data['task_id'] = 0;
-		}		
-		
-		return $data;
-	}
 
 	/**
-	 * Handles the logging of an event
-	 * @param $date
-	 * @param $type
-	 * @param $performed_by
-	 * @param $stuff
-	 * @param $project_id
-	 * @param $company_id
-	 * @param $task_id
-	 * @param $note_id
-	 * @param $bookmark_id
-	 * @param $user_id
+	 * Handles the logging of an activity
+	 * @param $data
 	 * @return void
 	 */
-	static private function logEvent(
-							$date, 
-							$type, 
-							$performed_by, 
-							array $stuff, 
-							$project_id = 0, 
-							$company_id = 0, 
-							$task_id = 0, 
-							$note_id = 0, 
-							$bookmark_id = 0, 
-							$user_id = 0, 
-							$file_id = 0, 
-							$file_rev_id = 0, 
-							$file_review_id = 0)
-	{		
-		$logger = new PM_Model_DbTable_ActivityLog;
-		$sql = $logger->getSQL(
-			   		array(
-			   			 'date' => $date, 
-			   			 'type' => $type, 
-			   			 'performed_by' => $performed_by, 
-			   			 'stuff' => $stuff,
-			   			 'company_id' => $company_id,
-			   			 'project_id' => $project_id,
-			   			 'task_id' => $task_id,
-			   			 'note_id' => $note_id,
-			   			 'bookmark_id' => $bookmark_id,
-			   			 'user_id' => $user_id,
-			   			 'file_id' => $file_id,
-			   			 'file_rev_id' => $file_rev_id,
-			   			 'file_review_id' => $file_review_id
-			   		)
-			   );
-			   
-		$logger->addLog($sql);
+	public function logActivity(array $data)
+	{	
+	    $ext = $this->trigger(self::EventActivityLogAddPre, $this, compact('data'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+	    
+		$sql = $this->getSQL($data);
+		$sql['date'] = new \Zend\Db\Sql\Expression('NOW()');
+		$this->insert('activity_logs', $sql);
+		
+		$ext = $this->trigger(self::EventActivityLogAddPre, $this, compact('data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); 
+	}
+	
+	/**
+	 * Sets up the contextual hooks based on $data
+	 * @param array $data
+	 * @return array
+	 */
+	public function setXhooks(array $data = array())
+	{
+		$return = array();
+		if(!empty($data['company_id']))
+			$return[] = array('company' => $data['company_id']);
+	
+		if(!empty($data['project_id']))
+			$return[] = array('project' => $data['project_id']);
+	
+		if(!empty($data['file_id']))
+			$return[] = array('file' => $data['file_id']);
+	
+		if(!empty($data['bookmark_id']))
+			$return[] = array('bookmark' => $data['bookmark_id']);
+	
+		if(!empty($data['task_id']))
+			$return[] = array('task' => $data['task_id']);
+	
+		return $return;
 	}	
 }

@@ -78,13 +78,13 @@ abstract class AbstractPmController extends AbstractController
 	{
 		//setup the Activity Log
 		$hooks = array('project.update.pre' => 'logProjectUpdate');
-		$al = new ActivityLogEvent();
+		$al = $this->getServiceLocator()->get('PM\Event\ActivityLogEvent');
 		foreach($hooks AS $key => $value)
 		{
 			$this->getEventManager()
 				 ->getSharedManager()
 				 ->attach('Application\Model\AbstractModel', $key, array($al, $value));	
-		}		
+		}
 	}
 	
 	/**
