@@ -15,7 +15,6 @@ namespace Application\Model;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Cache\Pattern\ObjectCache;
 
 /**
  * Application - Login Model

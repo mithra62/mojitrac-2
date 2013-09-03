@@ -12,6 +12,7 @@
 
 namespace Application\Form;
 
+use Base\Form\BaseForm;
 use PM\Model\Options\Companies;
 
 /**
@@ -23,7 +24,7 @@ use PM\Model\Options\Companies;
 * @author		Eric Lamb
 * @filesource 	./module/Application/src/Application/Form/SettingsForm.php
 */
-class SettingsForm extends AbstractForm
+class SettingsForm extends BaseForm
 {	
 	/**
 	 * Returns the System Settings form

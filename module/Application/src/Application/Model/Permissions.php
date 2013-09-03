@@ -12,12 +12,8 @@
 
 namespace Application\Model;
 
-use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
-
 use Application\Model\AbstractModel;
-use Application\Model\Hash;
 
  /**
  * PM - User Model

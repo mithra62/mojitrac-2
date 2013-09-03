@@ -14,7 +14,7 @@ namespace PM\Form;
 
 use PM\Model\Options\Projects;
 use PM\Model\Options\Companies;
-use Application\Form\AbstractForm;
+use Base\Form\BaseForm;
 
 /**
 * LoginForm Form
@@ -25,7 +25,7 @@ use Application\Form\AbstractForm;
 * @author		Eric Lamb
 * @filesource 	./module/PM/src/PM/Forms/ProjectForm.php
 */
-class ProjectForm extends AbstractForm
+class ProjectForm extends BaseForm
 {
 	/**
 	 * Returns the ProjectForm form

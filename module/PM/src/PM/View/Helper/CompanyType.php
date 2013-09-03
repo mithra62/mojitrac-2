@@ -12,12 +12,7 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 use PM\Model\Options\Companies;
 
  /**
@@ -27,9 +22,9 @@ use PM\Model\Options\Companies;
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/View/Helper/CompanyType.php
  */
-class CompanyType extends AbstractViewHelper
+class CompanyType extends BaseViewHelper
 {
-	function __invoke($type)
+	public function __invoke($type)
 	{
 		return Companies::translateTypeId($type); 
 	}

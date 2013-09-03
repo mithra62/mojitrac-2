@@ -7,28 +7,22 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/View/Helper/MakeLink.php
+ * @filesource 	./module/PM/src/PM/View/Helper/MakeLink.php
  */
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 
 /**
  * PM - Make Link View Helper
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/PM/View/Helper/MakeLink.php
+ * @filesource 	./module/PM/src/PM/View/Helper/MakeLink.php
  */
-class MakeLink extends AbstractViewHelper
+class MakeLink extends BaseViewHelper
 {
-    	
 	public function __invoke($type, array $info)
 	{
 		switch($type)

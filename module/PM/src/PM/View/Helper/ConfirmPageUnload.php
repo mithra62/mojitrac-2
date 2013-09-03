@@ -12,12 +12,7 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 
 /**
  * PM - Confirm Page Unload View Helper
@@ -26,7 +21,7 @@ use Application\View\Helper\AbstractViewHelper;
  * @author		Eric Lamb
  * @filesource 	./module/PM/View/Helper/ConfirmPageUnload.php
  */
-class ConfirmPageUnload extends AbstractViewHelper
+class ConfirmPageUnload extends BaseViewHelper
 {
 	function __invoke($id)
 	{

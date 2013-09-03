@@ -12,7 +12,7 @@
 
 namespace PM\View\Helper;
 
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 
  /**
  * PM - Global Alerts View Helper
@@ -21,7 +21,7 @@ use Application\View\Helper\AbstractViewHelper;
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/View/Helper/DashboardTimeline.php
  */
-class DashboardTimeline extends AbstractViewHelper
+class DashboardTimeline extends BaseViewHelper
 {
     	
 	public function __invoke()

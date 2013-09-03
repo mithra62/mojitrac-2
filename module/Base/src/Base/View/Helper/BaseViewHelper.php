@@ -7,25 +7,23 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/View//Helper/AbstractViewHelper.php
+ * @filesource 	./module/Base/src/Base/View//Helper/BaseViewHelper.php
  */
 
-namespace Application\View\Helper;
+namespace Base\View\Helper;
 
 use Zend\View\Helper\AbstractHelper as ZFAbstract;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-use Application\Model\Auth\AuthAdapter;
-
  /**
- * PM - Abstract View Helper
+ * Base - View Helper
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/PM/View/Helper/AbstractViewHelper.php
+ * @filesource 	./module/Base/src/Base/View//Helper/BaseViewHelper.php
  */
-class AbstractViewHelper extends ZFAbstract implements ServiceLocatorAwareInterface 
+class BaseViewHelper extends ZFAbstract implements ServiceLocatorAwareInterface 
 {
 	public $identity;
 	

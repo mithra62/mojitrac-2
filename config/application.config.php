@@ -11,8 +11,9 @@ return array(
         'Api',
         'Application',
         'Clients',
-    	'ZendDeveloperTools'
-        ),	
+        'ZendDeveloperTools',
+        'Base'
+        ),
     'module_listener_options' => array(
         'module_paths' => array(
             './module',

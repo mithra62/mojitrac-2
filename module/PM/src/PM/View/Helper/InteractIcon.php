@@ -12,12 +12,7 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 
  /**
  * PM - Interact Icon View Helper
@@ -26,7 +21,7 @@ use Application\View\Helper\AbstractViewHelper;
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/View/Helper/InteractIcon.php
  */
-class InteractIcon extends AbstractViewHelper
+class InteractIcon extends BaseViewHelper
 {
     public $view;
     

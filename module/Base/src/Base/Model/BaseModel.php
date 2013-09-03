@@ -10,12 +10,10 @@
  * @filesource 	./moji/application/controllers/LoginController.php
  */
 
-namespace Application\Model;
+namespace Base\Model;
 
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
-
-use Base\Model\BaseModel;
 
  /**
  * Model Abstract
@@ -26,7 +24,7 @@ use Base\Model\BaseModel;
  * @author		Eric Lamb
  * @filesource 	./moji/application/models/Abstract.php
  */
-abstract class AbstractModel extends BaseModel
+abstract class BaseModel implements EventManagerInterfaceConstants
 {
 	/**
 	 * The database object

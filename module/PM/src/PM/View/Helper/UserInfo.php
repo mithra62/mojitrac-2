@@ -12,12 +12,7 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 
  /**
  * PM - User Info View Helper
@@ -26,7 +21,7 @@ use Application\View\Helper\AbstractViewHelper;
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/View/Helper/UserInfo.php
  */
-class UserInfo extends AbstractViewHelper
+class UserInfo extends BaseViewHelper
 {
 	public $userInfo = FALSE;
 	

@@ -7,27 +7,21 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/src/PM/View/Helper/TaskStatus.php
+ * @filesource 	./module/PM/src/PM/View/Helper/Truncate.php
  */
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
-use PM\Model\Options\Projects;
+use Base\View\Helper\BaseViewHelper;
 
  /**
  * PM - Task Status View Helper
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/PM/src/PM/View/Helper/TaskStatus.php
+ * @filesource 	./module/PM/src/PM/View/Helper/Truncate.php
  */
-class Truncate extends AbstractViewHelper
+class Truncate extends BaseViewHelper
 {
 	function __invoke($string, $length = 80, $etc = '...',
 	                                  $break_words = false, $middle = false)

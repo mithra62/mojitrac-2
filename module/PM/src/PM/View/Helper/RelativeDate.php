@@ -12,21 +12,16 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 
  /**
- * PM - Check Permission View Helper
+ * PM - Relative Date View Helper
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/View/Helper/RelativeDate.php
  */
-class RelativeDate extends AbstractViewHelper
+class RelativeDate extends BaseViewHelper
 {
     	
 	/**

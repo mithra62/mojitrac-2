@@ -14,7 +14,7 @@ namespace PM\Form;
 
 use PM\Model\Options\Us\States;
 use PM\Model\Options\Companies;
-use Application\Form\AbstractForm;
+use Base\Form\BaseForm;
 
 /**
 * Compnany Form
@@ -25,7 +25,7 @@ use Application\Form\AbstractForm;
 * @author		Eric Lamb
 * @filesource 	./module/PM/src/PM/Forms/CompanyForm.php
 */
-class CompanyForm extends AbstractForm
+class CompanyForm extends BaseForm
 {
 	/**
 	 * Returns the Company form

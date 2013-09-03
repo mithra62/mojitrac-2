@@ -12,7 +12,7 @@
 
 namespace PM\View\Helper;
 
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 
  /**
  * PM - Check Permission View Helper
@@ -21,7 +21,7 @@ use Application\View\Helper\AbstractViewHelper;
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/View/Helper/CheckPermission.php
  */
-class CheckPermission extends AbstractViewHelper
+class CheckPermission extends BaseViewHelper
 {
 	public function __invoke($permission)
 	{

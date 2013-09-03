@@ -7,17 +7,12 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/View/Helper/NoteTopic.php
+ * @filesource 	./module/PM/src/PM/View/Helper/NoteTopic.php
  */
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 use PM\Model\Options\Notes;
 
 /**
@@ -25,9 +20,9 @@ use PM\Model\Options\Notes;
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/PM/View/Helper/NoteTopic.php
+ * @filesource 	./module/PM/src/PM/View/Helper/NoteTopic.php
  */
-class NoteTopic extends AbstractViewHelper
+class NoteTopic extends BaseViewHelper
 {
 	function __invoke($status)
 	{

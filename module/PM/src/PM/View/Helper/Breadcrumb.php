@@ -12,12 +12,7 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 
 /**
  * PM - Breadcrumb View Helper
@@ -26,7 +21,7 @@ use Application\View\Helper\AbstractViewHelper;
  * @author		Eric Lamb
  * @filesource 	./module/PM/View/Helper/Breadcrumb.php
  */
-class Breadcrumb extends AbstractViewHelper
+class Breadcrumb extends BaseViewHelper
 {
 	/**
 	 * Contains our nav data 

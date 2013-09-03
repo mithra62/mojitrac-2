@@ -12,6 +12,8 @@
 
 namespace Application\Form;
 
+use Base\Form\BaseForm;
+
 /**
 * Login Form
 *
@@ -21,7 +23,7 @@ namespace Application\Form;
 * @author		Eric Lamb
 * @filesource 	./moji/application/forms/LoginForm.php
 */
-class LoginForm extends AbstractForm
+class LoginForm extends BaseForm
 {
 	/**
 	 * Generates the LoginForm form

@@ -12,9 +12,7 @@
 
 namespace Application\Model;
 
-use Zend\InputFilter\Factory as InputFactory;
 use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
 
 /**
 * Setting Model
@@ -80,26 +78,6 @@ class Settings extends AbstractModel
 	{
 		parent::__construct($adapter, $db);
 	}
-	
-	/**
-	 * Returns the form for managing the global settings
-	 * @param array $options
-	 * @param array $hidden
-	 */
-	public function getSettingForm($options = array(), $hidden = array())
-	{
-        return new PM_Form_Settings($options, $hidden);		
-	}
-	
-	/**
-	 * Returns the form for managing the global settings
-	 * @param array $options
-	 * @param array $hidden
-	 */
-	public function getResetForm($options = array(), $phrase = FALSE)
-	{
-        return new PM_Form_Reset($options, $phrase);		
-	}	
 	
 	/**
 	 * Verifies that a submitted setting is valid and exists. If it's valid but doesn't exist it is created.

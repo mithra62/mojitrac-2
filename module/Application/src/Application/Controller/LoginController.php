@@ -45,7 +45,7 @@ class LoginController extends AbstractController
 	}
 		
     public function indexAction() 
-    {   	
+    {   
     	$form = $this->getServiceLocator()->get('Application\Form\LoginForm');
     	$request = $this->getRequest();
     	if ($request->isPost())

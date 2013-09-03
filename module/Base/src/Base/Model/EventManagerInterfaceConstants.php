@@ -10,7 +10,7 @@
  * @filesource 	./moji/application/models/EventManagerInterfaceConstants.php
  */
 
-namespace Application\Model;
+namespace Base\Model;
 
 use Zend\EventManager\EventManagerAwareInterface;
 

@@ -7,27 +7,23 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/View/Helper/GlobalAlerts.php
+ * @filesource 	./module/PM/src/PM/View/Helper/GlobalAlerts.php
  */
 
 namespace PM\View\Helper;
 
-use Zend\Db\Sql\Sql;
-use Zend\Db\Adapter\Adapter;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 
  /**
  * PM - Global Alerts View Helper
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/PM/View/Helper/GlobalAlerts.php
+ * @filesource 	./module/PM/src/PM/View/Helper/GlobalAlerts.php
  */
-class GlobalAlerts extends AbstractViewHelper
+class GlobalAlerts extends BaseViewHelper
 {   	
-	function __invoke($id)
+	public function __invoke($id)
 	{
 		if(!$id)
 		{

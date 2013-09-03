@@ -12,6 +12,8 @@
 
 namespace Application\Form;
 
+use Base\Form\BaseForm;
+
 /**
 * LoginForm Form
 *
@@ -21,7 +23,7 @@ namespace Application\Form;
 * @author		Eric Lamb
 * @filesource 	./moji/application/forms/ForgotPasswordForm.php
 */
-class ForgotPasswordForm extends AbstractForm
+class ForgotPasswordForm extends BaseForm
 {
 	/**
 	 * Generates the LoginForm form

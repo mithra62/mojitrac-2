@@ -6,27 +6,22 @@
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
- * @version		1.0
- * @filesource 	./module/Application/view//helper/StaticUrl.php
+ * @version		2.0
+ * @filesource 	./module/Application/src/Application/View/Helper/Staticurl.php
  */
 
 namespace Application\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 
  /**
- * Default - Abstract Controller
+ * View Helper - Static URL 
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/Application/view//helper/StaticUrl.php
+ * @filesource 	./module/Application/src/Application/View/Helper/Staticurl.php
  */
-class Staticurl extends AbstractViewHelper
+class Staticurl extends BaseViewHelper
 {
 	public function __invoke()
 	{
