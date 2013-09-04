@@ -6,23 +6,29 @@
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
- * @version		1.0
- * @filesource 	./module/PM/src/PM/Model/Times.php
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Model/Bookmarks.php
  */
 
 namespace PM\Model;
 
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
+
 use Application\Model\AbstractModel;
 
  /**
- * PM - Times Model
+ * PM - Bookmarks Model
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/PM/src/PM/Model/Times.php
+ * @filesource 	./module/PM/src/PM/Model/Bookmarks.php
  */
 class Bookmarks extends AbstractModel
 {	
+    protected $inputFilter;
+    
 	/**
 	 * The Times Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
@@ -33,13 +39,40 @@ class Bookmarks extends AbstractModel
 		parent::__construct($adapter, $db);
 	}
 	
-	/**
-	 * Returns the Bookmark Form
-	 * @return object
-	 */
-	public function getBookmarkForm($options = array())
+	public function getSQL($data){
+		return array(
+			'owner' => $data['owner'],
+			'name' => $data['name'],
+			'url' => $data['url'],
+			'description' => $data['description'],
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+	}	
+	
+	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
-        return new PM_Form_Bookmark($options);		
+		throw new \Exception("Not used");
+	}
+	
+	public function getInputFilter()
+	{
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'name',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+			)));
+	
+			$this->inputFilter = $inputFilter;
+		}
+	
+		return $this->inputFilter;
 	}	
 	
 	/**
@@ -63,26 +96,14 @@ class Bookmarks extends AbstractModel
 	 */
 	public function getBookmarkById($id)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('bk'=>$this->db->getTableName()));
-		$sql = $sql->where('bk.id = ?', $id);
+		$sql = $this->db->select()->from(array('bk'=> 'bookmarks'));
+		$sql = $sql->where(array('bk.id' => $id));
 		
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = bk.project_id', array('name AS project_name', 'id AS project_id'));
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = bk.owner', array('first_name AS owner_first_name', 'last_name AS owner_last_name'));
-		$sql = $sql->joinLeft(array('t' => 'tasks'), 't.id = bk.task_id', array('name AS task_name'));
-		$sql = $sql->joinLeft(array('c' => 'companies'), 'c.id = bk.company_id', array('name AS company_name'));
-		return $this->db->getBookmark($sql);
-	}
-	
-	/**
-	 * Returns an array of all unique artist names
-	 * @return mixed
-	 */
-	public function getAllBookmarkNames()
-	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->select()->from($task->getTableName(), array('name'))
-								->where('status = ?', 'active');
-		return $task->getTasks($sql);
+		$sql = $sql->join(array('p' => 'projects'), 'p.id = bk.project_id', array('project_name' => 'name', 'project_id' => 'id'), 'left');
+		$sql = $sql->join(array('u' => 'users'), 'u.id = bk.owner', array('owner_first_name' => 'first_name', 'owner_last_name' => 'last_name'), 'left');
+		$sql = $sql->join(array('t' => 'tasks'), 't.id = bk.task_id', array('task_name' => 'name'), 'left');
+		$sql = $sql->join(array('c' => 'companies'), 'c.id = bk.company_id', array('company_name' => 'name'), 'left');
+		return $this->getRow($sql);
 	}
 	
 	/**
@@ -219,37 +240,39 @@ class Bookmarks extends AbstractModel
 	 */
 	public function addBookmark($data)
 	{
-		$ext = $this->event('pre.moji_bookmark_add', $this, compact('data'));
-		if($ext->stopped()) return $ext->last();
+		$ext = $this->trigger(self::EventBookmarkAddPre, $this, compact('data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 				
-		$sql = $this->db->getSQL($data);
+		$sql = $this->getSQL($data);
 		$sql['company_id'] = (array_key_exists('company', $data) ? $data['company'] : 0);
 		$sql['project_id'] = (array_key_exists('project', $data) ? $data['project'] : 0);
-		$sql['task_id'] = (array_key_exists('task', $data) ? $data['task'] : 0);		
-		$bookmark_id = $this->db->addBookmark($sql);
+		$sql['task_id'] = (array_key_exists('task', $data) ? $data['task'] : 0);
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
+			
+		$bookmark_id = $data['bookmark_id'] = $this->insert('bookmarks', $sql);
 		
-		$ext = $this->event('post.moji_bookmark_add', $this, compact('data', 'bookmark_id'));
-		if($ext->stopped()) return $ext->last();
+		$ext = $this->trigger(self::EventBookmarkAddPost, $this, compact('data', 'bookmark_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $bookmark_id = $ext->last();
 				
 		return $bookmark_id;
 	}
 	
 	/**
-	 * Updates a company
+	 * Updates a bookmark
 	 * @param array $data
 	 * @param int	 $id
 	 * @return bool
 	 */
-	public function updateBookmark($data, $id)
+	public function updateBookmark($data, $bookmark_id)
 	{
-		$ext = $this->event('pre.moji_bookmark_edit', $this, compact('data'));
-		if($ext->stopped()) return $ext->last();
+	    $ext = $this->trigger(self::EventBookmarkUpdatePre, $this, compact('data', 'bookmark_id'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 				
-		$sql = $this->db->getSQL($data);
-		$return = $this->db->update($sql, "id = '$id'");
+		$sql = $this->getSQL($data);
+		$return = $this->db->update($sql, "id = '$bookmark_id'");
 		
-		$ext = $this->event('pre.moji_bookmark_edit', $this, compact('data', 'id'));
-		if($ext->stopped()) return $ext->last();	
+	    $ext = $this->trigger(self::EventBookmarkUpdatePost, $this, compact('data', 'bookmark_id'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $return = $ext->last();
 
 		return $return;
 	}	
@@ -261,7 +284,16 @@ class Bookmarks extends AbstractModel
 	 */
 	public function removeBookmark($id)
 	{
-		return $this->db->deleteBookmark($id);
+	    $data = $this->getBookmarkById($id);
+	    $ext = $this->trigger(self::EventBookmarkRemovePre, $this, compact('id', 'data'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $id = $ext->last();
+	    	    
+		$remove = $this->remove('bookmarks', array('id' => $id));
+		
+		$ext = $this->trigger(self::EventBookmarkRemovePost, $this, compact('id', 'data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $remove = $ext->last();
+				
+		return $remove;
 	}
 	
 	/**
@@ -282,5 +314,34 @@ class Bookmarks extends AbstractModel
 	public function removeBookmarksByProject($project_id)
 	{
 		return $this->db->deleteBookmark($project_id, 'project_id');
+	}	
+	
+	/**
+	 * Sets up the contextual hooks based on $data
+	 * @param array $data
+	 * @return array
+	 */
+	public function setXhooks(array $data = array())
+	{
+		$return = array();
+		if(!empty($data['company']))
+			$return[] = array('company' => $data['company']);
+	
+		if(!empty($data['id']))
+			$return[] = array('bookmark' => $data['id']);
+	
+		if(!empty($data['project']))
+			$return[] = array('project' => $data['project']);
+	
+		if(!empty($data['priority']))
+			$return[] = array('priority' => $data['priority']);
+	
+		if(!empty($data['type']))
+			$return[] = array('type' => $data['type']);
+	
+		if(!empty($data['status']))
+			$return[] = array('status' => $data['status']);
+	
+		return $return;
 	}	
 }

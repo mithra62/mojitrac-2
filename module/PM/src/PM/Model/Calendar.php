@@ -6,28 +6,31 @@
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
- * @version		1.0
- * @filesource 	./moji/application/modules/pm/models/Calendar.php
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Model/Companies.php
  */
+
+namespace PM\Model;
+
+use Application\Model\AbstractModel;
 
  /**
  * PM - The Calendar Object
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/modules/pm/models/Calendar.php
+ * @filesource 	./module/PM/src/PM/Model/Calendar.php
  */
-class PM_Model_Calendar extends Model_Abstract
+class Calendar extends AbstractModel
 {
 	/**
-	 * The PM Calendar Object
-	 * @param PM_Model_DbTable_Projects_Teams $project
-	 * @param PM_Model_DbTable_Tasks $task
+	 * The Calendar Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $db
 	 */
-	public function __construct(PM_Model_DbTable_Projects $project = null, PM_Model_DbTable_Tasks $task = null)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
-		$this->project = $project;
-		$this->task = $task;
+		parent::__construct($adapter, $db);
 	}
 	
 	/**

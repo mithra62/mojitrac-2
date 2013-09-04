@@ -228,7 +228,7 @@ class CompaniesController extends AbstractPmController
 			{
 				
 				$formData['owner'] = $this->identity;
-				$company_id = $company->addCompany($formData);
+				$company_id = $company->addCompany($formData->toArray());
 				if($company_id)
 				{
 			    	$this->flashMessenger()->addMessage('Company Added!');
@@ -255,9 +255,8 @@ class CompaniesController extends AbstractPmController
 		return $view;
 	}
 	
-	function removeAction()
+	public function removeAction()
 	{
-		
 		if(!$this->perm->check($this->identity, 'manage_companies'))
         {
         	return $this->redirect()->toRoute('companies');
@@ -301,7 +300,7 @@ class CompaniesController extends AbstractPmController
 		//$this->view->headTitle('Delete Company: '. $this->view->company['name'], 'PREPEND');
 		$view['id'] = $id;
 
-		return $view;
+		return $this->ajax_output($view);
 	}
 	
 	public function mapAction()

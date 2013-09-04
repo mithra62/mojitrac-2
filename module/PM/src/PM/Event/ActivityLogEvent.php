@@ -36,6 +36,16 @@ class ActivityLogEvent extends BaseEvent
     public $identity = false;
     
     /**
+     * The hooks used for the Event
+     * @var array
+     */
+    private $hooks = array(
+        'project.update.pre' => 'logProjectUpdate',
+        'project.add.post' => 'logProjectAdd',
+        'project.addteam.post' => 'logProjectTeamAdd',
+    );
+    
+    /**
      * Activity Log Event
      * @param \PM\Model\ActivityLog $al
      * @param int $identity
@@ -44,6 +54,18 @@ class ActivityLogEvent extends BaseEvent
     {
         $this->al = $al;
         $this->identity = $identity;
+    }
+    
+    /**
+     * Registers the Event with ZF and our Application Model
+     * @param \Zend\EventManager\SharedEventManager $ev
+     */
+    public function register( \Zend\EventManager\SharedEventManager $ev)
+    {
+        foreach($this->hooks AS $key => $value)
+        {
+        	$ev->attach('Application\Model\AbstractModel', $key, array($this, $value));
+        }        
     }
     
 	/**
@@ -105,7 +127,8 @@ class ActivityLogEvent extends BaseEvent
 	{
 		$data = $event->getParam('data');
 		$project_id = $event->getParam('project_id');
-		$this->al->logActivity(self::setDate(), 'project_add', $data['creator'], $data, $id);
+		$data = array('stuff' => $data, 'project_id' => $project_id, 'type' => 'project_add', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);		
 	}
 	
 	/**
@@ -352,7 +375,6 @@ class ActivityLogEvent extends BaseEvent
 		$this->al->logActivity(self::setDate(), 'file_review_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $data['revision_id'], $id);
 	}	
 	
-
 	/**
 	 * Takes the array and verifies the existance of the primary keys
 	 * @param $data

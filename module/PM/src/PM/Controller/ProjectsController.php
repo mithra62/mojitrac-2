@@ -85,7 +85,7 @@ class ProjectsController extends AbstractPmController
 	        }
 	        else
 	        {
-				$user = new PM_Model_Users(new PM_Model_DbTable_Users);
+				$user = $this->getServiceLocator()->get('PM\Model\Users');
 				$this->view->projects = $user->getAssignedProjects($this->identity);	    		
 	        }
 		}
@@ -309,16 +309,14 @@ class ProjectsController extends AbstractPmController
 		
     	if(!$id)
     	{
-    		$this->_helper->redirector('index','projects');
-    		exit;
+    		return $this->redirect()->toRoute('projects');
     	}
     	
     	$project_data = $project->getProjectById($id);
     	$view['project'] = $project_data;
     	if(!$view['project'])
     	{
-			$this->_helper->redirector('index','projects');
-			exit;
+			return $this->redirect()->toRoute('projects');
     	}
 
     	if($fail)
@@ -331,10 +329,8 @@ class ProjectsController extends AbstractPmController
     	   	if($project->removeProject($id))
     		{	
     			$project->removeProjectTeam($id);
-    			PM_Model_ActivityLog::logProjectRemove($project_data, $id, $this->identity);
-				$this->_flashMessenger->addMessage('Project Removed');
-				$this->_helper->redirector('index','projects');
-				exit;
+				$this->flashMessenger()->addMessage('Project Removed');
+				$this->redirect()->toRoute('projects');
 				
     		}
     	}
@@ -345,7 +341,7 @@ class ProjectsController extends AbstractPmController
 		//$this->view->headTitle('Delete Project: '. $this->view->project['name'], 'PREPEND');
 		$view['id'] = $id;  
 
-		return $view;
+		return $this->ajax_output($view);
 	}
 	
 	/**

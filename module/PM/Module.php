@@ -27,6 +27,7 @@ use PM\Model\Options;
 use PM\Model\Notifications;
 use PM\Model\Contacts;
 use PM\Model\ActivityLog;
+use PM\Model\Calendar;
 
 use PM\Form\ProjectForm;
 use PM\Form\CompanyForm;
@@ -139,6 +140,11 @@ class Module
 					$db = $sm->get('SqlObject');
 					return new Contacts($adapter, $db);
 				},
+				'PM\Model\Calendar' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Calendar($adapter, $db);
+				},
 				'PM\Form\ProjectForm' => function($sm) {
 					return new ProjectForm('project', $sm->get('PM\Model\Companies'), $sm->get('PM\Model\Options'));
 				},	
@@ -152,7 +158,7 @@ class Module
 				    $auth = $sm->get('AuthService');
 				    $al = $sm->get('PM\Model\ActivityLog');
 					return new ActivityLogEvent($al, $auth->getIdentity());
-				},											
+				},										
 			),
     	);
     }    

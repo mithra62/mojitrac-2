@@ -6,8 +6,8 @@
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
- * @version		1.0
- * @filesource 	./moji/application/controllers/LoginController.php
+ * @version		2.0
+ * @filesource 	./module/Base/src/Base/Model/BaseModel.php
  */
 
 namespace Base\Model;
@@ -16,13 +16,13 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
 
  /**
- * Model Abstract
+ * Base Abstract
  *
- * Sets things up for abstracted functionality
+ * General Moji Model Methods
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/models/Abstract.php
+ * @filesource 	./module/Base/src/Base/Model/BaseModel.php
  */
 abstract class BaseModel implements EventManagerInterfaceConstants
 {
@@ -137,9 +137,18 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		return $result->getGeneratedValue(); 
 	}
 	
+	/**
+	 * Removes rows from $table based on $where
+	 * @param string $table
+	 * @param array $where
+	 * @return number
+	 */
 	public function remove($table, array $where)
 	{
-		
+	    $sql = $this->db->delete($table)->where($where);
+		$removeString = $this->db->getSqlStringForSqlObject($sql);	
+		$result = ($this->adapter->query($removeString, 'execute'));
+		return $result->getAffectedRows(); 
 	}
 	
 	/**

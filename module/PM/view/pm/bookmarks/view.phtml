@@ -3,13 +3,13 @@
 	<div class="bookmark_header"><?php echo $this->bookmark['name']; ?></div>
 		
 		<div class="actions">
-			<a rel="facebox" href="<?php echo $this->url(array('module' => 'pm','controller'=>'bookmarks','action'=>'remove'), null, FALSE); ?>" title="Delete">
+			<a rel="facebox" href="<?php echo $this->url('bookmarks/remove', array('bookmark_id' => $this->bookmark['id'])); ?>" title="Delete">
 				<?php echo $this->InteractIcon('cross', 'Remove Bookmark');?>
 				<div class="action_text">Delete</div>
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'bookmarks','action'=>'edit'), null, FALSE); ?>" title="Edit">
+			<a href="<?php echo $this->url('bookmarks/edit', array('bookmark_id' => $this->bookmark['id'])); ?>" title="Edit">
 				<?php echo $this->InteractIcon('pencil', 'Edit Bookmark');?>
 				<div class="action_text">Edit</div>
 			</a> 
@@ -31,7 +31,7 @@ $owner_data = array(
     </div>
     <div class="items" style="padding-left:10px;">
     	<p>
-			<span class="bold">Company:</span> <a href="<?php echo $this->url(array('module' => 'pm','controller'=>'companies','action'=>'view', 'id' => $this->bookmark['company_id']), null, TRUE); ?>"><?php echo $this->bookmark['company_name']; ?></a><br />
+			<span class="bold">Company:</span> <a href="<?php echo $this->url('bookmarks', array('module' => 'pm','controller'=>'companies','action'=>'view', 'id' => $this->bookmark['company_id']), null, TRUE); ?>"><?php echo $this->bookmark['company_name']; ?></a><br />
 			<?php if($this->bookmark['project_name']): ?>
 			<span class="bold">Project:</span> <a href="/pm/projects/view/id/<?php echo $this->bookmark['project_id']; ?>"><?php echo $this->bookmark['project_name']; ?></a><br />
 			<?php endif; ?>

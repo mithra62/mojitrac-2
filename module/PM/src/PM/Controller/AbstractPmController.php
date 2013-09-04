@@ -77,14 +77,8 @@ abstract class AbstractPmController extends AbstractController
 	private function _initEvents()
 	{
 		//setup the Activity Log
-		$hooks = array('project.update.pre' => 'logProjectUpdate');
 		$al = $this->getServiceLocator()->get('PM\Event\ActivityLogEvent');
-		foreach($hooks AS $key => $value)
-		{
-			$this->getEventManager()
-				 ->getSharedManager()
-				 ->attach('Application\Model\AbstractModel', $key, array($al, $value));	
-		}		
+		$al->register($this->getEventManager()->getSharedManager());		
 	}
 	
 	/**

@@ -14,7 +14,6 @@ namespace PM\Model;
 
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
 use Application\Model\AbstractModel;
@@ -238,8 +237,16 @@ class Companies extends AbstractModel
 	 */
 	public function addCompany($data)
 	{
+	    $ext = $this->trigger(self::EventCompanyAddPre, $this, compact('data'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+	    	    
 		$sql = $this->getSQL($data);
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 		$company_id = $this->insert('companies', $sql);
+		
+		$ext = $this->trigger(self::EventCompanyAddPost, $this, compact('data', 'company_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+				
 		return $company_id;
 	}
 	
@@ -249,10 +256,18 @@ class Companies extends AbstractModel
 	 * @param int	 $id
 	 * @return bool
 	 */
-	public function updateCompany($data, $id)
+	public function updateCompany($data, $company_id)
 	{
+	    $ext = $this->trigger(self::EventCompanyUpdatePre, $this, compact('data', 'company_id'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+	    	    
 		$sql = $this->getSQL($data);
-		return $this->update('companies', $sql, array('id' => $id));
+		$update = $this->update('companies', $sql, array('id' => $company_id));
+		
+		$ext = $this->trigger(self::EventCompanyAddPost, $this, compact('data', 'company_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $update = $ext->last();
+
+		return $update;
 	}
 	
 	/**
@@ -296,4 +311,27 @@ class Companies extends AbstractModel
 		
 		return TRUE;
 	}
+	
+	/**
+	 * Sets up the contextual hooks based on $data
+	 * @param array $data
+	 * @return array
+	 */
+	public function setXhooks(array $data = array())
+	{
+		$return = array();
+		if(!empty($data['type']))
+			$return[] = array('type' => $data['type']);
+	
+		if(!empty($data['zip']))
+			$return[] = array('zip' => $data['zip']);
+	
+		if(!empty($data['state']))
+			$return[] = array('state' => $data['state']);
+	
+		if(!empty($data['company_id']))
+			$return[] = array('company' => $data['company_id']);
+	
+		return $return;
+	}	
 }

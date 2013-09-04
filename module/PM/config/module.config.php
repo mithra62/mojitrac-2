@@ -89,7 +89,7 @@ return array(
         				'options' => array(
         					'route' => '/remove/[:bookmark_id]',
         					'constraints' => array(
-        						'slug' => '[0-9]+'
+        						'bookmark_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'remove'
@@ -101,7 +101,7 @@ return array(
         				'options' => array(
         					'route' => '/add[/:type][/:id]',
         					'constraints' => array(
-        						'slug' => '[0-9]+'
+        						'id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'add'

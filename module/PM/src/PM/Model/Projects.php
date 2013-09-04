@@ -315,7 +315,7 @@ class Projects extends AbstractModel
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 
 		$sql = $this->getSQL($data);
-		$data['project_id'] = $this->insert('projects', $sql);
+		$data['project_id'] = $project_id = $this->insert('projects', $sql);
 		
 		$ext = $this->trigger(self::EventProjectAddPost, $this, compact('project_id', 'data'), $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $project_id = $ext->last();		

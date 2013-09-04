@@ -7,26 +7,21 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/View/Helper/FormatDate.php
+ * @filesource 	./module/PM/src/PM/View/Helper/FormatHtml.php
  */
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 
 /**
- * PM - Format Date View Helper
+ * PM - Format HTML View Helper
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/PM/View/Helper/FormatDate.php
+ * @filesource 	./module/PM/src/PM/View/Helper/FormatHtml.php
  */
-class FormatHtml extends AbstractViewHelper
+class FormatHtml extends BaseViewHelper
 {
 	function __invoke($str)
 	{

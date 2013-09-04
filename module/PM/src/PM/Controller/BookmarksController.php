@@ -143,25 +143,26 @@ class BookmarksController extends AbstractPmController
 	 */
 	public function viewAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
-		if (!$id) {
-			$this->_helper->redirector('index','bookmarks');
+		$id = $this->params()->fromRoute('bookmark_id');
+		if (!$id) 
+		{
+			return $this->redirect()->toRoute('pm');
 		}
 		
-		$bookmark = new PM_Model_Bookmarks(new PM_Model_DbTable_Bookmarks);
+		$bookmark = $this->getServiceLocator()->get('PM\Model\Bookmarks');
 		$bookmark_data = $bookmark->getBookmarkById($id);
-		$this->view->bookmark = $bookmark_data;
-		if (!$bookmark_data) {
-			$this->_helper->redirector('index','index');
+		$view['bookmark'] = $bookmark_data;
+		if (!$bookmark_data)
+		{
+			return $this->redirect()->toRoute('pm');
 		}
 		
 		if($bookmark_data['project_id'])
 		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
 			if(!$project->isUserOnProjectTeam($this->identity, $bookmark_data['project_id']))
 			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
+	        	return $this->redirect()->toRoute('pm');
 			}			
 		}
 		
@@ -169,13 +170,13 @@ class BookmarksController extends AbstractPmController
 		{
 			if(!$this->perm->check($this->identity, 'view_companies'))
 			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
+	        	return $this->redirect()->toRoute('pm');				
 			}			
 		}		
 
-		$this->view->headTitle('Viewing Bookmark: '. $this->view->bookmark['name'], 'PREPEND');
-		$this->view->id = $id;
+		//$this->view->headTitle('Viewing Bookmark: '. $this->view->bookmark['name'], 'PREPEND');
+		$view['id'] = $id;
+		return $this->ajax_output($view);
 	}
 	
 	/**
@@ -184,63 +185,48 @@ class BookmarksController extends AbstractPmController
 	 */
 	public function editAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('bookmark_id');
 		if (!$id) {
 			$this->_helper->redirector('index','bookmarks');
 		}
-		
-		$bookmark = new PM_Model_Bookmarks(new PM_Model_DbTable_Bookmarks);
+
+		$bookmark = $this->getServiceLocator()->get('PM\Model\Bookmarks');
+		$form = $this->getServiceLocator()->get('PM\Form\BookmarkForm');
+				
 		$bookmark_data = $bookmark->getBookmarkById($id);
 		if (!$bookmark_data) {
 			$this->_helper->redirector('index','bookmarks');
 		}
-			
-		$form = $bookmark->getBookmarkForm(array(
-            'action' => '/pm/bookmarks/edit/',
-            'method' => 'post',
-        ), array('id' => $id));
         
-        $this->view->id = $id;
-        
-      
-        $form->populate($bookmark_data);	
-        
-        $this->view->form = $form;
-        
+        $view['id'] = $id;      
+        $form->setData($bookmark_data);	
+        $view['form'] = $form;
         if ($this->getRequest()->isPost()) 
         {
             $formData = $this->getRequest()->getPost();
+            $form->setData($formData);
             if ($form->isValid($formData)) 
             {
-				          	
-            	if($bookmark->updateBookmark($formData, $id))
-	            {	
-					$formData['task'] = $bookmark_data['task_id'];
-					$formData['company'] = $bookmark_data['company_id'];
-					$formData['project'] = $bookmark_data['project_id'];  	            	
-	            	PM_Model_ActivityLog::logBookmarkUpdate($formData, $id, $this->identity);
-			    	$this->_flashMessenger->addMessage('Bookmark updated!');
-					$this->_helper->redirector('view','bookmarks', 'pm', array('id' => $id));    
-					        		
+            	if($bookmark->updateBookmark($formData->toArray(), $id))
+	            {		            	
+			    	$this->flashMessenger()->addMessage('Bookmark updated!');
+					return $this->redirect()->toRoute('bookmarks/view', array('bookmark_id' => $id));   
             	} 
             	else 
             	{
-            		$this->view->errors = array('Couldn\'t update bookmark...');
-            		$form->populate($formData);
+            		$view['errors'] = array('Couldn\'t update bookmark...');
+            		$form->setData($formData);
             	}
-                
             } 
             else 
             {
-            	$this->view->errors = array('Please fix the errors below.');
-                $form->populate($formData);
+            	$view['errors'] = array('Please fix the errors below.');
+                $form->setData($formData);
             }
             
-	    }
-	    
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		    
-		$this->view->headTitle('Edit Bookmark', 'PREPEND');     	
+	    }	    
+		//$this->view->headTitle('Edit Bookmark', 'PREPEND');   
+		return $view;  	
 	}
 	
 	/**
@@ -259,45 +245,48 @@ class BookmarksController extends AbstractPmController
 			$company_data = $company->getCompanyById($company_id);
 			if(!$company_data)
 			{
-				return $this->redirect()->toRoute('companies');				
+				return $this->redirect()->toRoute('companies');
 			}
 			
 			$view['company'] = $company_data;
 		}
 
-		if($type == 'projects') 
+		if($type == 'project') 
 		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+		    $project_id = $id;
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
 			$project_data = $project->getProjectById($project_id);
 			if(!$project_data)
 			{
-				$this->_helper->redirector('index','projects');
-				exit;				
+			    return $this->redirect()->toRoute('projects');
 			}
-			$this->view->project = $project_data;
+			$view['project'] = $project_data;
 		}
 
 		if($type == 'tasks') 
 		{
-			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
+		    $task_id = $id;
+			$task = $this->getServiceLocator()->get('PM\Model\Tasks');
 			$task_data = $task->getTaskById($task_id);
 			if(!$task_data)
 			{
-				$this->_helper->redirector('index','tasks');
-				exit;				
+				return $this->residrect()->toRoute('tasks');
 			}
+			
 			$this->view->task = $task_data;
 		}			
 
 		$bookmark = $this->getServiceLocator()->get('PM\Model\Bookmarks');
 		$form = $this->getServiceLocator()->get('PM\Form\BookmarkForm');
         		
-		 if ($this->getRequest()->isPost()) 
-		 {
+		if ($this->getRequest()->isPost()) 
+		{
     		$formData = $this->getRequest()->getPost();
+    		$form->setInputFilter($bookmark->getInputFilter());
+    		$form->setData($formData);
+    		    		
 			if ($form->isValid($formData)) 
 			{
-				
 				$formData['owner'] = $this->identity;
 				if(isset($project_data))
 				{
@@ -306,25 +295,23 @@ class BookmarksController extends AbstractPmController
 				
 				if(isset($task_data))
 				{
-					$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+					$project = $this->getServiceLocator()->get('PM\Model\Projects');
 					$formData['project'] = $task_data['project_id'];
 					$temp = $project->getCompanyIdById($task_data['project_id']);
 					$formData['company'] = $temp['company_id'];
 				}	
-							
-				if($id = $bookmark->addBookmark($formData))
+
+				$id = $bookmark->addBookmark($formData->toArray());
+				if($id)
 				{
-					PM_Model_ActivityLog::logBookmarkAdd($formData, $id, $this->identity); 
-			    	$this->_flashMessenger->addMessage('Bookmark Added!');
-					$this->_helper->redirector('view','bookmarks', 'pm', array('id' => $id));
-										
-					exit;
+					$this->flashMessenger()->addMessage('Bookmark Added!');
+					return $this->redirect()->toRoute('bookmarks/view', array('bookmark_id' => $id));
 				}
 				
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
+				$view['errors'] = array('Please fix the errors below.');
 			}
 
 		}
@@ -332,35 +319,33 @@ class BookmarksController extends AbstractPmController
         $this->layout()->setVariable('sidebar', 'dashboard');
         $this->layout()->setVariable('layout_style', 'right');
 		//$this->view->headTitle('Add Bookmark', 'PREPEND');
+		$form->setAttribute('action', $this->getRequest()->getRequestUri());
 		$view['form'] = $form;		
 		return $this->ajax_output($view);
 	}
 	
-	function removeAction()
+	public function removeAction()
 	{   		
-		$bookmark = new PM_Model_Bookmarks(new PM_Model_DbTable_Bookmarks);
-		$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
+		$bookmark = $this->getServiceLocator()->get('PM\Model\Bookmarks');
+		$id = $this->params()->fromRoute('bookmark_id');
+		$confirm = $this->params()->fromPost('confirm');
+		$fail = $this->params()->fromPost('fail');
 		
     	if(!$id)
     	{
-    		$this->_helper->redirector('index','bookmarks');
-    		exit;
+    		return $this->redirect()->toRoute('pm');
     	}
     	
     	$bookmark_data = $bookmark->getBookmarkById($id);
-    	$this->view->bookmark = $bookmark_data;
-    	if(!$this->view->bookmark)
+    	$view['bookmark'] = $bookmark_data;
+    	if(!$view['bookmark'])
     	{
-			$this->_helper->redirector('index','bookmarks');
-			exit;
+			return $this->redirect()->toRoute('pm');
     	}
 
     	if($fail)
     	{
-			$this->_helper->redirector('view','bookmarks', 'pm', array('id' => $id));
-			exit;   		
+    	    return $this->redirect()->toRoute('bookmarks/view', array('bookmark_id' => $id));
     	}
     	
     	if($confirm)
@@ -369,34 +354,30 @@ class BookmarksController extends AbstractPmController
     		{	
 				$formData['task'] = $bookmark_data['task_id'];
 				$formData['company'] = $bookmark_data['company_id'];
-				$formData['project'] = $bookmark_data['project_id'];    			
-    			PM_Model_ActivityLog::logBookmarkRemove($bookmark_data, $id, $this->identity); 
-				$this->_flashMessenger->addMessage('Bookmark Removed');
+				$formData['project'] = $bookmark_data['project_id'];
+				$this->flashMessenger()->addMessage('Bookmark Removed');
 				if($bookmark_data['task_id'] > 0)
 				{
-					$this->_helper->redirector('view','tasks', 'pm', array('id' => $bookmark_data['task_id']));
-					exit;
+				    return $this->redirect()->toRoute('tasks/view', array('task_id' => $bookmark_data['task_id']));
 				}
 				
     			if($bookmark_data['project_id'] > 0)
 				{
-					$this->_helper->redirector('view','projects', 'pm', array('id' => $bookmark_data['project_id']));
-					exit;
+				    return $this->redirect()->toRoute('projects/view', array('project_id' => $bookmark_data['project_id']));
 				}
 
     			if($bookmark_data['company_id'] > 0)
 				{
-					$this->_helper->redirector('view','companies', 'pm', array('id' => $bookmark_data['company_id']));
-					exit;
+				    return $this->redirect()->toRoute('companies/view', array('company_id' => $bookmark_data['company_id']));
 				}				
 				
-				$this->_helper->redirector('index','bookmarks');
-				exit;
+				return $this->redirect()->toRoute('companies');
 				
     		} 
     	}
     	
-		$this->view->headTitle('Delete Bookmark: '. $this->view->note['subject'], 'PREPEND');
-		$this->view->id = $id;    	
+		//$this->view->headTitle('Delete Bookmark: '. $this->view->note['subject'], 'PREPEND');
+		$view['id'] = $id;   
+		return $this->ajax_output($view); 	
 	}		
 }
