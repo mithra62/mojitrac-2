@@ -129,8 +129,8 @@ class Projects extends AbstractModel
 	 */
 	public function getCompanyIdById($id)
 	{
-		$sql = $this->db->select()->from($this->db->getTableName(), array('company_id'))->where('id = ?', $id);
-		return $this->db->getProject($sql);
+		$sql = $this->db->select()->from('projects')->columns( array('company_id'))->where(array('id' => $id));
+		return $this->getRow($sql);
 	}
 	
 	/**

@@ -47,9 +47,8 @@ class BackToLink extends AbstractHelper
 		if($this->options['task'])
 		{
 			$return['name'] = $this->options['task']['name'];
-			$return['id'] = $this->options['task']['id'];
-			$return['controller'] = 'tasks';
-			$return['action'] = 'view';
+			$return['options'] = array('task_id' => $this->options['task']['id']);
+			$return['route'] = 'tasks/view';
 		}
 		elseif($this->options['project'])
 		{

@@ -31,12 +31,12 @@ $owner_data = array(
     </div>
     <div class="items" style="padding-left:10px;">
     	<p>
-			<span class="bold">Company:</span> <a href="<?php echo $this->url('bookmarks', array('module' => 'pm','controller'=>'companies','action'=>'view', 'id' => $this->bookmark['company_id']), null, TRUE); ?>"><?php echo $this->bookmark['company_name']; ?></a><br />
+			<span class="bold">Company:</span> <a href="<?php echo $this->url('companies/view', array('company_id' => $this->bookmark['company_id'])); ?>"><?php echo $this->bookmark['company_name']; ?></a><br />
 			<?php if($this->bookmark['project_name']): ?>
-			<span class="bold">Project:</span> <a href="/pm/projects/view/id/<?php echo $this->bookmark['project_id']; ?>"><?php echo $this->bookmark['project_name']; ?></a><br />
+			<span class="bold">Project:</span> <a href="<?php echo $this->url('projects/view', array('project_id' => $this->bookmark['project_id'])); ?>"><?php echo $this->bookmark['project_name']; ?></a><br />
 			<?php endif; ?>
 			<?php if($this->bookmark['task_name']): ?>
-				<span class="bold">Task:</span> <a href="/pm/tasks/view/id/<?php echo $this->bookmark['task_id']; ?>"><?php echo $this->bookmark['task_name']; ?></a>
+				<span class="bold">Task:</span> <a href="<?php echo $this->url('tasks/view', array('task_id' => $this->bookmark['task_id'])); ?>"><?php echo $this->bookmark['task_name']; ?></a>
 			<?php endif; ?> 	
     	</p>
     </div>

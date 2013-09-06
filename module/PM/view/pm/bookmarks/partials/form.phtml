@@ -46,7 +46,7 @@ echo $this->formRow($csrf);
 <?php if($this->task): ?>
 <p>
 	<label for="task_id">Task</label>
-	<a href="<?php echo $this->url('docs', array('module' => 'pm','controller'=>'tasks','action'=>'view', 'task_id' => $this->task['id'])); ?>"><?php echo $this->task['name']; ?></a>
+	<a href="<?php echo $this->url('tasks/view', array('task_id' => $this->task['id'])); ?>"><?php echo $this->task['name']; ?></a>
 	<input type="hidden" name="task" value="<?php echo $this->task['id']; ?>" />
 </p>
 <?php endif; ?>

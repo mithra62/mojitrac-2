@@ -87,7 +87,8 @@ class BookmarksController extends AbstractPmController
 				return $this->residrect()->toRoute('tasks');
 			}
 			
-			$this->view->task = $task_data;
+			$view['task'] = $task_data;
+			$bookmark_data = $bookmarks->getBookmarksByTaskId($task_id);
 		}			
     	
     	if(!$company_id && !$project_id && !$task_id)
@@ -239,7 +240,7 @@ class BookmarksController extends AbstractPmController
 				return $this->residrect()->toRoute('tasks');
 			}
 			
-			$this->view->task = $task_data;
+			$view['task'] = $task_data;
 		}			
 
 		$bookmark = $this->getServiceLocator()->get('PM\Model\Bookmarks');
