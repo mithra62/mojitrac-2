@@ -1,7 +1,7 @@
 <div class="content_headers" style="padding-top:0px;">
 	<div class="calendar_header">Calendar</div>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'calendar', 'page' => 'main'), null, TRUE); ?>" rel="facebox" title="About Calendar">
+			<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'calendar', 'page' => 'main'), null, TRUE); ?>" rel="facebox" title="About Calendar">
 				<?php echo $this->InteractIcon('help', 'About Calendar');?>
 				<div class="action_text">Help</div>
 			</a>
@@ -25,7 +25,7 @@ foreach($this->calendar_data AS $date => $data)
 //print_r($calendar_data);
 echo $this->Calendar(
 						$calendar_data,
-						$this->url(array('module' => 'pm','controller'=>'calendar','action'=>'view-day'), null, FALSE),
+						$this->url('pm', array('module' => 'pm','controller'=>'calendar','action'=>'view-day'), null, FALSE),
 						'date',
 						$this->month,
 						$this->year

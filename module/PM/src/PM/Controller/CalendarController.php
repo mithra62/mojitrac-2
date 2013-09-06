@@ -35,8 +35,8 @@ class CalendarController extends AbstractPmController
     
     public function indexAction()
     {
-    	$cal = new PM_Model_Calendar(new PM_Model_DbTable_Projects, new PM_Model_DbTable_Tasks);
-    	$date = $this->_request->getParam('date', FALSE);
+    	$cal = $this->getServiceLocator()->get('PM\Model\Calendar');
+    	$date = false;//$this->_request->getParam('date', FALSE);
     	if(!$date)
     	{
 	    	$month = date('m');
@@ -49,17 +49,19 @@ class CalendarController extends AbstractPmController
     		$year = $parts['1'];
     	}
     	
-    	$this->view->month = $month;
-    	$this->view->year = $year;
+    	$view['month'] = $month;
+    	$view['year'] = $year;
     	
     	if($this->perm->check($this->identity, 'manage_projects'))
     	{
-    		$this->view->calendar_data = $cal->getAllCalendarItems($month, $year);
+    		$view['calendar_data'] = $cal->getAllCalendarItems($month, $year);
     	}
     	else
     	{
-    		$this->view->calendar_data = $cal->getUserProjectItems($month, $year, $this->identity);
+    		$view['calendar_data'] = $cal->getUserProjectItems($month, $year, $this->identity);
     	} 	
+    	
+    	return $view;
     }
     
     public function viewAction()

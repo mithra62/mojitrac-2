@@ -84,6 +84,18 @@ return array(
         		),
         		'may_terminate' => true,
         		'child_routes' => array(
+        			'all' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/[:type][/:id]',
+        					'constraints' => array(
+        						'id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'index'
+        					)
+        				)
+        			), 
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
@@ -107,7 +119,7 @@ return array(
         						'action' => 'add'
         					)
         				)
-        			),        			
+        			),        			        			
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
@@ -497,6 +509,18 @@ return array(
         		),
         		'may_terminate' => true,
         		'child_routes' => array(
+        			'all' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/[:type][/:id]',
+        					'constraints' => array(
+        						'id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'index'
+        					)
+        				)
+        			), 
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
@@ -512,9 +536,9 @@ return array(
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/add',
+        					'route' => '/add[/:type][/:id]',
         					'constraints' => array(
-        						'note_id' => '[0-9]+'
+        						'id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'add'

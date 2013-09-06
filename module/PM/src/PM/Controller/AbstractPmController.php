@@ -106,7 +106,7 @@ abstract class AbstractPmController extends AbstractController
 	{
 		if(array_key_exists('enable_ip', $this->settings) && $this->settings['enable_ip'] !== FALSE)
 		{
-			$ip = new PM_Model_Ips;
+			$ip = $this->getServiceLocator()->get('PM\Model\Ips');
 			if(!$ip->isAllowed($_SERVER['REMOTE_ADDR']))
 			{
 				exit;

@@ -51,8 +51,8 @@
 			<td><?php echo $this->RelativeDate($bookmark['last_modified']); ?></td>
 			<?php if($this->enable_actions):?>
 			<td>
-			<a href="<?php echo $this->url('bookmarks/edit', array('module' => 'pm','controller'=>'bookmarks','action'=>'edit', 'id'=>$bookmark['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit Bookmark');?></a>
-			<a <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> href="<?php echo $this->url('bookmarks/remove', array('module' => 'pm','controller'=>'bookmarks','action'=>'remove', 'id'=>$bookmark['id']), null, TRUE); ?>" title="Delete"><?php echo $this->InteractIcon('cross', 'Remove Bookmark');?></a>
+			<a href="<?php echo $this->url('bookmarks/edit', array('bookmark_id'=>$bookmark['id'])); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit Bookmark');?></a>
+			<a <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> href="<?php echo $this->url('bookmarks/remove', array('bookmark_id'=>$bookmark['id'])); ?>" title="Delete"><?php echo $this->InteractIcon('cross', 'Remove Bookmark');?></a>
 			</td>
 			<?php endif; ?>
 		</tr>

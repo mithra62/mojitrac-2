@@ -225,7 +225,7 @@ endif;
 		</a>
 	</div>	
 	<div class="actions">
-		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'bookmarks','action'=>'index', 'project' => $this->id), null, TRUE); ?>" title="View All">
+		<a href="<?php echo $this->url('bookmarks/all', array('type' => 'project', 'id' => $this->id)); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All');?>  
 			<div class="action_text">View All</div>
 		</a>

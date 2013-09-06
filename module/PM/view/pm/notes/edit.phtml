@@ -3,10 +3,10 @@
 </div>
 <?php 
 $options = array('id' => $this->id, 'controller' => 'notes', 'name' => 'Note', 'action' => 'view');
-echo $this->BackToLink($options); 
+//echo $this->BackToLink($options); 
 ?>
 
 <?php 
 $options = array('form' => $this->form, 'id' => $this->id);
-echo $this->partial('notes/partials/form.phtml', $options); 
+echo $this->partial('pm/notes/partials/form', $options); 
 ?>

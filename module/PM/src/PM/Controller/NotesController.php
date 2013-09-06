@@ -13,8 +13,6 @@
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 
 /**
 * PM - Notes Controller
@@ -30,19 +28,19 @@ class NotesController extends AbstractPmController
 	/**
 	 * Class preDispatch
 	 */
-	public function preDispatch()
-	{ 
-		parent::preDispatch();
-        $this->view->headTitle('Notes', 'PREPEND');	
-        $this->view->layout_style = 'single';
-        $this->view->sidebar = 'dashboard';
-        $this->view->sub_menu = 'tasks';
-        $this->view->active_nav = 'bookmarks';
-        $this->view->sub_menu_options = PM_Model_Options_Projects::status();
-        $this->view->uri = $this->_request->getPathInfo();
-		$this->view->active_sub = 'None';
-		$this->view->title = FALSE;       
-	}
+	public function onDispatch( \Zend\Mvc\MvcEvent $e )
+	{
+		$e = parent::onDispatch( $e );
+		//$this->layout()->setVariable('layout_style', 'single');
+		$this->layout()->setVariable('sidebar', 'dashboard');
+		$this->layout()->setVariable('sub_menu', 'tasks');
+		$this->layout()->setVariable('active_nav', 'bookmarks');
+		$this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
+		$this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
+		$this->layout()->setVariable('active_sub', 'None');
+	
+		return $e;
+	}	
     
     /**
      * Main Page
@@ -126,59 +124,56 @@ class NotesController extends AbstractPmController
 	}
 	
 	/**
-	 * Company View Page
+	 * Note View Page
 	 * @return void
 	 */
 	public function viewAction()
 	{
-				
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('note_id');
 		if (!$id) 
 		{
-			$this->_helper->redirector('index','notes');
-			exit;
+			return $this->redirect()->toRoute('notes');
 		}
 		
-		$note = new PM_Model_Notes();
+		$note = $this->getServiceLocator()->get('PM\Model\Notes');
 		$note_data = $note->getNoteById($id);
-		$this->view->note = $note_data;
+		$view['note'] = $note_data;
 		if (!$note_data) 
 		{
-			$this->_helper->redirector('index','index');
-			exit;
+			return $this->redirect()->toRoute('notes');
 		}
 		
-
 		if($note_data['project_id'])
 		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
 			if(!$project->isUserOnProjectTeam($this->identity, $note_data['project_id']))
 			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
+	        	return $this->redirect()->toRoute('pm');				
 			}
-			$this->view->project = $project->getProjectById($note_data['project_id'], array('id', 'name'));
+			
+			$view['project'] = $project->getProjectById($note_data['project_id'], array('id', 'name'));
 		}
 		
 		if($note_data['task_id'])
 		{
-			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-			$this->view->task = $task->getTaskById($note_data['task_id'], array('id', 'name'));
+			$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+			$view['task'] = $task->getTaskById($note_data['task_id'], array('id', 'name'));
 		}		
 		
 		if($note_data['company_id'] && $note_data['project_id'] == '0')
 		{
 			if(!$this->perm->check($this->identity, 'view_companies'))
 			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
+	        	return $this->redirect()->toRoute('pm');			
 			}
-			$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
-			$this->view->company = $company->getCompanyById($note_data['company_id'], array('id', 'name'));
+			
+			$company = $this->getServiceLocator()->get('PM\Model\Company');
+			$view['company'] = $company->getCompanyById($note_data['company_id'], array('id', 'name'));
 		}		
 
-		$this->view->headTitle('Viewing Note: '. $this->view->note['subject'], 'PREPEND');
-		$this->view->id = $id;
+		//$this->view->headTitle('Viewing Note: '. $this->view->note['subject'], 'PREPEND');
+		$view['id'] = $id;
+		return $this->ajax_output($view);
 	}
 	
 	/**
@@ -187,28 +182,25 @@ class NotesController extends AbstractPmController
 	 */
 	public function editAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id =  $this->params()->fromRoute('note_id');
 		if (!$id) 
 		{
-			$this->_helper->redirector('index','notes');
-			exit;
+			return $this->redirect()->toRoute('notes');
 		}
 		
-		$note = new PM_Model_Notes();
+		$note = $this->getServiceLocator()->get('PM\Model\Notes');
 		$note_data = $note->getNoteById($id);
 		if (!$note_data) 
 		{
-			$this->_helper->redirector('index','notes');
-			exit;
+			return $this->redirect()->toRoute('notes');
 		}
 		
 		if($note_data['project_id'])
 		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
 			if(!$project->isUserOnProjectTeam($this->identity, $note_data['project_id']))
 			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
+	        	return $this->redirect()->toRoute('pm');			
 			}			
 		}
 		
@@ -216,57 +208,53 @@ class NotesController extends AbstractPmController
 		{
 			if(!$this->perm->check($this->identity, 'view_companies'))
 			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
+	        	return $this->redirect()->toRoute('pm');				
 			}			
 		}		
 		
-		$form = $note->getNoteForm(array(
-            'action' => '/pm/notes/edit/',
-            'method' => 'post',
-        ), array('id' => $id));
-        
-        $this->view->id = $id;
-        
-        $form->populate($note_data);	
-        
-        $this->view->form = $form;
-        
+		$form = $this->getServiceLocator()->get('PM\Form\NoteForm');
+        $view['id'] = $id;
+        $form->setData($note_data);
         if ($this->getRequest()->isPost()) 
         {
             $formData = $this->getRequest()->getPost();
+            $form->setInputFilter($note->getInputFilter());
+            $form->setData($formData);
             if ($form->isValid($formData)) 
             {
 				          	
-            	if($note->updateNote($formData, $id))
+            	if($note->updateNote($formData->toArray(), $id))
 	            {	
 	            	$formData['task'] = $note_data['task_id'];
 	            	$formData['company'] = $note_data['company_id'];
 	            	$formData['project'] = $note_data['project_id'];
-	            	PM_Model_ActivityLog::logNoteUpdate($formData, $id, $this->identity);
+	            	//PM_Model_ActivityLog::logNoteUpdate($formData, $id, $this->identity);
 	            	
-			    	$this->_flashMessenger->addMessage('Note updated!');
-					$this->_helper->redirector('view','notes', 'pm', array('id' => $id));
+			    	$this->flashMessenger()->addMessage('Note updated!');
+					return $this->redirect()->toRoute('notes/view', array('note_id' => $id));
 					        		
             	} 
             	else 
             	{
-            		$this->view->errors = array('Couldn\'t update note...');
-            		$form->populate($formData);
+            		$view['errors'] = array('Couldn\'t update note...');
+            		$form->setData($formData);
             	}
                 
             } 
             else 
             {
-            	$this->view->errors = array('Please fix the errors below.');
-                $form->populate($formData);
+            	$view['errors'] = array('Please fix the errors below.');
+                $form->setData($formData);
             }
             
 	    }
 	    
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		    
-		$this->view->headTitle('Edit Note', 'PREPEND');     	
+	    $view['form'] = $form;  
+		//$this->view->headTitle('Edit Note', 'PREPEND');  
+        $this->layout()->setVariable('layout_style', 'right');
+        $this->layout()->setVariable('sidebar', 'dashboard');
+
+		return $this->ajax_output($view);
 	}
 	
 	/**

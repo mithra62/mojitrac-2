@@ -23,13 +23,13 @@
 		{
 		?>
 		<tr>
-			<td><a title="<?php echo $note['subject']; ?>" href="<?php echo $this->url('notes/view', array('module' => 'pm','controller'=>'notes','action'=>'view', 'id'=> $note['id']), null, TRUE); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $note['subject']; ?></a></td>
+			<td><a title="<?php echo $note['subject']; ?>" href="<?php echo $this->url('notes/view', array('note_id'=> $note['id'])); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $note['subject']; ?></a></td>
 			<td><?php echo $this->NoteTopic($note['topic']); ?></td>
 
 			<?php if($this->enable_project): ?>
 			<td>
 				<?php if($note['project_name']):?>
-					<a title="<?php echo $note['project_name']; ?>" href="<?php echo $this->url('projects/view', array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=> $note['project_id']), null, TRUE); ?>" ><?php echo $note['project_name']; ?></a>
+					<a title="<?php echo $note['project_name']; ?>" href="<?php echo $this->url('projects/view', array('project_id'=> $note['project_id'])); ?>" ><?php echo $note['project_name']; ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif;?>
@@ -49,7 +49,7 @@
 			<td><?php echo $this->RelativeDate($note['last_modified']); ?></td>
 			<?php if($this->enable_actions):?>
 			<td>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'notes','action'=>'edit', 'id' => $note['id']), null, TRUE); ?>" title="Edit"><img src="/images/pencil.png" width="16" height="16" class="png_bg" alt="Edit" /></a>
+			<a href="<?php echo $this->url('notes/edit', array('note_id' => $note['id']), null, TRUE); ?>" title="Edit"><img src="/images/pencil.png" width="16" height="16" class="png_bg" alt="Edit" /></a>
 			<a <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> href="<?php echo $this->url(array('module' => 'pm','controller'=>'notes','action'=>'remove', 'id' => $note['id']), null, TRUE); ?>" title="Delete"><img src="/images/cross.png" width="16" height="16" class="png_bg" alt="Close" /></a>
 			</td>
 			<?php endif; ?>

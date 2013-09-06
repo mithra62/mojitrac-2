@@ -82,24 +82,24 @@ class Tasks extends AbstractModel
 	 */
 	public function getTaskById($id, array $what = null)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false);
+		$sql = $this->db->select();
 		
 		if(is_array($what))
 		{
-			$sql->from(array('t'=>$this->db->getTableName()), $what);
+			$sql->from(array('t'=> 'tasks'))->columns(what);
 		}
 		else
 		{
-			$sql->from(array('t'=>$this->db->getTableName()));
+			$sql->from(array('t'=> 'tasks'));
 		}
 		
-		$sql = $sql->where('t.id = ?', $id);
+		$sql = $sql->where(array('t.id' => $id));
 		
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = t.project_id', array('name AS project_name', 'id AS project_id'));
-		$sql = $sql->joinLeft(array('u2' => 'users'), 'u2.id = t.assigned_to', array('first_name AS assigned_first_name', 'last_name AS assigned_last_name'));
-		$sql = $sql->joinLeft(array('c' => 'companies'), 'c.id = p.company_id', array('id AS company_id', 'name AS company_name'));
+		$sql = $sql->join(array('p' => 'projects'), 'p.id = t.project_id', array('project_name' => 'name', 'project_id' => 'id'), 'left');
+		$sql = $sql->join(array('u2' => 'users'), 'u2.id = t.assigned_to', array('assigned_first_name' => 'first_name', 'assigned_last_name' => 'last_name'), 'left');
+		$sql = $sql->join(array('c' => 'companies'), 'c.id = p.company_id', array('company_id' => 'id', 'company_name' => 'name'), 'left');
 		
-		return $this->db->getTask($sql);
+		return $this->getRow($sql);
 	}
 	
 	/**
@@ -258,7 +258,7 @@ class Tasks extends AbstractModel
 		{
 			foreach($where AS $key => $value)
 			{
-				$sql = $sql->where("$key = ? ", $value);
+				$sql = $sql->where(array($key => $value));
 			}
 		}
 		
@@ -266,7 +266,7 @@ class Tasks extends AbstractModel
 		{
 			foreach($not AS $key => $value)
 			{
-				$sql = $sql->where("$key != ? ", $value);
+				$sql = $sql->where("$key != '$value'");
 			}
 		}
 		
@@ -530,12 +530,11 @@ class Tasks extends AbstractModel
 	 */
 	public function getTaskAssignments($id)
 	{
-		$assignment = new PM_Model_DbTable_Task_Assignments;
-		$sql = $assignment->select()->setIntegrityCheck(false)->from(array('ta'=>$assignment->getTableName()));
-		$sql = $sql->where('task_id = ?', $id);
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = ta.assigned_to', array('first_name AS to_first_name', 'last_name AS to_last_name'));
-		$sql = $sql->joinLeft(array('u2' => 'users'), 'u2.id = ta.assigned_by', array('first_name AS by_first_name', 'last_name AS by_last_name'));
-		return $assignment->getTaskAssignments($sql);
+		$sql = $this->db->select()->from(array('ta'=> 'task_assignments'));
+		$sql = $sql->where(array('task_id' => $id));
+		$sql = $sql->join(array('u' => 'users'), 'u.id = ta.assigned_to', array('to_first_name' => 'first_name', 'to_last_name' => 'last_name'));
+		$sql = $sql->join(array('u2' => 'users'), 'u2.id = ta.assigned_by', array('by_first_name' => 'first_name', 'by_last_name' => 'last_name'));
+		return $this->getRows($sql);
 	}
 	
 	/**

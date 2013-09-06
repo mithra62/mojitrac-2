@@ -45,14 +45,14 @@ class ProjectForm extends BaseForm
 		));
 		
 		$this->add(array(
-				'name' => 'priority',
-				'type' => 'Select',
-				'attributes' => array(
-					'class' => 'select input', 
-				),
-				'options' => array(
-					'value_options' => Projects::priorities(),
-				)
+			'name' => 'priority',
+			'type' => 'Select',
+			'attributes' => array(
+				'class' => 'select input', 
+			),
+			'options' => array(
+				'value_options' => Projects::priorities(),
+			)
 		));	
 
 		$this->add(array(

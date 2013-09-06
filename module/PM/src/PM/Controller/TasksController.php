@@ -13,8 +13,6 @@
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 
 /**
 * PM - Tasks Controller
@@ -31,19 +29,16 @@ class TasksController extends AbstractPmController
 	/**
 	 * Class preDispatch
 	 */
-	public function preDispatch()
-	{ 
-		parent::preDispatch();
+	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
+	{
+		parent::onDispatch( $e );
         parent::check_permission('view_tasks');
-        $this->view->headTitle('Tasks', 'PREPEND');
-        $this->view->layout_style = 'single';
-        $this->view->sidebar = 'dashboard';
-        $this->view->sub_menu = 'projects';
-        $this->view->active_nav = 'projects';
-        $this->view->sub_menu_options = PM_Model_Options_Projects::status();
-        $this->view->uri = $this->_request->getPathInfo();
-		$this->view->active_sub = 'None';
-		$this->view->title = FALSE;          
+        $this->layout()->setVariable('sidebar', 'dashboard');
+        $this->layout()->setVariable('sub_menu', 'projects');
+        $this->layout()->setVariable('active_nav', 'projects');
+        $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
+        $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
+		$this->layout()->setVariable('active_sub', 'None');         
 	}
     
     /**
@@ -88,64 +83,61 @@ class TasksController extends AbstractPmController
 	 */
 	public function viewAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('task_id');
 		if (!$id) 
 		{
-			$this->_helper->redirector('index','tasks');
-			exit;
+			return $this->redirect()->toRoute('tasks');
 		}
 		
-		$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
+		$view = array();
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
 		$task_data = $task->getTaskById($id);
 		if($task_data['assigned_to'] == $this->identity)
 		{
-			$this->view->assigned_to = TRUE;
+			$view['assigned_to'] = TRUE;
 		}
 		
-		$this->view->task = $task_data;
+		$view['task'] = $task_data;
 		if (!$task_data) 
 		{
-			$this->_helper->redirector('index','index');
-			exit;
+			return $this->redirect()->toRoute('pm');
 		}
 		
 		if(!$this->perm->check($this->identity, 'view_tasks'))
 		{
-			$this->_helper->redirector('view','projects','pm', array('id' => $task_data['project_id']));
-			exit;			
+			return $this->redirect()->toRoute('projects/view', array('project_id' => $task_data['project_id']));
 		}
 		
-		$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
 		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_projects'))
 		{
-			$this->_helper->redirector('index','index');
-			exit;				
+			return $this->redirect()->toRoute('pm');				
 		}		
 		
-		$this->view->assignment_history = $task->getTaskAssignments($id);
-
+		$view['assignment_history'] = $task->getTaskAssignments($id);
 		if($this->perm->check($this->identity, 'view_files'))
 		{
-			$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-			$this->view->files = $file->getFilesByTaskId($id);
+			$file = $this->getServiceLocator()->get('PM\Model\Files');
+			$view['files'] = $file->getFilesByTaskId($id);
 		}
 
 		if($this->perm->check($this->identity, 'view_time'))
 		{
-			$times = new PM_Model_Times;
-			$this->view->times = $times->getTimesByTaskId($id);
-			$this->view->hours = $times->getTotalTimesByTaskId($id);
+			$times = $this->getServiceLocator()->get('PM\Model\Times');
+			$view['times'] = $times->getTimesByTaskId($id);
+			$view['hours'] = $times->getTotalTimesByTaskId($id);
 		}
 		
-		$bookmarks = new PM_Model_Bookmarks(new PM_Model_DbTable_Bookmarks);
-		$this->view->bookmarks = $bookmarks->getBookmarksByTaskId($id);	
+		$bookmarks = $this->getServiceLocator()->get('PM\Model\Bookmarks');
+		$view['bookmarks'] = $bookmarks->getBookmarksByTaskId($id);	
 
-		$notes = new PM_Model_Notes;
-		$this->view->notes = $notes->getNotesByTaskId($id);		
+		$notes = $this->getServiceLocator()->get('PM\Model\Notes');
+		$view['notes'] = $notes->getNotesByTaskId($id);		
 		
-		$this->view->title = FALSE;
-		$this->view->headTitle('Viewing Task: '. $this->view->task['name'], 'PREPEND');
-		$this->view->id = $id;
+		//$this->view->title = FALSE;
+		//$this->view->headTitle('Viewing Task: '. $this->view->task['name'], 'PREPEND');
+		$view['id'] = $id;
+		return $view;
 	}
 	
 	/**

@@ -3,13 +3,13 @@
 	<div class="note_header"><?php echo $this->note['subject']; ?></div>
 		
 		<div class="actions">
-			<a rel="facebox" href="<?php echo $this->url(array('module' => 'pm','controller'=>'notes','action'=>'remove'), null, FALSE); ?>" title="Delete">
+			<a rel="facebox" href="<?php echo $this->url('notes/remove', array('note_id' => $this->note['id'])); ?>" title="Delete">
 				<?php echo $this->InteractIcon('cross', 'Delete');?>
 				<div class="action_text">Delete</div>
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'notes','action'=>'edit'), null, FALSE); ?>" title="Edit" rel="facebox">
+			<a href="<?php echo $this->url('notes/edit', array('note_id' => $this->note['id'])); ?>" title="Edit" rel="facebox">
 				<?php echo $this->InteractIcon('pencil', 'Edit');?>
 				<div class="action_text">Edit</div>
 			</a> 
@@ -30,12 +30,12 @@ echo $this->BackToLink($options);
     </div>
     <div class="items" style="padding-left:10px;">
     	<p>
-			<span class="bold">Company:</span> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'companies','action'=>'view', 'id' => $this->note['company_id']), null, TRUE); ?>"><?php echo $this->note['company_name']; ?></a>
+			<span class="bold">Company:</span> <a href="<?php echo $this->url('companies/view', array('company_id' => $this->note['company_id'])); ?>"><?php echo $this->note['company_name']; ?></a>
 			<?php if($this->note['project_name']): ?>
-				<br /><span class="bold">Project:</span> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'projects','action'=>'view', 'id' => $this->note['project_id']), null, TRUE); ?>"><?php echo $this->note['project_name']; ?></a>
+				<br /><span class="bold">Project:</span> <a href="<?php echo $this->url('projects/view', array('project_id' => $this->note['project_id'])); ?>"><?php echo $this->note['project_name']; ?></a>
 			<?php endif; ?>
 			<?php if($this->note['task_name']): ?>
-				<br /><span class="bold">Task:</span> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'tasks','action'=>'view', 'id' => $this->note['task_id']), null, TRUE); ?>"><?php echo $this->note['task_name']; ?></a>
+				<br /><span class="bold">Task:</span> <a href="<?php echo $this->url('tasks/view', array('task_id' => $this->note['task_id'])); ?>"><?php echo $this->note['task_name']; ?></a>
 			<?php endif; ?> 	
     	</p>
     </div>   

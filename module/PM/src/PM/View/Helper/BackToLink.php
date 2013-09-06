@@ -44,15 +44,6 @@ class BackToLink extends AbstractHelper
 	private function _parseOptions()
 	{
 		$return = array();
-		if(isset($this->options['name']) && isset($this->options['id']) && isset($this->options['controller'])  && isset($this->options['action']))
-		{
-			$return['id'] = $this->options['id'];
-			$return['name'] = $this->options['name'];
-			$return['controller'] = $this->options['controller'];
-			$return['action'] = $this->options['action'];
-			return $return;
-		}
-		
 		if($this->options['task'])
 		{
 			$return['name'] = $this->options['task']['name'];
@@ -79,6 +70,7 @@ class BackToLink extends AbstractHelper
 			$return['controller'] = 'users';
 			$return['action'] = 'view';
 		}		
+		
 		return $return;		
 	}
     private function template($route, $options, $name)

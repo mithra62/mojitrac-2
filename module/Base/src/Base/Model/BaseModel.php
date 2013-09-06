@@ -228,4 +228,30 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		
 		return $ext;
 	}
+	
+	/**
+	 * Sets up the contextual hooks based on $data
+	 * @param array $data
+	 * @return array
+	 */
+	public function setXhooks(array $data = array())
+	{
+		$return = array();
+		if(!empty($data['company']))
+			$return[] = array('company' => $data['company']);
+	
+		if(!empty($data['project']))
+			$return[] = array('project' => $data['project']);
+	
+		if(!empty($data['priority']))
+			$return[] = array('priority' => $data['priority']);
+	
+		if(!empty($data['type']))
+			$return[] = array('type' => $data['type']);
+	
+		if(!empty($data['status']))
+			$return[] = array('status' => $data['status']);
+	
+		return $return;
+	}	
 }

@@ -12,13 +12,8 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
-use PM\Model\Options\Projects;
+use Base\View\Helper\BaseViewHelper;
+use PM\Model\Options\Tasks;
 
  /**
  * PM - Task Type View Helper
@@ -27,10 +22,15 @@ use PM\Model\Options\Projects;
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/View/Helper/TaskType.php
  */
-class TaskType
+class TaskType extends BaseViewHelper
 {
-	function __invoke($type)
+	public function __invoke($type)
 	{
-		return PM_Model_Options_Tasks::translateTypeId($type); 
+	    $helperPluginManager = $this->getServiceLocator();
+	    $serviceManager = $helperPluginManager->getServiceLocator();
+	    
+	    $options = $serviceManager->get('PM\Model\Options');
+	    	    
+		return Tasks::translateTypeId($type, $options); 
 	}
 }

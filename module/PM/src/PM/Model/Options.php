@@ -60,16 +60,11 @@ class Options extends AbstractModel
 	 * Returns all the options for the project types
 	 */
 	public function getAllTaskTypes()
-	{
-		$key = 'options_'.$this->areas['task_type'];
-		if(!$types = $this->cache->load($key)) 
-		{			
-			$sql = $this->db->select()->from(array($this->db->getTableName()), array('id', 'name'))
-									  ->where('area = ?', $this->areas['task_type'])
-									  ->order('name ASC');
-			$types = $this->db->getOptions($sql);
-			$this->cache->save($types, $key, array($this->cache_key));
-		}
+	{	
+		$sql = $this->db->select()->from('options')->columns(array('id', 'name'))
+								  ->where(array('area' => $this->areas['task_type']))
+								  ->order('name ASC');
+		$types = $this->getRows($sql);
 		return $types;
 	}
 	

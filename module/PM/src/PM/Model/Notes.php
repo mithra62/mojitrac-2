@@ -6,11 +6,15 @@
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
- * @version		1.0
+ * @version		2.0
  * @filesource 	./module/PM/src/PM/Model/Notes.php
  */
 
 namespace PM\Model;
+
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
 
 use Application\Model\AbstractModel;
 
@@ -23,6 +27,8 @@ use Application\Model\AbstractModel;
  */
 class Notes extends AbstractModel
 {
+    protected $inputFilter;
+    
 	/**
 	 * The Notes Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
@@ -31,16 +37,44 @@ class Notes extends AbstractModel
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
 		parent::__construct($adapter, $db);
-	}	
+	}
 	
-	/**
-	 * Returns the Bookmark Form
-	 * @return object
-	 */
-	public function getNoteForm($options = array(), $hidden = array())
+	public function getSQL($data){
+		return array(
+		'topic' => $data['topic'],
+		'date' => $data['date'],
+		'subject' => $data['subject'],
+		'description' => $data['description'],
+		'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+	}
+	
+	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
-        return new PM_Form_Note($options, $hidden);		
-	}	
+		throw new \Exception("Not used");
+	}
+	
+	public function getInputFilter()
+	{
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'subject',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+			)));
+	
+			$this->inputFilter = $inputFilter;
+		}
+	
+		return $this->inputFilter;
+	}
+		
 	
 	/**
 	 * Returns the $mbid for a given artist $name
@@ -58,20 +92,19 @@ class Notes extends AbstractModel
 	}
 	
 	/**
-	 * Returns a bookmark for a given task $id
+	 * Returns a note for a given $id
 	 * @param int $id
 	 * @return array
 	 */
 	public function getNoteById($id)
 	{
-		$note = new PM_Model_DbTable_Notes;
-		$sql = $note->select()->setIntegrityCheck(false)->from(array('n'=>$note->getTableName()));
-		$sql = $sql->where('n.id = ?', $id);
+		$sql = $this->db->select()->from(array('n'=>'notes'));
+		$sql = $sql->where(array('n.id' => $id));
 		
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = n.project_id', array('name AS project_name', 'id AS project_id'));
-		$sql = $sql->joinLeft(array('t' => 'tasks'), 't.id = n.task_id', array('name AS task_name'));
-		$sql = $sql->joinLeft(array('c' => 'companies'), 'c.id = n.company_id', array('name AS company_name'));
-		return $note->getNote($sql);
+		$sql = $sql->join(array('p' => 'projects'), 'p.id = n.project_id', array('project_name' => 'name', 'project_id' => 'id'), 'left');
+		$sql = $sql->join(array('t' => 'tasks'), 't.id = n.task_id', array('task_name' => 'name'), 'left');
+		$sql = $sql->join(array('c' => 'companies'), 'c.id = n.company_id', array('company_name' => 'name'), 'left');
+		return $this->getRow($sql);
 	}
 	
 	/**
@@ -218,11 +251,18 @@ class Notes extends AbstractModel
 	 * @param int	 $id
 	 * @return bool
 	 */
-	public function updateNote($data, $id)
+	public function updateNote($data, $note_id)
 	{
-		$note = new PM_Model_DbTable_Notes;
-		$sql = $note->getSQL($data);
-		return $note->update($sql, "id = '$id'");
+	    $ext = $this->trigger(self::EventNoteUpdatePre, $this, compact('data', 'note_id'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+	    	    
+		$sql = $this->getSQL($data);
+		$update = $this->update('notes', $sql, array('id' => $note_id));
+		
+		$ext = $this->trigger(self::EventNoteUpdatePost, $this, compact('data', 'note_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $update = $ext->last();	
+
+		return $update;
 	}	
 	
 	/**

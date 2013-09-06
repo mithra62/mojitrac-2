@@ -12,12 +12,7 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 use PM\Model\Options\Projects;
 
  /**
@@ -27,10 +22,10 @@ use PM\Model\Options\Projects;
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/View/Helper/TaskStatus.php
  */
-class TaskStatus extends AbstractViewHelper
+class TaskStatus extends BaseViewHelper
 {
 	function __invoke($status)
 	{
-		return PM_Model_Options_Projects::translateStatusId($status); 
+		return Projects::translateStatusId($status); 
 	}
 }

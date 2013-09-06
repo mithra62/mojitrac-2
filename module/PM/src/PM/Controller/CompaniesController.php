@@ -55,7 +55,7 @@ class CompaniesController extends AbstractPmController
 		$view['company_filter'] = $param;		
 		if($this->perm->check($this->identity, 'manage_companies'))
 		{
-			$company = $this->getServiceLocator()->get('PM\Model\Companies'); 
+			$company = $this->getServiceLocator()->get('PM\Model\Companies');
 			$companies = $company->getAllCompanies($view);
 			$view['companies'] = $companies;
 		}

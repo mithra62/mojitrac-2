@@ -310,7 +310,7 @@ endif;
 		</a>
 	</div>		
 	<div class="actions">
-		<a href="<?php echo $this->url('bookmarks', array('module' => 'pm','controller'=>'bookmarks','action'=>'index', 'company' => $this->id), null, TRUE); ?>" title="View All">
+		<a href="<?php echo $this->url('bookmarks/all', array('id' => $this->id, 'type' => 'company'), null, TRUE); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All Company Bookmarks');?> 
 			<div class="action_text">View All</div>
 		</a>

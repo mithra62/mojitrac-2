@@ -2,14 +2,14 @@
 
 	<div class="task_header">Viewing Task: <?php echo $this->task['name']; ?></div>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'view'), null, TRUE); ?>" rel="facebox" title="About Tasks">
+			<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'view'), null, TRUE); ?>" rel="facebox" title="About Tasks">
 				<?php echo $this->InteractIcon('help', 'About Tasks');?>
 				<div class="action_text">Help</div>
 			</a>
 		</div>
 		<!-- 
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'tasks','action'=>'ical', 'id' => $this->id), null, TRUE); ?>" title="Export Time">
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'tasks','action'=>'ical', 'id' => $this->id), null, TRUE); ?>" title="Export Time">
 				<?php echo $this->InteractIcon('save_disk', 'Export');?>
 				<div class="action_text">Export</div>
 			</a>
@@ -18,7 +18,7 @@
 		
 		<?php if($this->CheckPermission('track_time')):?>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'timers','action'=>'view', 'task' => $this->id), null, TRUE); ?>" title="Timer" rel="facebox">
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'timers','action'=>'view', 'task' => $this->id), null, TRUE); ?>" title="Timer" rel="facebox">
 				<?php echo $this->InteractIcon('timer', 'Timer');?>
 				<div class="action_text">Timer</div>
 			</a>
@@ -27,13 +27,13 @@
 					
 		<?php if($this->CheckPermission('manage_tasks')):?>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'tasks','action'=>'remove', 'id' => $this->id), null, TRUE); ?>" rel="facebox" title="Delete">
+			<a href="<?php echo $this->url('tasks/remove', array('task_id' => $this->id)); ?>" rel="facebox" title="Delete">
 				<?php echo $this->InteractIcon('cross', 'Delete');?>
 				<div class="action_text">Delete</div>
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'tasks','action'=>'edit', 'id' => $this->id), null, TRUE); ?>">
+			<a href="<?php echo $this->url('tasks/edit', array('task_id' => $this->id)); ?>">
 				<?php echo $this->InteractIcon('pencil', 'Edit');?>
 				<div class="action_text">Edit</div>
 			</a> 
@@ -76,7 +76,7 @@ endif;
 <div class="item_details">
     <div class="items">
     	<p>
-			<span class="bold">Project:</span> <a href="/pm/projects/view/id/<?php echo $this->task['project_id']; ?>"><?php echo $this->Truncate($this->task['project_name'], '25'); ?></a><br />
+			<span class="bold">Project:</span> <a href="<?php echo $this->url('projects/view', array('project_id' => $this->task['project_id'])); ?>"><?php echo $this->Truncate($this->task['project_name'], '25'); ?></a><br />
 			<span class="bold">Status:</span> <?php echo $this->TaskStatus($this->task['status']); ?><br />
 			<span class="bold">Priority:</span> <?php echo $this->TaskPriority($this->task['priority']); ?><br />
 			<span class="bold">Type:</span> <?php echo $this->TaskType($this->task['type']); ?>    	
@@ -106,7 +106,7 @@ endif;
     <div class="items" style="padding-left:10px;">
 		<?php 
 			$options = array('hours' => $this->hours, 'type' => 'task', 'id' => $this->id);
-			echo $this->partial('times/partials/hour_status.phtml', $options); 		
+			echo $this->partial('pm/times/partials/hour_status', $options); 		
 		?>
     </div>    
 </div>
@@ -171,7 +171,7 @@ $(document).ready(function() {
 <div class="content_headers">
 	<div class="assignment_history_header">Assignment History</div>
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'assignment-history'), null, TRUE); ?>" rel="facebox" title="About Assignment History">
+		<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'assignment-history'), null, TRUE); ?>" rel="facebox" title="About Assignment History">
 			<?php echo $this->InteractIcon('help', 'About Assignment History');?>
 			<div class="action_text">Help</div>
 		</a>
@@ -180,7 +180,7 @@ $(document).ready(function() {
 <?php 
 if($this->assignment_history):
 	$options = array('assignment_history' => $this->assignment_history);
-	echo $this->partial('tasks/partials/assignments.phtml', $options); 
+	echo $this->partial('pm/tasks/partials/assignments', $options); 
 else: 
 ?>
 <div class="information png_bg">This task hasn't been assigned to anyone.</div>
@@ -192,13 +192,13 @@ endif;
 	<div class="content_headers">
 		<div class="file_header">Files</div>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'files'), null, TRUE); ?>" rel="facebox" title="Add Task Files">
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'files'), null, TRUE); ?>" rel="facebox" title="Add Task Files">
 				<?php echo $this->InteractIcon('help', 'About Task Files');?>
 				<div class="action_text">Help</div>
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'index', 'task' => $this->id), null, TRUE); ?>" title="View All">
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'files','action'=>'index', 'task' => $this->id), null, TRUE); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All');?>
 				<div class="action_text">View All</div>
 			</a>
@@ -206,7 +206,7 @@ endif;
 		
 		<?php if($this->CheckPermission('manage_files')): ?>	
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'add', 'task' => $this->id), null, TRUE); ?>" rel="facebox" title="Add File">
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'files','action'=>'add', 'task' => $this->id), null, TRUE); ?>" rel="facebox" title="Add File">
 				<?php echo $this->InteractIcon('add', 'Add');?> 
 				<div class="action_text">Add File</div>
 			</a>
@@ -216,10 +216,10 @@ endif;
 	<?php 
 	if($this->files):
 		$options = array('files' => $this->files, 'facebox' => 'yes');
-		echo $this->partial('files/partials/files.phtml', $options); 
+		echo $this->partial('pm/files/partials/files', $options); 
 	else: 
 	?>
-	<div class="information png_bg">There aren't any files uploaded yet. Want to <a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'add', 'task' => $this->id), null, TRUE); ?>" rel="facebox">add</a> one?</div>
+	<div class="information png_bg">There aren't any files uploaded yet. Want to <a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'files','action'=>'add', 'task' => $this->id), null, TRUE); ?>" rel="facebox">add</a> one?</div>
 	<?php 
 	endif;
 endif;
@@ -228,19 +228,19 @@ endif;
 <div class="content_headers">
 	<div class="note_header">Notes</div>
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'notes'), null, TRUE); ?>" rel="facebox" title="Add Task Notes">
+		<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'notes')); ?>" rel="facebox" title="Add Task Notes">
 			<?php echo $this->InteractIcon('help', 'About Task Notes');?>
 			<div class="action_text">Help</div>
 		</a>
 	</div>		
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'notes','action'=>'index', 'task' => $this->id), null, TRUE); ?>" title="View All">
+		<a href="<?php echo $this->url('notes/all', array('type' => 'task', 'id' => $this->id)); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All');?> 
 			<div class="action_text">View All</div>
 		</a>
 	</div>	
 	<div class="actions">
-		<a rel="facebox" href="<?php echo $this->url(array('module' => 'pm','controller'=>'notes','action'=>'add', 'task' => $this->id), null, TRUE); ?>" title="Add Note">
+		<a rel="facebox" href="<?php echo $this->url('notes/add', array('type' => 'task', 'id' => $this->id)); ?>" title="Add Note">
 			<?php echo $this->InteractIcon('add', 'Add');?>  
 			<div class="action_text">Add Note</div>
 		</a>
@@ -249,10 +249,10 @@ endif;
 <?php 
 if($this->notes):
 	$options = array('notes' => $this->notes, 'facebox' => 'yes');
-	echo $this->partial('notes/partials/notes.phtml', $options); 
+	echo $this->partial('pm/notes/partials/notes', $options); 
 else: 
 ?>
-<div class="information png_bg">There aren't any notes added yet. Want to <a href="<?php echo $this->url(array('module' => 'pm','controller'=>'notes','action'=>'add', 'task' => $this->id), null, TRUE); ?>" rel="facebox">add</a> one?</div>
+<div class="information png_bg">There aren't any notes added yet. Want to <a href="<?php echo $this->url('notes/add', array('type'=>'task', 'id' => $this->id)); ?>" rel="facebox">add</a> one?</div>
 <?php 
 endif;
 ?>
@@ -260,19 +260,19 @@ endif;
 <div class="content_headers">
 	<div class="bookmark_header">Bookmarks</div>
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'bookmarks'), null, TRUE); ?>" rel="facebox" title="About Task Bookmarks">
+		<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'bookmarks'), null, TRUE); ?>" rel="facebox" title="About Task Bookmarks">
 			<?php echo $this->InteractIcon('help', 'About Task Bookmarks');?>
 			<div class="action_text">Help</div>
 		</a>
 	</div>	
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'bookmarks','action'=>'index', 'task' => $this->id), null, TRUE); ?>" title="View All">
+		<a href="<?php echo $this->url('bookmarks/all', array('type' => 'task', 'id' => $this->id), null, TRUE); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All');?>
 			<div class="action_text">View All</div>
 		</a>
 	</div>	
 	<div class="actions">
-		<a rel="facebox" href="<?php echo $this->url(array('module' => 'pm','controller'=>'bookmarks','action'=>'add', 'task' => $this->id), null, TRUE); ?>" title="Add Bookmark">
+		<a rel="facebox" href="<?php echo $this->url('bookmarks/add', array('type' => 'task', 'id' => $this->id)); ?>" title="Add Bookmark">
 			<?php echo $this->InteractIcon('add', 'Add');?>  
 			<div class="action_text">Add Bookmark</div>
 		</a>
@@ -281,10 +281,10 @@ endif;
 <?php 
 if($this->bookmarks):
 	$options = array('bookmarks' => $this->bookmarks, 'facebox' => 'yes');
-	echo $this->partial('bookmarks/partials/bookmarks.phtml', $options); 
+	echo $this->partial('pm/bookmarks/partials/bookmarks', $options); 
 else: 
 ?>
-<div class="information png_bg">There aren't any bookmarks added yet. Want to <a href="<?php echo $this->url(array('module' => 'pm','controller'=>'bookmarks','action'=>'add', 'task' => $this->id), null, TRUE); ?>" rel="facebox">add</a> one?</div>
+<div class="information png_bg">There aren't any bookmarks added yet. Want to <a href="<?php echo $this->url('bookmarks/add', array('type' => 'task', 'id' => $this->id)); ?>" rel="facebox">add</a> one?</div>
 <?php 
 endif;
 ?>
@@ -293,13 +293,13 @@ endif;
 	<div class="content_headers">
 		<div class="timetracker_header">Timetracker</div>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'times'), null, TRUE); ?>" rel="facebox" title="About Task Times">
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'times'), null, TRUE); ?>" rel="facebox" title="About Task Times">
 				<?php echo $this->InteractIcon('help', 'About Task Times');?>
 				<div class="action_text">Help</div>
 			</a>
 		</div>			
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'times','action'=>'view', 'task' => $this->id), null, TRUE); ?>" title="View All">
+			<a href="<?php echo $this->url('bookmarks/add', array('type' => 'task', 'id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All');?>
 				<div class="action_text">View All</div>
 			</a>
@@ -308,7 +308,7 @@ endif;
 	<?php 
 	if($this->times): 
 		$options = array('times' => $this->times, 'enable_date' => 'yes');
-		echo $this->partial('times/partials/times.phtml', $options); 
+		echo $this->partial('pm/times/partials/times', $options); 
 	else: 
 	?>
 	<div class="information png_bg">There aren't any times added yet. </div>

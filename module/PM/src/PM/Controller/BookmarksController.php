@@ -24,24 +24,7 @@ use PM\Controller\AbstractPmController;
 * @filesource 	./module/PM/src/PM/Controller/BookmarksController.php
 */
 class BookmarksController extends AbstractPmController
-{
-	
-	/**
-	 * Class preDispatch
-	 */
-	public function preDispatch()
-	{
-        parent::preDispatch();
-        $this->view->headTitle('Bookmarks', 'PREPEND');
-        $this->view->layout_style = 'single';
-        $this->view->sidebar = 'dashboard';
-        $this->view->sub_menu = 'tasks';
-        $this->view->active_nav = 'bookmarks';
-		$this->view->active_sub = 'None';
-		$this->view->sub_menu_options = PM_Model_Options_Projects::status();
-		$this->view->title = FALSE;          
-	}
-	
+{	
 	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{
 		$e = parent::onDispatch( $e );
@@ -62,68 +45,49 @@ class BookmarksController extends AbstractPmController
      */
 	public function indexAction()
 	{	
-	    $bookmarks = new PM_Model_Bookmarks(new PM_Model_DbTable_Bookmarks);
-		$company_id = $this->_getParam("company",FALSE);
-    	if($company_id)
-    	{
-			if(!$this->perm->check($this->identity, 'view_companies'))
-	        {
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;
-	        }	
-	            		
-			$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
-			$company_data = $company->getCompanyById($company_id);
-			if(!$company_data) 
-			{
-				$this->_helper->redirector('index','companies');
-				exit;				
-			}
-			$this->view->company = $company_data;
-			$bookmark_data = $bookmarks->getBookmarksByCompanyId($company_id);
-    	}
-    	
-		$project_id = $this->_request->getParam('project', FALSE);
-		if($project_id) 
+	    $bookmarks = $this->getServiceLocator()->get('PM\Model\Bookmarks');
+	    $id = $this->params()->fromRoute('id');
+	    $type = $this->params()->fromRoute('type');
+	    $company_id = $project_id = $task_id = false;
+	    
+		if($type == 'company') 
 		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+			$company_id = $id;
+			$company = $this->getServiceLocator()->get('PM\Model\Companies');
+			$company_data = $company->getCompanyById($company_id);
+			if(!$company_data)
+			{
+				return $this->redirect()->toRoute('companies');
+			}
+			
+			$view['company'] = $company_data;
+			$bookmark_data = $bookmarks->getBookmarksByCompanyId($company_id);
+		}
+
+		if($type == 'project') 
+		{
+		    $project_id = $id;
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
 			$project_data = $project->getProjectById($project_id);
 			if(!$project_data)
 			{
-				$this->_helper->redirector('index','projects');
-				exit;				
+			    return $this->redirect()->toRoute('projects');
 			}
-			
-			if(!$project->isUserOnProjectTeam($this->identity, $project_id))
-			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
-			}
-						
-			$this->view->project = $project_data;
+			$view['project'] = $project_data;
 			$bookmark_data = $bookmarks->getBookmarksByProjectId($project_id);
 		}
-		
-		$task_id = $this->_request->getParam('task', FALSE);
-		if($task_id) 
+
+		if($type == 'task') 
 		{
-			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+		    $task_id = $id;
+			$task = $this->getServiceLocator()->get('PM\Model\Tasks');
 			$task_data = $task->getTaskById($task_id);
 			if(!$task_data)
 			{
-				$this->_helper->redirector('index','tasks');
-				exit;				
+				return $this->residrect()->toRoute('tasks');
 			}
 			
-			if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']))
-			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
-			}
-						
 			$this->view->task = $task_data;
-			$bookmark_data = $bookmarks->getBookmarksByTaskId($task_id);
 		}			
     	
     	if(!$company_id && !$project_id && !$task_id)
@@ -132,9 +96,10 @@ class BookmarksController extends AbstractPmController
     		$bookmark_data = $bookmarks->getAllBookmarks($view);
     	}
     	
-		$view = $this->_getParam("view",FALSE);
-		$this->view->active_sub = $view;
-	    $this->view->bookmarks = $bookmark_data;
+	    $view['bookmarks'] = $bookmark_data;
+	    $view['id'] = $id;
+	    $view['type'] = $type;
+	    return $view;
 	}
 	
 	/**
@@ -204,6 +169,7 @@ class BookmarksController extends AbstractPmController
         if ($this->getRequest()->isPost()) 
         {
             $formData = $this->getRequest()->getPost();
+            $form->setInputFilter($bookmark->getInputFilter());
             $form->setData($formData);
             if ($form->isValid($formData)) 
             {
@@ -238,7 +204,7 @@ class BookmarksController extends AbstractPmController
 		$id = $this->params()->fromRoute('id');
 		$type = $this->params()->fromRoute('type');
 		$view = array();
-		if($type == 'companies') 
+		if($type == 'company') 
 		{
 			$company_id = $id;
 			$company = $this->getServiceLocator()->get('PM\Model\Companies');
@@ -263,7 +229,7 @@ class BookmarksController extends AbstractPmController
 			$view['project'] = $project_data;
 		}
 
-		if($type == 'tasks') 
+		if($type == 'task') 
 		{
 		    $task_id = $id;
 			$task = $this->getServiceLocator()->get('PM\Model\Tasks');

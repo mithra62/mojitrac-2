@@ -74,7 +74,7 @@ class Calendar extends AbstractModel
 		$proj_team = $this->projects;
 		$sql = $proj_team->select()->setIntegrityCheck(false)->from(array('pt' =>$proj_team->getTableName()), array('project_id'))->where('pt.user_id = ?', $identity);
 		$sql = $sql->join(array('p' => 'projects'), 'p.id = pt.project_id');
-		$sql = $sql->where(new Zend_Db_Expr('date_format(p.start_date,"%Y-%m") = '."'$year-$month'"));	
+		$sql = $sql->where(new \Zend\Db\Sql\Expression('date_format(p.start_date,"%Y-%m") = '."'$year-$month'"));	
 		
 		$arr = $this->_translateItems($proj_team->getProjectTeamMembers($sql), 'start_date', 'projects');
 		$arr = $this->_translateItems($this->getStartedTasksByDate($month, $year, $identity), 'start_date', 'tasks', $arr);
@@ -118,12 +118,11 @@ class Calendar extends AbstractModel
 	 */
 	public function getStartedProjectsByDate($month, $year)
 	{
-		$project = $this->project;
-		$sql = $project->select()
-					   ->from($project->getTableName(), array('start_date', 'name', 'id', 'status'))
-					   ->where(new Zend_Db_Expr('date_format(start_date,"%Y-%m")').' = ?', "$year-$month");
+	    $date = new \Zend\Db\Sql\Expression('date_format(start_date,"%Y-%m")');
+		$sql = $this->db->select()->from('projects')->columns(array('start_date', 'name', 'id', 'status'))
+					   ->where($date->getExpression()." = '$year-$month'");
 		
-		return $project->getProjects($sql);
+		return $this->getRows($sql);
 	}
 	
 	/**
@@ -134,31 +133,32 @@ class Calendar extends AbstractModel
 	 */
 	public function getStartedTasksByDate($month, $year, $assigned = FALSE)
 	{
-		$task = $this->task;
-		$sql = $task->select()
-					   ->from($task->getTableName(), array('date_format(start_date,"%Y-%m-%d") AS start_date', 'name', 'id', 'status'))
-					   ->where(new Zend_Db_Expr('date_format(start_date,"%Y-%m")').' = ?', "$year-$month");
+		$date = new \Zend\Db\Sql\Expression('date_format(start_date,"%Y-%m")');
+		$sql = $this->db->select()->from('tasks')
+		->columns(array('start_date' => new \Zend\Db\Sql\Expression('date_format(start_date,"%Y-%m-%d")'), 'name', 'id', 'status'))
+					   ->where($date->getExpression()." = '$year-$month'");
 
 		if($assigned)
 		{
-			$sql = $sql->where('assigned_to = ?', $assigned);
+			$sql = $sql->where(array('assigned_to' => $assigned));
 		}
 		
-		return $task->getTasks($sql);
+		return $this->getRows($sql);
 	}
 
 	public function getCompletedTasksByDate($month = FALSE, $year = FALSE, $assigned = FALSE)
 	{
-		$task = $this->task;
-		$sql = $task->select()
-					   ->from($task->getTableName(), array('date_format(end_date,"%Y-%m-%d") AS end_date', 'name', 'id', 'status'))
-					   ->where(new Zend_Db_Expr('date_format(end_date,"%Y-%m")').' = ?', "$year-$month");
+		$date = new \Zend\Db\Sql\Expression('date_format(start_date,"%Y-%m")');
+		$sql = $this->db->select()->from('tasks')
+		->columns(array('start_date' => new \Zend\Db\Sql\Expression('date_format(start_date,"%Y-%m-%d")'), 'name', 'id', 'status'))
+		                 ->where($date->getExpression()." = '$year-$month'");
 		
 		if($assigned)
 		{
-			$sql = $sql->where('assigned_to = ?', $assigned);
-		}					   
-		return $task->getTasks($sql);
+			$sql = $sql->where(array('assigned_to' => $assigned));
+		}
+						   
+		return $this->getRows($sql);
 	}	
 
 	public function translateMonth($month_name)

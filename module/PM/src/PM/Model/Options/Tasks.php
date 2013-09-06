@@ -1,9 +1,28 @@
-<?php
-class PM_Model_Options_Tasks extends PM_Model_Options_Abstract
+<?php 
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Model/Options/Tasks.php
+ */
+
+namespace PM\Model\Options;
+
+/**
+ * PM - Tasks Options Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Model/Options/Tasks.php
+ */
+class Tasks extends AbstractOptions
 {
 	static public function types()
-	{
-		$options = new PM_Model_Options(new PM_Model_DbTable_Options);
+	{		
 		return parent::filterOptions($options->getAllTaskTypes());
 	}
 	
@@ -23,9 +42,9 @@ class PM_Model_Options_Tasks extends PM_Model_Options_Abstract
 		return array();
 	}	
 	
-	static public function translateTypeId($id)
+	static public function translateTypeId($id, \PM\Model\Options $options)
 	{
-		$types = self::types();
+		$types = $options->getAllTaskTypes();
 		if(isset($types[$id]))
 		{
 			return $types[$id];

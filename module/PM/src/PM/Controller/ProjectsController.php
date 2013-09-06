@@ -98,13 +98,11 @@ class ProjectsController extends AbstractPmController
 	 * @return void
 	 */
 	public function viewAction()
-	{
-		$this->getEventManager()->trigger('moji.project_view.pre', $this);
-		
+	{	
 		$id = $this->params()->fromRoute('project_id');
 		if (!$id) 
 		{
-			return $this->redirect()->toRoute('projects');			
+			return $this->redirect()->toRoute('projects');
 		}
 		
 		$view = array();

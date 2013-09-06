@@ -32,6 +32,7 @@ use PM\Model\Calendar;
 use PM\Form\ProjectForm;
 use PM\Form\CompanyForm;
 use PM\Form\BookmarkForm;
+use PM\Form\NoteForm;
 
 use PM\Event\ActivityLogEvent;
 
@@ -153,6 +154,9 @@ class Module
 				},	
 				'PM\Form\BookmarkForm' => function($sm) {
 					return new BookmarkForm('bookmark');
+				},	
+				'PM\Form\NoteForm' => function($sm) {
+					return new NoteForm('note');
 				},
 				'PM\Event\ActivityLogEvent' => function($sm) {
 				    $auth = $sm->get('AuthService');

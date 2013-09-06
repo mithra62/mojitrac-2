@@ -38,7 +38,7 @@ echo $this->formRow($csrf);
 <?php if($this->project): ?>
 <p>
 	<label for="project_id">Project</label>
-	<a href="<?php echo $this->url('docs', array('module' => 'pm','controller'=>'projects','action'=>'view', 'id' => $this->project['id']), null, TRUE); ?>"><?php echo $this->project['name']; ?></a>
+	<a href="<?php echo $this->url('projects/view', array('project_id' => $this->project['id'])); ?>"><?php echo $this->project['name']; ?></a>
 	<input type="hidden" name="project" value="<?php echo $this->project['id']; ?>" />
 </p>
 <?php endif; ?>
@@ -46,7 +46,7 @@ echo $this->formRow($csrf);
 <?php if($this->task): ?>
 <p>
 	<label for="task_id">Task</label>
-	<a href="<?php echo $this->url('docs', array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id' => $this->task['id']), null, TRUE); ?>"><?php echo $this->task['name']; ?></a>
+	<a href="<?php echo $this->url('docs', array('module' => 'pm','controller'=>'tasks','action'=>'view', 'task_id' => $this->task['id'])); ?>"><?php echo $this->task['name']; ?></a>
 	<input type="hidden" name="task" value="<?php echo $this->task['id']; ?>" />
 </p>
 <?php endif; ?>

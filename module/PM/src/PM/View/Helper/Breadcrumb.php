@@ -119,12 +119,11 @@ class Breadcrumb extends BaseViewHelper
     
     private function add_project()
     {
-
     	$helperPluginManager = $this->getServiceLocator();
     	$serviceManager = $helperPluginManager->getServiceLocator();
-    	
     	$projects = $serviceManager->get('PM/Model/Projects');
     	$result = $projects->getProjectById($this->pk);	
+    	
     	if($result)
     	{
     		$company_url = $this->view->url('companies/view', array('company_id' => $result['company_id']));
@@ -137,20 +136,21 @@ class Breadcrumb extends BaseViewHelper
 
     private function add_task()
     {
-    	$this->db = new PM_Model_DbTable_Tasks();
-    	$sql = $this->db->select()->setIntegrityCheck(false)->from(array('t'=>$this->db->getTableName()), array('c.name AS company_name', 'c.id AS company_id'));
-    	$sql = $sql->join(array('p' => 'projects'), "p.id = t.project_id AND t.id = '".$this->pk."'", array('p.name AS project_name', 'p.id AS project_id'));
-    	$sql = $sql->join(array('c' => 'companies'), "p.company_id = c.id", array('t.name AS task_name', 't.id AS task_id'));
-    	$result = $this->db->getTask($sql);	
+    	$helperPluginManager = $this->getServiceLocator();
+    	$serviceManager = $helperPluginManager->getServiceLocator();
+    	 
+    	$task = $serviceManager->get('PM/Model/Tasks');
+
+    	$result = $task->getTaskById($this->pk);
     	if($result)
     	{
-    		$company_url = $this->view->url(array('module' => 'pm','controller' => 'companies','action'=>'view', 'id' => $result['company_id']), null, TRUE);
-    		$project_url = $this->view->url(array('module' => 'pm','controller' => 'projects','action'=>'view', 'id' => $result['project_id']), null, TRUE);
-    		$task_url = $this->view->url(array('module' => 'pm','controller' => 'tasks','action'=>'view', 'id' => $result['task_id']), null, TRUE);
+    		$company_url = $this->view->url('companies/view', array('company_id' => $result['company_id']));
+    		$project_url = $this->view->url('projects/view', array('project_id' => $result['project_id']));
+    		$task_url = $this->view->url('tasks/view', array('task_id' => $result['id']));
     		
     		$this->add_breadcrumb($company_url, $result['company_name']);
     		$this->add_breadcrumb($project_url, $result['project_name']);
-    		$this->add_breadcrumb($task_url, $result['task_name'], TRUE);
+    		$this->add_breadcrumb($task_url, $result['name'], TRUE);
     	}
     } 
     

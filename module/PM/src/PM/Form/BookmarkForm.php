@@ -15,9 +15,9 @@ namespace PM\Form;
 use Base\Form\BaseForm;
 
 /**
-* Compnany Form
+* Bookmark Form
 *
-* Generates the Company form
+* Generates the Bookmark form
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb

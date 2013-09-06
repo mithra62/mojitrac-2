@@ -1,30 +1,94 @@
 <?php
-/**
- * The IP module model
- * @author Eric
+ /**
+ * mithra62 - MojiTrac
  *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Model/Ips.php
  */
-class PM_Model_Ips extends Model_Abstract
+
+namespace PM\Model;
+
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
+
+use Application\Model\AbstractModel;
+
+ /**
+ * PM - Ip Locker Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Model/Ips.php
+ */
+class Ips extends AbstractModel
 {
-	
-	/**
-	 * Construct
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->db = new PM_Model_DbTable_Ips;
-	}
-	
-	/**
-	 * Returns the Project Form
-	 * @return object
-	 */
-	public function getIpForm($options = array(), $hidden = array())
-	{
-        return new PM_Form_Ip($options, $hidden);		
-	}	
-	
+    protected $inputFilter;
+    
+    /**
+     * The Companies Model
+     * @param \Zend\Db\Adapter\Adapter $adapter
+     * @param \Zend\Db\Sql\Sql $db
+     */
+    public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
+    {
+    	parent::__construct($adapter, $db);
+    }
+    
+    public function setInputFilter(InputFilterInterface $inputFilter)
+    {
+    	throw new \Exception("Not used");
+    }
+    
+    public function getInputFilter()
+    {
+    	if (!$this->inputFilter) {
+    		$inputFilter = new InputFilter();
+    		$factory = new InputFactory();
+    
+    		$inputFilter->add($factory->createInput(array(
+    				'name'     => 'name',
+    				'required' => true,
+    				'filters'  => array(
+    						array('name' => 'StripTags'),
+    						array('name' => 'StringTrim'),
+    				),
+    		)));
+    
+    		$this->inputFilter = $inputFilter;
+    	}
+    
+    	return $this->inputFilter;
+    }
+    
+    /**
+     * Returns an array for modifying $_name
+     * @param $data
+     * @return array
+     */
+    public function getSQL($data){
+    	return array(
+    			'name' => $data['name'],
+    			'phone1' => $data['phone1'],
+    			'phone2' => $data['phone2'],
+    			'fax' => $data['fax'],
+    			'address1' => $data['address1'],
+    			'address2' => $data['address2'],
+    			'city' => $data['city'],
+    			'state' => $data['state'],
+    			'zip' => $data['zip'],
+    			'primary_url' => $data['primary_url'],
+    			'description' => $data['description'],
+    			'type' => $data['type'],
+    			'custom' => $data['custom'],
+    			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+    	);
+    }
+    
 	/**
 	 * Returns all the Ip Addresses
 	 */
@@ -77,10 +141,6 @@ class PM_Model_Ips extends Model_Abstract
 		$sql['creator'] = $creator;
 		if($this->db->addIp($sql))
 		{
-		    $this->cache->clean(
-		          Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-		          array($this->cache_keys['ips'])
-		    );
 		    return TRUE;			
 		}	
 	}
@@ -94,10 +154,6 @@ class PM_Model_Ips extends Model_Abstract
 	{
 		if($this->db->deleteIp($key, $col))
 		{
-		    $this->cache->clean(
-		          Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-		          array($this->cache_keys['ips'])
-		    );
 		    return TRUE;			
 		}
 	}
@@ -112,10 +168,6 @@ class PM_Model_Ips extends Model_Abstract
 		$sql = $this->db->getSQL($data);
 		if($this->db->update($sql, "id = '$id'"))
 		{
-		    $this->cache->clean(
-		          Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-		          array($this->cache_keys['ips'])
-		    );
 		    return TRUE;	
 		}
 	}
