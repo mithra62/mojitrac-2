@@ -58,47 +58,42 @@ class ContactsController extends AbstractPmController
 			}
 		}
 		
-		if($company_id)
-		{
+		if($company_id) {
 			$view['contacts'] = $contacts->getContactsByCompanyId($company_id);
-		}
-		else
-		{
+		} else {
 			$view['contacts'] = $contacts->getAllContacts($view);
 		}
-			    
-// 		/$this->view->active_sub = $view;
-		//$this->view->title = FALSE;'
+		
 		return $view;
 	}
 	
 	/**
-	 * Company View Page
+	 * Contact View Page
 	 * @return void
 	 */
 	public function viewAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('contact_id');
 		if (!$id) {
-			$this->_helper->redirector('index','companies');
-			exit;
+			return $this->redirect()->toRoute('companies');
 		}
 		
-		$contact = new PM_Model_Contacts;
-		$this->view->contact = $contact->getContactById($id);
-		if(!$this->view->contact)
+		$contact = $this->getServiceLocator()->get('PM\Model\Contacts');
+		$view['contact'] = $contact->getContactById($id);
+		if(!$view['contact'])
 		{
-			$this->_helper->redirector('index','contacts');
-			exit;
+			return $this->redirect()->toRoute('contacts');
 		}
 			
-		$this->view->title = FALSE;
-		$this->view->headTitle('Viewing Contact: '. $this->view->contact['first_name'].' '.$this->view->contact['last_name'], 'PREPEND');
-		$this->view->id = $id;
+		//$this->view->title = FALSE;
+		//$this->view->headTitle('Viewing Contact: '. $this->view->contact['first_name'].' '.$this->view->contact['last_name'], 'PREPEND');
+		$view['id'] = $id;
+		
+		return $this->ajax_output($view);
 	}
 	
 	/**
-	 * Company Edit Page
+	 * Contact Edit Page
 	 * @return void
 	 */
 	public function editAction()

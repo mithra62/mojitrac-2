@@ -66,12 +66,12 @@ class Contacts extends AbstractModel
 			$factory = new InputFactory();
 	
 			$inputFilter->add($factory->createInput(array(
-					'name'     => 'name',
-					'required' => true,
-					'filters'  => array(
-							array('name' => 'StripTags'),
-							array('name' => 'StringTrim'),
-					),
+				'name'     => 'name',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
 			)));
 	
 			$this->inputFilter = $inputFilter;
@@ -79,64 +79,31 @@ class Contacts extends AbstractModel
 	
 		return $this->inputFilter;
 	}
-		
-	/**
-	 * Returns the Contact Form
-	 * @return object
-	 */
-	public function getContactForm($options = array(), $hidden = array())
-	{
-        return new PM_Form_Contact($options, $hidden);		
-	}	
-	
-	/**
-	 * Returns the $mbid for a given artist $name
-	 * @param $name
-	 * @return mixed
-	 */
-	public function getContactIdByName($name)
-	{
-		$sql = $this->db->select()
-					  ->from($contact->getTableName(), array('id'))
-					  ->where('name LIKE ?', $name);
-					  
-		return $contact->getContact($sql);
-	}
 	
 	public function getContactById($id)
 	{
-		$sql = $contact->select()->setIntegrityCheck(false)->from(array('c'=>$contact->getTableName()));
-		$sql = $sql->where('c.id = ?', $id);
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = c.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
-		$sql = $sql->joinLeft(array('o' => 'companies'), 'o.id = c.company_id', array('name AS company_name'));
-		return $contact->getContact($sql);
+		$sql = $this->db->select()->from(array('c'=> 'company_contacts'));
+		$sql = $sql->where(array('c.id' => $id));
+		$sql = $sql->join(array('u' => 'users'), 'u.id = c.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), 'left');
+		$sql = $sql->join(array('o' => 'companies'), 'o.id = c.company_id', array('company_name' => 'name'), 'left');
+		
+		return $this->getRow($sql);
 	}
 	
 	/**
-	 * Returns an array of all unique artist names
-	 * @return mixed
-	 */
-	public function getAllContactNames()
-	{
-		$contact = new PM_Model_DbTable_Contacts;
-		$sql = $contact->select()->from($contact->getTableName(), array('id','name'));
-		return $contact->getCompanies($sql);
-	}
-	
-	/**
-	 * Returns an array of all unique album names with artist names
+	 * Returns an array of all contacts based on type
 	 * @return mixed
 	 */
 	public function getAllContacts($view_type = FALSE)
 	{
-		$contacts = new PM_Model_DbTable_Contacts;
-		$sql = $contacts->select();
+		$sql = $this->db->select();
 		
 		if(is_numeric($view_type))
 		{
-			$sql = $sql->where('type = ?', $view_type);
+			$sql = $sql->where(array('type' => $view_type));
 		}
-		return $contacts->getContacts($sql);		
+		
+		return $this->getRows($sql);		
 	}
 	
 	/**
@@ -162,7 +129,6 @@ class Contacts extends AbstractModel
 	 */
 	public function addContact($data)
 	{
-		$contact = new PM_Model_DbTable_Contacts;
 		$sql = $contact->getSQL($data);
 		$contact_id = $contact->addContact($sql);
 		return $contact_id;
@@ -176,7 +142,6 @@ class Contacts extends AbstractModel
 	 */
 	public function updateContact($data, $id)
 	{
-		$contact = new PM_Model_DbTable_Contacts;
 		$sql = $contact->getSQL($data);
 		return $contact->update($sql, "id = '$id'");
 	}
@@ -189,7 +154,6 @@ class Contacts extends AbstractModel
 	 */
 	public function removeContact($id)
 	{
-		$contact = new PM_Model_DbTable_Contacts;
 		if($contact->deleteContact($id))
 		{
 			/*

@@ -21,13 +21,13 @@
 		
 		<?php if($this->CheckPermission('view_company_contacts')):?>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'contacts','action'=>'remove', 'id' => $this->id), null, TRUE); ?>" title="Delete" rel="facebox">
+			<a href="<?php echo $this->url('contacts/remove', array('module' => 'pm','controller'=>'contacts','action'=>'remove', 'id' => $this->id), null, TRUE); ?>" title="Delete" rel="facebox">
 				<?php echo $this->InteractIcon('cross', 'Delete');?>
 				<div class="action_text">Delete</div>
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'contacts','action'=>'edit', 'id' => $this->id), null, TRUE); ?>" title="Edit">
+			<a href="<?php echo $this->url('contacts/edit', array('module' => 'pm','controller'=>'contacts','action'=>'edit', 'id' => $this->id), null, TRUE); ?>" title="Edit">
 				<?php echo $this->InteractIcon('pencil', 'Edit');?>
 				<div class="action_text">Edit</div>
 			</a> 
@@ -41,7 +41,7 @@
     		<?php if($this->contact['job_title']):?>
 			<span class="bold">Title:</span> <?php echo $this->contact['job_title']; ?><br />
 			<?php endif; ?>
-			<span class="bold">Company:</span> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'companies','action'=>'view', 'id' => $this->contact['company_id']), null, TRUE); ?>"><?php echo $this->contact['company_name']; ?></a><br />   
+			<span class="bold">Company:</span> <a href="<?php echo $this->url('companies/view', array('module' => 'pm','controller' => 'companies','action'=>'view', 'id' => $this->contact['company_id']), null, TRUE); ?>"><?php echo $this->contact['company_name']; ?></a><br />   
 			<span class="bold">Last Modified:</span> <?php echo $this->RelativeDate($this->contact['last_modified']); ?><br />
 			<span class="bold">Created Date:</span> <?php echo $this->RelativeDate($this->contact['created_date']); ?> 				
     	</p>
