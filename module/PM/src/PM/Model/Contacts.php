@@ -148,7 +148,7 @@ class Contacts extends AbstractModel
 	{
 		$sql = $this->db->select()->from(array('c'=>'company_contacts'));
 		
-		$sql = $sql->where('c.company_id = ?', $id);
+		$sql = $sql->where(array('c.company_id' => $id));
 		$sql = $sql->join(array('u' => 'users'), 'u.id = c.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), 'left');
 		
 		return $this->getRows($sql);			

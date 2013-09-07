@@ -206,14 +206,14 @@ if($this->CheckPermission('view_company_contacts')):?>
 			</a>
 		</div>			
 		<div class="actions">
-			<a href="<?php echo $this->url('contacts', array('module' => 'pm','controller'=>'contacts','action'=>'index', 'company' => $this->id), null, TRUE); ?>" title="View All">
+			<a href="<?php echo $this->url('contacts/all', array('company_id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All Company Contacts');?> 
 				<div class="action_text">View All</div>
 			</a>
 		</div>			
 		<?php if($this->CheckPermission('manage_company_contacts')): ?>	
 		<div class="actions">
-			<a href="<?php echo $this->url('contacts', array('module' => 'pm','controller'=>'contacts','action'=>'add', 'company' => $this->id), null, TRUE); ?>" title="Add Contact">
+			<a href="<?php echo $this->url('contacts/add', array('company_id' => $this->id)); ?>" title="Add Contact">
 				<?php echo $this->InteractIcon('add', 'Add Company Contact');?>
 				<div class="action_text">Add Contact</div>
 			</a>
@@ -223,7 +223,7 @@ if($this->CheckPermission('view_company_contacts')):?>
 	<?php 
 	if($this->contacts):
 		$options = array('contacts' => $this->contacts, 'facebox' => 'yes');
-		echo $this->partial('contacts/partials/contacts.phtml', $options); 
+		echo $this->partial('pm/contacts/partials/contacts', $options); 
 	else: 
 	?>
 	<div class="information png_bg">

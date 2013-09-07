@@ -324,6 +324,6 @@ class CompaniesController extends AbstractPmController
 		}
 		
 		$view['company'] = $company_data;
-		return $view;
+		return $this->ajax_output($view);
 	}
 }

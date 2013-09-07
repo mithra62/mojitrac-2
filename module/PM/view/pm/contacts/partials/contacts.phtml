@@ -19,7 +19,7 @@
 		{
 		?>
 		<tr>
-			<td><a title="<?php echo $contact['first_name']; ?> <?php echo $contact['last_name']; ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> href="<?php echo $this->url(array('module' => 'pm','controller'=>'contacts','action'=>'view', 'id' => $contact['id']), null, TRUE); ?>"><?php echo $contact['first_name']; ?> <?php echo $contact['last_name']; ?></a></td>
+			<td><a title="<?php echo $contact['first_name']; ?> <?php echo $contact['last_name']; ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> href="<?php echo $this->url('contacts/view', array('contact_id' => $contact['id'])); ?>"><?php echo $contact['first_name']; ?> <?php echo $contact['last_name']; ?></a></td>
 			<td><a title="<?php echo $contact['email']; ?>" href="mailto:<?php echo $contact['email']; ?>"><?php echo $contact['email']; ?></a></td>
 			<td><?php 
 			if($contact['mobile'] != '')

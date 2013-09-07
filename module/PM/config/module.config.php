@@ -232,6 +232,18 @@ return array(
         		),
         		'may_terminate' => true,
         		'child_routes' => array(
+        			'all' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/[:company_id]',
+        					'constraints' => array(
+        						'id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'index'
+        					)
+        				)
+        			), 
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
@@ -265,6 +277,18 @@ return array(
         					),
         					'defaults' => array(
         						'action' => 'edit'
+        					)
+        				)
+        			),       			
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/[:contact_id]',
+        					'constraints' => array(
+        						'contact_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
         					)
         				)
         			),

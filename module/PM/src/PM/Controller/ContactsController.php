@@ -28,19 +28,13 @@ class ContactsController extends AbstractPmController
 	/**
 	 * Class preDispatch
 	 */
-	public function preDispatch()
+	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{
-        parent::preDispatch();
+		$e = parent::onDispatch( $e );
         parent::check_permission('view_company_contacts');
-        $this->view->headTitle('Company Contacts', 'PREPEND'); 
-        $this->view->layout_style = 'single';
-        $this->view->sidebar = 'dashboard';
-        $this->view->sub_menu = 'companies';
-        $this->view->active_nav = 'companies';
-        $this->view->sub_menu_options = PM_Model_Options_Companies::types();
-        $this->view->uri = $this->_request->getPathInfo();
-		$this->view->active_sub = 'None';
-		$this->view->title = FALSE;          
+		$this->layout()->setVariable('sub_menu', 'companies');
+		$this->layout()->setVariable('active_nav', 'companies');
+		$this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Companies::types());        
 	}
     
     /**
@@ -181,8 +175,7 @@ class ContactsController extends AbstractPmController
 
 		if(!$this->perm->check($this->identity, 'manage_company_contacts'))
         {
-        	$this->_helper->redirector('index', 'contacts', 'pm');
-        	exit;
+        	return $this->redirect()->toRoute('contacts');
         }
         		
 		$company_id = $this->_getParam("company",FALSE);
