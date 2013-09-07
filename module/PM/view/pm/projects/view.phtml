@@ -191,14 +191,14 @@ endif;
 		</a>
 	</div>	
 	<div class="actions">
-		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'notes','action'=>'index', 'project' => $this->id), null, TRUE); ?>" title="View All">
+		<a href="<?php echo $this->url('notes/all', array('type'=>'project', 'id' => $this->id)); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All');?>  
 			<div class="action_text">View All</div>
 		</a>
 	</div>
 	<?php if($this->user_is_on_team): ?>
 	<div class="actions">
-		<a rel="facebox" href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'notes','action'=>'add', 'project' => $this->id), null, TRUE); ?>" title="Add Note">
+		<a rel="facebox" href="<?php echo $this->url('notes/add', array('type'=>'project', 'id' => $this->id)); ?>" title="Add Note">
 			<?php echo $this->InteractIcon('add', 'Add Note');?>  
 			<div class="action_text">Add Note</div>
 		</a>
@@ -211,7 +211,7 @@ if($this->notes):
 	echo $this->partial('pm/notes/partials/notes', $options); 
 else: 
 ?>
-<div class="information png_bg">There aren't any notes added yet. Want to <a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'notes','action'=>'add', 'project' => $this->id), null, TRUE); ?>" rel="facebox">add</a> one?</div>
+<div class="information png_bg">There aren't any notes added yet. Want to <a href="<?php echo $this->url('notes/add', array('type'=>'project', 'id' => $this->id)); ?>" rel="facebox">add</a> one?</div>
 <?php 
 endif;
 ?>
@@ -232,7 +232,7 @@ endif;
 	</div>	
 	<?php if($this->user_is_on_team):?>	
 	<div class="actions">
-		<a rel="facebox" href="<?php echo $this->url('bookmarks/add', array('type'=>'project', 'id' => $this->id), null, TRUE); ?>"  title="Add Bookmark">
+		<a rel="facebox" href="<?php echo $this->url('bookmarks/add', array('type'=>'project', 'id' => $this->id)); ?>"  title="Add Bookmark">
 			<?php echo $this->InteractIcon('add', 'Add Bookmark');?>  
 			<div class="action_text">Add Bookmark</div>
 		</a>
