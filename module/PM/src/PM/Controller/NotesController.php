@@ -48,79 +48,63 @@ class NotesController extends AbstractPmController
      */
 	public function indexAction()
 	{
-		
-	    $notes = new PM_Model_Notes;
-		$company_id = $this->_getParam("company",FALSE);
-    	if($company_id)
-    	{
-			if(!$this->perm->check($this->identity, 'view_companies'))
-	        {
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;
-	        }	    		
-			$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
-			$company_data = $company->getCompanyById($company_id);
-			if(!$company_data) 
-			{
-				$this->_helper->redirector('index','companies');
-				exit;				
-			}
-			$this->view->company = $company_data;
-			$note_data = $notes->getNotesByCompanyId($company_id);
-    	}
-    	
-		$project_id = $this->_request->getParam('project', FALSE);
-		if($project_id) 
-		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-			$project_data = $project->getProjectById($project_id);
-			if(!$project_data)
-			{
-				$this->_helper->redirector('index','projects');
-				exit;				
-			}
-			
-			if(!$project->isUserOnProjectTeam($this->identity, $project_id))
-			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
-			}
-						
-			$this->view->project = $project_data;
-			$note_data = $notes->getNotesByProjectId($project_id);
-		}
-		
-		$task_id = $this->_request->getParam('task', FALSE);
-		if($task_id) 
-		{
-			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-			$task_data = $task->getTaskById($task_id);
-			if(!$task_data)
-			{
-				$this->_helper->redirector('index','tasks');
-				exit;				
-			}
-			
-			if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']))
-			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
-			}
-						
-			$this->view->task = $task_data;
-			$note_data = $notes->getNotesByTaskId($task_id);
-		}			
+	    $note = $this->getServiceLocator()->get('PM\Model\Notes');
+	    $id = $this->params()->fromRoute('id');
+	    $type = $this->params()->fromRoute('type');
+	    $company_id = $project_id = $task_id = false;
+	     
+	    if($type == 'company')
+	    {
+	    	$company_id = $id;
+	    	$company = $this->getServiceLocator()->get('PM\Model\Companies');
+	    	$company_data = $company->getCompanyById($company_id);
+	    	if(!$company_data)
+	    	{
+	    		return $this->redirect()->toRoute('companies');
+	    	}
+	    		
+	    	$view['company'] = $company_data;
+	    	$note_data = $note->getNotesByCompanyId($company_id);
+	    }
+	    
+	    if($type == 'project')
+	    {
+	    	$project_id = $id;
+	    	$project = $this->getServiceLocator()->get('PM\Model\Projects');
+	    	$project_data = $project->getProjectById($project_id);
+	    	if(!$project_data)
+	    	{
+	    		return $this->redirect()->toRoute('projects');
+	    	}
+	    	$view['project'] = $project_data;
+	    	$note_data = $note->getNotesByProjectId($project_id);
+	    }
+	    
+	    if($type == 'task')
+	    {
+	    	$task_id = $id;
+	    	$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+	    	$task_data = $task->getTaskById($task_id);
+	    	if(!$task_data)
+	    	{
+	    		return $this->residrect()->toRoute('tasks');
+	    	}
+	    		
+	    	$view['task'] = $task_data;
+	    	$note_data = $note->getNotesByTaskId($task_id);
+	    }		
     	
     	if(!$company_id && !$project_id && !$task_id)
     	{
     		$view = $this->_getParam("view",FALSE);
-    		$note_data = $notes->getAllNotes($view);
+    		$note_data = $note->getAllNotes($view);
     	}
     	
-		$view = $this->_getParam("view",FALSE);
-		$this->view->active_sub = $view;
-		$this->view->notes = $note_data;
+		//$this->view->active_sub = $view;
+		$view['notes'] = $note_data;
+		$view['id'] = $id;
+		
+		return $view;
 	}
 	
 	/**

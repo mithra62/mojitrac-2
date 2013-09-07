@@ -14,7 +14,7 @@
 
 		<?php if($this->CheckPermission('view_company_contacts')):?>	
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'notes','action'=>'add'), null, FALSE); ?>" title="Add">
+			<a href="<?php echo $this->url('notes/add', array('type'=> $this->type,'id'=> $this->id)); ?>" title="Add">
 				<?php echo $this->InteractIcon('add', 'Add Note');?>
 				<div class="action_text">Add Note</div>
 			</a> 
@@ -29,10 +29,10 @@ echo $this->BackToLink($options);
 if($this->notes): 
 
 	$options = array('notes' => $this->notes, 'enable_actions' => 'yes', 'facebox' => 'yes');
-	echo $this->partial('notes/partials/notes.phtml', $options);
+	echo $this->partial('pm/notes/partials/notes', $options);
 
 else: ?>
 
-<div class="information png_bg">There aren't notes added yet. Want to <a href="<?php echo $this->url(array('module' => 'pm','controller'=>'notes','action'=>'add'), null, TRUE); ?>">add</a> one?.</div>
+<div class="information png_bg">There aren't notes added yet. Want to <a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'notes','action'=>'add'), null, TRUE); ?>">add</a> one?.</div>
 
 <?php endif; ?>

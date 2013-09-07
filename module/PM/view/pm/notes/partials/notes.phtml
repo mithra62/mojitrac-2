@@ -50,7 +50,7 @@
 			<?php if($this->enable_actions):?>
 			<td>
 			<a href="<?php echo $this->url('notes/edit', array('note_id' => $note['id']), null, TRUE); ?>" title="Edit"><img src="/images/pencil.png" width="16" height="16" class="png_bg" alt="Edit" /></a>
-			<a <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> href="<?php echo $this->url(array('module' => 'pm','controller'=>'notes','action'=>'remove', 'id' => $note['id']), null, TRUE); ?>" title="Delete"><img src="/images/cross.png" width="16" height="16" class="png_bg" alt="Close" /></a>
+			<a <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'notes','action'=>'remove', 'id' => $note['id']), null, TRUE); ?>" title="Delete"><img src="/images/cross.png" width="16" height="16" class="png_bg" alt="Close" /></a>
 			</td>
 			<?php endif; ?>
 		</tr>
