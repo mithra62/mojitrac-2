@@ -171,8 +171,17 @@ class Contacts extends AbstractModel
 	 */
 	public function addContact($data)
 	{
-		$sql = $contact->getSQL($data);
-		$contact_id = $contact->addContact($sql);
+	    $ext = $this->trigger(self::EventContactAddPre, $this, compact('data'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+	    	    
+		$sql = $this->getSQL($data);
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
+		
+		$contact_id = $this->insert('company_contacts', $sql);
+		
+		$ext = $this->trigger(self::EventContactUpdatePost, $this, compact('data', 'contact_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $contact_id = $ext->last();	
+		
 		return $contact_id;
 	}
 	
@@ -184,13 +193,13 @@ class Contacts extends AbstractModel
 	 */
 	public function updateContact($data, $id)
 	{
-	    $ext = $this->trigger(self::EventContactAddPre, $this, compact('data', 'id'), $this->setXhooks($data));
+	    $ext = $this->trigger(self::EventContactUpdatePre, $this, compact('data', 'id'), $this->setXhooks($data));
 	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 	    	    
 		$sql = $this->getSQL($data);
 		$update = $this->update('company_contacts', $sql, array('id' => $id));
 		
-		$ext = $this->trigger(self::EventContactAddPost, $this, compact('data', 'id'), $this->setXhooks($data));
+		$ext = $this->trigger(self::EventContactUpdatePost, $this, compact('data', 'id'), $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $update = $ext->last();		
 		
 		return $update;

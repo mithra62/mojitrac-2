@@ -167,63 +167,56 @@ class ContactsController extends AbstractPmController
         	return $this->redirect()->toRoute('contacts');
         }
         		
-		$company_id = $this->_getParam("company",FALSE);
+		$company_id = $this->params()->fromRoute('company_id');
 		if(!$company_id)
 		{
-			$company_id = $this->_getParam("company_id",FALSE);
-			if(!$company_id)
-			{
-				$this->_helper->redirector('index','companies', 'pm');
-				exit;
-			}
+			return $this->redirect()->toRoute('companies');
 		}
 		
-		$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
+		$company = $this->getServiceLocator()->get('PM\Model\Companies');
 		$company_data = $company->getCompanyById($company_id);
 		if(!$company_data)
 		{
-			$this->_helper->redirector('index','companies', 'pm');
-			exit;
+			return $this->redirect()->toRoute('companies');
 		}
 		
-		$contact = new PM_Model_Contacts;
+		$contact = $this->getServiceLocator()->get('PM\Model\Contacts');
 		
-		$form = $contact->getContactForm(array(
-            'action' => '/pm/contacts/add/company/'.$company_id,
-            'method' => 'post',
-        ));
-		
+		$form = $this->getServiceLocator()->get('PM\Form\ContactForm');
+        $request = $this->getRequest();
 		if ($this->getRequest()->isPost()) {
     		
     		$formData = $this->getRequest()->getPost();
+    		$formData = $this->getRequest()->getPost();
+    		$form->setInputFilter($contact->getInputFilter());
+    		$form->setData($request->getPost());
+    		    		
 			if ($form->isValid($formData)) {
 				$formData['creator'] = $this->identity;
-				if($id = $contact->addContact($formData)){
-			    	$this->_flashMessenger->addMessage('Contact Added!');
-					$this->_helper->redirector('view','contacts', 'pm', array('id' => $id));
+				$contact_id = $contact->addContact($formData->toArray());
+				if($contact_id){
+			    	$this->flashMessenger()->addMessage('Contact Added!');
+					return $this->redirect()->toRoute('contacts/view', array('contact_id' => $contact_id));
 				} else {	
-					$this->view->errors = array('Something went wrong...');
+					$view['errors'] = array('Something went wrong...');
 				}
 				
 			} else {
-				$this->view->errors = array('Please fix the errors below.');
+				$view['errors'] = array('Please fix the errors below.');
 			}
 
 		}
-		
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		
-		$this->view->title = FALSE;
-		$this->view->headTitle('Add Contact', 'PREPEND');
-		$this->view->addAction = TRUE;
-		$this->view->company_data = $company_data;
+		$view['addAction'] = TRUE;
+		$view['company_data'] = $company_data;
 
-		$this->view->active_sub = $company_data['type'];
-		$this->view->form = $form;
-		$this->view->id = $company_id;
+		$this->layout()->setVariable('active_sub', $company_data['type']);
+		$this->layout()->setVariable('layout_style', 'left');
+		$view['form'] = $form;
+		$view['id'] = $company_id;
+		return $this->ajax_output($view);
 	}
 	
-	function removeAction()
+	public function removeAction()
 	{
 		if(!$this->perm->check($this->identity, 'manage_company_contacts'))
         {
