@@ -5,15 +5,15 @@
 ?>
 <div class="back_link_content">
 	<?php if($this->note['task_name']): ?>
-	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id' => $this->note['task_id']), null, TRUE); ?>" title="Back to <?php echo $this->task['name']; ?>">
+	<a href="<?php echo $this->url('tasks/view', array('task_id' => $this->note['task_id'])); ?>" title="Back to <?php echo $this->task['name']; ?>">
 		Back to <?php echo $this->note['task_name']; ?>
 	</a>
 	<?php elseif($this->note['project_name']): ?>
-	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'view', 'id' => $this->note['project_id']), null, TRUE); ?>" title="Back to <?php echo $this->note['project_name']; ?>">
+	<a href="<?php echo $this->url('projects/view', array('project_id' => $this->note['project_id'])); ?>" title="Back to <?php echo $this->note['project_name']; ?>">
 		Back to <?php echo $this->note['project_name']; ?>
 	</a>	
 	<?php else: ?>
-	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'companies','action'=>'view'), null, TRUE); ?>" title="Back to <?php echo $this->note['company_name']; ?>">
+	<a href="<?php echo $this->url('companies/view', array('company_id'=> $this->note['company_id'])); ?>" title="Back to <?php echo $this->note['company_name']; ?>">
 		Back to <?php echo $this->note['company_name']; ?>
 	</a>	
 	<?php endif; ?>
@@ -27,7 +27,7 @@ Are you sure you want to remove "<?php echo $this->note['subject']?>"? This can 
 </div>
 
 <p>
-<form action="<?php echo $this->url(array('module' => 'pm','controller'=>'notes','action'=>'remove', 'id' => $this->id), null, TRUE); ?>" method="POST">
+<form action="<?php echo $this->url('notes/remove', array('note_id' => $this->id), null, TRUE); ?>" method="POST">
 	<input type="submit" class="submit" value="Yes" name="confirm" /> <input type="submit" class="submit" value="No" name="fail"/>
 </form>
 </p>

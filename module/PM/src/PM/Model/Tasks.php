@@ -86,7 +86,7 @@ class Tasks extends AbstractModel
 		
 		if(is_array($what))
 		{
-			$sql->from(array('t'=> 'tasks'))->columns(what);
+			$sql->from(array('t'=> 'tasks'))->columns($what);
 		}
 		else
 		{

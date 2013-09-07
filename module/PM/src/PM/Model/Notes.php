@@ -231,17 +231,24 @@ class Notes extends AbstractModel
 	/**
 	 * Inserts or updates a Note
 	 * @param $data
-	 * @param $bypass_update
+	 * @param $creator
 	 * @return mixed
 	 */
 	public function addNote($data, $creator)
 	{
-		$note = new PM_Model_DbTable_Notes;
-		$sql = $note->getSQL($data);
+	    $ext = $this->trigger(self::EventNoteAddPre, $this, compact('data'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+	    	    
+		$sql = $this->getSQL($data);
 		$sql['company_id'] = (array_key_exists('company', $data) ? $data['company'] : 0);
 		$sql['project_id'] = (array_key_exists('project', $data) ? $data['project'] : 0);
 		$sql['task_id'] = (array_key_exists('task', $data) ? $data['task'] : 0);
-		$note_id = $note->addNote($sql);
+		
+		$note_id = $this->insert('notes', $sql);
+		
+		$ext = $this->trigger(self::EventNoteAddPost, $this, compact('data', 'note_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $note_id = $ext->last();
+				
 		return $note_id;
 	}
 	
@@ -273,8 +280,16 @@ class Notes extends AbstractModel
 	 */
 	public function removeNote($id)
 	{
-		$note = new PM_Model_DbTable_Notes;
-		return $note->deleteNote($id);
+	    $data = $this->getNoteById($id);
+	    $ext = $this->trigger(self::EventNoteRemovePre, $this, compact('id', 'data'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $id = $ext->last();
+	    	    
+		$remove = $this->remove('notes', array('id' => $id));
+		
+		$ext = $this->trigger(self::EventNoteRemovePost, $this, compact('id', 'data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $remove = $ext->last();
+				
+		return $remove;
 	}
 	
 	/**
