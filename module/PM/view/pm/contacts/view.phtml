@@ -41,7 +41,7 @@
     		<?php if($this->contact['job_title']):?>
 			<span class="bold">Title:</span> <?php echo $this->contact['job_title']; ?><br />
 			<?php endif; ?>
-			<span class="bold">Company:</span> <a href="<?php echo $this->url('companies/view', array('module' => 'pm','controller' => 'companies','action'=>'view', 'id' => $this->contact['company_id']), null, TRUE); ?>"><?php echo $this->contact['company_name']; ?></a><br />   
+			<span class="bold">Company:</span> <a href="<?php echo $this->url('companies/view', array('company_id' => $this->contact['company_id'])); ?>"><?php echo $this->contact['company_name']; ?></a><br />   
 			<span class="bold">Last Modified:</span> <?php echo $this->RelativeDate($this->contact['last_modified']); ?><br />
 			<span class="bold">Created Date:</span> <?php echo $this->RelativeDate($this->contact['created_date']); ?> 				
     	</p>

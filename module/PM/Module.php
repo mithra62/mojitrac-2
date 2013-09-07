@@ -33,6 +33,7 @@ use PM\Form\ProjectForm;
 use PM\Form\CompanyForm;
 use PM\Form\BookmarkForm;
 use PM\Form\NoteForm;
+use PM\Form\ContactForm;
 
 use PM\Event\ActivityLogEvent;
 
@@ -157,6 +158,9 @@ class Module
 				},	
 				'PM\Form\NoteForm' => function($sm) {
 					return new NoteForm('note');
+				},	
+				'PM\Form\ContactForm' => function($sm) {
+					return new ContactForm('contact', $sm->get('PM\Model\Companies'), $sm->get('PM\Model\Options'));
 				},
 				'PM\Event\ActivityLogEvent' => function($sm) {
 				    $auth = $sm->get('AuthService');

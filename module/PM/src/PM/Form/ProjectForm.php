@@ -56,52 +56,52 @@ class ProjectForm extends BaseForm
 		));	
 
 		$this->add(array(
-				'name' => 'company_id',
-				'type' => 'Select',
-				'attributes' => array(
-					'class' => 'select input',
-				),
-				'options' => array(
-					'value_options' => Companies::companies($companies, TRUE),
-				)
+			'name' => 'company_id',
+			'type' => 'Select',
+			'attributes' => array(
+				'class' => 'select input',
+			),
+			'options' => array(
+				'value_options' => Companies::companies($companies, TRUE),
+			)
 		));
 
 		$this->add(array(
-				'name' => 'status',
-				'type' => 'Select',
-				'attributes' => array(
-					'class' => 'select input',
-				),
-				'options' => array(
-					'value_options' => Projects::status(),
-				)
+			'name' => 'status',
+			'type' => 'Select',
+			'attributes' => array(
+				'class' => 'select input',
+			),
+			'options' => array(
+				'value_options' => Projects::status(),
+			)
 		));
 
 		$this->add(array(
-				'name' => 'type',
-				'type' => 'Select',
-				'attributes' => array(
-					'class' => 'select input',
-				),
-				'options' => array(
-					'value_options' => Projects::types($options),
-				)
+			'name' => 'type',
+			'type' => 'Select',
+			'attributes' => array(
+				'class' => 'select input',
+			),
+			'options' => array(
+				'value_options' => Projects::types($options),
+			)
 		));		
 
 		$this->add(array(
-				'name' => 'start_date',
-				'type' => 'Text',
-				'attributes' => array(
-					'class' => 'input small',
-				)
+			'name' => 'start_date',
+			'type' => 'Text',
+			'attributes' => array(
+				'class' => 'input small',
+			)
 		));
 
 		$this->add(array(
-				'name' => 'end_date',
-				'type' => 'Text',
-				'attributes' => array(
-					'class' => 'input small',
-				),
+			'name' => 'end_date',
+			'type' => 'Text',
+			'attributes' => array(
+				'class' => 'input small',
+			),
 		));
 
         $this->add(array(
@@ -115,12 +115,12 @@ class ProjectForm extends BaseForm
         ));
         		
 		$this->add(array(
-				'name' => 'submit',
-				'type' => 'Submit',
-				'attributes' => array(
-						'value' => 'Go',
-						'id' => 'submitbutton',
-				),
+			'name' => 'submit',
+			'type' => 'Submit',
+			'attributes' => array(
+				'value' => 'Go',
+				'id' => 'submitbutton',
+			),
 		));
 	}
 }

@@ -14,7 +14,6 @@ namespace PM\Model;
 
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 
 use Application\Model\AbstractModel;
@@ -46,6 +45,40 @@ class Contacts extends AbstractModel
 	}
 	
 	/**
+	 * Returns an array for modifying $_name
+	 * @param $data
+	 * @return array
+	 */
+	public function getSQL($data){
+		return array(
+    		'job_title' => (!empty($data['job_title']) ? $data['job_title'] : ''),
+    		'company_id' => (!empty($data['company_id']) ? $data['company_id'] : ''),
+    		'first_name' => (!empty($data['first_name']) ? $data['first_name'] : ''),
+    		'last_name' => (!empty($data['last_name']) ? $data['last_name'] : ''),
+    		'title' => (!empty($data['title']) ? $data['title'] : ''),
+    		'email' => (!empty($data['email']) ? $data['email'] : ''),
+    		'email2' => (!empty($data['email2']) ? $data['email2'] : ''),
+    		'url' => (!empty($data['url']) ? $data['url'] : ''),
+    		'phone_home' => (!empty($data['phone_home']) ? $data['phone_home'] : ''),
+    		'phone2' => (!empty($data['phone2']) ? $data['phone2'] : ''),
+    		'fax' => (!empty($data['fax']) ? $data['fax'] : ''),
+    		'mobile' => (!empty($data['mobile']) ? $data['mobile'] : ''),
+    		'address1' => (!empty($data['address1']) ? $data['address1'] : ''),
+    		'address2' => (!empty($data['address2']) ? $data['address2'] : ''),
+    		'city' => (!empty($data['city']) ? $data['city'] : ''),
+    		'state' => (!empty($data['state']) ? $data['state'] : ''),
+    		'zip' => (!empty($data['zip']) ? $data['zip'] : ''),
+    		'description' => (!empty($data['description']) ? $data['description'] : ''),
+    		'jabber' => (!empty($data['jabber']) ? $data['jabber'] : ''),
+    		'icq' => (!empty($data['icq']) ? $data['icq'] : ''),
+    		'msn' => (!empty($data['msn']) ? $data['msn'] : ''),
+    		'yahoo' => (!empty($data['yahoo']) ? $data['yahoo'] : ''),
+    		'aol' => (!empty($data['aol']) ? $data['aol'] : ''),
+    		'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+	}	
+	
+	/**
 	 * Sets the input filter to use
 	 * @param InputFilterInterface $inputFilter
 	 * @throws \Exception
@@ -66,7 +99,16 @@ class Contacts extends AbstractModel
 			$factory = new InputFactory();
 	
 			$inputFilter->add($factory->createInput(array(
-				'name'     => 'name',
+				'name'     => 'email',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+			)));
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'first_name',
 				'required' => true,
 				'filters'  => array(
 					array('name' => 'StripTags'),
@@ -142,8 +184,16 @@ class Contacts extends AbstractModel
 	 */
 	public function updateContact($data, $id)
 	{
-		$sql = $contact->getSQL($data);
-		return $contact->update($sql, "id = '$id'");
+	    $ext = $this->trigger(self::EventContactAddPre, $this, compact('data', 'id'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+	    	    
+		$sql = $this->getSQL($data);
+		$update = $this->update('company_contacts', $sql, array('id' => $id));
+		
+		$ext = $this->trigger(self::EventContactAddPost, $this, compact('data', 'id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $update = $ext->last();		
+		
+		return $update;
 	}
 	
 	/**

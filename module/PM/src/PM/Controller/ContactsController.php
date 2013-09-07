@@ -98,69 +98,61 @@ class ContactsController extends AbstractPmController
 	 */
 	public function editAction()
 	{
-		
-	    if(!$this->perm->check($this->identity, 'manage_company_contacts'))
-        {
-        	$this->_helper->redirector('index', 'contacts', 'pm');
-        	exit;
+	    if(!$this->perm->check($this->identity, 'manage_company_contacts')) {
+        	return $this->redirect()->toRoute('contacts');
         }
         		
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('contact_id');
 		if (!$id) {
-			$this->_helper->redirector('index','contacts');
-			exit;
+			return $this->redirect()->toRoute('contacts');
 		}
 		
-		$contact = new PM_Model_Contacts;
+		$contact = $this->getServiceLocator()->get('PM\Model\Contacts');
 		$contact_data = $contact->getContactById($id);
 		if(!$contact_data)
 		{
-			$this->_helper->redirector('index','contacts');
-			exit;
+			return $this->redirect()->toRoute('contacts');
 		}
 
-		$form = $contact->getContactForm(array(
-            'action' => '/pm/contacts/edit/',
-            'method' => 'post',
-        ), array('id' => $id));
-        
-        $this->view->id = $id;
-        
-        $form->populate($contact->getContactById($id));	
-        	
-        $this->view->form = $form;
-        
+		$form = $this->getServiceLocator()->get('PM\Form\ContactForm');
+        $form->setData($contact->getContactById($id));	
+        $request = $this->getRequest();
         if ($this->getRequest()->isPost()) 
         {
             $formData = $this->getRequest()->getPost();
+            $form->setInputFilter($contact->getInputFilter());  
+            $form->setData($request->getPost());
             if ($form->isValid($formData)) 
             {
-            
-            	if($contact->updateContact($formData, $id))
+            	if($contact->updateContact($formData->toArray(), $id))
 	            {	
-			    	$this->_flashMessenger->addMessage('Contact updated!');
-					$this->_helper->redirector('view','contacts', 'pm', array('id' => $id));
+			    	$this->flashMessenger()->addMessage('Contact updated!');
+					return $this->redirect()->toRoute('contacts/view', array('contact_id' => $id));
 					        		
             	} 
             	else 
             	{
-            		$this->view->errors = array('Couldn\'t update contact...');
-            		$form->populate($formData);
+            		$view['errors'] = array('Couldn\'t update contact...');
+            		$form->setData($formData);
             	}
                 
             } 
             else 
             {
-            	$this->view->errors = array('Please fix the errors below.');
-                $form->populate($formData);
+            	$view['errors'] = array('Please fix the errors below.');
+                $form->setData($formData);
             }
             
 	    }
 	    
-	    $this->view->contact_data = $contact_data;
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		    
-		$this->view->headTitle('Edit Contact', 'PREPEND');     	
+	    $view['id'] = $id;
+	    $view['form'] = $form;	    
+	    
+	    $view['contact_data'] = $contact_data;
+		$this->layout()->setVariable('layout_style', 'right');     
+		//$this->view->headTitle('Edit Contact', 'PREPEND');     	
+		
+		return $this->ajax_output($view);
 	}
 	
 	/**

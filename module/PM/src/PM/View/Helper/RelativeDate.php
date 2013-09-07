@@ -41,12 +41,12 @@ class RelativeDate extends BaseViewHelper
 			$prefs = $this->getUserData();
 			if(isset($prefs['enable_rel_time']) && $prefs['enable_rel_time'] == '0')
 			{
-				return $this->c($str_date).$this->view->formatDate($date);
+				$return = $this->c($str_date).$this->view->formatDate($date);
 			}
 
 			if(date('Y-m-d') == $date)
 			{
-				return $this->c($str_date).'Today';
+				$return = $this->c($str_date).'Today';
 			}
 			
 			$time_diff = time() - $str_date;
@@ -54,12 +54,14 @@ class RelativeDate extends BaseViewHelper
 
 			if ( ($time_diff > 0 && $time_diff < (24*60*60)*7) || ($time_diff < 0 && $time_diff < (24*60*60)*7))
 			{
-				return $this->c($str_date).$this->relative_datetime($date); 
+				$return = $this->c($str_date).$this->relative_datetime($date); 
 			}
 			else
 			{			
-				return $this->c($str_date).$this->formatDate($date, $prefs['date_format']);
+				$return = $this->c($str_date).$this->formatDate($date, $prefs['date_format']);
 			}
+			
+			return '<time datetime="'.date('r', $str_date).'" title="'.date('r', $str_date).'">'.$return.'</time>';
 		}
 	}
 	
@@ -109,13 +111,13 @@ class RelativeDate extends BaseViewHelper
 	
 		for($j = 0; $difference > $lengths[$j] && $total_lengths > $j; $j++)
 		{
-		$difference /= $lengths[$j];
+            $difference /= $lengths[$j];
 		}
 	
 		$difference = round($difference);
 		if($difference != 1)
 		{
-		$periods[$j].= "s";
+            $periods[$j].= "s";
 		}
 	
 		$text = "$difference $periods[$j] $ending";
