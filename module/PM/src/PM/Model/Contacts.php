@@ -213,26 +213,15 @@ class Contacts extends AbstractModel
 	 */
 	public function removeContact($id)
 	{
-		if($contact->deleteContact($id))
-		{
-			/*
-			$projects = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-			$projects->removeProjectsByCompany($id);
-			
-			$tasks = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-			$tasks->removeTasksByCompany($id);
-			
-			$files = new PM_Model_Files(new PM_Model_DbTable_Files);
-			$files->removeFilesByCompany($id);
-
-			$notes = new PM_Model_Notes;
-			$notes->removeNotesByCompany($id);
-
-			$bookmarks = new PM_Model_Bookmarks;
-			$bookmarks->removeBookmarksByCompany($id);	
-			*/		
-		}
+	    $data = $this->getContactById($id);
+	    $ext = $this->trigger(self::EventContactRemovePre, $this, compact('id', 'data'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $id = $ext->last();
+	    	    
+		$remove = $this->remove('company_contacts', array('id' => $id));
 		
-		return TRUE;
+		$ext = $this->trigger(self::EventContactRemovePost, $this, compact('id', 'data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $remove = $ext->last();
+				
+		return $remove;
 	}
 }

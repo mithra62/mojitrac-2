@@ -220,53 +220,42 @@ class ContactsController extends AbstractPmController
 	{
 		if(!$this->perm->check($this->identity, 'manage_company_contacts'))
         {
-        	$this->_helper->redirector('index', 'contacts', 'pm');
-        	exit;
+        	return $this->redirect()->toRoute('contacts');
         }
         		
-		$contacts = new PM_Model_Contacts;
-		$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
+		$contacts = $this->getServiceLocator()->get('PM\Model\Contacts');
+		$id = $this->params()->fromRoute('contact_id');
+		$confirm = $this->params()->fromPost('confirm');
+		$fail = $this->params()->fromPost('fail');
 		
     	if(!$id)
     	{
-    		$this->_helper->redirector('index','contacts');
-    		exit;
+    		return $this->redirect()->toRoute('contacts');
     	}
     	
-    	$this->view->contact = $contacts->getContactById($id);
-    	if(!$this->view->contact)
+    	$view['contact'] = $contacts->getContactById($id);
+    	if(!$view['contact'])
     	{
-			$this->_helper->redirector('index','contacts');
-			exit;
+			return $this->redirect()->toRoute('contacts');
     	}
 
     	if($fail)
     	{
-			$this->_helper->redirector('view','contacts', 'pm', array('id' => $id));
-			exit;   		
+			return $this->redirect()->toRoute('contacts/view', array('contact_id' => $id));
     	}
     	
     	if($confirm)
     	{
     	   	if($contacts->removeContact($id))
     		{	
-				$this->_flashMessenger->addMessage('Contact Removed');
-				$this->_helper->redirector('index','contacts');
-				exit;
-				
+				$this->flashMessenger()->addMessage('Contact Removed');
+				return $this->redirect()->toRoute('companies/view', array('company_id' => $view['contact']['company_id']));
     		}
     	}
     	
-    	/*
-    	$this->view->project_count = $contacts->getProjectCount($id);
-    	$this->view->task_count = $contacts->getTaskCount($id);
-    	$this->view->file_count = $contacts->getFileCount($id);
-    	*/
-    	
-		$this->view->title = "Delete Contact: ". $this->view->contact['first_name'].' '.$this->view->contact['last_name'];
-		$this->view->headTitle('Delete Contact: '. $this->view->contact['first_name'].' '.$this->view->contact['last_name'], 'PREPEND');
-		$this->view->id = $id;    	
+		$view['title'] = "Delete Contact: ". $this->view->contact['first_name'].' '.$this->view->contact['last_name'];
+		//$this->view->headTitle('Delete Contact: '. $this->view->contact['first_name'].' '.$this->view->contact['last_name'], 'PREPEND');
+		$view['id'] = $id;
+		return $this->ajax_output($view);
 	}
 }
