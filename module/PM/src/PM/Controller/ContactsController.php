@@ -44,15 +44,15 @@ class ContactsController extends AbstractPmController
 	public function indexAction()
 	{
 		
-	    $contacts = new PM_Model_Contacts;
-		$view = $this->_getParam("view",FALSE);
-		$this->view->company = FALSE;
-		$company_id = $this->_getParam("company",FALSE);
+	    $contacts = $this->getServiceLocator()->get('PM\Model\Contacts');
+		//$view = $this->_getParam("view",FALSE);
+		$view['company'] = FALSE;
+		$company_id = $this->params()->fromRoute('company_id');
 		if($company_id)
 		{
-			$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
-			$this->view->company = $company->getCompanyById($company_id);
-			if(!$this->view->company)
+			$company = $this->getServiceLocator()->get('PM\Model\Companies');
+			$view['company'] = $company->getCompanyById($company_id);
+			if(!$view['company'])
 			{
 				$company_id = FALSE;
 			}
@@ -60,14 +60,16 @@ class ContactsController extends AbstractPmController
 		
 		if($company_id)
 		{
-			$this->view->contacts = $contacts->getContactsByCompanyId($company_id);
+			$view['contacts'] = $contacts->getContactsByCompanyId($company_id);
 		}
 		else
 		{
-			$this->view->contacts = $contacts->getAllContacts($view);
+			$view['contacts'] = $contacts->getAllContacts($view);
 		}
-		$this->view->active_sub = $view;
-		$this->view->title = FALSE;
+			    
+// 		/$this->view->active_sub = $view;
+		//$this->view->title = FALSE;'
+		return $view;
 	}
 	
 	/**

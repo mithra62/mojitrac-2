@@ -43,8 +43,8 @@
 			<td><?php echo $this->RelativeDate($contact['last_modified']); ?></td>
 			<?php if($this->enable_actions):?>
 			<td>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'contacts','action'=>'edit', 'id' => $contact['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit');?></a>
-			<a <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> href="<?php echo $this->url(array('module' => 'pm','controller'=>'contacts','action'=>'remove', 'id' => $contact['id']), null, TRUE); ?>" title="Delete"><?php echo $this->InteractIcon('cross', 'Delete');?></a>
+			<a href="<?php echo $this->url('contacts/edit', array('contact_id' => $contact['id'])); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit');?></a>
+			<a <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> href="<?php echo $this->url('contacts/remove', array('contact_id' => $contact['id'])); ?>" title="Delete"><?php echo $this->InteractIcon('cross', 'Delete');?></a>
 			</td>
 			<?php endif; ?>
 		</tr>
