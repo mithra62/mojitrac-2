@@ -272,19 +272,19 @@ endif;
 <div class="content_headers">
 	<div class="note_header">Notes</div>
 	<div class="actions">
-		<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'notes'), null, TRUE); ?>" rel="facebox" title="About Company Notes">
+		<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'notes')); ?>" rel="facebox" title="About Company Notes">
 			<?php echo $this->InteractIcon('help', 'About Company Notes');?>
 			<div class="action_text">Help</div>
 		</a>
 	</div>		
 	<div class="actions">
-		<a href="<?php echo $this->url('notes', array('module' => 'pm','controller'=>'notes','action'=>'index', 'company' => $this->id), null, TRUE); ?>" title="View All">
+		<a href="<?php echo $this->url('notes/all', array('id' => $this->id, 'type' => 'company')); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All Company Notes');?>
 			<div class="action_text">View All</div>
 		</a>
 	</div>		
 	<div class="actions">
-		<a rel="facebox" href="<?php echo $this->url('notes/add', array('module' => 'pm','controller'=>'notes','action'=>'add', 'company' => $this->id), null, TRUE); ?>" title="Add Note">
+		<a rel="facebox" href="<?php echo $this->url('notes/add', array('id' => $this->id, 'type' => 'company')); ?>" title="Add Note">
 			<?php echo $this->InteractIcon('add', 'Add Company Note');?>
 			<div class="action_text">Add Note</div>
 		</a>
@@ -296,7 +296,7 @@ if($this->notes):
 	echo $this->partial('pm/notes/partials/notes', $options); 
 else: 
 ?>
-<div class="information png_bg">There aren't any notes added yet. Want to <a href="<?php echo $this->url('notes', array('module' => 'pm','controller'=>'notes','action'=>'add', 'company' => $this->id), null, TRUE); ?>">add</a> one?</div>
+<div class="information png_bg">There aren't any notes added yet. Want to <a href="<?php echo $this->url('notes/add', array('id' => $this->id, 'type' => 'company')); ?>">add</a> one?</div>
 <?php 
 endif;
 ?>
@@ -310,13 +310,13 @@ endif;
 		</a>
 	</div>		
 	<div class="actions">
-		<a href="<?php echo $this->url('bookmarks/all', array('id' => $this->id, 'type' => 'company'), null, TRUE); ?>" title="View All">
+		<a href="<?php echo $this->url('bookmarks/all', array('id' => $this->id, 'type' => 'company')); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All Company Bookmarks');?> 
 			<div class="action_text">View All</div>
 		</a>
 	</div>	
 	<div class="actions">
-		<a rel="facebox" href="<?php echo $this->url('bookmarks/add', array('type' => 'companies', 'id' => $this->id), null, TRUE); ?>" title="Add Bookmark">
+		<a rel="facebox" href="<?php echo $this->url('bookmarks/add', array('id' => $this->id, 'type' => 'company')); ?>" title="Add Bookmark">
 			<?php echo $this->InteractIcon('add', 'Add Company Bookmark');?>
 			<div class="action_text">Add Bookmark</div>
 		</a>
@@ -327,7 +327,7 @@ endif;
 	echo $this->partial('pm/bookmarks/partials/bookmarks', $options); 
 else: 
 ?>
-<div class="information png_bg">There aren't any bookmarks added yet. Want to <a href="<?php echo $this->url('bookmarks/add', array('module' => 'pm','controller'=>'bookmarks','action'=>'add', 'company' => $this->id), null, TRUE); ?>">add</a> one?</div>
+<div class="information png_bg">There aren't any bookmarks added yet. Want to <a href="<?php echo $this->url('bookmarks/add', array('id' => $this->id, 'type' => 'company')); ?>">add</a> one?</div>
 <?php endif; ?>
 
 <?php if($this->company['type'] == '1' || $this->company['type'] == '6'): ?>
@@ -335,13 +335,13 @@ else:
 	<div class="content_headers">
 		<div class="timetracker_header">Timetracker</div>
 		<div class="actions">
-			<a href="<?php echo $this->url('times', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'times'), null, TRUE); ?>" rel="facebox" title="About Company Times">
+			<a href="<?php echo $this->url('times', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'times')); ?>" rel="facebox" title="About Company Times">
 				<?php echo $this->InteractIcon('help', 'About Company Times');?>
 				<div class="action_text">Help</div>
 			</a>
 		</div>			
 		<div class="actions">
-			<a href="<?php echo $this->url('times', array('module' => 'pm','controller'=>'times','action'=>'view', 'company' => $this->id), null, TRUE); ?>" title="View All">
+			<a href="<?php echo $this->url('times', array('company_id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All Company Time');?>
 				<div class="action_text">View All</div>
 			</a>
