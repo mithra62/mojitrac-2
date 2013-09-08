@@ -6,7 +6,7 @@ Are you sure you want to remove "<?php echo $this->task['name']?>"? This can not
 </div>
 
 <p>
-<form action="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'remove', 'id' => $this->id), null, TRUE); ?>" method="POST">
+<form action="<?php echo $this->url('tasks/remove', array('task_id' => $this->id), null, TRUE); ?>" method="POST">
 	<input type="submit" class="submit" value="Yes" name="confirm" /> <input type="submit" class="submit" value="No" name="fail"/>
 </form>
 </p>

@@ -257,7 +257,7 @@ class TasksController extends AbstractPmController
 			exit;
 		}		
 		
-		$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
 		$task_data = $task->getTaskById($id);
 		if (!$task_data) 
 		{
@@ -340,87 +340,50 @@ class TasksController extends AbstractPmController
 		return $view;
 	}
 	
-	function removeAction()
+	public function removeAction()
 	{
 		
-		$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-		$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+		$id = $this->params()->fromRoute('task_id');
+		$confirm = $this->params()->fromPost('confirm');
+		$fail = $this->params()->fromPost('fail');
 		
     	if(!$id)
     	{
-    		$this->_helper->redirector('index','projects');
-    		exit;
+    		return $this->redirect()->toRoute('pm');
     	}
     	
     	$task_data = $task->getTaskById($id);
-    	$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+    	$project = $this->getServiceLocator()->get('PM\Model\Projects');
 		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_projects'))
 		{
-			$this->_helper->redirector('view','tasks', 'pm', array('id' => $id));
-			exit;				
+			return $this->redirect()->toRoute('tasks/view', array('task_id' => $id));
 		}
 			    	
-    	$this->view->task = $task_data;
-    	if(!$this->view->task)
+    	$view['task'] = $task_data;
+    	if(!$view['task'])
     	{
-			$this->_helper->redirector('index','projects');
-			exit;
+			return $this->redirect()->toRoute('pm');
     	}
 
     	if($fail)
     	{
-			$this->_helper->redirector('view','tasks', 'pm', array('id' => $id));
-			exit;   		
+			return $this->redirect()->toRoute('tasks/view', array('task_id' => $id));
     	}
     	
     	if($confirm)
     	{
     	   	if($task->removeTask($id))
     		{	
-    			PM_Model_ActivityLog::logTaskRemove($task_data, $id, $task_data['project_id'], $this->identity);
-				$this->_flashMessenger->addMessage('Task Removed');
-				$this->_helper->redirector('view','projects', 'pm', array('id' => $task_data['project_id']));
-				exit;
-				
+				$this->flashMessenger()->addMessage('Task Removed');
+				return $this->redirect()->toRoute('projects/view', array('project_id' => $task_data['project_id']));
     		}
     	}
     	
-    	$this->view->file_count = $task->getFileCount($id);
+    	$view['file_count'] = $task->getFileCount($id);
     	
-		$this->view->headTitle('Delete Task: '. $this->view->task['name'], 'PREPEND');
-		$this->view->id = $id;    	
+		//$this->view->headTitle('Delete Task: '. $this->view->task['name'], 'PREPEND');
+		$view['id'] = $id;
+		return $this->ajax_output($view);
 	}	
-	
-    public function icalAction()
-    {
-    	$this->view->layout()->disableLayout();
-		$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-		$id = $this->_request->getParam('id', FALSE);
-		
-        if(!$id)
-    	{
-    		$this->_helper->redirector('index','projects');
-    		exit;
-    	}
-    	
-    	$task_data = $task->getTaskById($id);
-    	$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_projects'))
-		{
-			$this->_helper->redirector('view','tasks', 'pm', array('id' => $id));
-			exit;				
-		}
-			
-    	$ical = new PM_Model_Ical;
-    	$ical->event_id = 'SSPCAEvent_Moji_task_'.$id;
-    	$ical->desc = $task_data['description'];
-    	$ical->filename = $ical->event_id.'.ics';
-    	$ical->download();
-    	
-    	//print_r($task_data);
-    	exit;
-    	
-    }	
 }

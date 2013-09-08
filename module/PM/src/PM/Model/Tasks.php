@@ -504,14 +504,14 @@ class Tasks extends AbstractModel
 	 */
 	public function removeTask($task_id)
 	{
-		$ext = $this->event('pre.moji_task_remove', $this, compact('task_id'));
-		if($ext->stopped()) return $ext->last();
-				
-		$task = new PM_Model_DbTable_Tasks;
-		$remove = $task->deleteTask($task_id);
+	    $data = $this->getTaskById($task_id);
+		$ext = $this->trigger(self::EventTaskRemovePre, $this, compact('task_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 		
-		$ext = $this->event('post.moji_task_remove', $this, compact('task_id'));
-		if($ext->stopped()) return $ext->last();
+		$remove = $this->remove('tasks', array('id' => $task_id));
+		
+		$ext = $this->trigger(self::EventTaskRemovePost, $this, compact('task_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $remove = $ext->last();
 
 		return $remove;
 	}
@@ -546,11 +546,10 @@ class Tasks extends AbstractModel
 	 */
 	public function getFileCount($id, $status = FALSE)
 	{
-		$file = new PM_Model_DbTable_Files;
-		$sql = $file->select()
-					->from($file->getTableName(), array(new Zend_Db_Expr('COUNT(id) AS count')))
+		$sql = $this->db->select()
+					->from('files')->columns( array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
 					->where('task_id = ?', $id);
-		$data = $file->getFile($sql);
+		$data = $this->getRow($sql);
 		if(is_array($data))
 		{
 			return $data['count'];
