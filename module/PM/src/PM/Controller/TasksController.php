@@ -218,7 +218,7 @@ class TasksController extends AbstractPmController
 
 	            	//$task->updateCompanyId($id, FALSE, $formData['project_id']);	            	
 			    	$this->flashMessenger()->addMessage('Task updated!');
-					return $this->redirect()->toRoute('tasks/view', array('task_id' => $id));   		
+					return $this->redirect()->toRoute('tasks/view', array('task_id' => $id));
             	} 
             	else 
             	{
@@ -280,81 +280,64 @@ class TasksController extends AbstractPmController
 	public function addAction()
 	{
 		
-		$project = $this->_request->getParam('project', FALSE);
-		$company = $this->_request->getParam('company', FALSE);
-		if(!$company && !$project)
+		$project = $this->params()->fromRoute('project_id');
+		if(!$project)
 		{
-			$this->_helper->redirector('index','tasks');
-			exit;
+			return $this->redirect()->toRoute('pm');
 		}
 		
 		if($project)
 		{
-			$projects = new PM_Model_Projects(new PM_Model_DbTable_Projects);			
-			$this->view->project_data = $projects->getProjectById($project);
-			if(!$this->view->project_data)
+			$projects = $this->getServiceLocator()->get('PM\Model\Projects');		
+			$view['project_data'] = $projects->getProjectById($project);
+			if(!$view['project_data'])
 			{
-				$this->_helper->redirector('index','tasks');
-				exit;				
+				return $this->redirect()->toRoute('pm');			
 			}
 			
 		}
 				
-		$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-		$form = $task->getTaskForm($project);
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+		$form = $this->getServiceLocator()->get('PM\Form\TaskForm');
+		$form->setup($project);
 		
 		if ($this->getRequest()->isPost()) {
     		
     		$formData = $this->getRequest()->getPost();
+    		$form->setInputFilter($task->getInputFilter());
+    		$form->setData($formData);    		
 			if ($form->isValid($formData)) 
 			{
 				$formData['creator'] = $this->identity;
-				if((is_numeric($formData['start_hour']) && $formData['start_hour'] <= 24) 
-				&& (is_numeric($formData['start_minute']) && $formData['start_minute'] <= 60))
-				{	
-					$formData['start_date'] = $formData['start_date'].' '.$formData['start_hour'].':'.$formData['start_minute'];
-				}
-				
-				if((is_numeric($formData['end_hour']) && $formData['end_hour'] <= 24) 
-				&& (is_numeric($formData['end_minute']) && $formData['end_minute'] <= 60))
-				{	
-					$formData['end_date'] = $formData['end_date'].' '.$formData['end_hour'].':'.$formData['end_minute'];
-				}
-				
-				if($id = $task->addTask($formData))
+				$task_id = $task->addTask($formData->toArray());
+				if($task_id)
 				{
-					PM_Model_ActivityLog::logTaskAdd($formData, $id, $formData['project_id'], $this->identity);					
+					//PM_Model_ActivityLog::logTaskAdd($formData, $id, $formData['project_id'], $this->identity);					
 				    if($formData['assigned_to'] != 0)
             		{
-            			$formData['id'] = $id;
-            			$task->logTaskAssignment($id, $formData['assigned_to'], $this->identity);            			
-            			PM_Model_ActivityLog::logTaskAssignment($formData, $id, $formData['project_id'], $this->identity);
-            			
-            			$noti = new PM_Model_Notifications;            			
-            			$noti->sendTaskAssignment($formData);
+            		    //todo
+//             			$noti = new PM_Model_Notifications;            			
+//             			$noti->sendTaskAssignment($formData);
             		}
             							
-					$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+					$project = $this->getServiceLocator()->get('PM\Model\Projects');
 					$project->updateProjectTaskCount($formData['project_id']);
-					$task->updateCompanyId($id, FALSE, $formData['project_id']);
+					$task->updateCompanyId($task_id, FALSE, $formData['project_id']);
 
-			    	$this->_flashMessenger->addMessage('Task Added!');
-					$this->_helper->redirector('view','tasks', 'pm', array('id' => $id));
-										
+			    	$this->flashMessenger()->addMessage('Task Added!');
+					return $this->redirect()->toRoute('tasks/view', array('task_id' => $task_id));
 					exit;
 				}
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
+				$view['errors'] = array('Please fix the errors below.');
 			}
 		 }
 		
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		
-		$this->view->headTitle('Add Task', 'PREPEND');
-
-		$this->view->form = $form;
+		$view['form'] = $form;
+        $this->layout()->setVariable('layout_style', 'left');
+		return $view;
 	}
 	
 	function removeAction()

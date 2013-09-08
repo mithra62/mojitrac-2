@@ -367,18 +367,35 @@ class Tasks extends AbstractModel
 	 * @param $bypass_update
 	 * @return mixed
 	 */
-	public function addTask($data, $bypass_update = FALSE)
+	public function addTask(array $data, $bypass_update = FALSE)
 	{
-		$ext = $this->event('pre.moji_task_add', $this, compact('data'));
-		if($ext->stopped()) return $ext->last();
-				
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->getSQL($data);	
-		$sql['creator'] = $data['creator'];
-		$task_id = $task->addTask($sql);	
+		$ext = $this->trigger(self::EventTaskAddPre, $this, compact('data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 
-		$ext = $this->event('post.moji_task_add', $this, compact('task_id', 'data'));
-		if($ext->stopped()) return $ext->last();		
+		if((is_numeric($data['start_hour']) && $data['start_hour'] <= 24)
+		&& (is_numeric($data['start_minute']) && $data['start_minute'] <= 60))
+		{
+			$data['start_date'] = $data['start_date'].' '.$data['start_hour'].':'.$data['start_minute'];
+		}
+		
+		if((is_numeric($data['end_hour']) && $data['end_hour'] <= 24)
+		&& (is_numeric($data['end_minute']) && $data['end_minute'] <= 60))
+		{
+			$data['end_date'] = $data['end_date'].' '.$data['end_hour'].':'.$data['end_minute'];
+		}
+		
+		$sql = $this->getSQL($data);	
+		$sql['creator'] = $data['creator'];
+		$task_id = $this->insert('tasks', $sql);	
+
+	    if($task_id && $data['assigned_to'] != 0)
+	    {
+	    	$data['id'] = $task_id;
+	    	$this->logTaskAssignment($task_id, $data['assigned_to'], $sql['creator']);
+	    }
+
+		$ext = $this->trigger(self::EventTaskAddPost, $this, compact('data', 'task_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();	
 				
 		return $task_id;
 	}
@@ -446,17 +463,10 @@ class Tasks extends AbstractModel
 	 * @param int $project_id
 	 * @return int
 	 */
-	public function updateCompanyId($task_id, $company_id = FALSE, $project_id = FALSE)
+	public function updateCompanyId($task_id, $company_id)
 	{
-		if($project_id && !$company_id)
-		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-			$company_id = $project->getCompanyIdById($project_id);
-		}
-		
-		$task = new PM_Model_DbTable_Tasks;
 		$sql = array('company_id' => $company_id);
-		return $task->update($sql, "id = '$task_id'");
+		return $this->update('tasks', $sql, array('id' => $task_id));
 	}
 	
 	/**
@@ -601,10 +611,11 @@ class Tasks extends AbstractModel
 	    $ext = $this->trigger(self::EventTaskAssignPre, $this, compact('task_id', 'assigned_to', 'assigned_by'), $this->setXhooks($data));
 	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 	    	    
-		$sql = $assignment->getSQL(array('task_id'=>$task_id, 'assigned_to' => $assigned_to, 'assigned_by' => $assigned_by, 'assign_comment' => $assign_comment));
-		$return = $assignment->addTaskAssignment($sql);
+		$sql = $this->getAssignmentSQL(array('task_id'=>$task_id, 'assigned_to' => $assigned_to, 'assigned_by' => $assigned_by, 'assign_comment' => $assign_comment));
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
+		$return = $this->insert('task_assignments', $sql);
 		
-		$ext = $this->trigger(self::EventTaskAssignPre, $this, compact('task_id', 'assigned_to', 'assigned_by'), $this->setXhooks($data));
+		$ext = $this->trigger(self::EventTaskAssignPost, $this, compact('task_id', 'assigned_to', 'assigned_by'), $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $return = $ext->last();		
 		
 		return $return;

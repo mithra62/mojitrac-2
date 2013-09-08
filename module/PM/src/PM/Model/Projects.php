@@ -352,8 +352,8 @@ class Projects extends AbstractModel
 	 */
 	public function updateProjectTaskCount($id, $count = 1, $col = 'task_count')
 	{
-		$sql = array($col => new Zend_Db_Expr($col.'+'.$count));
-		return $this->db->updateProject($sql, $id);
+		$sql = array($col => new \Zend\Db\Sql\Expression($col.'+'.$count));
+		return $this->update('projects', $sql, array('id' => $id));
 	}
 	
 	/**
@@ -364,7 +364,7 @@ class Projects extends AbstractModel
 	 */
 	public function updateProjectTime($id, $time)
 	{
-		$sql = array('hours_worked' => new Zend_Db_Expr('hours_worked+'.$time));
+		$sql = array('hours_worked' => new \Zend\Db\Sql\Expression('hours_worked+'.$time));
 		return $this->db->updateProject($sql, $id);		
 	}
 	
@@ -377,7 +377,7 @@ class Projects extends AbstractModel
 	 */
 	public function updateProjectFileCount($id, $count = 1, $col = 'task_count')
 	{
-		$sql = array($col => new Zend_Db_Expr($col.'+'.$count));
+		$sql = array($col => new \Zend\Db\Sql\Expression($col.'+'.$count));
 		return $this->db->updateProject($sql, $id);
 	}	
 	
