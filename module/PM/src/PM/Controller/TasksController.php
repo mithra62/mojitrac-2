@@ -47,34 +47,31 @@ class TasksController extends AbstractPmController
      */
 	public function indexAction()
 	{
-		$project_id = $this->_request->getParam('project', FALSE);
-		if($project_id)
+		$project_id = $this->params()->fromRoute('project_id');
+		if(!$project_id)
 		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-			if(!$project->isUserOnProjectTeam($this->identity, $project_id) && !$this->perm->check($this->identity, 'manage_projects'))
-			{
-				$this->_helper->redirector('index','index');
-				exit;				
-			}
-			
-			$project_data = $project->getProjectById($project_id);
-			if(!$project_data)
-			{
-				$this->_helper->redirector('index','tasks');
-				exit;
-			}
-			
-			$tasks = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-			$view = $this->_getParam("view",FALSE);
-			$this->view->active_sub = $view;
-		    $this->view->tasks = $tasks->getTasksByProjectId($project_id);
-		    $this->view->project_data = $project_data;			
+		    return $this->redirect()->toRoute('pm');
 		}
-		else
+		
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+		if(!$project->isUserOnProjectTeam($this->identity, $project_id) && !$this->perm->check($this->identity, 'manage_projects'))
 		{
-		    $this->_helper->redirector('index','index');
-			exit;
+			return $this->redirect()->toRoute('pm');			
 		}
+		
+		$project_data = $project->getProjectById($project_id);
+		if(!$project_data)
+		{
+			return $this->redirect()->toRoute('projects');
+		}
+		
+		$tasks = $this->getServiceLocator()->get('PM\Model\Tasks');
+		//$this->view->active_sub = $view;
+	    $view['tasks'] = $tasks->getTasksByProjectId($project_id);
+	    $view['project_data'] = $project_data;	
+
+	    return $view;
+
 	}
 	
 	/**

@@ -117,7 +117,7 @@ endif;
 			</a>
 		</div>				
 		<div class="actions">
-			<a href="<?php echo $this->url('tasks', array('module' => 'pm','controller'=>'tasks','action'=>'index', 'project' => $this->id), null, TRUE); ?>" title="View All">
+			<a href="<?php echo $this->url('tasks/all', array('project_id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All');?> 
 				<div class="action_text">View All</div>
 			</a>
@@ -126,7 +126,7 @@ endif;
 		<?php echo $this->ActionBlock('chart', 'Gantt Chart', $this->url('pm', array('module' => 'pm','controller' => 'reports','action'=>'gantt', 'project' => $this->id), null, TRUE), 'facebox'); ?>
 		
 		<div class="actions">
-			<a href="<?php echo $this->url('tasks/add', array('module' => 'pm','controller'=>'tasks','action'=>'add', 'project' => $this->id), null, TRUE); ?>" title="Add Task">
+			<a href="<?php echo $this->url('tasks/add', array('project_id' => $this->id)); ?>" title="Add Task">
 				<?php echo $this->InteractIcon('add', 'Add Task');?>  
 				<div class="action_text">Add Task</div>
 			</a>

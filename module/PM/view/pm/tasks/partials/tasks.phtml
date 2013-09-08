@@ -94,11 +94,11 @@
 			<?php endif; ?>	
 			<?php if($this->enable_actions):?>
 			<td>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'index', 'task'=> $task['id']), null, TRUE); ?>" title="Files"><?php echo $this->InteractIcon('folder', 'Files');?></a>
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'files','action'=>'index', 'task'=> $task['id']), null, TRUE); ?>" title="Files"><?php echo $this->InteractIcon('folder', 'Files');?></a>
 			
 			<?php if($this->CheckPermission('manage_tasks')):?>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'edit', 'id'=> $task['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit');?></a>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'remove', 'id'=> $task['id']), null, TRUE); ?>" title="Delete"><?php echo $this->InteractIcon('cross', 'Delete');?></a>
+			<a href="<?php echo $this->url('tasks/edit', array('task_id'=> $task['id'])); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit');?></a>
+			<a href="<?php echo $this->url('tasks/remove', array('task_id'=> $task['id'])); ?>" title="Delete"><?php echo $this->InteractIcon('cross', 'Delete');?></a>
 			<?php endif; ?>
 			</td>
 			<?php endif; ?>
