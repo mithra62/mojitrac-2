@@ -34,8 +34,10 @@ use PM\Form\CompanyForm;
 use PM\Form\BookmarkForm;
 use PM\Form\NoteForm;
 use PM\Form\ContactForm;
+use PM\Form\TaskForm;
 
 use PM\Event\ActivityLogEvent;
+use PM\Event\NotificationEvent;
 
 /**
  * PM - Module Object
@@ -51,7 +53,6 @@ class Module
 		//sets the layout
 		$sharedEvents = $moduleManager->getEventManager()->getSharedManager();
 		$sharedEvents->attach(__NAMESPACE__, 'dispatch', function($e) {
-			// This event will only be fired when an ActionController under the MyModule namespace is dispatched.
 			$controller = $e->getTarget();
 			$controller->layout('layout/pm');
 		}, 100);	
@@ -151,7 +152,7 @@ class Module
 					return new ProjectForm('project', $sm->get('PM\Model\Companies'), $sm->get('PM\Model\Options'));
 				},	
 				'PM\Form\CompanyForm' => function($sm) {
-					return new CompanyForm('company', $sm->get('PM\Model\Companies'), $sm->get('PM\Model\Options'));
+					return new CompanyForm('company');
 				},	
 				'PM\Form\BookmarkForm' => function($sm) {
 					return new BookmarkForm('bookmark');
@@ -162,11 +163,19 @@ class Module
 				'PM\Form\ContactForm' => function($sm) {
 					return new ContactForm('contact', $sm->get('PM\Model\Companies'), $sm->get('PM\Model\Options'));
 				},
+				'PM\Form\TaskForm' => function($sm) {
+					return new TaskForm('task', $sm->get('PM\Model\Options'), $sm->get('PM\Model\Projects'));
+				},
 				'PM\Event\ActivityLogEvent' => function($sm) {
 				    $auth = $sm->get('AuthService');
 				    $al = $sm->get('PM\Model\ActivityLog');
 					return new ActivityLogEvent($al, $auth->getIdentity());
-				},										
+				},
+				'PM\Event\NotificationEvent' => function($sm) {
+				    $auth = $sm->get('AuthService');
+				    $al = $sm->get('PM\Model\ActivityLog');
+					return new NotificationEvent($al, $auth->getIdentity());
+				},											
 			),
     	);
     }    

@@ -21,7 +21,7 @@ namespace PM\Model\Options;
  */
 class Tasks extends AbstractOptions
 {
-	static public function types()
+	static public function types($options)
 	{		
 		return parent::filterOptions($options->getAllTaskTypes());
 	}

@@ -46,6 +46,8 @@ interface EventManagerInterfaceConstants extends EventManagerAwareInterface
 	const EventTaskAddPost = 'task.add.post';
 	const EventTaskRemovePre = 'task.remove.pre';
 	const EventTaskRemovePost = 'task.remove.post';	
+	const EventTaskAssignPre = 'task.assign.pre';
+	const EventTaskAssignPost = 'task.assign.post';
 	
 	const EventCompanyUpdatePre = 'company.update.pre';
 	const EventCompanyUpdatePost = 'company.update.post';

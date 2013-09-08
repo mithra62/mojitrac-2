@@ -6,11 +6,15 @@
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
- * @version		1.0
+ * @version		2.0
  * @filesource 	./module/PM/src/PM/Model/Tasks.php
  */
 
 namespace PM\Model;
+
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
 
 use Application\Model\AbstractModel;
 
@@ -23,6 +27,12 @@ use Application\Model\AbstractModel;
  */
 class Tasks extends AbstractModel
 {
+    /**
+     * The form validation filering
+     * @var \Zend\InputFilter\InputFilter
+     */
+    protected $inputFilter;
+        
 	/**
 	 * For passing to the DB
 	 * @var array
@@ -52,12 +62,80 @@ class Tasks extends AbstractModel
 	}
 	
 	/**
-	 * Returns the Artist Form
-	 * @return object
+	 * Returns an array for modifying $_name
+	 * @param $data
+	 * @return array
 	 */
-	public function getTaskForm($id, $options = array(), $hidden = array())
+	public function getSQL(array $data){
+		return array(
+    		'name' => (!empty($data['name']) ? $data['name'] : ''),
+    		'parent' => (!empty($data['parent']) ? $data['parent'] : ''),
+    		'milestone' => (!empty($data['milestone']) ? $data['milestone'] : ''),
+    		'assigned_to' => (!empty($data['assigned_to']) ? $data['assigned_to'] : ''),
+    		'project_id' => (!empty($data['project_id']) ? $data['project_id'] : 0),
+    		'progress' => (!empty($data['progress']) ? $data['progress'] : 0),
+    		'duration' => (!empty($data['duration']) ? $data['duration'] : ''),
+    		'hours_worked' => (!empty($data['hours_worked']) ? $data['hours_worked'] : ''),
+    		'start_date' => (!empty($data['start_date']) ? $data['start_date'] : ''),
+    		'end_date' => (!empty($data['end_date']) ? $data['end_date'] : ''),
+    		'status' => (!empty($data['status']) ? $data['status'] : ''),
+    		'percent_complete' => (!empty($data['percent_complete']) ? $data['percent_complete'] : ''),
+    		'description' => (!empty($data['description']) ? $data['description'] : ''),
+    		'notify' => ($data['notify'] != '' ? $data['notify'] : '0'),
+    		'priority' => (!empty($data['priority']) ? $data['priority'] : ''),
+    		'type' => (!empty($data['type']) ? $data['type'] : ''),
+    		'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+	}
+
+	/**
+	 * Returns an array for modifying the Task Assignments
+	 * @param unknown $data
+	 * @return multitype:\PM\Model\Zend_Db_Expr unknown
+	 */
+	public function getAssignmentSQL(array $data){
+		return array(
+			'task_id' => $data['task_id'],
+			'assigned_by' => $data['assigned_by'],
+			'assigned_to' => $data['assigned_to'],
+			'comments' => (!empty($data['assign_comment']) ? $data['assign_comment'] : ''), 
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+	}	
+	
+	/**
+	 * Sets the input filter to use
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
+	 */
+	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
-        return new PM_Form_Task($id, $options, $hidden);		
+		throw new \Exception("Not used");
+	}
+	
+	/**
+	 * Returns the InputFilter
+	 * @return \Zend\InputFilter\InputFilter
+	 */
+	public function getInputFilter()
+	{
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'name',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+			)));
+	
+			$this->inputFilter = $inputFilter;
+		}
+	
+		return $this->inputFilter;
 	}	
 	
 	/**
@@ -199,16 +277,6 @@ class Tasks extends AbstractModel
 	}
 	
 	/**
-	 * Returns all the tasks used for the daily notification email
-	 * @param int $id
-	 * @return array
-	 */
-	public function getUserDtrTasks($id, array $where = null, array $not = null)
-	{
-		
-	}
-	
-	/**
 	 * Returns all the tasks a user is related to. By default will only include tasks user is assigned to.
 	 * @param int $id
 	 * @param bool $inc_created
@@ -321,11 +389,12 @@ class Tasks extends AbstractModel
 	 * @param int	 $id
 	 * @return bool
 	 */
-	public function updateTask(array $data, $id)
+	public function updateTask(array $data, $task_id)
 	{	
-		$ext = $this->event('pre.moji_task_update', $this, compact('id', 'data'));
-		if($ext->stopped()) return $ext->last();
+		$ext = $this->trigger(self::EventTaskUpdatePre, $this, compact('data', 'task_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 		
+		//setup some defaults and rearrange things based on input
         if((is_numeric($data['start_hour']) && $data['start_hour'] <= 24) 
 		&& (is_numeric($data['start_minute']) && $data['start_minute'] <= 60))
 		{	
@@ -345,18 +414,29 @@ class Tasks extends AbstractModel
 		elseif($data['progress'] == '100' && $data['status'] != '6')
 		{
 			$data['status'] = '5';
-		}	
-
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->getSQL($data);
-		$data = $task->update($sql, "id = '$id'");
-		
-		if($data)
-		{
-			$ext = $this->event('post.moji_task_update', $this, compact('id', 'data'));
-			if($ext->stopped()) return $ext->last();
-			return $data;
 		}
+
+		//check if we have to log an assignment
+		$legacy = $this->getTaskById($task_id);
+		if($legacy['assigned_to'] != $data['assigned_to'])
+		{
+			$assign_desc = (isset($data['assign_comment']) ? $data['assign_comment'] : null);
+			$this->logTaskAssignment($task_id, $data['assigned_to'], $data['creator'], $assign_desc);
+			if($data['assigned_to'] != 0)
+			{
+				//todo
+				//$noti->sendTaskAssignment($formData);
+			}
+		}
+		
+		$sql = $this->getSQL($data);
+		$sql['company_id'] = $legacy['company_id'];
+		$return = $this->update('tasks', $sql, array('id' => $task_id));
+		
+		$ext = $this->trigger(self::EventTaskUpdatePost, $this, compact('data', 'task_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $return = $ext->last();	
+
+		return $return;
 	}
 	
 	/**
@@ -515,12 +595,19 @@ class Tasks extends AbstractModel
 	 * @param str $desc
 	 * @return bool
 	 */
-	public function logTaskAssignment($id, $assigned_to, $assigned_by, $assign_comment = null)
+	public function logTaskAssignment($task_id, $assigned_to, $assigned_by, $assign_comment = null)
 	{
-		$assignment = new PM_Model_DbTable_Task_Assignments;
-		$sql = $assignment->getSQL(array('task_id'=>$id, 'assigned_to' => $assigned_to, 'assigned_by' => $assigned_by, 'assign_comment' => $assign_comment));
-		return $assignment->addTaskAssignment($sql);
+	    $data = array('task_id' => $task_id, 'assigned_to' => $assigned_to, 'assigned_by' => $assigned_by);
+	    $ext = $this->trigger(self::EventTaskAssignPre, $this, compact('task_id', 'assigned_to', 'assigned_by'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+	    	    
+		$sql = $assignment->getSQL(array('task_id'=>$task_id, 'assigned_to' => $assigned_to, 'assigned_by' => $assigned_by, 'assign_comment' => $assign_comment));
+		$return = $assignment->addTaskAssignment($sql);
 		
+		$ext = $this->trigger(self::EventTaskAssignPre, $this, compact('task_id', 'assigned_to', 'assigned_by'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $return = $ext->last();		
+		
+		return $return;
 	}
 	
 	/**

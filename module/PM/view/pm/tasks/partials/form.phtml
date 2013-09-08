@@ -1,5 +1,11 @@
-
-<form action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod()) ?>" id="task_form">
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'task_form');
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>	
 <input type="hidden" name="start_date_default" id="start_date_default" value="<?php echo date('Y-m-d'); ?>" />
 <input type="hidden" name="end_date_default" id="end_date_default" value="<?php echo date('Y-m-d'); ?>" />
 <?php 
@@ -20,43 +26,45 @@ if($this->id > 0)
 	
 		<p>
 			<label for="name">Name</label>
-			<?php echo $this->form->name; ?>
+			<?php $name = $form->get('name'); echo $this->formRow($name); ?>
 		</p>
 		
 		<p>
 			<label for="project_id">Project</label>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'projects','action'=>'view', 'id' => $this->project_data['id']), null, TRUE); ?>"><?php echo $this->project_data['name']; ?></a>
+			<a href="<?php echo $this->url('projects/view', array('project_id' => $this->project_data['id'])); ?>"><?php echo $this->project_data['name']; ?></a>
 			
 		</p>
 		
 		<p>
 			<label for="assigned_to">Assigned To</label>
-			<?php echo $this->form->assigned_to; ?> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'assigned_to'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Assigned To');?></a>
+			<?php $name = $form->get('assigned_to'); echo $this->formRow($name); ?>
+			<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'assigned_to'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Assigned To');?></a>
 		</p>
 		
 		<p style="display: none" id="assignment_comment">
 			<label for="assign_comment">Assignment Comment</label>
-			<?php echo $this->form->assign_comment; ?>
+			<?php $name = $form->get('assign_comment'); echo $this->formRow($name); ?>
 		</p>				
 		
 		<p>
 			<label for="status">Status</label>
-			<?php echo $this->form->status; ?> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'status'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Status');?></a>
+			<?php $name = $form->get('status'); echo $this->formRow($name); ?><a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'status'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Status');?></a>
 		</p>
 		
 		<p>
 			<label for="priority">Priority</label>
-			<?php echo $this->form->priority; ?>
+			<?php $name = $form->get('priority'); echo $this->formRow($name); ?>
 		</p>
 		
 		<p>
 			<label for="type">Type</label>
-			<?php echo $this->form->type; ?> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'type'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Types');?></a>
+			<?php $name = $form->get('type'); echo $this->formRow($name); ?>
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'type'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Types');?></a>
 		</p>																	
 		
 		<p>
 			<label for="description">Description</label>
-			<?php echo $this->form->description; ?>
+			<?php $name = $form->get('description'); echo $this->formRow($name); ?>
 		</p>
 		
 		<p>
@@ -69,22 +77,30 @@ if($this->id > 0)
 	
 		<p>
 			<label for="start_date">Start Date</label>
-			<?php echo $this->form->start_date; ?> <?php echo $this->form->start_hour; ?> <?php echo $this->form->start_minute; ?> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'start_date'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Start Date');?></a>
+			<?php $name = $form->get('start_date'); echo $this->formRow($name); ?>
+			<?php $name = $form->get('start_hour'); echo $this->formRow($name); ?>
+			<?php $name = $form->get('start_minute'); echo $this->formRow($name); ?>
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'start_date'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Start Date');?></a>
 		</p>
 
 		<p>
 			<label for="end_date">End Date</label>
-			<?php echo $this->form->end_date; ?> <?php echo $this->form->end_hour; ?> <?php echo $this->form->end_minute; ?> <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'end_date'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Stop Date');?></a>
+			<?php $name = $form->get('end_date'); echo $this->formRow($name); ?>
+			<?php $name = $form->get('end_hour'); echo $this->formRow($name); ?>
+			<?php $name = $form->get('end_minute'); echo $this->formRow($name); ?>
+			 <a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'end_date'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Stop Date');?></a>
 		</p>
 		
 		<p>
 			<label for="progress">Progress</label>
-			<?php echo $this->form->progress; ?> % <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'progress'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Progress');?></a>
+			<?php $name = $form->get('progress'); echo $this->formRow($name); ?>
+			 % <a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'progress'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Progress');?></a>
 		</p>		
 		
 		<p>
 			<label for="duration">Expected Duration</label>
-			<?php echo $this->form->duration; ?> <?php echo $this->form->duration_type; ?> hours <a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'duration'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Duration');?></a>
+			<?php $name = $form->get('duration'); echo $this->formRow($name); ?>
+			hours <a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'duration'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Task Duration');?></a>
 		</p>
 		
 		<p>
@@ -94,7 +110,7 @@ if($this->id > 0)
 	</div>
 
 </div>
-</form>	
+<?php echo $this->form()->closeTag() ?>
 
 <script type="text/javascript">
 var def_assign = '<?php echo ($this->task_data['assigned_to'] ? $this->task_data['assigned_to'] : 0); ?>';

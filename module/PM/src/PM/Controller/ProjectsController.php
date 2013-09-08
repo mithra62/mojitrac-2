@@ -62,35 +62,31 @@ class ProjectsController extends AbstractPmController
 		}
 		
 	    $projects = $this->getServiceLocator()->get('PM\Model\Projects'); 
-		//$view = $this->_getParam("view",FALSE);
-		$this->layout()->setVariable('active_sub', $view);
-		$this->layout()->setVariable('project_filter', ($view !== FALSE ? (string)$view : FALSE));
 		if($company_id)
 		{
-			$this->view->projects = $projects->getProjectsByCompanyId($company_id);
-			$this->view->headTitle('Projects For: '. $company_data['name'], 'PREPEND');
-       		$this->view->sub_menu = 'company';
-       		$this->view->active_sub = 'projects';
-        	$this->view->active_nav = 'companies';
-        	$this->view->company_id = $company_id;
-        	$this->view->company_data = $company_data;
+       		$this->layout()->setVariable('active_sub', 'projects');
+       		$this->layout()->setVariable('active_nav', 'companies');
+       		$this->layout()->setVariable('sub_menu', 'company');
+        	$view['company_id'] = $company_id;
+			$view['projects'] = $projects->getProjectsByCompanyId($company_id);
+        	$view['company_data'] = $company_data;
+        	$view['project_filter'] = '';
 			
 		}
 		else
 		{
 			if($this->perm->check($this->identity, 'manage_projects'))
 	        {
-	        	$project_data = $projects->getAllProjects(FALSE);
-	        	$this->layout()->setVariable('projects', $project_data);
+	        	$view['projects'] = $projects->getAllProjects(FALSE);
 	        }
 	        else
 	        {
 				$user = $this->getServiceLocator()->get('PM\Model\Users');
-				$this->view->projects = $user->getAssignedProjects($this->identity);	    		
+				$view['projects'] = $user->getAssignedProjects($this->identity);	    		
 	        }
 		}
 		
-		return array('projects' => $project_data);
+		return $view;
 	}
 	
 	/**
@@ -375,9 +371,10 @@ class ProjectsController extends AbstractPmController
 					{
 						if($project->addProjectTeamMember($key, $id))
 						{
-							PM_Model_ActivityLog::logProjectTeamAdd($formData['proj_member'], $id, $this->identity);
-							$noti = new PM_Model_Notifications();
-							$noti->addToProjectTeam($key, $project_data);							
+						    //todo
+							//PM_Model_ActivityLog::logProjectTeamAdd($formData['proj_member'], $id, $this->identity);
+							//$noti = new PM_Model_Notifications();
+							//$noti->addToProjectTeam($key, $project_data);							
 						}
 					}
 				}
@@ -391,9 +388,10 @@ class ProjectsController extends AbstractPmController
 					{	
 						if($project->removeProjectTeamMember($removed, $id))
 						{
-							PM_Model_ActivityLog::logProjectTeamRemove($proj_team, $id, $this->identity);
-							$noti = new PM_Model_Notifications();
-							$noti->removeFromProjectTeam($removed, $project_data);							
+						    //todo
+							//PM_Model_ActivityLog::logProjectTeamRemove($proj_team, $id, $this->identity);
+// 							/$noti = new PM_Model_Notifications();
+// 							$noti->removeFromProjectTeam($removed, $project_data);							
 						}
 					}
 				}

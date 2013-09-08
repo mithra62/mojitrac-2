@@ -146,40 +146,32 @@ class TasksController extends AbstractPmController
 	 */
 	public function editAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('task_id');
 		if (!$id) 
 		{
-			$this->_helper->redirector('index','tasks');
-			exit;
+			return $this->redirect()->toRoute('pm');
 		}
 		
-		$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
 		$task_data = $task->getTaskById($id);
 		if (!$task_data) 
 		{
-			$this->_helper->redirector('index','tasks');
-			exit;
+			return $this->redirect()->toRoute('pm');
 		}
 
-		$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
 		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_projects'))
 		{
-			$this->_helper->redirector('view','tasks', 'pm', array('id' => $id));
-			exit;				
+			return $this->redirect()->toRoute('tasks/view', array('task_id' => $id));
 		}
 				
-        $this->view->id = $id;
-
-        $project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-        $this->view->project_data = $project->getProjectById($task_data['project_id']);
+        $view['id'] = $id;
+        $view['project_data'] = $project->getProjectById($task_data['project_id']);
         
         $task_data = $task->parseTaskDates($task_data);
         
-		$form = $task->getTaskForm($task_data['project_id'], array(
-            'action' => '/pm/tasks/edit/',
-            'method' => 'post',
-        ), array('id' => $id));
-
+		$form = $this->getServiceLocator()->get('PM\Form\TaskForm');
+		$form->setup($task_data['project_id']);
 	    if($task_data['start_date'] == '0000-00-00')
         {
         	$task_data['start_date'] = '';
@@ -190,40 +182,35 @@ class TasksController extends AbstractPmController
         	$task_data['end_date'] = '';
         }
         
-        $form->populate($task_data);	
+        $form->setData($task_data);	
         
-        $this->view->form = $form;
+        $view['form'] = $form;
         
         if ($this->getRequest()->isPost()) 
         {
             $formData = $this->getRequest()->getPost();
             $formData['project_id'] = $task_data['project_id'];
             $formData['project_name'] = $task_data['project_name'];
+            
+            $formData = $this->getRequest()->getPost();
+            $form->setInputFilter($task->getInputFilter());
+            $form->setData($formData);
+                        
             if ($form->isValid($formData)) 
             {
-            	$noti = new PM_Model_Notifications;
-            	if($task->updateTask($formData, $id))
-	            {	            	
-	            	PM_Model_ActivityLog::logTaskUpdate($formData, $id, $formData['project_id'], $this->identity);
-					if($formData['assigned_to'] != $task_data['assigned_to'])
-	            	{
-	            		PM_Model_ActivityLog::logTaskAssignment($formData, $id, $formData['project_id'], $this->identity);
-	            		$assign_desc = (isset($formData['assign_comment']) ? $formData['assign_comment'] : null);
-	            		$task->logTaskAssignment($id, $formData['assigned_to'], $this->identity, $assign_desc);
-	            		if($formData['assigned_to'] != 0)
-	            		{
-	            			$noti->sendTaskAssignment($formData);
-	            		}
-	            	}
-	            		            	
+                $formData['creator'] = $this->identity;
+            	if($task->updateTask($formData->toArray(), $id))
+	            {		            	
 	            	if($formData['status'] != $task_data['status'] && ($formData['priority'] == $task_data['priority']))
 	            	{
-	            		$noti->sendTaskStatusChange($formData);	            		
+	            	    //todo
+	            		//$noti->sendTaskStatusChange($formData);	            		
 	            	}
 	            	
 	            	if($formData['priority'] != $task_data['priority'])
 	            	{
-	            		$noti->sendTaskPriorityChange($formData);	            		
+	            	    //todo
+	            		//$noti->sendTaskPriorityChange($formData);	            		
 	            	}
 	            	
 	            	if($formData['end_date'] != $task_data['end_date'])
@@ -232,30 +219,27 @@ class TasksController extends AbstractPmController
 	            		//$noti->sendTaskEndDateChange($task_data);	            		
 	            	}
 
-	            	$task->updateCompanyId($id, FALSE, $formData['project_id']);	            	
-			    	$this->_flashMessenger->addMessage('Task updated!');
-					$this->_helper->redirector('view','tasks', 'pm', array('id' => $id));  
-					exit;      		
+	            	//$task->updateCompanyId($id, FALSE, $formData['project_id']);	            	
+			    	$this->flashMessenger()->addMessage('Task updated!');
+					return $this->redirect()->toRoute('tasks/view', array('task_id' => $id));   		
             	} 
             	else 
             	{
-            		$this->view->errors = array('Couldn\'t update task...');
-            		$form->populate($formData);
+            		$view['errors'] = array('Couldn\'t update task...');
+            		$form->setData($formData);
             	}
                 
             } 
             else 
             {
-            	$this->view->errors = array('Please fix the errors below.');
-                $form->populate($formData);
+            	$view['errors'] = array('Please fix the errors below.');
+                $form->setData($formData);
             }
 	    }
 	    
-	    Zend_Registry::set('pm_activity_filter', array('project_id' => $task_data['project_id']));
-	    $this->view->task_data = $task_data;
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		    
-		$this->view->headTitle('Edit Task', 'PREPEND');     	
+	    $view['task_data'] = $task_data;
+        $this->layout()->setVariable('layout_style', 'left');
+		return $view;
 	}
 	
 	public function updateProgressAction()

@@ -13,7 +13,7 @@
 		<?php echo $this->ActionBlock('help', 'Help', $this->url('docs', array('action'=>'projects', 'page' => 'main')), 'facebox');?>		
 		<?php if($this->CheckPermission('manage_projects')):?>
 		<div class="actions">
-			<a href="<?php echo $this->url('projects/add', array('company_id' => FALSE)); ?>" title="Add Project">
+			<a href="<?php echo $this->url('projects/add', array('company_id' => $this->company_data['id'])); ?>" title="Add Project">
 				<?php echo $this->InteractIcon('add', 'Add Project');?>
 				<div class="action_text">Add Project</div>
 			</a>
@@ -25,7 +25,7 @@
 if($this->projects):
 	
 	if($this->company_id):
-		$options = array('id' => $this->company_id, 'controller' => 'companies', 'name' => $this->company_data['name'], 'action' => 'view');
+		$options = array('company' => $this->company_data);
 		echo $this->BackToLink($options); 	
 	endif;
 	$options = array('projects' => $this->projects, 'enable_actions' => 'yes', 'facebox' => 'yes');

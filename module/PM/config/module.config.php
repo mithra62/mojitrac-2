@@ -674,6 +674,18 @@ return array(
         		),
         		'may_terminate' => true,
         		'child_routes' => array(
+        			'all' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/[:company_id]',
+        					'constraints' => array(
+        						'id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'index'
+        					)
+        				)
+        			),
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(

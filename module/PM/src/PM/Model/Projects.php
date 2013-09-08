@@ -19,7 +19,7 @@ use Zend\InputFilter\InputFilterInterface;
 use Application\Model\AbstractModel;
 
  /**
- * PM - ProjectForm Model
+ * PM - Project Model
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
@@ -91,20 +91,20 @@ class Projects extends AbstractModel
 	 */
 	private function getSQL($data){
 		return array(
-				'name' => (!empty($data['name']) ? $data['name'] : ''), 
-				'company_id' => $data['company_id'],
-				'start_date' => $data['start_date'],
-				'end_date' => $data['end_date'],
-				'actual_end_date' => $data['actual_end_date'],
-				'status' => $data['status'],
-				'percent_complete' => $data['percent_complete'],
-				'description' => $data['description'],
-				'target_budget' => $data['target_budget'],
-				'actual_budget' => $data['actual_budget'],
-				'creator' => $data['creator'],
-				'priority' => $data['priority'],
-				'type' => $data['type'],
-				'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+    		'name' => (!empty($data['name']) ? $data['name'] : ''), 
+    		'company_id' => (!empty($data['company_id']) ? $data['company_id'] : '0'),
+    		'start_date' => (!empty($data['start_date']) ? $data['start_date'] : null),
+    		'end_date' => (!empty($data['end_date']) ? $data['end_date'] : null),
+    		'actual_end_date' => (!empty($data['actual_end_date']) ? $data['actual_end_date'] : null),
+    		'status' => (!empty($data['status']) ? $data['status'] : ''),
+    		'percent_complete' => (!empty($data['percent_complete']) ? $data['percent_complete'] : ''),
+    		'description' => (!empty($data['description']) ? $data['description'] : ''),
+    		'target_budget' => (!empty($data['target_budget']) ? $data['target_budget'] : ''),
+    		'actual_budget' => (!empty($data['actual_budget']) ? $data['actual_budget'] : ''),
+    		'creator' => (!empty($data['creator']) ? $data['creator'] : ''),
+    		'priority' => (!empty($data['priority']) ? $data['priority'] : ''),
+    		'type' => (!empty($data['type']) ? $data['type'] : ''),
+    		'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
 		);
 	}	
 	
@@ -497,9 +497,8 @@ class Projects extends AbstractModel
 	    $ext = $this->trigger(self::EventProjectRemoveTeamPre, $this, compact('id', 'project'), $this->setXhooks(array('id' => $project)));
 	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $project = $ext->last();
 	    	    
-		$team = new PM_Model_DbTable_Projects_Teams;
-		$where = "user_id = '$id' AND project_id = '$project'";
-		$delete = $team->delete($where);
+		$where = array('user_id' => $id, 'project_id' => $project);
+		$delete = $this->remove('project_teams', $where);
 		
 		$ext = $this->trigger(self::EventProjectRemoveTeamPost, $this, compact('id', 'project'), $this->setXhooks(array('id' => $project)));
 		if($ext->stopped()) return $ext->last();

@@ -129,7 +129,7 @@
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php echo $this->url('projects',array('module' => 'pm','controller'=>'projects','action'=>'index', 'company' => $this->id), null, TRUE); ?>" title="View All">
+			<a href="<?php echo $this->url('projects/all',array('company_id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All Company Projects');?> 
 				<div class="action_text">View All</div>
 			</a>
