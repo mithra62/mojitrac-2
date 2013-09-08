@@ -171,7 +171,7 @@ class CompaniesController extends AbstractPmController
             
             if ($form->isValid($formData)) 
             {        
-            	if($company->updateCompany($formData, $id))
+            	if($company->updateCompany($formData->toArray(), $id))
 	            {	
 			    	$this->flashMessenger()->addMessage('Company updated!');
 			    	return $this->redirect()->toRoute('companies/view', array('company_id' => $id));

@@ -69,7 +69,6 @@ return array(
         		)
         	), //end Admin Routes
 
-
         	'bookmarks' => array( //Bookmarks Routes
         		'type' => 'segment',
         		'options' => array(
@@ -409,9 +408,6 @@ return array(
         			),
         		)
         	), //end Files Routes
-
-
-
 
         	'ips' => array( //Ips Routes
         		'type' => 'segment',
@@ -1098,10 +1094,6 @@ return array(
         			)
         		)
         	), //End User Routes
-
-
-
-
         ),
     ),
     'controllers' => array(
@@ -1129,7 +1121,6 @@ return array(
             'PM\Controller\Timers' => 'PM\Controller\TimersController',
             'PM\Controller\Times' => 'PM\Controller\TimesController',
             'PM\Controller\Users' => 'PM\Controller\UsersController',
-
         ),
     ),
     'view_manager' => array(
