@@ -13,6 +13,7 @@
 namespace PM\View\Helper;
 
 use Base\View\Helper\BaseViewHelper;
+use Michelf\MarkdownExtra;
 
 /**
  * PM - Format HTML View Helper
@@ -23,9 +24,9 @@ use Base\View\Helper\BaseViewHelper;
  */
 class FormatHtml extends BaseViewHelper
 {
-	function __invoke($str)
+	public function __invoke($str)
 	{
-		return $this->makeLinks($str);
+		return MarkdownExtra::defaultTransform($str);
 	}
 	
 	public function makeLinks($text) 
