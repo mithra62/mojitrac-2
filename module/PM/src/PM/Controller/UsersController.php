@@ -56,47 +56,46 @@ class UsersController extends AbstractPmController
 	 */
 	public function viewAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('user_id');
 		if (!$id) 
 		{
-			$this->view->active_nav = '';
-			$this->view->sub_menu = 'settings';
+			$this->layout()->setVariable('active_nav', '');
+			$this->layout()->setVariable('sub_menu', 'settings');
 			$id = $this->identity;
 		}
 		
 		if(!$this->perm->check($this->identity, 'view_users_data'))
         {
-        	$this->view->active_nav = '';
-        	$this->view->sub_menu = 'settings';
+			$this->layout()->setVariable('active_nav', '');
+			$this->layout()->setVariable('sub_menu', 'settings');
         	$id = $this->identity;
         }		
 
-		$user = new PM_Model_Users(new PM_Model_DbTable_Users);
-		$this->view->user = $user->getUserById($id);
-		if(!$this->view->user)
+		$user = $this->getServiceLocator()->get('Application\Model\User');
+		$view['user'] = $user->getUserById($id);
+		if(!$view['user'])
 		{
-			$this->_helper->redirector('index','users');
-			exit;
+			return $this->redirect()->toRoute('pm');
 		}
 		
-		$this->view->roles = $user->getUserRoles($id);
-		
-		$this->view->projects = $user->getAssignedProjects($id);
+		$view['roles'] = $user->getUserRoles($id);
+		$view['projects'] = $user->getAssignedProjects($id);
 
-		$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-		$this->view->tasks = $task->getTasksByUserId($id, TRUE, TRUE, TRUE);
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+		$view['tasks'] = $task->getTasksByUserId($id, TRUE, TRUE, TRUE);
 		
-		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$this->view->files = $file->getFilesByUserId($id);
+		$file = $this->getServiceLocator()->get('PM\Model\Files');
+		$view['files'] = $file->getFilesByUserId($id);
 
 		
-		$times = new PM_Model_Times;
-		$this->view->times = $times->getTimesByUserId($id);
+		$times = $this->getServiceLocator()->get('PM\Model\Times');
+		$view['times'] = $times->getTimesByUserId($id);
 
-		$this->view->hours = $times->getTotalTimesByUserId($id);
+		$view['hours'] = $times->getTotalTimesByUserId($id);
 		
-		$this->view->headTitle('Viewing User: '. $this->view->user['first_name'].' '.$this->view->user['last_name'], 'PREPEND');
-		$this->view->id = $id;
+		//$this->view->headTitle('Viewing User: '. $this->view->user['first_name'].' '.$this->view->user['last_name'], 'PREPEND');
+		$view['id'] = $id;
+		return $view;
 	}
 
 	/**

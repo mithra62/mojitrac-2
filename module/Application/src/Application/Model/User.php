@@ -386,10 +386,10 @@ class User extends AbstractModel
 	 */
 	public function getUserRoles($id)
 	{
-		$roles = new PM_Model_DbTable_User_Roles;
-		$sql = $roles->select()->setIntegrityCheck(false)->from(array('r' => $roles->getTableName()), 'r.*');
-		$sql = $sql->join(array('u2r' => 'user2role'), 'u2r.role_id = r.id AND u2r.user_id = '.$id);
-		return $roles->getUserRoles($sql);
+		$sql = $this->db->select()->from(array('r' => 'user_roles'), 'r.*');
+		$sql = $sql->join(array('u2r' => 'user2role'), 'u2r.role_id = r.id');
+		$sql = $sql->where(array('u2r.user_id' => $id));
+		return $this->getRows($sql);
 	}
 	
 	/**

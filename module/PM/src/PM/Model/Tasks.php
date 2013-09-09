@@ -286,18 +286,18 @@ class Tasks extends AbstractModel
 	 */
 	public function getTasksByUserId($id, $inc_created = FALSE, $inc_archived = FALSE, $inc_assigned_to = FALSE)
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->select()->setIntegrityCheck(false)->from(array('t'=>$task->getTableName()));
+		$sql = $this->db->select()->from(array('t'=> 'tasks'));
 		
 		if($inc_created)
 		{
 			if($inc_archived)
 			{
-				$sql->orwhere("creator = ? ", $id);
+				$sql->where(array('creator' => $id), 'OR');
 			}
 			else
 			{
-				$sql->orwhere("creator = ? AND status != '6'", $id);
+				$sql->where(array('creator' => $id), 'OR');
+				$sql->where("status != '6'", 'OR');
 			}
 		}
 		
@@ -305,7 +305,7 @@ class Tasks extends AbstractModel
 		{
 			if($inc_archived)
 			{
-				$sql->orwhere("assigned_to = ? ", $id);
+				$sql->where(array('assigned_to' => $id), 'OR');
 			}
 			else
 			{
@@ -313,9 +313,9 @@ class Tasks extends AbstractModel
 			}
 		}		
 		
-		$sql = $sql->joinLeft(array('u2' => 'users'), 'u2.id = t.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
-		$sql = $sql->joinLeft(array('u3' => 'users'), 'u3.id = t.assigned_to', array('first_name AS assigned_first_name', 'last_name AS assigned_last_name'));		
-		return $task->getTasks($sql);
+		$sql = $sql->join(array('u2' => 'users'), 'u2.id = t.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), 'left');
+		$sql = $sql->join(array('u3' => 'users'), 'u3.id = t.assigned_to', array('assigned_first_name' => 'first_name', 'assigned_last_name' => 'last_name'), 'left');
+		return $this->getRows($sql);
 	}
 
 	private function getTasksWhere(array $where = null, array $not = null, array $orwhere = null, array $ornot = null)

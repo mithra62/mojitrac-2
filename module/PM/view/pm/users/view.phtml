@@ -2,7 +2,7 @@
 
 	<div class="user_header">View User: <?php echo $this->user['first_name'].' '.$this->user['last_name'];?></div>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'view'), null, TRUE); ?>" rel="facebox" title="Add Project">
+			<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'view')); ?>" rel="facebox" title="Add Project">
 				<?php echo $this->InteractIcon('help', 'About Users');?>
 				<div class="action_text">Help</div>
 			</a>
@@ -18,7 +18,7 @@
 		<?php endif; ?>
 		<?php if($this->CheckPermission('manage_users')):?>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'users','action'=>'remove', 'id' => $this->user['id']), null, FALSE); ?>" title="Delete">
+			<a href="<?php echo $this->url('users/remove', array('user_id' => $this->user['id'])); ?>" title="Delete">
 				<?php echo $this->InteractIcon('cross', 'Remove User');?>
 				<div class="action_text">Delete</div>
 			</a>
@@ -26,7 +26,7 @@
 		<?php endif; ?>	
 		<?php if($this->CheckPermission('manage_users') || $this->id == $this->identity):?>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'users','action'=>'edit', 'id' => $this->user['id']), null, FALSE); ?>" title="Edit">
+			<a href="<?php echo $this->url('users/edit', array('user_id' => $this->user['id'])); ?>" title="Edit">
 				<?php echo $this->InteractIcon('pencil', 'Edit User');?>
 				<div class="action_text">Edit</div>
 			</a>
@@ -96,7 +96,7 @@
     <div class="items" style="padding-left:10px;">
 		<?php 
 			$options = array('hours' => $this->hours, 'type' => 'user', 'id' => $this->id);
-			echo $this->partial('times/partials/hour_status.phtml', $options); 		
+			echo $this->partial('pm/times/partials/hour_status', $options); 		
 		?>
     </div>
     <?php endif; ?>
@@ -115,7 +115,7 @@ if($this->roles):
 <div class="content_headers">
 	<div class="user_role_header">User Roles</div>	
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'roles'), null, TRUE); ?>" rel="facebox" title="Add Project">
+		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'roles'), null, TRUE); ?>" rel="facebox" title="Add Project">
 			<?php echo $this->InteractIcon('help', 'About User Roles');?>
 			<div class="action_text">Help</div>
 		</a>
@@ -123,13 +123,13 @@ if($this->roles):
 </div>
 <?php 
 	$options = array('roles' => $this->roles);
-	echo $this->partial('roles/partials/roles.phtml', $options); 
+	echo $this->partial('pm/roles/partials/roles', $options); 
 endif; ?>
 
 <div class="content_headers">
 	<div class="project_header">Projects</div>	
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'projects'), null, TRUE); ?>" rel="facebox" title="Add Project">
+		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'projects'), null, TRUE); ?>" rel="facebox" title="Add Project">
 			<?php echo $this->InteractIcon('help', 'About User Projects');?>
 			<div class="action_text">Help</div>
 		</a>
@@ -138,7 +138,7 @@ endif; ?>
 <?php 
 if($this->projects):
 	$options = array('projects' => $this->projects);
-	echo $this->partial('projects/partials/projects.phtml', $options); 
+	echo $this->partial('pm/projects/partials/projects', $options); 
 else: 
 ?>
 <div class="information png_bg"><?php echo $this->user['first_name'].' '.$this->user['last_name'];?> isn't assigned to any projects yet.</div>
@@ -151,7 +151,7 @@ if($this->tasks):
 <div class="content_headers">
 	<div class="task_header">Tasks</div>	
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'tasks'), null, TRUE); ?>" rel="facebox" title="Add Project">
+		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'tasks'), null, TRUE); ?>" rel="facebox" title="Add Project">
 			<?php echo $this->InteractIcon('help', 'About User Tasks');?>
 			<div class="action_text">Help</div>
 		</a>
@@ -159,7 +159,7 @@ if($this->tasks):
 </div>
 <?php 
 	$options = array('tasks' => $this->tasks, 'enable_due' => 'yes', 'enable_assigned' => 'yes', 'enable_completion' => 'yes');
-	echo $this->partial('tasks/partials/tasks.phtml', $options); 
+	echo $this->partial('pm/tasks/partials/tasks', $options); 
 endif; ?>
 
 <?php 
@@ -168,7 +168,7 @@ if($this->files):
 <div class="content_headers">
 	<div class="file_header">Files</div>	
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'files'), null, TRUE); ?>" rel="facebox" title="Add Project">
+		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'files'), null, TRUE); ?>" rel="facebox" title="Add Project">
 			<?php echo $this->InteractIcon('help', 'About User Files');?>
 			<div class="action_text">Help</div>
 		</a>
@@ -176,7 +176,7 @@ if($this->files):
 </div>
 <?php 
 	$options = array('files' => $this->files);
-	echo $this->partial('files/partials/files.phtml', $options); 
+	echo $this->partial('pm/files/partials/files', $options); 
 endif;
 ?>
 
@@ -186,7 +186,7 @@ if($this->notes):
 <div class="content_headers">
 	<div class="note_header">Notes</div>
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'notes'), null, TRUE); ?>" rel="facebox" title="Add Project">
+		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'notes'), null, TRUE); ?>" rel="facebox" title="Add Project">
 			<?php echo $this->InteractIcon('help', 'About User Notes');?>
 			<div class="action_text">Help</div>
 		</a>
@@ -194,7 +194,7 @@ if($this->notes):
 </div>
 <?php 
 	$options = array('notes' => $this->notes);
-	echo $this->partial('notes/partials/notes.phtml', $options); 
+	echo $this->partial('pm/notes/partials/notes', $options); 
 endif;
 ?>
 
@@ -203,7 +203,7 @@ endif;
 <div class="content_headers">
 	<div class="bookmark_header">Bookmarks</div>	
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'bookmarks'), null, TRUE); ?>" rel="facebox" title="Add Project">
+		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'bookmarks'), null, TRUE); ?>" rel="facebox" title="Add Project">
 			<?php echo $this->InteractIcon('help', 'About User Bookmarks');?>
 			<div class="action_text">Help</div>
 		</a>
@@ -211,7 +211,7 @@ endif;
 </div>
 <?php 
 	$options = array('bookmarks' => $this->bookmarks);
-	echo $this->partial('bookmarks/partials/bookmarks.phtml', $options); 
+	echo $this->partial('pm/bookmarks/partials/bookmarks', $options); 
 endif; ?>
 
 <?php 
@@ -220,7 +220,7 @@ if($this->times):
 <div class="content_headers">
 	<div class="timetracker_header">Timetracker</div>
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'times'), null, TRUE); ?>" rel="facebox" title="Add Project">
+		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'users', 'page' => 'times'), null, TRUE); ?>" rel="facebox" title="Add Project">
 			<?php echo $this->InteractIcon('help', 'About User Times');?>
 			<div class="action_text">Help</div>
 		</a>
@@ -228,5 +228,5 @@ if($this->times):
 </div>
 <?php 
 	$options = array('times' => $this->times, 'enable_project' => 'yes', 'enable_task' => 'yes', 'enable_company' => 'yes', 'enable_date' => 'yes');
-	echo $this->partial('times/partials/times.phtml', $options); 
+	echo $this->partial('pm/times/partials/times', $options); 
 endif; ?>
