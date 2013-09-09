@@ -13,6 +13,7 @@
 namespace PM;
 
 use Zend\ModuleManager\ModuleManager;
+use DateTime;
 
 use PM\Model\Projects;
 use PM\Model\Companies;
@@ -175,6 +176,19 @@ class Module
 				    $auth = $sm->get('AuthService');
 				    $al = $sm->get('PM\Model\ActivityLog');
 					return new NotificationEvent($al, $auth->getIdentity());
+				},	
+				'Timezone' => function($sm) {
+				    
+				    $auth = $sm->get('AuthService');
+					$settings = $sm->get('Application\Model\Settings');
+					
+					$data = $settings->getSettings();
+					//setup timezones
+					date_default_timezone_set($data['timezone']);
+					$dt = new DateTime();
+					$offset = $dt->format('P');
+					$settings->query("SET time_zone='$offset'");
+					return true;
 				},											
 			),
     	);

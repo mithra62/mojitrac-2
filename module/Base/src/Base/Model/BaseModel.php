@@ -151,6 +151,11 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		return $result->getAffectedRows(); 
 	}
 	
+	public function query($sql)
+	{
+	    $result = ($this->adapter->query($sql, 'execute'));
+	}
+	
 	/**
 	 * Returns the databse adapter or lazy loads it if it doesn't exist
 	 */

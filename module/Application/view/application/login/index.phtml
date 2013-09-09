@@ -19,7 +19,7 @@ echo $this->form()->openTag($form);
 $csrf = $form->get('_x');
 echo $this->formRow($csrf); 
 ?>
-<p><label><?php echo $this->translate('email', 'app'); ?></label>
+<p><label><?php echo $this->_('email', 'app'); ?></label>
 <?php 
 $email = $form->get('email');
 echo $this->formRow($email); ?>

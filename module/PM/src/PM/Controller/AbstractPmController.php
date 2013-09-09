@@ -59,6 +59,8 @@ abstract class AbstractPmController extends AbstractController
 		$settings = $this->getServiceLocator()->get('Application\Model\Settings'); 
 		$this->settings = $settings->getSettings();	
 		
+		$this->getServiceLocator()->get('Timezone');
+		
 		$this->_initPrefs();
 		$this->perm = $this->getServiceLocator()->get('Application\Model\Permissions');
 				
