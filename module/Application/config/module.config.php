@@ -10,7 +10,6 @@
 * @filesource 	./module/Application/config/module.config.php
 */
 
-
 return array(
     'router' => array(
         'routes' => array(
@@ -71,24 +70,24 @@ return array(
         	), //end Login Routes
             
             'forgot-password' => array(
-            		'type' => 'Zend\Mvc\Router\Http\Literal',
-            		'options' => array(
-            				'route'    => '/forgot-password',
-            				'defaults' => array(
-            						'controller' => 'Application\Controller\ForgotPassword',
-            						'action'     => 'index',
-            				),
+            	'type' => 'Zend\Mvc\Router\Http\Literal',
+            	'options' => array(
+            		'route'    => '/forgot-password',
+            		'defaults' => array(
+            			'controller' => 'Application\Controller\ForgotPassword',
+            			'action'     => 'index',
             		),
+            	),
             ), 
             'forgot-password/reset' => array(
-            		'type' => 'Zend\Mvc\Router\Http\Literal',
-            		'options' => array(
-            				'route'    => '/forgot-password/reset',
-            				'defaults' => array(
-            						'controller' => 'Application\Controller\ForgotPassword',
-            						'action'     => 'reset',
-            				),
+            	'type' => 'Zend\Mvc\Router\Http\Literal',
+            	'options' => array(
+            		'route'    => '/forgot-password/reset',
+            		'defaults' => array(
+            			'controller' => 'Application\Controller\ForgotPassword',
+            			'action'     => 'reset',
             		),
+            	),
             ), 
         ),
     ),
@@ -99,16 +98,6 @@ return array(
         ),
         'aliases' => array(
             'translator' => 'MvcTranslator',
-        ),
-    ),
-    'translator' => array(
-        'locale' => 'en_US',
-        'translation_file_patterns' => array(
-            array(
-                'type'     => 'gettext',
-                'base_dir' => __DIR__ . '/../language',
-                'pattern'  => '%s.mo',
-            ),
         ),
     ),
     'controllers' => array(
@@ -139,7 +128,10 @@ return array(
 	    'invokables' => array(
 	    	'StaticUrl' => 'Application\View\Helper\StaticUrl',
 	    ),
-    ),    
+    ), 
+    'helper_map' => array(
+    		'_' => 'Zend\View\Helper\Translator'
+    ),       
     'translator' => array(
         'translation_file_patterns' => array(
             array(

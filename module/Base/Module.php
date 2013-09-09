@@ -8,6 +8,9 @@ class Module
         $translator = $e->getApplication()->getServiceManager()->get('translator');
         $translator->setLocale(\Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']))->setFallbackLocale('en_US');
         
+        $e->getApplication()->getServiceManager()->get('ViewHelperManager')->setAlias('_', 'translate');
+        $e->getApplication()->getServiceManager()->get('ViewHelperManager')->setAlias('plural', 'translateplural');        
+        
     }
     public function getConfig()
     {
