@@ -64,7 +64,7 @@ class ActivityLogEvent extends BaseEvent
     {
         foreach($this->hooks AS $key => $value)
         {
-        	$ev->attach('Application\Model\AbstractModel', $key, array($this, $value));
+        	$ev->attach('Base\Model\BaseModel', $key, array($this, $value));
         }        
     }
     
@@ -123,7 +123,7 @@ class ActivityLogEvent extends BaseEvent
 	 * @param int $performed_by
 	 * @return void
 	 */
-	public function logProjectAdd($event)
+	public function logProjectAdd(\Zend\EventManager\Event $event)
 	{
 		$data = $event->getParam('data');
 		$project_id = $event->getParam('project_id');
@@ -137,7 +137,6 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logProjectUpdate(\Zend\EventManager\Event $event)
 	{
-	    //$event->getName();
 	    $data = $event->getParam('data');
 	    $project_id = $event->getParam('project_id');
 	    $data = array('stuff' => $data, 'project_id' => $project_id, 'type' => 'project_update', 'performed_by' => $this->identity);    

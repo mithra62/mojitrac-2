@@ -178,13 +178,11 @@ class Module
 					return new NotificationEvent($al, $auth->getIdentity());
 				},	
 				'Timezone' => function($sm) {
-				    
 				    $auth = $sm->get('AuthService');
 					$settings = $sm->get('Application\Model\Settings');
-					
 					$data = $settings->getSettings();
-					//setup timezones
 					date_default_timezone_set($data['timezone']);
+					
 					$dt = new DateTime();
 					$offset = $dt->format('P');
 					$settings->query("SET time_zone='$offset'");

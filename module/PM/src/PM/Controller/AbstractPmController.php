@@ -94,7 +94,7 @@ abstract class AbstractPmController extends AbstractController
 		{
 			if(!$url)
 			{
-				$this->_helper->redirector('index', 'index', 'pm');
+				return $this->redirect()->toRoute('pm');
 			}
 			 
 			exit;

@@ -6,14 +6,13 @@
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/modules/pm/controllers/UsersController.php
+* @version		2.0
+* @filesource 	./module/PM/src/PM/Controller/UsersController.php
 */
 
-/**
- * Include the Abstract library
- */
-include_once 'Abstract.php';
+namespace PM\Controller;
+
+use PM\Controller\AbstractPmController;
 
 /**
 * PM - Users Controller
@@ -22,25 +21,17 @@ include_once 'Abstract.php';
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./moji/application/modules/pm/controllers/UsersController.php
+* @filesource 	./module/PM/src/PM/Controller/UsersController.php
 */
-class Pm_UsersController extends PM_Abstract
+class UsersController extends AbstractPmController
 {
 
 	/**
 	 * Class preDispatch
 	 */
-	public function preDispatch()
-	{ 
-		parent::preDispatch();
-        $this->view->headTitle('Users', 'PREPEND');
-        $this->view->layout_style = 'single';
-		$this->view->sidebar = 'dashboard';
-		$this->view->sub_menu = 'admin';
-		$this->view->active_nav = 'admin';
-		$this->view->active_sub = 'users';
-        $this->view->uri = $this->_request->getPathInfo();
-		$this->view->title = FALSE;          
+	public function onDispatch( \Zend\Mvc\MvcEvent $e )
+	{
+		$e = parent::onDispatch( $e );      
 	}
 
 	/**
@@ -49,9 +40,14 @@ class Pm_UsersController extends PM_Abstract
 	 */
 	public function indexAction()
 	{
-        parent::check_permission('view_users_data');
-		$users = new PM_Model_Users(new PM_Model_DbTable_Users);
-		$this->view->users = $users->getAllUsers();
+        if(!$this->perm->check($this->identity, 'view_users_data'))
+        {
+            return $this->redirect()->toRoute('pm');
+        }
+        
+		$users = $this->getServiceLocator()->get('Application\Model\User');
+		$view['users'] = $users->getAllUsers();
+		return $view;
 	}
 
 	/**
