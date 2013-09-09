@@ -140,6 +140,17 @@ return array(
 	    	'StaticUrl' => 'Application\View\Helper\StaticUrl',
 	    ),
     ),    
+    'translator' => array(
+        'translation_file_patterns' => array(
+            array(
+                'type'     => 'phparray',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern'  => '%s.php',
+                'text_domain' => 'app',
+            ),
+        ),
+    ),
+              
     // Placeholder for console routes
     'console' => array(
         'router' => array(

@@ -12,7 +12,7 @@ if(is_array($this->messages) && count($this->messages) >= 1)
 	}
 } else {
 	
-	echo '<div class="information large png_bg">To log in please enter your credentials below.</div> ';
+	echo '<div class="information large png_bg">'.$this->translate('login_message', 'app').'</div> ';
 }
 ?>		
 		<?php echo $this->form()->openTag($form); ?>

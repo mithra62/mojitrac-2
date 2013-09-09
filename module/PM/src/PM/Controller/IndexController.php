@@ -13,8 +13,6 @@
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 /**
 * PM - Index Controller
 *
@@ -43,7 +41,7 @@ class IndexController extends AbstractPmController
     		$formData = $this->getRequest()->getPost();
     		if(array_key_exists('task_completed', $formData) && is_array($formData['task_completed']))
     		{
-    			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
+    			$task = $this->getServiceLocator()->get('PM\Model\Tasks');
     			$looped = FALSE;
     			foreach($formData['task_completed'] AS $task_id => $value)
 	    		{
@@ -56,9 +54,10 @@ class IndexController extends AbstractPmController
 	    						if($task->markCompleted($task_id, $this->identity))
 	    						{
 	    							$looped = TRUE;
-						            $noti = new PM_Model_Notifications;
-						            $noti->sendTaskStatusChange($t);	    							
-	    							PM_Model_ActivityLog::logTaskUpdate($t, $task_id, $t['project_id'], $this->identity);	    							
+	    							//todo
+						            //$noti = new PM_Model_Notifications;
+						            //$noti->sendTaskStatusChange($t);	    							
+	    							//PM_Model_ActivityLog::logTaskUpdate($t, $task_id, $t['project_id'], $this->identity);	    							
 	    						}
 	    					}
 	    				}
