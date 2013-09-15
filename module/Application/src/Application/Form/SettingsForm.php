@@ -14,6 +14,8 @@ namespace Application\Form;
 
 use Base\Form\BaseForm;
 use PM\Model\Options\Companies;
+use PM\Model\Options\Timezones;
+use PM\Model\Options\Languages;
 
 /**
 * Password Form
@@ -43,6 +45,30 @@ class SettingsForm extends BaseForm
 			),
 			'options' => array(
 				'value_options' => Companies::companies($companies, TRUE),
+			)
+		));
+
+		$this->add(array(
+			'name' => 'timezone',
+			'type' => 'Select',
+			'attributes' => array(
+				'class' => 'select input',
+				'id' => 'timezone'
+			),
+			'options' => array(
+				'value_options' => Timezones::tz(),
+			)
+		));
+
+		$this->add(array(
+			'name' => 'locale',
+			'type' => 'Select',
+			'attributes' => array(
+				'class' => 'select input',
+				'id' => 'locale'
+			),
+			'options' => array(
+				'value_options' => Languages::langs(),
 			)
 		));
 

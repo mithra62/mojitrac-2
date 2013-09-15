@@ -12,6 +12,8 @@
 
 namespace Application\Form;
 
+use Base\Form\BaseForm;
+
 /**
 * PrefsForm Form
 *
@@ -21,7 +23,7 @@ namespace Application\Form;
 * @author		Eric Lamb
 * @filesource 	./module/Application/src/Application/Form/PrefsForm.php
 */
-class PrefsForm extends AbstractForm
+class PrefsForm extends BaseForm
 {
 	/**
 	 * Returns the Preferences form

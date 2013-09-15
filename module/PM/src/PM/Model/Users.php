@@ -53,33 +53,6 @@ class Users extends AbstractModel
 		$this->title  = (!empty($data['title'])) ? $data['title'] : null;
 	}
 		
-	/**
-	 * Returns the User Form
-	 * @return object
-	 */
-	public function getUsersForm($options = array(), $add_password = FALSE, $add_terms = FALSE, $unique_email = TRUE, $add_roles = FALSE)
-	{
-        return new PM_Form_Users($options, $add_password, $add_terms, $unique_email, $add_roles);		
-	}	
-	
-	/**
-	 * Returns the Password Form
-	 * @return object
-	 */
-	public function getPasswordForm($options = array(), $confirm = TRUE)
-	{
-        return new PM_Form_Password($options, $confirm);		
-	}
-	
-	/**
-	 * Returns the Prefernces Form
-	 * @return object
-	 */
-	public function getPrefsForm($options = array(), $confirm = TRUE)
-	{
-        return new PM_Form_Prefs($options, $confirm);		
-	}	
-	
 	public function changePassword($id, $password)
 	{
 		$hash = new Model_Hash;

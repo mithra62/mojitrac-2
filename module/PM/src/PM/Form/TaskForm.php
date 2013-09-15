@@ -41,6 +41,10 @@ class TaskForm extends BaseForm
 		$this->project = $project;
 	}
 	
+	/**
+	 * Sets the default form values
+	 * @param int $project_id
+	 */
 	public function setup($project_id)
 	{		
 	    $this->add(array(

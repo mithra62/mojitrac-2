@@ -104,22 +104,22 @@ class UsersController extends AbstractPmController
 	 */
 	public function editAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('user_id');
 		if (!$id) 
 		{
-			$this->view->active_nav = '';
-			$this->view->sub_menu = 'settings';
+			$this->layout()->setVariable('active_nav', '');
+			$this->layout()->setVariable('sub_menu', 'settings');
 			$id = $this->identity;
 		}
 		
-		if(!$this->perm->check($this->identity, 'manage_users'))
+		if(!$this->perm->check($this->identity, 'view_users_data'))
         {
-        	$this->view->active_nav = '';
-        	$this->view->sub_menu = 'settings';
+			$this->layout()->setVariable('active_nav', '');
+			$this->layout()->setVariable('sub_menu', 'settings');
         	$id = $this->identity;
-        }			
+        }		
 
-		$user = new PM_Model_Users(new PM_Model_DbTable_Users);
+		$user = $this->getServiceLocator()->get('Application\Model\User');
 		$form = $user->getUsersForm(array(
             'action' => '/pm/users/edit/',
             'method' => 'post',

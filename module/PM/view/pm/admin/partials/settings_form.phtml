@@ -10,6 +10,7 @@ echo $this->formRow($csrf);
 	<ul>
 		<li><a href="#general">General</a></li>
 		<li><a href="#files">Files</a></li>
+		<li><a href="#i18n">i18n</a></li>
 	</ul>
 	<div id="general">
 		<p>
@@ -32,7 +33,21 @@ echo $this->formRow($csrf);
 		<p>
 			<input type="submit" class="submit" value="Submit" />
 		</p>
-	</div>	
+	</div>
+	
+	<div id="i18n">
+		<p>
+			<label for="timezone">Timezone <a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'settings', 'page' => 'allowed_file_formats'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Allowed File Formats');?></a></label>
+			<?php $field = $form->get('timezone'); echo $this->formRow($field); ?>
+		</p>
+		<p>
+			<label for="locale">Locale <a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'settings', 'page' => 'allowed_file_formats'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Allowed File Formats');?></a></label>
+			<?php $field = $form->get('locale'); echo $this->formRow($field); ?>
+		</p>		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>
+	</div>		
 
 </div>	
 

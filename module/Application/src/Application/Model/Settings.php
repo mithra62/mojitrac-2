@@ -22,54 +22,22 @@ use Zend\Db\Sql\Sql;
  * @filesource 	./module/Application/src/Application/Model/Settings.php
 */
 class Settings extends AbstractModel
-{
+{			
 	/**
-	 * The link to the database object
-	 * @var object
-	 */
-	public $db;
-	
-	/**
-	 * The cache object
-	 * @var object
-	 */
-	public $cache;
-	
-	/**
-	 * Contains all the keys for the client settings
+	 * Contains all the defaults for the global settings
 	 * @var array
 	 */
-	public $client = array('');
-	
-	/**
-	 * Contains all the keys for the global settings
-	 * @var array
-	 */
-	public $global = array(
-						   'master_company', 
-						   'enable_ip', 
-						   'timezone', 
-						   'allowed_file_formats', 
-						   'date_format', 
-						   'date_format_custom', 
-						   'time_format', 
-						   'time_format_custom'
-			);
-			
-	/**
-	 * Contains all the keys for the global settings
-	 * @var array
-	 */
-	public $pm = array(
-					  'master_company', 
-					  'enable_ip', 
-					  'timezone', 
-					  'allowed_file_formats', 
-					  'date_format',
-					  'date_format_custom',  
-					  'time_format',  
-					  'time_format_custom'
-			);			
+	private $defaults = array(
+	  'master_company' => '1', 
+	  'enable_ip' => '0', 
+	  'timezone' => 'America/Los_Angeles', 
+	  'locale' => 'en_US', 
+	  'allowed_file_formats' => 'jpg,gif,png,txt,docx,doc,pdf,php,xls,xlsx,csv,psd,ppt,pptx,pot,potx,rar,zip,tar,gz,tgz,bz2,html,htm,avi,mov,fla,swf,asf,flv,sql,mp3', 
+	  'date_format' => 'F j, Y',
+	  'date_format_custom' => '',  
+	  'time_format' => 'g:i A',  
+	  'time_format_custom' => ''
+	);			
 	
 	/**
 	 * The Constructor
@@ -79,13 +47,21 @@ class Settings extends AbstractModel
 		parent::__construct($adapter, $db);
 	}
 	
+	public function getSQL($data){
+		return array(
+			'option_value' => $data['option_value'],
+			'option_name' => $data['option_name'],
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+	}
+	
 	/**
 	 * Verifies that a submitted setting is valid and exists. If it's valid but doesn't exist it is created.
 	 * @param string $setting
 	 */
 	private function _checkSetting($setting)
 	{
-		if(in_array($setting, $this->global) || in_array($setting, $this->pm) || in_array($setting, $this->client))
+		if(array_key_exists($setting, $this->defaults))
 		{
 			if(!$this->getSetting($setting))
 			{
@@ -102,8 +78,9 @@ class Settings extends AbstractModel
 	 */
 	public function addSetting($setting)
 	{
-		$sql = $this->db->getSQL(array('option_name' => $setting));
-		return $this->db->addSetting($sql);
+		$sql = $this->getSQL(array('option_name' => $setting));
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
+		return $this->insert('settings', $sql);
 	}
 	
 	/**
@@ -112,8 +89,8 @@ class Settings extends AbstractModel
 	 */
 	public function getSetting($setting)
 	{
-		$sql = $this->db->select()->from($this->db->getTableName(), array('id'))->where('option_name = ?', $setting);
-		return $this->db->getSetting($sql);
+		$sql = $this->db->select()->from('settings')->columns( array('id'))->where(array('option_name' => $setting));
+		return $this->getRow($sql);
 	}
 	
 	/**
@@ -128,9 +105,8 @@ class Settings extends AbstractModel
 			return FALSE;
 		}
 		
-		$sql = $this->db->getSQL(array('option_name' => $key, 'option_value' => $value));
-		return $this->db->updateSetting($sql, $key);
-		
+		$sql = $this->getSQL(array('option_name' => $key, 'option_value' => $value));
+		return $this->update('settings', $sql, array('option_name' => $key));
 	}
 	
 	/**
@@ -139,17 +115,15 @@ class Settings extends AbstractModel
 	 */
 	public function updateSettings($settings)
 	{
-		$ip = new PM_Model_Ips;
-		$identity = Zend_Auth::getInstance()->getIdentity();
 		foreach($settings AS $key => $value)
 		{
 			$this->updateSetting($key, $value);
 			if($key == 'enable_ip' && $value == '1')
 			{				
-				$ip->addIp(array('ip' => $_SERVER['REMOTE_ADDR'], 'description' => 'Ip Blocking Enabled'), $identity);
+				//ip->addIp(array('ip' => $_SERVER['REMOTE_ADDR'], 'description' => 'Ip Blocking Enabled'), $identity);
 			}
 		}
-		$this->cache->remove('pm_settings');
+		
 		return TRUE;
 	}
 
@@ -181,6 +155,16 @@ class Settings extends AbstractModel
 				$arr[$setting['option_name']] = $setting['option_value'];
 			}
 		}
+		
+		//now we verify there are settings for everything 
+		foreach($this->defaults AS $key => $value)
+		{
+		    if(!isset($arr[$key]))
+		    {
+		        $arr[$key] = $value;
+		    }
+		}
+		
 		return $arr;
 	}
 	

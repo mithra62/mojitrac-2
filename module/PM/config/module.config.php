@@ -24,9 +24,9 @@ return array(
                 ),
             ),
         	'calendar' => array(
-        		'type' => 'Zend\Mvc\Router\Http\Literal',
+        		'type' => 'segment',
         		'options' => array(
-        			'route'    => '/calendar',
+        			'route'    => '/pm/calendar',
         			'defaults' => array(
         				'controller' => 'PM\Controller\Calendar',
         				'action' => 'index',

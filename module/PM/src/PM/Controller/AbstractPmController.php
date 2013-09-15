@@ -63,6 +63,9 @@ abstract class AbstractPmController extends AbstractController
 		
 		$this->_initPrefs();
 		$this->perm = $this->getServiceLocator()->get('Application\Model\Permissions');
+		
+		$translator = $e->getApplication()->getServiceManager()->get('translator');
+		$translator->setLocale(\Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']))->setFallbackLocale('en_US');		
 				
 		$this->layout()->setVariable('messages',  $this->flashMessenger()->getMessages());
 		//$this->layout()->setVariable('layout_style', 'left');
@@ -106,7 +109,7 @@ abstract class AbstractPmController extends AbstractController
 	 */
 	protected function _initIpBlocker()
 	{
-		if(array_key_exists('enable_ip', $this->settings) && $this->settings['enable_ip'] !== FALSE)
+		if(!empty($this->settings['enable_ip']) && $this->settings['enable_ip'] != '1')
 		{
 			$ip = $this->getServiceLocator()->get('PM\Model\Ips');
 			if(!$ip->isAllowed($_SERVER['REMOTE_ADDR']))
