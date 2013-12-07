@@ -9,7 +9,7 @@
     "homepage": "http://mojitrac.com/",
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework": ">2.2.0rc1",
+        "zendframework/zendframework": "2.*",
         "zendframework/zftool": "dev-master",
         "zendframework/zend-developer-tools": "dev-master",
         "bjyoungblood/bjy-profiler": "dev-master",
