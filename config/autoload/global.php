@@ -16,7 +16,9 @@ return array(
     'cache_dir' =>  './data/cache',
 	'db' => array(
 		'driver'  => 'Pdo',
-		'dsn' => 'mysql:dbname=dev_moji_install;host=localhost',
+		'dsn' => '', //Local.php
+		'username' => '', //Local.php
+		'password' => '', //Local.php
 		'driver_options' => array(
 			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
 		),
@@ -24,15 +26,11 @@ return array(
     //see http://framework.zend.com/manual/2.1/en/modules/zend.mail.smtp.options.html for complete options
     'email' => array(
 	   'type' => 'php', //choose between `php` and `smtp`
-       'smtp_options' => array( //if `smtp` chosen above, this must be completed and accurate 
-       
+       'smtp_options' => array( //if `smtp` chosen above, this must be completed and accurate
            'name' => 'localhost.localdomain',
            'host' => '127.0.0.1',
            'connection_class' => 'login',
-           'connection_config' => array(
-           	    'username' => 'user',
-           		'password' => 'pass',
-           )    	   
+           'connection_config' => array()
         ) 
     ),
 	'service_manager' => array(
