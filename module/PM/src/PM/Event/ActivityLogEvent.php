@@ -36,6 +36,12 @@ class ActivityLogEvent extends BaseEvent
     public $identity = false;
     
     /**
+     * The project data that's to be removed
+     * @var array
+     */
+    private $removed_project_data = array();
+    
+    /**
      * The hooks used for the Event
      * @var array
      */
@@ -43,6 +49,8 @@ class ActivityLogEvent extends BaseEvent
         'project.update.pre' => 'logProjectUpdate',
         'project.add.post' => 'logProjectAdd',
         'project.addteam.post' => 'logProjectTeamAdd',
+    	'project.remove.pre' => 'prepLogProjectRemove',
+    	'project.remove.post' => 'logProjectRemove'
     );
     
     /**
@@ -119,9 +127,7 @@ class ActivityLogEvent extends BaseEvent
 	/**
 	 * Wrapper to log a project update entry
 	 * @todo Check for existance of a project add log before creating a new one
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
+	 * @param \Zend\EventManager\Event $event
 	 * @return void
 	 */
 	public function logProjectAdd(\Zend\EventManager\Event $event)
@@ -135,6 +141,7 @@ class ActivityLogEvent extends BaseEvent
 	
 	/**
 	 * Wrapper to log a project update entry
+	 * @param \Zend\EventManager\Event $event
 	 * @return void
 	 */
 	public function logProjectUpdate(\Zend\EventManager\Event $event)
@@ -146,22 +153,34 @@ class ActivityLogEvent extends BaseEvent
 	}
 	
 	/**
-	 * Wrapper to log a project removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
+	 * Prepares the project data for use by the logger after the project is actually removed
+	 * @param \Zend\EventManager\Event $event
 	 * @return void
 	 */
-	public function logProjectRemove(array $data)
+	public function prepLogProjectRemove(\Zend\EventManager\Event $event)
 	{
+	    $project_id = $event->getParam('id');
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+		$this->removed_project_data = $project->getProjectById($project_id);
+	}
+	
+	/**
+	 * Wrapper to log a project removal
+	 * @param \Zend\EventManager\Event $event
+	 * @return void
+	 */
+	public function logProjectRemove(\Zend\EventManager\Event $event)
+	{
+	    $project_id = $event->getParam('id');
+	    $project = $this->getServiceLocator()->get('PM\Model\Projects');
+	    $data = (!empty($this->removed_project_data) ? $this->removed_project_data : '');
+	    $data = array('stuff' => $data, 'project_id' => $project_id, 'type' => 'project_remove', 'performed_by' => $this->identity);    
 		$this->al->logActivity($data);
 	}
 	
 	/**
 	 * Wrapper to log a project removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
+	 * @param \Zend\EventManager\Event $event
 	 * @return void
 	 */
 	public function logProjectTeamRemove(array $data, $id, $performed_by)

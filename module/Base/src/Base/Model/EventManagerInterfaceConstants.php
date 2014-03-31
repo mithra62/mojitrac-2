@@ -39,6 +39,8 @@ interface EventManagerInterfaceConstants extends EventManagerAwareInterface
 	const EventProjectAddTeamPost = 'project.addteam.post';
 	const EventProjectRemoveTeamPre = 'project.removeteam.pre';
 	const EventProjectRemoveTeamPost = 'project.removeteam.post';
+	const EventProjectRemoveTeamMemberPre = 'project.removeteammember.pre';
+	const EventProjectRemoveTeamMemberPost = 'project.removeteammember.post';
 	
 	const EventTaskUpdatePre = 'task.update.pre';
 	const EventTaskUpdatePost = 'task.update.post';

@@ -298,10 +298,9 @@ class Projects extends AbstractModel
 	 */
 	public function getCompanyId($id)
 	{
-		$sql = $this->db->select()->from($this->db->getTableName(), array('company_id'))
-						->where('id = ?', $id);
-		$company = $this->db->getProject($sql);
-		
+		$sql = $this->db->select()->from('projects')->columns( array('company_id'))
+						->where(array('id' => $id));
+		$company = $this->getRow($sql);
 		if(array_key_exists('company_id', $company))
 		{
 			return $company['company_id'];
@@ -394,11 +393,11 @@ class Projects extends AbstractModel
 	 */
 	public function removeProject($id)
 	{	
-		$ext = $this->event(self::EventProjectRemovePre, $this, compact('id'), $this->setXhooks(array('id' => $id)));
+		$ext = $this->trigger(self::EventProjectRemovePre, $this, compact('id'), $this->setXhooks(array('id' => $id)));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $id = $ext->last();	
-				
+		
 		$company_id = $this->getCompanyId($id);
-		if($this->db->deleteProject($id))
+		if($this->remove('projects', array('id' => $id)))
 		{
 		    $success = TRUE;
 		    /*
@@ -418,7 +417,7 @@ class Projects extends AbstractModel
 			$companies->updateCompanyProjectCount($company_id, -1, 'active_projects');
 			*/
 			
-			$ext = $this->event(self::EventProjectRemovePost, $this, compact('id'), $this->setXhooks(array('id' => $id)));
+			$ext = $this->trigger(self::EventProjectRemovePost, $this, compact('id'), $this->setXhooks(array('id' => $id)));
 			if($ext->stopped()) return $ext->last(); elseif($ext->last()) $success = $ext->last();
 						
 			return $success;
@@ -499,13 +498,13 @@ class Projects extends AbstractModel
 	 */
 	public function removeProjectTeamMember($id, $project)
 	{
-	    $ext = $this->trigger(self::EventProjectRemoveTeamPre, $this, compact('id', 'project'), $this->setXhooks(array('id' => $project)));
+	    $ext = $this->trigger(self::EventProjectRemoveTeamMemberPre, $this, compact('id', 'project'), $this->setXhooks(array('id' => $project)));
 	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $project = $ext->last();
 	    	    
 		$where = array('user_id' => $id, 'project_id' => $project);
 		$delete = $this->remove('project_teams', $where);
 		
-		$ext = $this->trigger(self::EventProjectRemoveTeamPost, $this, compact('id', 'project'), $this->setXhooks(array('id' => $project)));
+		$ext = $this->trigger(self::EventProjectRemoveTeamMemberPost, $this, compact('id', 'project'), $this->setXhooks(array('id' => $project)));
 		if($ext->stopped()) return $ext->last();
 
 		return $delete;
@@ -517,8 +516,16 @@ class Projects extends AbstractModel
 	 */
 	public function removeProjectTeam($id)
 	{
-		$team = new PM_Model_DbTable_Projects_Teams;
-		return $team->deleteProjectTeamMember($id, 'project_id');		
+	    $ext = $this->trigger(self::EventProjectRemoveTeamPre, $this, compact('id'), $this->setXhooks(array('id' => $id)));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $id = $ext->last();
+	    	    
+		$where = array('project_id' => $id);
+		$delete = $this->remove('project_teams', $where);
+		
+		$ext = $this->trigger(self::EventProjectRemoveTeamPost, $this, compact('id'), $this->setXhooks(array('id' => $id)));
+		if($ext->stopped()) return $ext->last();
+
+		return $delete;	
 	}
 	
 	/**
