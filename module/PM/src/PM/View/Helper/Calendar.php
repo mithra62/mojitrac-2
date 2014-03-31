@@ -12,7 +12,7 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Zend\View\Helper\AbstractHelper, DateTime, IntlDateFormatter, DateInterval;
 
 /**
  * PM - Calendar View Helper
@@ -43,7 +43,7 @@ class Calendar extends AbstractHelper
 	public function __invoke($calendar_data = FALSE, $base_url = FALSE, $date_key = FALSE, $link_rel = 'facebox')
 	{
 		//set the locale
-		$locale = "en_US";
+		$locale = "es_ES";
 		$base_date = null;
 
 		if (array_key_exists('date', $_GET)) {
@@ -72,15 +72,15 @@ class Calendar extends AbstractHelper
 		
 	}
 	
-	private function initDateParams (Zend_Date $date)
+	private function initDateParams ($date)
 	{
 		$this->monthNames = $this->getMonthNames(); //locale month list
-		$this->dayNames = Zend_Locale::getTranslationList('Day', $this->locale); //locale day list
+		$this->dayNames = $this->getDayNames(); //locale day list
 		$this->setValidDateRange(); //locale valid dates
-		$this->numMonthDays = $date->get(Zend_Date::MONTH_DAYS); //num days in locale month
+		$this->numMonthDays = $this->date->format('t'); //num days in locale month
 		$this->setNextMonth($date); //the next month
 		$this->setPrevMonth($date); //the previous month
-		$this->firstDayOfWeek = $date->get(Zend_Date::WEEKDAY_DIGIT); //first day of the curr month
+		$this->firstDayOfWeek = $this->date->format('w'); //first day of the curr month
 		$this->numWeeks = ceil(($this->getFirstDayOfWeek() + $this->getNumMonthDays()) / 7); //num weeks of curr month
 	}
 	
@@ -90,70 +90,73 @@ class Calendar extends AbstractHelper
 		$return = array();
 		foreach($range AS $key => $monthNum)
 		{
-			$return[$key+1] = date("F", mktime(0, 0, 0, $monthNum, 10));
+		    $fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'MMMM');
+			$return[$monthNum] = datefmt_format( $fmt , mktime(0,0,0,$monthNum,1,date('Y')));
 		}
-		 
-		print_r($return);
-		exit;
+
 		return $return;
-		print_r($range);
-		exit;
 	}
-		
-	/*
-	 *
-	*/
+	
+	private function setDayNames()
+	{
+	    $range = range(1,7);
+	    $return = array();
+	    foreach($range AS $key => $dayNum)
+	    {
+	    	$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'eee');
+	    	$key = strtolower(datefmt_format( $fmt , mktime(0,0,0,1,$dayNum,date('Y'))));
+	    	
+	    	$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'EEEE');
+	    	$return[$key] = datefmt_format( $fmt , mktime(0,0,0,1,$dayNum,date('Y')));
+	    }
+
+	    return $return;
+	}
+	
+	/**
+	 * Sets the date range the calendar uses
+	 * @param int $startOffset
+	 * @param int $endOffset
+	 */
 	public function setValidDateRange ($startOffset = -1, $endOffset = 12)
 	{
 		$this->validDates = array();
 		$startDate = clone $this->now;
-		$startMonth = $startDate->subMonth(abs($startOffset));
-		$startNum = intval($startMonth->get("M"));
-		$this->validDates[$startMonth->get("MMMM yyyy")] = $startMonth->get("MMM- yyyy");
+		$abs = abs($startOffset);
+		$startMonth = $startDate->add(DateInterval::createFromDateString($startOffset.' month'));
+
+		$startNum = intval($startMonth->format("m"));
+		$key_fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'MMMM yyyy');
+		$value_fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'MMM- yyyy');
+		$key = datefmt_format( $key_fmt , strtotime($startMonth->format('r')));
+		
+		$this->validDates[$key] = datefmt_format( $key_fmt , strtotime($startMonth->format('r')));
 		for ($i = $startNum; $i <= ($startNum + $endOffset); $i ++) {
-			$str = $startMonth->addMonth(1)->get("MMMM yyyy");
+		    
+		    $month = $startDate->add(DateInterval::createFromDateString('1 month'));
+		    $str = datefmt_format( $key_fmt , strtotime($month->format('r')));
+			//$str = $startMonth->addMonth(1)->get("MMMM yyyy");
 			$this->validDates[$str] = $str;
 		}
 		unset($startDate);
 		unset($startMonth);
 		unset($startNum);
 	}
-	/*
-	 *
-	*/
-	private function setNextMonth (Zend_Date $date)
+
+	private function setNextMonth (DateTime $date)
 	{
 		$tempDate = clone $date;
-		$this->nextMonth = $tempDate->addMonth(1);
+		$this->nextMonth = $tempDate->add(DateInterval::createFromDateString('1 month'));
 		unset($tempDate);
 	}
-	/*
-	 *
-	*/
-	private function setPrevMonth (Zend_Date $date)
+
+	private function setPrevMonth (DateTime $date)
 	{
 		$tempDate = clone $date;
-		$this->prevMonth = $tempDate->subMonth(1);
+		$this->prevMonth = $tempDate->sub(DateInterval::createFromDateString('1 month'));
 		unset($tempDate);
 	}
-	/**
-	 * @param $locale
-	 */
-	public function setLocale ($locale)
-	{
-		if (Zend_Locale::isLocale($locale)) {
-			$this->locale = new Zend_Locale($locale);
-			$this->date->setLocale($locale);
-		} else {
-			$this->locale = new Zend_Locale("en_US"); //default locale
-			$this->date->setLocale("en_US");
-		}
-		//update the date params
-		$this->initDateParams($this->date);
-	}
-	/**
-	 * @return String
-	 */
+
 	public function getCalendarHeaderHtml ( $arr = NULL )
 	{
 		$showPrevMonthLink=false;
@@ -191,9 +194,7 @@ class Calendar extends AbstractHelper
 		return "<div id=\"calendar_header\">$pLink&nbsp;$headDate&nbsp;$nLink</div>\n";
 	
 	}
-	/**
-	* @return String
-	 */
+
 	 public function getCalendarBodyHtml ( $arr = NULL )
 	 {
 	 $showToday=false;
@@ -211,9 +212,12 @@ class Calendar extends AbstractHelper
 	 $html .= "<td class='header'>$dayFull</td>\n";
 	 $html .= "</tr>\n";
 	
-	 //day numbers display
-	 $today = $this->now->get("d");
-	 $nowDate = $this->now->get("MMMM yyyy");
+	 //day numbers displaydate
+	 $fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'd');
+	 $today = datefmt_format($fmt, strtotime($this->now->format('r')));
+	 
+	 $fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'MMMM yyyy');
+	 $nowDate = datefmt_format($fmt, strtotime($this->now->format('r')));
 	 $focusDate = $this->getDateAsString();
 	 $calDayNum = 1;
 	
@@ -252,57 +256,57 @@ class Calendar extends AbstractHelper
 	 			}
 	 			$html .= "</table>\n";
 	 			return $html;
-	 			}
+    }
 	
-	 			private function process_date_data($m_date)
-	 			{
-	 					if(!is_array($this->date_data))
-	 					{
-	 							return;
-	 			}
+    private function process_date_data($m_date)
+	{
+        if(!is_array($this->date_data))
+        {
+            return;
+        }
 	
-	 			$stuff = '';
-	 			if(array_key_exists($m_date, $this->date_data))
-	 			{
-	 			foreach($this->date_data[$m_date] AS $data)
-	 			{
-	 			$stuff .= '<br /><a href="'.$data['href'].'" rel="'.$data['rel'].'" title="'.strip_tags($data['string']).'">'.$data['string'].'</a>';
-	 }
-	 }
+        $stuff = '';
+        if(array_key_exists($m_date, $this->date_data))
+        {
+            foreach($this->date_data[$m_date] AS $data)
+            {
+                $stuff .= '<br /><a href="'.$data['href'].'" rel="'.$data['rel'].'" title="'.strip_tags($data['string']).'">'.$data['string'].'</a>';
+            }
+        }
 	
 		return $stuff;
 	 }
 	
-	 /**
-	 * @return String
-	 */
-	 public function getCalendarHtml ( $arr = NULL )
-	 {
-	 $showToday=false;
-	 $showPrevMonthLink=false;
-	 $showNextMonthLink=false;
-	 $tableClass="calendar";
-	 $selectBox=false;
-	 $selectBoxName="selectMonth";
-	 $selectBoxFormName="selectMonthForm";
-	 if (is_array($arr))
-			extract ($arr);
-					
-		$html = "<div id=\"calendar_wrapper\">\n";
-			$html .= $this->getCalendarHeaderHtml(array('showPrevMonthLink'=>$showPrevMonthLink,
-	 'showNextMonthLink'=>$showNextMonthLink,
-	 'selectBox'=>$selectBox,
-	 'selectBoxName'=>$selectBoxName,
-	 	'selectBoxFormName'=>$selectBoxFormName)); //returns a div
-	 	$html .= "<div id=\"calendar_body\">\n";
-	 			$html .= $this->getCalendarBodyHtml(array('showToday'=>$showToday,
-	 			'tableClass'=>$tableClass)); //returns a table
-	 			$html .= "</div>\n</div>\n";
-	 			return $html;
+    public function getCalendarHtml ( $arr = NULL )
+    {
+        $showToday=false;
+        $showPrevMonthLink=false;
+        $showNextMonthLink=false;
+        $tableClass="calendar";
+        $selectBox=false;
+        $selectBoxName="selectMonth";
+        $selectBoxFormName="selectMonthForm";
+        if (is_array($arr))
+        	extract ($arr);
+        			
+        $html = "<div id=\"calendar_wrapper\">\n";
+        $html .= $this->getCalendarHeaderHtml(
+            array(
+                'showPrevMonthLink'=>$showPrevMonthLink,
+                'showNextMonthLink'=>$showNextMonthLink,
+                'selectBox'=>$selectBox,
+                'selectBoxName'=>$selectBoxName,
+                'selectBoxFormName'=>$selectBoxFormName)
+        ); 
+        
+        $html .= "<div id=\"calendar_body\">\n";
+        $html .= $this->getCalendarBodyHtml(array('showToday'=>$showToday,
+        'tableClass'=>$tableClass)); //returns a table
+        $html .= "</div>\n</div>\n";
+
+        return $html;
     }
-    /**
-     * @return String
-	     */
+
 	     public function getValidDatesSelectBox ( $arr = NULL )
 	     {
 	     $selectedDateStr=false;
@@ -344,107 +348,88 @@ class Calendar extends AbstractHelper
 	*/
 	public function getDayNames ()
 	{
-	return $this->dayNames;
+        if(!$this->dayNames)
+        {
+        	$this->dayNames = $this->setDayNames();
+        }
+	    	    
+        return $this->dayNames;
 	}
-	/**
-	* @return Zend_Locale
-	*/
+
+	
 	public function getLocale ()
 	{
-	return $this->locale;
+        return $this->locale;
 	}
-	/**
-	* @return String
-	*/
+	
 	public function getLocaleAsString ()
 	{
-	return $this->locale->toString();
+        return $this->locale->toString();
 	}
-	/**
-	* @return int
-	*/
+	
 	public function getFirstDayOfWeek ()
 	{
-	return $this->firstDayOfWeek;
+        return $this->firstDayOfWeek;
 	}
-	/**
-	* @return Zend_Date
-	*/
+	
 	public function getDate ()
 	{
-	return $this->date;
+        return $this->date;
 	}
-	/**
-	* @return String "MMMM yyyy"
-		*/
-			public function getDateAsString ()
-			{
-			return $this->date->get("MMMM yyyy");
-	}
-	/**
-	* @param Zend_Date
-	*/
+
+    public function getDateAsString ()
+    {
+        $fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'MMMM yyyy');
+        return datefmt_format($fmt, strtotime($this->date->format('r')));        
+    }
+    
 	public function setDate ($date = null, $locale = "en_US")
 	{
-    	//locale
-    	if (Zend_Locale::isLocale($locale)) {
-    	   $this->now = Zend_Date::now($locale); //today
-    	   $this->locale = new Zend_Locale($locale);
-    	} else {
-    	   $this->now = Zend_Date::now("en_US"); //today, default locale
-    	   $this->locale = new Zend_Locale("en_US"); //default locale
-    	}
+    	$this->now = new DateTime();
+    	$this->locale = $locale; 
+    	
     	//date
     	try {
-    	   $this->date = new Zend_Date($date, "MMMM yyyy", $this->locale);
-    	} catch (Zend_Date_Exception $zde) {
-    	   $this->date = new Zend_Date(null, "MMMM yyyy", $this->locale);
+    	   $this->date = new DateTime(strtotime($date));
+    	} catch (Exception $zde) {
+    	   $this->date = new DateTime(time());
     	}
     	//date params
     	$this->initDateParams($this->date);
 	}
+	
 	/**
 	* @return int
 	*/
 	public function getNumMonthDays ()
-		{
-			return $this->numMonthDays;
+	{
+	   return $this->numMonthDays;
 	}
-	/**
-	* @return String
-	*/
+	
 	public function getMonthName ()
 	{
-	return $this->date->get("MMMM");
+        return $this->date->get("MMMM");
 	}
-		/**
-		* @return String
-     */
-				public function getMonthShortName ()
-				{
-				return $this->date->get("MMM");
+
+    public function getMonthShortName ()
+	{
+        return $this->date->get("MMM");
 	}
-	/**
-	* @return int
-			*/
+	
 	public function getMonthNum ()
-		{
-		return $this->date->get("MM");
+	{
+	    return $this->date->get("MM");
 	}
-		/**
-			* @return int
-			*/
-			public function getYear ()
-			{
-			return $this->date->get("yyyy");
-		}
-		/**
-		* @return String
-			*/
-				public function getNextMonthName ()
-			{
-			return $this->nextMonth->get("MMMM");
-		}
+
+    public function getYear ()
+	{
+        return $this->date->get("yyyy");
+	}
+	
+    public function getNextMonthName ()
+	{
+		return $this->nextMonth->get("MMMM");
+	}
 		/**
 		* @return int
 		*/
@@ -459,12 +444,11 @@ class Calendar extends AbstractHelper
 	     {
 	     return $this->nextMonth->get("yyyy");
 	     }
-	     /**
-	     * @return String "MMMM yyyy"
-	     */
-	     public function getNextMonthAsDateString ()
-	     {
-	     return $this->nextMonth->get("MMMM yyyy");
+	     
+    public function getNextMonthAsDateString ()
+	{
+	    $fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'MMMM yyyy');
+	    return datefmt_format($fmt, strtotime($this->nextMonth->format('r')));
 	}
 
 	
@@ -490,9 +474,10 @@ class Calendar extends AbstractHelper
 	 /**
 	 * @return String
 	 */
-	 public function getPrevMonthAsDateString ()
-	 	{
-	 	return $this->prevMonth->get("MMMM yyyy");
+    public function getPrevMonthAsDateString ()
+    {
+	 	$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'MMMM yyyy');
+	 	return datefmt_format($fmt, strtotime($this->prevMonth->format('r')));
 	}
 	/**
 	* @return int
