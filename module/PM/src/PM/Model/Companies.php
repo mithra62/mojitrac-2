@@ -17,6 +17,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
 use Application\Model\AbstractModel;
+use PM\Model\Projects;
 
  /**
  * PM - Companies Model
@@ -286,27 +287,17 @@ class Companies extends AbstractModel
 	/**
 	 * Handles everything for removing a company.
 	 * @param $id
-	 * @param $campaign_id
 	 * @return bool
 	 */
-	public function removeCompany($id)
+	public function removeCompany($company_id)
 	{
-		if($this->db->deleteCompany($id))
+		$ext = $this->trigger(self::EventCompanyRemovePre, $this, compact('company_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+				
+		if($this->db->deleteCompany($company_id))
 		{
-			$projects = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-			$projects->removeProjectsByCompany($id);
-			
-			$tasks = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-			$tasks->removeTasksByCompany($id);
-			
-			$files = new PM_Model_Files(new PM_Model_DbTable_Files);
-			$files->removeFilesByCompany($id);
-
-			$notes = new PM_Model_Notes;
-			$notes->removeNotesByCompany($id);
-
-			$bookmarks = new PM_Model_Bookmarks(new PM_Model_DbTable_Bookmarks);
-			$bookmarks->removeBookmarksByCompany($id);			
+			$ext = $this->trigger(self::EventCompanyRemovePost, $this, compact('company_id'), $this->setXhooks($data));
+			if($ext->stopped()) return $ext->last(); elseif($ext->last()) $update = $ext->last();
 		}
 		
 		return TRUE;

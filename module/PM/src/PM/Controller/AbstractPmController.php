@@ -93,6 +93,12 @@ abstract class AbstractPmController extends AbstractController
 	 */
 	public function check_permission($permission, $url = FALSE)
 	{
+		$this->identity = $this->getServiceLocator()->get('AuthService')->getIdentity();
+		if( empty($this->identity) )
+		{
+			return $this->redirect()->toRoute('login');
+		}
+					
 		if(!$this->perm->check($this->identity, $permission))
 		{
 			if(!$url)

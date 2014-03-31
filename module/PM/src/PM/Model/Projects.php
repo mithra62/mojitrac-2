@@ -90,22 +90,27 @@ class Projects extends AbstractModel
 	 * @return multitype:\PM\Model\Zend_Db_Expr unknown
 	 */
 	private function getSQL($data){
-		return array(
+		$sql = array(
     		'name' => (!empty($data['name']) ? $data['name'] : ''), 
     		'company_id' => (!empty($data['company_id']) ? $data['company_id'] : '0'),
     		'start_date' => (!empty($data['start_date']) ? $data['start_date'] : null),
     		'end_date' => (!empty($data['end_date']) ? $data['end_date'] : null),
     		'actual_end_date' => (!empty($data['actual_end_date']) ? $data['actual_end_date'] : null),
     		'status' => (!empty($data['status']) ? $data['status'] : ''),
-    		'percent_complete' => (!empty($data['percent_complete']) ? $data['percent_complete'] : ''),
+    		'percent_complete' => (!empty($data['percent_complete']) ? $data['percent_complete'] : 0),
     		'description' => (!empty($data['description']) ? $data['description'] : ''),
-    		'target_budget' => (!empty($data['target_budget']) ? $data['target_budget'] : ''),
-    		'actual_budget' => (!empty($data['actual_budget']) ? $data['actual_budget'] : ''),
+    		'target_budget' => (!empty($data['target_budget']) ? $data['target_budget'] : 0),
+    		'actual_budget' => (!empty($data['actual_budget']) ? $data['actual_budget'] : 0),
     		'creator' => (!empty($data['creator']) ? $data['creator'] : ''),
-    		'priority' => (!empty($data['priority']) ? $data['priority'] : ''),
+    		'priority' => (!empty($data['priority']) ? $data['priority'] : 0),
     		'type' => (!empty($data['type']) ? $data['type'] : ''),
     		'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
 		);
+		
+		if(empty($sql['creator']))
+			unset($sql['creator']);
+		
+		return $sql;
 	}	
 	
 	/**

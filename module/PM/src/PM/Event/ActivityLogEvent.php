@@ -118,6 +118,7 @@ class ActivityLogEvent extends BaseEvent
 	
 	/**
 	 * Wrapper to log a project update entry
+	 * @todo Check for existance of a project add log before creating a new one
 	 * @param array $data
 	 * @param int $id
 	 * @param int $performed_by
@@ -127,7 +128,8 @@ class ActivityLogEvent extends BaseEvent
 	{
 		$data = $event->getParam('data');
 		$project_id = $event->getParam('project_id');
-		$data = array('stuff' => $data, 'project_id' => $project_id, 'type' => 'project_add', 'performed_by' => $this->identity);
+		$company_id = $data['company_id'];
+		$data = array('stuff' => $data, 'project_id' => $project_id, 'company_id' => $company_id, 'type' => 'project_add', 'performed_by' => $this->identity);
 		$this->al->logActivity($data);		
 	}
 	
@@ -150,9 +152,9 @@ class ActivityLogEvent extends BaseEvent
 	 * @param int $performed_by
 	 * @return void
 	 */
-	public function logProjectRemove(array $data, $id, $performed_by)
+	public function logProjectRemove(array $data)
 	{
-		$this->al->logActivity(self::setDate(), 'project_remove', $performed_by, $data, $id);
+		$this->al->logActivity($data);
 	}
 	
 	/**
@@ -174,9 +176,12 @@ class ActivityLogEvent extends BaseEvent
 	 * @param int $performed_by
 	 * @return void
 	 */
-	public function logProjectTeamAdd(array $data, $id, $performed_by)
+	public function logProjectTeamAdd(\Zend\EventManager\Event $event)
 	{
-		$this->al->logActivity(self::setDate(), 'project_team_add', $performed_by, $data, $id);
+		$user_id = $event->getParam('id');
+		$project_id = $event->getParam('project');
+		$data = array('user_id' => $user_id, 'project_id' => $project_id, 'type' => 'project_team_add', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);
 	}
 	
 	/**
