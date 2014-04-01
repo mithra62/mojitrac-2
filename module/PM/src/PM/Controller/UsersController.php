@@ -120,10 +120,7 @@ class UsersController extends AbstractPmController
         }		
 
 		$user = $this->getServiceLocator()->get('Application\Model\User');
-		$form = $user->getUsersForm(array(
-            'action' => '/pm/users/edit/',
-            'method' => 'post',
-		), FALSE, FALSE, FALSE, $this->perm->check($this->identity, 'manage_users'));
+		$form = $this->getServiceLocator()->get('Application\Form\UserForm');
 
 		$this->view->id = $id;
 		$this->view->add_groups = $this->perm->check($this->identity, 'manage_users');

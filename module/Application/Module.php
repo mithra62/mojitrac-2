@@ -21,15 +21,16 @@ use Application\Model\Auth\AuthAdapter;
 use Application\Model\User;
 use Application\Model\User\UserData;
 use Application\Model\Permissions;
-use Application\Form\LoginForm;
 use Application\Model\Login;
-use Application\Form\ForgotPasswordForm;
 use Application\Model\ForgotPassword;
 use Application\Model\Settings;
+use Application\Model\Hash;
+
+use Application\Form\ForgotPasswordForm;
+use Application\Form\SettingsForm;
+use Application\Form\LoginForm;
 use Application\Form\PasswordForm;
 use Application\Form\PrefsForm;
-use Application\Model\Hash;
-use Application\Form\SettingsForm;
 
 /**
  * Application - Module Loader
