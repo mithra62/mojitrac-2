@@ -36,7 +36,6 @@ use PM\Form\BookmarkForm;
 use PM\Form\NoteForm;
 use PM\Form\ContactForm;
 use PM\Form\TaskForm;
-use PM\Form\UserForm;
 
 use PM\Event\ActivityLogEvent;
 use PM\Event\NotificationEvent;
@@ -171,9 +170,6 @@ class Module
 				},
 				'PM\Form\TaskForm' => function($sm) {
 					return new TaskForm('task', $sm->get('PM\Model\Options'), $sm->get('PM\Model\Projects'));
-				},
-				'PM\Form\UserForm' => function($sm) {
-					return new UserForm('user', $sm->get('PM\Model\Options'), $sm->get('PM\Model\Projects'));
 				},
 				
 				//events

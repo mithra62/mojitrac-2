@@ -19,6 +19,7 @@ use Zend\Authentication\AuthenticationService;
 
 use Application\Model\Auth\AuthAdapter;
 use Application\Model\User;
+use Application\Model\Roles;
 use Application\Model\User\UserData;
 use Application\Model\Permissions;
 use Application\Model\Login;
@@ -31,6 +32,7 @@ use Application\Form\SettingsForm;
 use Application\Form\LoginForm;
 use Application\Form\PasswordForm;
 use Application\Form\PrefsForm;
+use Application\Form\UsersForm;
 
 /**
  * Application - Module Loader
@@ -103,7 +105,8 @@ class Module
     public function getServiceConfig()
     {
     	return array(
-    		'factories' => array(		
+    		'factories' => array(	
+    				
 				//setting up the Authentication stuff
 				'Application\Model\Auth\AuthStorage' => function($sm){
 					return new \Application\Model\Auth\AuthStorage('mojitrac');
@@ -118,17 +121,22 @@ class Module
 				},
 				//end Auth 
 				
+				//db object
 				'SqlObject' => function($sm) {
 					$db = $sm->get('Zend\Db\Adapter\Adapter');
 					return new Sql($db);
 				},
-				'Application\Form\LoginForm' => function($sm) {
-					return new LoginForm('login');
-				},				
+
+				//models
 				'Application\Model\User' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					return new User($adapter, $db);
+				},
+				'Application\Model\Roles' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Roles($adapter, $db);
 				},
 				'Application\Model\Permissions' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
@@ -156,18 +164,26 @@ class Module
 					$db = $sm->get('SqlObject');
 					return new UserData($adapter, $db);					
 				},
+				'Application\Model\Hash' => function($sm) {
+					return new Hash();
+				},
+				
+				//forms
+				'Application\Form\SettingsForm' => function($sm) {
+					return new SettingsForm('settings', $sm->get('PM\Model\Companies'));
+				},
 				'Application\Form\PrefsForm' => function($sm) {
 					return new PrefsForm('preferences');
 				},
 				'Application\Form\PasswordForm' => function($sm) {
 					return new PasswordForm('password');
 				},
-				'Application\Model\Hash' => function($sm) {
-					return new Hash();
+				'Application\Form\LoginForm' => function($sm) {
+					return new LoginForm('login');
 				},
-				'Application\Form\SettingsForm' => function($sm) {
-					return new SettingsForm('settings', $sm->get('PM\Model\Companies'));
-				}
+				'Application\Form\UsersForm' => function($sm) {
+					return new UsersForm('user');
+				},
 			),
     	);
     }

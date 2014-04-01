@@ -1,14 +1,22 @@
-<form id="user_form" action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod()) ?>">
 <?php 
-	if($this->id > 0)
-		echo '<input type="hidden" value="'.$this->id.'" name="id" />';
-?>	
+$form = $this->form;
+$form->setAttribute('id', 'user_form');
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>
+<input type="hidden" name="start_date_default" id="start_date_default" value="<?php echo date('Y-m-d'); ?>" />
+<input type="hidden" name="end_date_default" id="end_date_default" value="<?php echo date('Y-m-d'); ?>" />
+<?php 
+if($this->id > 0)
+	echo '<input type="hidden" value="'.$this->id.'" name="id" />';
+?>
 <div id="form_tabs">
 	<ul>
 
 		<li><a href="#general">General</a></li>
 		<li><a href="#phone">Phone</a></li>
-		<li><a href="#im">IM</a></li>
 		<?php if($this->CheckPermission('manage_users')):?>
 		<li><a href="#roles">Roles</a></li>
 		<?php endif; ?>
@@ -17,39 +25,39 @@
 		
 		<p>
 			<label for="first_name">First Name</label>
-			<?php echo $this->form->first_name; ?>
+			<?php $field = $form->get('first_name'); echo $this->formRow($field); ?>
 		</p>				
 		
 		<p>
 			<label for="last_name">Last Name</label>
-			<?php echo $this->form->last_name; ?>
+			<?php $field = $form->get('last_name'); echo $this->formRow($field); ?>
 		</p>			
 		
 		<p>
 			<label for="email">Email</label>
-			<?php echo $this->form->email; ?>
+			<?php $field = $form->get('email'); echo $this->formRow($field); ?>
 		</p>
 		
 		<?php if($this->addPassword): ?>
 		<p>
 			<label for="password">Password</label>
-			<?php echo $this->form->password; ?>
+			<?php $field = $form->get('password'); echo $this->formRow($field); ?>
 		</p>
 		
 		<p>
 			<label for="confirm_password">Confirm Password</label>
-			<?php echo $this->form->confirm_password; ?>
+			<?php $field = $form->get('confirm_password'); echo $this->formRow($field); ?>
 		</p>
 		<?php endif; ?>	
 		
 		<p>
 			<label for="job_title">Title</label>
-			<?php echo $this->form->job_title; ?>
+			<?php $field = $form->get('job_title'); echo $this->formRow($field); ?>
 		</p>
 		
 		<p>
 			<label for="description">Description</label>
-			<?php echo $this->form->description; ?>
+			<?php $field = $form->get('description'); echo $this->formRow($field); ?>
 		</p>		
 		
 		<p>
@@ -59,67 +67,29 @@
 	<div id="phone">
 		<p>
 			<label for="phone_home">Home</label>
-			<?php echo $this->form->phone_home; ?>
+			<?php $field = $form->get('phone_home'); echo $this->formRow($field); ?>
 		</p>
 			
 		<p>
-			<label for="phone2">Work</label>
-			<?php echo $this->form->phone_work; ?>
+			<label for="phone_work">Work</label>
+			<?php $field = $form->get('phone_work'); echo $this->formRow($field); ?>
 		</p>
 		
 		<p>
-			<label for="mobile">Mobile</label>
-			<?php echo $this->form->phone_mobile; ?>
+			<label for="phone_mobile">Mobile</label>
+			<?php $field = $form->get('phone_mobile'); echo $this->formRow($field); ?>
 		</p>
 		
 		<p>
-			<label for="fax">Fax</label>
-			<?php echo $this->form->phone_fax; ?>
+			<label for="phone_fax">Fax</label>
+			<?php $field = $form->get('phone_fax'); echo $this->formRow($field); ?>
 		</p>
 		
 		<p>
 			<input type="submit" class="submit" value="Submit" />
 		</p>			
 	</div>
-	<div id="im">
-		<p>
-			<label for="jabber">Jabber</label>
-			<?php echo $this->form->jabber; ?>
-		</p>
-			
-		<p>
-			<label for="aol">AIM</label>
-			<?php echo $this->form->aol; ?>
-		</p>
-		
-		<p>
-			<label for="yahoo">Yahoo!</label>
-			<?php echo $this->form->yahoo; ?>
-		</p>
-		
-		<p>
-			<label for="google_talk">Google Talk</label>
-			<?php echo $this->form->google_talk; ?>
-		</p>
-		
-		<p>
-			<label for="msn">MSN</label>
-			<?php echo $this->form->msn; ?>
-		</p>	
-		<p>
-			<label for="ichat">iChat</label>
-			<?php echo $this->form->ichat; ?>
-		</p>
-		
-		<p>
-			<label for="skype">Skype</label>
-			<?php echo $this->form->skype; ?>
-		</p>						
-		
-		<p>
-			<input type="submit" class="submit" value="Submit" />
-		</p>			
-	</div>	
+
 	<?php if($this->CheckPermission('manage_users')):?>
 	<div id="roles">
 		

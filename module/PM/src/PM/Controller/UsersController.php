@@ -29,9 +29,18 @@ class UsersController extends AbstractPmController
 	/**
 	 * Class preDispatch
 	 */
-	public function onDispatch( \Zend\Mvc\MvcEvent $e )
+	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
-		$e = parent::onDispatch( $e );      
+		parent::onDispatch( $e );
+        //$this->layout()->setVariable('layout_style', 'single');
+        $this->layout()->setVariable('sidebar', 'dashboard');
+        $this->layout()->setVariable('sub_menu', 'admin');
+        $this->layout()->setVariable('active_nav', 'users');
+        $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
+        $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
+		$this->layout()->setVariable('active_sub', 'None');
+		    
+		return $e;
 	}
 
 	/**
@@ -182,27 +191,23 @@ class UsersController extends AbstractPmController
 			exit;
         }
 
-		$user = new PM_Model_Users(new PM_Model_DbTable_Users);
-		$form = $user->getUsersForm(array(
-            'action' => '/pm/users/add/',
-            'method' => 'post',
-		), TRUE, FALSE, TRUE, TRUE);
+		$user = $this->getServiceLocator()->get('Application\Model\User');
+		$user_form = $this->getServiceLocator()->get('Application\Form\UsersForm');
 
-		$this->view->form = $form;
-		$this->view->addPassword = TRUE;
+		$view['form'] = $user_form->registration_form();
+		$view['addPassword'] = TRUE;
 		
-		$roles = new PM_Model_Roles;
-		$this->view->user_roles = $roles->getAllRoleNames();
+		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
+		$view['user_roles'] = $roles->getAllRoleNames();
 
-		$this->view->layout_style = 'right';
-		$this->view->sidebar = 'dashboard';
-		$this->view->headTitle('Add User', 'PREPEND');
-		$this->view->addAction = TRUE;		
+		$view['layout_style'] = 'right';
+		$view['sidebar'] = 'dashboard';
+		$view['addAction'] = TRUE;		
 		
 		if ($this->getRequest()->isPost()) {
 
 			$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData)) 
+			if ($user_form->isValid($formData)) 
 			{
 				
 				if ($formData['password'] != $formData['confirm_password']) 
@@ -230,9 +235,12 @@ class UsersController extends AbstractPmController
 			else 
 			{
 				$this->view->errors = array('Please fix the errors below.');
-				$form->populate($formData);
+				$user_form->populate($formData);
 			}
 		}
+        $this->layout()->setVariable('layout_style', 'left');
+		
+		return $view;
 	}
 
 	function removeAction()

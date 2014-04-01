@@ -1,21 +1,59 @@
 <?php
-/**
- * Roles Model
- * @author Eric
+ /**
+ * mithra62 - MojiTrac
  *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		1.0
+ * @filesource 	./moji/application/modules/pm/models/User.php
  */
-class PM_Model_Roles extends Model_Abstract
+
+namespace Application\Model;
+
+use Zend\Db\Sql\Sql;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
+
+use Application\Model\AbstractModel;
+
+ /**
+ * PM - User Model
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./moji/application/modules/pm/models/User.php
+ */
+class Roles extends AbstractModel
 {
+	/**
+	 * The cache object
+	 * @var object
+	 */
+	public $cache;
 	
+	/**
+	 * Contains all the permissions
+	 * @var array
+	 */
 	public static $permissions = FALSE;
 	
-	private $ur_2_perm = 'user_role_2_permissions';
+	/**
+	 * The validation filters
+	 * @var object
+	 */
+	protected $inputFilter;
 	
-	public $cache_key = 'roles';
-	
-	public function __construct()
+	/**
+	 * The User Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param Sql $db
+	 */
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db)
 	{
-		parent::__construct();	
+		parent::__construct($adapter, $db);
 	}
 	
 	/**
@@ -61,9 +99,8 @@ class PM_Model_Roles extends Model_Abstract
 	 */
 	public function getAllRoleNames()
 	{
-		$roles = new PM_Model_DbTable_User_Roles;
-		$sql = $roles->select()->from($roles->getTableName(), array('id','name'));
-		return $roles->getUserRoles($sql);
+		$sql = $this->db->select()->from('user_roles')->columns(array('id','name'));
+		return $this->getRow($sql);		
 	}
 	
 	/**

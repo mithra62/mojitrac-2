@@ -7,7 +7,7 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./moji/application/models/EventManagerInterfaceConstants.php
+ * @filesource 	./module/Base/src/Base/Model/
  */
 
 namespace Base\Model;
@@ -21,7 +21,7 @@ use Zend\EventManager\EventManagerAwareInterface;
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/models/EventManagerInterfaceConstants.php
+ * @filesource 	./module/Base/src/Base/Model/EventManagerInterfaceConstants.php
  */
 interface EventManagerInterfaceConstants extends EventManagerAwareInterface
 {

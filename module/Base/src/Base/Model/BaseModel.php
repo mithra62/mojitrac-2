@@ -7,7 +7,7 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/Base/src/Base/Model/BaseModel.php
+ * @filesource 	./module/Base/src/Base/Model/
  */
 
 namespace Base\Model;
