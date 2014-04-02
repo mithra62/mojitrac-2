@@ -12,9 +12,11 @@
 
 namespace Application\Model;
 
+use Zend\Db\Sql\Sql;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
+use Zend\Authentication\Result as AuthenticationResult;
 
 /**
  * Application - Login Model
@@ -25,7 +27,7 @@ use Zend\InputFilter\InputFilterInterface;
  * @author		Eric Lamb
  * @filesource 	./module/Application/src/Application/Model/Login.php
  */
-class Login
+class Login extends AbstractModel
 {
 	/**
 	 * The validation filters
@@ -34,6 +36,16 @@ class Login
 	protected $inputFilter;
 	
 	private $authAdapter;
+	
+	/**
+	 * The User Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param Sql $db
+	 */
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db)
+	{
+		parent::__construct($adapter, $db);
+	}	
 	
 	public function setAuthAdapter($auth)
 	{
@@ -78,5 +90,31 @@ class Login
 		}
 	
 		return $this->inputFilter;
+	}
+	
+	/**
+	 * Processes the 
+	 * @param string $email
+	 * @param string $password
+	 * @param \Zend\Authentication\AuthenticationService $adapter
+	 * @return \Zend\Authentication\Result
+	 */
+	public function procLogin($email, $password, \Zend\Authentication\AuthenticationService $adapter)
+	{
+		$credentials = compact('email', 'password');
+		$ext = $this->trigger(self::EventUserLoginPre, $this, $credentials);
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $credentials = $ext->last();
+				
+		$adapter->getAdapter()->setIdentity($credentials['email'])->setCredential($credentials['password']);
+		$check = $adapter->authenticate();		
+		
+		$result_code = $check->getCode();
+		if($result_code == AuthenticationResult::SUCCESS)
+		{
+			$ext = $this->trigger(self::EventUserLoginPost, $this, array('result_code' => $result_code));
+			if($ext->stopped()) return $ext->last(); elseif($ext->last()) $result_code = $ext->last();
+		}
+		
+		return $result_code;
 	}
 }

@@ -7,7 +7,7 @@
  * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./moji/application/controllers/LoginController.php
+ * @filesource 	./module/Application/src/Accplication/Controller/LoginController.php
  */
 
 namespace Application\Controller;
@@ -15,20 +15,17 @@ namespace Application\Controller;
 use Application\Controller\AbstractController;
 use Zend\Authentication\Result as AuthenticationResult;
 
-
  /**
- * Default - Login Class
+ * Application - Login Class
  *
  * Handles login routing 
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/controllers/LoginController.php
+ * @filesource 	./module/Application/src/Accplication/Controller/LoginController.php
  */
 class LoginController extends AbstractController
-{   
-	protected $usersTable;
-	
+{  
 	/**
 	 * Sets up the Login defaults
 	 * @see \Zend\Mvc\Controller\AbstractActionController::onDispatch()
@@ -58,13 +55,11 @@ class LoginController extends AbstractController
 			if ($form->isValid()) 
 			{
 				$data = $form->getData();
-				
-				$this->getAuthService()->getAdapter()
-									   ->setIdentity($request->getPost('email'))
-									   ->setCredential($request->getPost('password'));
-				
-				$result = $this->getAuthService()->authenticate();
-				switch ($result->getCode())
+	
+				$email = $request->getPost('email');
+				$password = $request->getPost('password');
+				$result = $login->procLogin($email, $password, $this->getAuthService());
+				switch ($result)
 				{
 					case AuthenticationResult::SUCCESS:
 

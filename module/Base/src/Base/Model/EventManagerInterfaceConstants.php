@@ -94,7 +94,9 @@ interface EventManagerInterfaceConstants extends EventManagerAwareInterface
 	const EventUserRemovePost = 'user.remove.post';
 	const EventUserLogoutPre = 'user.logout.pre';
 	const EventUserLogoutPost = 'user.logout.post';	
-	
+	const EventUserLoginPre = 'user.login.pre';
+	const EventUserLoginPost = 'user.login.post';
+		
 	const EventUserRoleAddPre = '';
 	const EventUserRoleAddPost = '';
 	const EventUserRoleUpdatePre = '';

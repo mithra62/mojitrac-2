@@ -143,8 +143,10 @@ class Module
 					$db = $sm->get('SqlObject');
 					return new Permissions($adapter, $db);					
 				},
-				'Application\Model\Login' => function() {
-					return new Login();
+				'Application\Model\Login' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');					
+					return new Login($adapter, $db);
 				},
 				'Application\Model\ForgotPassword' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
