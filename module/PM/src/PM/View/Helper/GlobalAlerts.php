@@ -35,7 +35,7 @@ class GlobalAlerts extends BaseViewHelper
 		$helperPluginManager = $this->getServiceLocator();
 		$serviceManager = $helperPluginManager->getServiceLocator();
 		
-		$user = $serviceManager->get('Application\Model\User');
+		$user = $serviceManager->get('Application\Model\Users');
 		$overdue_tasks = $user->userHasOverdueTasks($id);
 		if($overdue_tasks && is_array($overdue_tasks) && $overdue_tasks['total_count'] >= 1)
 		{

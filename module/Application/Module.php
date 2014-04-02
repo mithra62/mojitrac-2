@@ -18,7 +18,7 @@ use Zend\Db\Sql\Sql;
 use Zend\Authentication\AuthenticationService;
 
 use Application\Model\Auth\AuthAdapter;
-use Application\Model\User;
+use Application\Model\Users;
 use Application\Model\Roles;
 use Application\Model\User\UserData;
 use Application\Model\Permissions;
@@ -113,7 +113,7 @@ class Module
 				},
 				'AuthService' => function($sm) {
 					$db = $sm->get('Zend\Db\Adapter\Adapter');
-					$user = new User( $db ,  new Sql($db) );
+					$user = new Users( $db ,  new Sql($db) );
 					$authService = new AuthenticationService();
 					$authService->setAdapter(new AuthAdapter($user));
 					$authService->setStorage($sm->get('Application\Model\Auth\AuthStorage'));
@@ -128,10 +128,10 @@ class Module
 				},
 
 				//models
-				'Application\Model\User' => function($sm) {
+				'Application\Model\Users' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new User($adapter, $db);
+					return new Users($adapter, $db);
 				},
 				'Application\Model\Roles' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');

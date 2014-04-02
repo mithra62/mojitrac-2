@@ -1,11 +1,10 @@
 <?php
 namespace Application\Model\Auth;
 
-use Zend\Authentication\Adapter\AdapterInterface;
 use Zend\Authentication\Adapter\AbstractAdapter;
 use Zend\Authentication\Result as AuthenticationResult;
 
-use Application\Model\User;
+use Application\Model\Users;
 
 class AuthAdapter extends AbstractAdapter
 {
@@ -20,7 +19,7 @@ class AuthAdapter extends AbstractAdapter
      *
      * @return void
      */
-    public function __construct(User $users)
+    public function __construct(Users $users)
     {
     	$this->users = $users;
     }

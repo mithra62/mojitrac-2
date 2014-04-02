@@ -36,7 +36,7 @@ class UserInfo extends BaseViewHelper
 		{
 			$helperPluginManager = $this->getServiceLocator();
 			$serviceManager = $helperPluginManager->getServiceLocator();
-			$user = $serviceManager->get('Application\Model\User');
+			$user = $serviceManager->get('Application\Model\Users');
 			$this->userInfo = $user->getUserById($id);
 		}
 		return $this->userInfo;

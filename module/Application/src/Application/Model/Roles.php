@@ -251,19 +251,14 @@ class Roles extends AbstractModel
 	 * @param int $id
 	 * @return bool
 	 */
-	public function updateUserRoles($roles, $id)
+	public function updateUsersRoles($user_id, $roles)
 	{
-		$role = new PM_Model_DbTable_User_To_Role;
-		$role->deleteUserRole($id);
+		$role->deleteUserRole($user_id);
 		foreach($roles AS $new_role)
 		{
-			$sql = $role->getSQL(array('user_id'=> $id, 'role_id'=>$new_role));
+			$sql = $role->getSQL(array('user_id'=> $user_id, 'role_id'=>$new_role));
 			$role->addUserToRole($sql);
-		}
-	    $this->cache->clean(
-	          Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-	          array('permissions', $this->cache_key)
-	    );			
+		}	
 		return TRUE;		
 	}
 	

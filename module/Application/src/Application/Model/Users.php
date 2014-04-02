@@ -27,7 +27,7 @@ use Application\Model\Hash;
  * @author		Eric Lamb
  * @filesource 	./moji/application/modules/pm/models/User.php
  */
-class User extends AbstractModel
+class Users extends AbstractModel
 {		
 	/**
 	 * The cache object
@@ -62,6 +62,26 @@ class User extends AbstractModel
 	{
 		parent::__construct($adapter, $db);
 	}
+	
+	/**
+	 * Returns an array for modifying $_name
+	 * @param $data
+	 * @return array
+	 */
+	public function getSQL($data){
+		return array(
+			'email' => (!empty($data['email']) ? $data['email'] : ''),
+			'first_name' => (!empty($data['first_name']) ? $data['first_name'] : ''),
+			'last_name' => (!empty($data['last_name']) ? $data['last_name'] : ''),
+			'phone_mobile' => (!empty($data['phone_mobile']) ? $data['phone_mobile'] : ''),
+			'phone_home' => (!empty($data['phone_home']) ? $data['phone_home'] : ''),
+			'phone_work' => (!empty($data['phone_work']) ? $data['phone_work'] : ''),
+			'phone_fax' => (!empty($data['phone_fax']) ? $data['phone_fax'] : ''),
+			'job_title' => (!empty($data['job_title']) ? $data['job_title'] : ''),
+			'description' => (!empty($data['description']) ? $data['description'] : ''),
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+	}	
 	
 	/**
 	 * Sets the InputFilter
@@ -367,27 +387,34 @@ class User extends AbstractModel
 	}
 	
 	/**
-	 * Inserts or updates a user
-	 * @param $data
-	 * @param $bypass_update
-	 * @return mixed
+	 * Creates a member
+	 * @param array $data
+	 * @param \Application\Model\Hash $hash
+	 * @param \Application\Model\Roles $roles
+	 * @return unknown
 	 */
-	public function addUser($data)
+	public function addUser(array $data, \Application\Model\Hash $hash, \Application\Model\Roles $roles)
 	{
-		$hash = new Model_Hash;
-		$sql = $this->db->getSQL($data);
+		$ext = $this->trigger(self::EventUserAddPre, $this, compact('data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+		
+		$sql = $this->getSQL($data);
 		$sql['hash'] = $hash->gen_salt();
 		$sql['password'] = $hash->password($data['password'], $sql['hash']);
-		if($user_id = $this->db->addUser($sql))
+		$user_id = $data['user_id'] = $this->insert('users', $sql);
+		
+		if($user_id)
 		{
 			if(isset($data['user_roles']))
 			{
-				$roles = new PM_Model_Roles;
-				$roles->updateUserRoles($data['user_roles'], $user_id);
+				$roles->updateUsersRoles($data['user_roles'], $user_id);
 			}
-			return $user_id;		
+			
+			$ext = $this->trigger(self::EventUserAddPost, $this, compact('user_id', 'data'), $this->setXhooks($data));
+			if($ext->stopped()) return $ext->last(); elseif($ext->last()) $user_id = $ext->last();
+			
+			return $user_id;			
 		}
-		
 	}
 	
 	/**

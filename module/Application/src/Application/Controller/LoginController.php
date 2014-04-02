@@ -50,7 +50,7 @@ class LoginController extends AbstractController
     	$request = $this->getRequest();
     	if ($request->isPost())
     	{	
-    		$user = $this->getServiceLocator()->get('Application\Model\User');
+    		$user = $this->getServiceLocator()->get('Application\Model\Users');
 			$login = $this->getServiceLocator()->get('Application\Model\Login');
 			$login->setAuthAdapter($this->getAdapter());
 			$form->setInputFilter($login->getInputFilter());

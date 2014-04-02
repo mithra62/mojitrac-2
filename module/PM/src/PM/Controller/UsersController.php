@@ -191,7 +191,7 @@ class UsersController extends AbstractPmController
 			exit;
         }
 
-		$user = $this->getServiceLocator()->get('Application\Model\User');
+		$user = $this->getServiceLocator()->get('Application\Model\Users');
 		$user_form = $this->getServiceLocator()->get('Application\Form\UsersForm');
 		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
 
@@ -209,16 +209,8 @@ class UsersController extends AbstractPmController
 			$user_form->setData($request->getPost());
 			if ($user_form->isValid($formData)) 
 			{
-				echo 'fdsa';
-				exit;
-				if ($formData['password'] != $formData['confirm_password']) 
-				{
-					$this->view->errors = array("Password and Confirm Password must match.");
-					$this->render('add');
-					return;
-				}
-				
-				if($id = $user->addUser($formData))
+				$user_id = $id = $user->addUser($formData);
+				if($user_id)
 				{
 					$noti = new PM_Model_Notifications();
 					$noti->sendUserAdd($formData);
