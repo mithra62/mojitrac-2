@@ -97,7 +97,7 @@ class User extends AbstractModel
 					),
 					'validators' => array(
 						array(
-							'name' => '\PM\Validate\Password\Match',
+							'name' => '\Application\Validate\Password\Match',
 							'options' => array(
 								'identity' => $identity,
 								'users' => $this,
@@ -141,14 +141,19 @@ class User extends AbstractModel
 		return $this->passwordInputFilter;
 	}	
 	
+	/**
+	 * Sets the Input Filter for the registration form
+	 * @return object
+	 */
 	public function getRegistrationInputFilter()
 	{
 		if (!$this->registrationInputFilter) {
 			
 			$inputFilter = new InputFilter();
-			$factory = new InputFactory();
+			$factory = new InputFactory();			
+			
 			$inputFilter->add($factory->createInput(array(
-				'name'     => 'old_password',
+				'name'     => 'email',
 				'required' => true,
 				'filters'  => array(
 					array('name' => 'StripTags'),
@@ -156,31 +161,43 @@ class User extends AbstractModel
 				),
 				'validators' => array(
 					array(
-						'name' => '\PM\Validate\Password\Match',
+						'name' => 'EmailAddress',
+					),
+					array(
+						'name' => 'Db\NoRecordExists',
 						'options' => array(
-							'identity' => $identity,
-							'users' => $this,
-							'hash' => $hash
+							'table' => 'users',
+						    'field' => 'email',
+							'adapter' => $this->adapter
 						)
 					),
 				),
 			)));
-			
+
 			$inputFilter->add($factory->createInput(array(
-				'name'     => 'new_password',
+				'name'     => 'first_name',
 				'required' => true,
 				'filters'  => array(
 					array('name' => 'StripTags'),
 					array('name' => 'StringTrim'),
 				),
-				'validators' => array(
-					array(
-						'name' => 'Identical',
-						'options' => array(
-							'token' => 'confirm_password',
-							'strict' => FALSE
-						)
-					),
+			)));
+
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'last_name',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+			)));
+
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'password',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
 				),
 			)));
 
@@ -190,8 +207,17 @@ class User extends AbstractModel
 				'filters'  => array(
 					array('name' => 'StripTags'),
 					array('name' => 'StringTrim'),
-				)
-			)));			
+				),
+				'validators' => array(
+					array(
+						'name' => 'Identical',
+						'options' => array(
+							'token' => 'password',
+							'strict' => FALSE
+						)
+					),
+				),
+			)));
 			
 			$this->registrationInputFilter = $inputFilter;
 		}

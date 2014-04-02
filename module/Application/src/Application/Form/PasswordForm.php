@@ -12,16 +12,18 @@
 
 namespace Application\Form;
 
+use Base\Form\BaseForm;
+
 /**
 * Password Form
 *
-* Generates the Password form
+* Generates the Change Password form
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
 * @filesource 	./module/Application/src/Application/Form/PasswordForm.php
 */
-class PasswordForm extends AbstractForm
+class PasswordForm extends BaseForm
 {
 	/**
 	 * Returns the Password form

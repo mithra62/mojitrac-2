@@ -201,11 +201,12 @@ class UsersController extends AbstractPmController
 		$view['layout_style'] = 'right';
 		$view['sidebar'] = 'dashboard';
 		$view['addAction'] = TRUE;		
-		
-		if ($this->getRequest()->isPost()) {
+		$request = $this->getRequest();
+		if ($request->isPost()) {
 
-			$formData = $this->getRequest()->getPost();
+			$formData = $request->getPost();
             $user_form->setInputFilter($user->getRegistrationInputFilter());
+			$user_form->setData($request->getPost());
 			if ($user_form->isValid($formData)) 
 			{
 				echo 'fdsa';
@@ -234,8 +235,8 @@ class UsersController extends AbstractPmController
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
-				$user_form->populate($formData);
+				$view['errors'] = array('Please fix the errors below.');
+				$user_form->setData($formData);
 			}
 		}
         $this->layout()->setVariable('layout_style', 'left');
