@@ -31,8 +31,8 @@ abstract class AbstractController extends BaseController
 	
 	public function logoutAction()
 	{
-		$this->getSessionStorage()->forgetMe();
-		$this->getAuthService()->clearIdentity();
+		$login = $this->getServiceLocator()->get('Application\Model\Login');
+		$login->logout($this->getSessionStorage(), $this->getAuthService());
 	
 		$this->flashmessenger()->addMessage("You've been logged out");
 		return $this->redirect()->toRoute('login');
