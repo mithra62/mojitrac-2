@@ -193,13 +193,11 @@ class UsersController extends AbstractPmController
 
 		$user = $this->getServiceLocator()->get('Application\Model\User');
 		$user_form = $this->getServiceLocator()->get('Application\Form\UsersForm');
-
-		$view['form'] = $user_form->registration_form();
-		$view['addPassword'] = TRUE;
-		
 		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
-		$view['user_roles'] = $roles->getAllRoleNames();
 
+		$view['form'] = $user_form->registration_form()->roles_fields($roles);
+		$view['addPassword'] = TRUE;
+		$view['user_roles'] = $roles->getAllRoleNames();
 		$view['layout_style'] = 'right';
 		$view['sidebar'] = 'dashboard';
 		$view['addAction'] = TRUE;		
@@ -207,9 +205,11 @@ class UsersController extends AbstractPmController
 		if ($this->getRequest()->isPost()) {
 
 			$formData = $this->getRequest()->getPost();
+            $user_form->setInputFilter($user->getRegistrationInputFilter());
 			if ($user_form->isValid($formData)) 
 			{
-				
+				echo 'fdsa';
+				exit;
 				if ($formData['password'] != $formData['confirm_password']) 
 				{
 					$this->view->errors = array("Password and Confirm Password must match.");
@@ -239,7 +239,6 @@ class UsersController extends AbstractPmController
 			}
 		}
         $this->layout()->setVariable('layout_style', 'left');
-		
 		return $view;
 	}
 

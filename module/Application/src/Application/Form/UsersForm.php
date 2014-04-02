@@ -17,7 +17,7 @@ use Base\Form\BaseForm;
 /**
 * UserForm Form
 *
-* Generates the LoginForm form
+* Generates the UsersForm form
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
@@ -119,6 +119,10 @@ class UsersForm extends BaseForm
 		));		
     }
     
+    /**
+     * Includes the fields needed for Registration to the form
+     * @return \Application\Form\UsersForm
+     */
     public function registration_form()
     {
 		$this->add(array(
@@ -140,5 +144,35 @@ class UsersForm extends BaseForm
 		));		
 		
     	return $this;
+    }
+    
+    /**
+     * Adds the Role selection fields to the form
+     * @param \Application\Model\Roles $roles
+     * @return \Application\Form\UsersForm
+     */
+    public function roles_fields(\Application\Model\Roles $roles)
+    {
+    	$roles = $roles->getAllRoleNames();
+    	$role_fields = array();
+    	foreach($roles AS $role)
+    	{
+    		$role_fields[$role['id']] = $role['name'];
+    	}
+    	    	
+		$this->add(array(
+			'name' => 'user_roles',
+			'type' => 'MultiCheckbox',
+			'attributes' => array(
+				'class' => 'input large',
+				'id' => 'user_roles'
+			),
+			'options' => array(
+				'value_options' => $role_fields,
+			)
+		));		
+		
+    	return $this;
+    	
     }
 }

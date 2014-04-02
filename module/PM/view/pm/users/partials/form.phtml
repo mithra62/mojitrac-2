@@ -94,7 +94,7 @@ if($this->id > 0)
 	<div id="roles">
 		
 		<p class="user_role_boxes">
-		<?php echo $this->form->user_roles; ?>		
+		<?php $field = $form->get('user_roles'); echo $this->formRow($field); ?>		
 		</p>
 		
 		<p>

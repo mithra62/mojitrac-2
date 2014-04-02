@@ -100,7 +100,7 @@ class Roles extends AbstractModel
 	public function getAllRoleNames()
 	{
 		$sql = $this->db->select()->from('user_roles')->columns(array('id','name'));
-		return $this->getRow($sql);		
+		return $this->getRows($sql);		
 	}
 	
 	/**

@@ -42,10 +42,16 @@ class User extends AbstractModel
 	public static $permissions = FALSE;
 	
 	/**
-	 * The validation filters
+	 * The validation filter for the password form
 	 * @var object
 	 */
-	protected $inputFilter;
+	protected $passwordInputFilter;
+
+	/**
+	 * The validation filter for the user registration form
+	 * @var object
+	 */
+	protected $registrationInputFilter;	
 	
 	/**
 	 * The User Model
@@ -76,7 +82,7 @@ class User extends AbstractModel
 	 */
 	public function getPasswordInputFilter($identity, \Application\Model\Hash $hash, $confirm = TRUE)
 	{
-		if (!$this->inputFilter) {
+		if (!$this->passwordInputFilter) {
 			$inputFilter = new InputFilter();
 			$factory = new InputFactory();
 	
@@ -129,11 +135,69 @@ class User extends AbstractModel
 				)
 			)));			
 			
-			$this->inputFilter = $inputFilter;
+			$this->passwordInputFilter = $inputFilter;
 		}
 	
-		return $this->inputFilter;
+		return $this->passwordInputFilter;
 	}	
+	
+	public function getRegistrationInputFilter()
+	{
+		if (!$this->registrationInputFilter) {
+			
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'old_password',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+				'validators' => array(
+					array(
+						'name' => '\PM\Validate\Password\Match',
+						'options' => array(
+							'identity' => $identity,
+							'users' => $this,
+							'hash' => $hash
+						)
+					),
+				),
+			)));
+			
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'new_password',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+				'validators' => array(
+					array(
+						'name' => 'Identical',
+						'options' => array(
+							'token' => 'confirm_password',
+							'strict' => FALSE
+						)
+					),
+				),
+			)));
+
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'confirm_password',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				)
+			)));			
+			
+			$this->registrationInputFilter = $inputFilter;
+		}
+	
+		return $this->registrationInputFilter;
+	}
 	
 	/**
 	 * Changes a users password
