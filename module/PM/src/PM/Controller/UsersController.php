@@ -54,7 +54,7 @@ class UsersController extends AbstractPmController
             return $this->redirect()->toRoute('pm');
         }
         
-		$users = $this->getServiceLocator()->get('Application\Model\User');
+		$users = $this->getServiceLocator()->get('Application\Model\Users');
 		$view['users'] = $users->getAllUsers();
 		return $view;
 	}
@@ -80,7 +80,7 @@ class UsersController extends AbstractPmController
         	$id = $this->identity;
         }		
 
-		$user = $this->getServiceLocator()->get('Application\Model\User');
+		$user = $this->getServiceLocator()->get('Application\Model\Users');
 		$view['user'] = $user->getUserById($id);
 		if(!$view['user'])
 		{
@@ -128,7 +128,7 @@ class UsersController extends AbstractPmController
         	$id = $this->identity;
         }		
 
-		$user = $this->getServiceLocator()->get('Application\Model\User');
+		$user = $this->getServiceLocator()->get('Application\Model\Users');
 		$form = $this->getServiceLocator()->get('Application\Form\UserForm');
 
 		$this->view->id = $id;

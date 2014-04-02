@@ -35,6 +35,10 @@ class Login extends AbstractModel
 	 */
 	protected $inputFilter;
 	
+	/**
+	 * The athentication adaptor
+	 * @var object
+	 */
 	private $authAdapter;
 	
 	/**
@@ -93,7 +97,7 @@ class Login extends AbstractModel
 	}
 	
 	/**
-	 * Processes the 
+	 * Processes the User Login routine
 	 * @param string $email
 	 * @param string $password
 	 * @param \Zend\Authentication\AuthenticationService $adapter
@@ -118,6 +122,12 @@ class Login extends AbstractModel
 		return $result_code;
 	}
 	
+	/**
+	 * Processes the User Logout routine
+	 * @param \Application\Model\Auth\AuthStorage $storage
+	 * @param \Zend\Authentication\AuthenticationService $auth
+	 * @return void
+	 */
 	public function logout(\Application\Model\Auth\AuthStorage $storage, \Zend\Authentication\AuthenticationService $auth)
 	{
 		$ext = $this->trigger(self::EventUserLogoutPre, $this);
