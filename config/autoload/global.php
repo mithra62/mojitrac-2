@@ -23,7 +23,7 @@ return array(
 	),
     //see http://framework.zend.com/manual/2.1/en/modules/zend.mail.smtp.options.html for complete options
     'email' => array(
-	   'type' => 'php', //choose between `php` and `smtp`
+	   'type' => 'smtp', //choose between `php` and `smtp`
        'smtp_options' => array( //if `smtp` chosen above, this must be completed and accurate 
        
            'name' => 'localhost.localdomain',
@@ -33,7 +33,16 @@ return array(
            	    'username' => 'user',
            		'password' => 'pass',
            )    	   
-        ) 
+        ),
+    ),
+    'email_logging' => array(
+    	'type' => 'file',
+    	'file_options' => array(
+    		'path' => 'data/mail/',
+    		'callback' => function( \Zend\Mail\Transport\File $transport ) {
+    			return 'Message_'.microtime(true).'_'.mt_rand().'.txt';
+    		}
+    	),		
     ),
 	'service_manager' => array(
         'factories' => array(

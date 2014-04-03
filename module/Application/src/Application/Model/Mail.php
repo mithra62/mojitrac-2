@@ -1,14 +1,16 @@
 <?php
-/**
+ /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/forms/Mail.php
-*/
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/Application/src/Application/Model/Mail.php
+ */
+
+namespace Application\Model;
 
 /**
 * Mail Model
@@ -17,7 +19,7 @@
 * @author		Eric Lamb
 * @filesource 	./moji/application/models/Mail.php
 */
-class Model_Mail extends Zend_Mail 
+class Mail extends AbstractModel
 {
 		
 	/**
@@ -38,10 +40,9 @@ class Model_Mail extends Zend_Mail
 	 */
 	public $web_url = FALSE;
 	
-	public $utils;	
-	
-	public function __construct(){
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db){
 		
+		parent::__construct($adapter, $db);
 		parent::__construct("UTF-8");
 				
 		$this->addHeader('X-MailGenerator', 'MojiTrac');
@@ -57,7 +58,6 @@ class Model_Mail extends Zend_Mail
 		}
 		
 		$this->web_url = 'http://'.$_SERVER['HTTP_HOST'];
-		$this->utils = new LambLib_Controller_Action_Helper_Utilities;
 	}
 	
 

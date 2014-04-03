@@ -42,7 +42,7 @@ class Login extends AbstractModel
 	private $authAdapter;
 	
 	/**
-	 * The User Model
+	 * The Login Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param Sql $db
 	 */
