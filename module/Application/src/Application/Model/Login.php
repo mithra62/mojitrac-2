@@ -130,13 +130,13 @@ class Login extends AbstractModel
 	 */
 	public function logout(\Application\Model\Auth\AuthStorage $storage, \Zend\Authentication\AuthenticationService $auth)
 	{
-		$ext = $this->trigger(self::EventUserLogoutPre, $this);
+		$ext = $this->trigger(self::EventUserLogoutPre, $this, array());
 		if($ext->stopped()) return $ext->last();
 				
 		$storage->forgetMe();
 		$auth->clearIdentity();
 
-		$ext = $this->trigger(self::EventUserLoginPost, $this);
+		$ext = $this->trigger(self::EventUserLoginPost, $this, array());
 		if($ext->stopped()) return $ext->last();		
 	}
 }
