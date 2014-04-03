@@ -407,7 +407,7 @@ class Users extends AbstractModel
 		{
 			if(isset($data['user_roles']))
 			{
-				$roles->updateUsersRoles($data['user_roles'], $user_id);
+				$roles->updateUsersRoles($user_id, $data['user_roles']);
 			}
 			
 			$ext = $this->trigger(self::EventUserAddPost, $this, compact('user_id', 'data'), $this->setXhooks($data));
@@ -515,11 +515,10 @@ class Users extends AbstractModel
 	 * @return array
 	 */
 	public function getUserRolesArr($id)
-	{
-		$roles = new PM_Model_DbTable_User_Roles;
-		$sql = $roles->select()->setIntegrityCheck(false)->from(array('r' => $roles->getTableName()), 'r.id');
-		$sql = $sql->join(array('u2r' => 'user2role'), 'u2r.role_id = r.id AND u2r.user_id = '.$id, array());
-		$user_roles = $roles->getUserRoles($sql);
+	{			
+		$sql = $this->db->select()->from(array('r' => 'user_roles'))->columns(array('id' => 'id'));
+		$sql = $sql->join(array('u2r' => 'user2role'), 'u2r.role_id = r.id ')->where(array('u2r.user_id' => $id));
+		$user_roles = $this->getRows($sql);
 		$return = array();
 		foreach($user_roles As $role)
 		{

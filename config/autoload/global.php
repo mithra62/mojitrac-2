@@ -16,7 +16,7 @@ return array(
     'cache_dir' =>  './data/cache',
 	'db' => array(
 		'driver'  => 'Pdo',
-		'dsn' => 'mysql:dbname=dev_moji;host=localhost',
+		'dsn' => 'mysql:dbname=moji;host=localhost',
 		'driver_options' => array(
 			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
 		),

@@ -240,8 +240,6 @@ class Roles extends AbstractModel
 			    );				
 				return TRUE;
 			}
-			
-			
 		}
 	}
 	
@@ -251,15 +249,29 @@ class Roles extends AbstractModel
 	 * @param int $id
 	 * @return bool
 	 */
-	public function updateUsersRoles($user_id, $roles)
+	public function updateUsersRoles($user_id, array $roles)
 	{
-		$role->deleteUserRole($user_id);
+		$this->removeUsersRoles($user_id);
 		foreach($roles AS $new_role)
 		{
-			$sql = $role->getSQL(array('user_id'=> $user_id, 'role_id'=>$new_role));
-			$role->addUserToRole($sql);
+			$sql = array(
+				'user_id' => $user_id,
+				'role_id' => $new_role
+			);
+			$this->insert('user2role', $sql);
 		}	
+		
 		return TRUE;		
+	}
+	
+	/**
+	 * Removes a user from all groups
+	 * @param int $user_id
+	 * @return number
+	 */
+	public function removeUsersRoles($user_id)
+	{
+		return $this->remove('user2role', array('user_id' => $user_id));
 	}
 	
 	/**

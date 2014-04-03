@@ -129,17 +129,18 @@ class UsersController extends AbstractPmController
         }		
 
 		$user = $this->getServiceLocator()->get('Application\Model\Users');
-		$form = $this->getServiceLocator()->get('Application\Form\UserForm');
+		$user_form = $this->getServiceLocator()->get('Application\Form\UsersForm');
+		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
 
-		$this->view->id = $id;
-		$this->view->add_groups = $this->perm->check($this->identity, 'manage_users');
+		$view['id'] = $id;
+		$view['add_groups'] = $this->perm->check($this->identity, 'manage_users');
 
 		$user_data = $user->getUserById($id);
-		$user_data['user_roles'] = $user->getUserRolesArr($id);
+		$user_data['user_roles'] = $view['user_roles'] = $user->getUserRolesArr($id);
 
-		$form->populate($user_data);
+		$user_form->setData($user_data);
 		 
-		$this->view->form = $form;
+		$view['form'] = $user_form;
 
 		if ($this->getRequest()->isPost()) 
 		{
@@ -160,22 +161,21 @@ class UsersController extends AbstractPmController
 				else 
 				{
 					$this->view->errors = array('Couldn\'t update user...');
-					$form->populate($formData);
+					$form->setData($formData);
 				}
 
 			} 
 			else 
 			{
 				$this->view->errors = array('Please fix the errors below.');
-				$form->populate($formData);
+				$form->setData($formData);
 			}
 
 		}
 	  
-		$this->view->user_data = $user_data;
-		$this->view->layout_style = 'right';
-		$this->view->sidebar = 'dashboard';
-		$this->view->headTitle('Edit User', 'PREPEND');
+		$view['user_data'] = $user_data;
+		$this->layout()->setVariable('layout_style', 'left');
+		return $view;
 	}
 
 	/**
@@ -194,6 +194,7 @@ class UsersController extends AbstractPmController
 		$user = $this->getServiceLocator()->get('Application\Model\Users');
 		$user_form = $this->getServiceLocator()->get('Application\Form\UsersForm');
 		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
+		$hash = $this->getServiceLocator()->get('Application\Model\Hash');
 
 		$view['form'] = $user_form->registration_form()->roles_fields($roles);
 		$view['addPassword'] = TRUE;
@@ -209,19 +210,15 @@ class UsersController extends AbstractPmController
 			$user_form->setData($request->getPost());
 			if ($user_form->isValid($formData)) 
 			{
-				$user_id = $id = $user->addUser($formData);
+				$user_id = $id = $user->addUser($formData->toArray(), $hash, $roles);
 				if($user_id)
-				{
-					$noti = new PM_Model_Notifications();
-					$noti->sendUserAdd($formData);
-					
-					$this->_flashMessenger->addMessage('User Added!');
-					$this->_helper->redirector('view','users', 'pm', array('id' => $id));
-					exit;
+				{	
+					$this->flashMessenger()->addMessage('User Added!');
+					return $this->redirect()->toRoute('users/view', array('user_id' => $id));  
 				} 
 				else 
 				{
-					$this->view->errors = array('Something went wrong...');
+					$view['errors'] = array('Something went wrong...');
 				}
 
 			} 
