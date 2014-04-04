@@ -21,18 +21,29 @@ namespace Application\Model;
 */
 class Mail extends AbstractModel
 {
-		
 	/**
 	 * The email method
 	 * @var object
 	 */
-	public $transport;
+	public $sending_transport = null;
 	
 	/**
-	 * The users info
-	 * @var mixed
+	 * The sendmail type transport
+	 * @var object \Zend\Mail\Transport\Smtp
 	 */
-	public $user_data = FALSE;
+	public $sendmail_transport = null;
+	
+	/**
+	 * The file type transport (mostly used for logging emails sent)
+	 * @var object \Zend\Mail\Transport\File
+	 */
+	public $file_transport = null;
+	
+	/**
+	 * The SMTP type transport
+	 * @var object \Zend\Mail\Transport\Smtp
+	 */
+	public $smtp_transport = null;
 	
 	/**
 	 * The URL to reference the main site
@@ -40,27 +51,58 @@ class Mail extends AbstractModel
 	 */
 	public $web_url = FALSE;
 	
-	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db){
+	/**
+	 * Mail Model
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $sql
+	 * @param \Zend\Mail\Message $message
+	 */
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db, \Zend\Mail\Message $message){
 		
 		parent::__construct($adapter, $db);
-		parent::__construct("UTF-8");
-				
-		$this->addHeader('X-MailGenerator', 'MojiTrac');
-		$this->setFrom('noreply@mojitrac.com', 'MojiTrac');
-				
-		$config = array('auth' => 'login',
-		                'username' => 'noreply@mojitrac.com',
-		                'password' => 'dimens35');
 		
-		if('development' == APPLICATION_ENV)
-		{
-			$this->transport = new Zend_Mail_Transport_Smtp('63.236.10.80', $config);
-		}
-		
+		$this->message = $message;
+		$this->message->setEncoding("UTF-8");
+		$this->message->getHeaders()->addHeaderLine('X-MailGenerator', 'MojiTrac');
+		$this->message->addReplyTo("no-reply@mojitrac.com", "No Reply");
+		$this->message->setSender("no-reply@mojitrac.com", "MojiTrac");
+		$this->message->setFrom("no-reply@mojitrac.com", "MojiTrac");
 		$this->web_url = 'http://'.$_SERVER['HTTP_HOST'];
 	}
 	
-
+	/**
+	 * Sets the Sendmail Tranport object
+	 * @param \Zend\Mail\Transport\Sendmail $sendmail
+	 * @return Mail
+	 */	
+	public function setSendmailTransport(\Zend\Mail\Transport\Sendmail $sendmail)
+	{
+		$this->sendmail_transport = $sendmail;
+		return $this;
+	}
+	
+	/**
+	 * Sets the File Tranport object
+	 * @param \Zend\Mail\Transport\File $file
+	 * @return Mail
+	 */
+	public function setFileTransport(\Zend\Mail\Transport\File $file)
+	{
+		$this->file_transport = $file;
+		return $this;		
+	}
+	
+	/**
+	 * Sets the SMTP Tranport object
+	 * @param \Zend\Mail\Transport\Smtp $smtp
+	 * @return Mail
+	 */
+	public function setSmtpTransport(\Zend\Mail\Transport\Smtp $smtp)
+	{
+		$this->smtp_transport = $smtp;
+		return $this;		
+	}
+	
 	public function makeLink($body, $pk, $type = 'project')
 	{
 		$url = '';

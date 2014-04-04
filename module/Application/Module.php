@@ -26,6 +26,7 @@ use Application\Model\Login;
 use Application\Model\ForgotPassword;
 use Application\Model\Settings;
 use Application\Model\Hash;
+use Application\Model\Mail;
 
 use Application\Form\ForgotPasswordForm;
 use Application\Form\SettingsForm;
@@ -132,6 +133,19 @@ class Module
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					return new Users($adapter, $db);
+				},
+				'Application\Model\Mail' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					$message = new \Zend\Mail\Message;
+					$mailer = new Mail($adapter, $db, $message);
+					
+					$sendmail = new \Zend\Mail\Transport\Sendmail();
+					$file = new \Zend\Mail\Transport\File();
+					$smtp = new \Zend\Mail\Transport\Smtp();
+					
+					$mailer->setSendmailTransport($sendmail)->setFileTransport($file)->setSmtpTransport($smtp);
+					return $mailer;
 				},
 				'Application\Model\Roles' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');

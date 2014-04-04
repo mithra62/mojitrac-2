@@ -30,9 +30,11 @@ return array(
            'host' => '127.0.0.1',
            'connection_class' => 'login',
            'connection_config' => array(
+           		'ssl' => 'tls',
            	    'username' => 'user',
            		'password' => 'pass',
-           )    	   
+           ),
+           'port' => '25',
         ),
     ),
     'email_logging' => array(

@@ -13,15 +13,6 @@
 namespace Application\Controller;
 
 use Application\Controller\AbstractController;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Db\Sql\Sql;
-
-use Application\Form\ForgotPasswordForm;
-use Application\Model\User;
-use Application\Model\DbTable\UserTable;
-use Application\Model\ForgotPassword;
-use Application\Model\Hash;
 
  /**
  * Default - Forgot Password Controller Class
@@ -34,44 +25,11 @@ use Application\Model\Hash;
  */
 class ForgotPasswordController extends AbstractController
 {   
-    public function resetAction()
-    {
-    	$hash = $this->_request->getParam('p', FALSE);
-    	if(!$hash)
-    	{
-			$this->_helper->redirector('index');
-			exit;    		
-    	}
-    	
-    	$user = new PM_Model_Users(new PM_Model_DbTable_Users);
-    	$user_data = $user->getUserByPwHash($hash);
-    	if(!$user_data)
-    	{
-			$this->_helper->redirector('index');
-			exit;  
-    	}
-    	
-		$form = $user->getPasswordForm(array(
-            'action' => '/forgot-password/reset/p/'.$hash,
-            'method' => 'post',
-        ), FALSE); 
-        
-        if ($this->getRequest()->isPost()) 
-    	{
-    		$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData)) 
-			{
-				if($user->changePassword($user_data['id'], $formData['new_password']))
-				{
-					$this->_flashMessenger->addMessage('Your password hass been reset!');
-					$this->_helper->redirector('index', 'login');					
-				}
-			}   
-    	}
-
-        $this->view->form = $form;
-    }
-    
+	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
+	{
+		return parent::onDispatch( $e );
+	}
+		
     public function indexAction()
     {
     	$fp = $this->getServiceLocator()->get('Application\Model\ForgotPassword');
@@ -85,7 +43,9 @@ class ForgotPasswordController extends AbstractController
     		$form->setData($request->getPost());    		
 			if ($form->isValid($formData)) 
 			{
-				if($fp->sendEmail(new Hash, $formData['email']))
+				$mail = $this->getServiceLocator()->get('Application\Model\Mail');
+				$hash = $this->getServiceLocator()->get('Application\Model\Hash');
+				if($fp->sendEmail($mail, $hash, $formData['email']))
 				{
 					$this->_flashMessenger->addMessage('Please check your email');
 					$this->_helper->redirector('index', 'login');
@@ -101,4 +61,42 @@ class ForgotPasswordController extends AbstractController
     	$view['form'] = $form;
     	return $view;    	
     }   
+    
+    public function resetAction()
+    {
+    	$hash = $this->_request->getParam('p', FALSE);
+    	if(!$hash)
+    	{
+    		$this->_helper->redirector('index');
+    		exit;
+    	}
+    	 
+    	$user = new PM_Model_Users(new PM_Model_DbTable_Users);
+    	$user_data = $user->getUserByPwHash($hash);
+    	if(!$user_data)
+    	{
+    		$this->_helper->redirector('index');
+    		exit;
+    	}
+    	 
+    	$form = $user->getPasswordForm(array(
+    			'action' => '/forgot-password/reset/p/'.$hash,
+    			'method' => 'post',
+    	), FALSE);
+    
+    	if ($this->getRequest()->isPost())
+    	{
+    		$formData = $this->getRequest()->getPost();
+    		if ($form->isValid($formData))
+    		{
+    			if($user->changePassword($user_data['id'], $formData['new_password']))
+    			{
+    				$this->_flashMessenger->addMessage('Your password hass been reset!');
+    				$this->_helper->redirector('index', 'login');
+    			}
+    		}
+    	}
+    
+    	$this->view->form = $form;
+    }    
 }

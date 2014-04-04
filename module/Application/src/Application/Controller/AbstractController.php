@@ -24,6 +24,10 @@ use Base\Controller\BaseController;
 abstract class AbstractController extends BaseController
 {
 
+	/**
+	 * (non-PHPdoc)
+	 * @see \Base\Controller\BaseController::onDispatch()
+	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
 		return parent::onDispatch( $e );

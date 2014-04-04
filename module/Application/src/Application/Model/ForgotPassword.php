@@ -14,12 +14,10 @@ namespace Application\Model;
 
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\Db\Sql\Sql;
 
-use Application\Model\Hash;
-use Application\Model\User;
+use Application\Model\Users;
 
 /**
 * Forgot Password Model
@@ -63,10 +61,10 @@ class ForgotPassword extends AbstractModel
 					array(
 						'name' => 'Db\RecordExists',
 						'options' => array(
-						        'table' => 'users',
-						        'field' => 'email',
-								'adapter' => $this->adapter
-						    )
+						    'table' => 'users',
+						    'field' => 'email',
+							'adapter' => $this->adapter
+						)
 					),
 				),
 			)));
@@ -77,10 +75,11 @@ class ForgotPassword extends AbstractModel
 		return $this->inputFilter;
 	}	
 	
-	public function sendEmail(Hash $hash, $email)
+	public function sendEmail(\Application\Model\Mail $mail, \Application\Model\Hash $hash, $email)
 	{
-		$guid = $hash->guidish();
-		$users = new User($this->adapter, new Sql($this->adapter));
+		echo $guid = $hash->guidish();
+		exit;
+		$users = new Users($this->adapter, new Sql($this->adapter));
 		$user_data = $users->getUserByEmail($email);
 		if(!$user_data)
 		{
