@@ -46,7 +46,7 @@ abstract class BaseForm extends Form
 			'type' => 'Csrf',
 			'options' => array(
 				'csrf_options' => array(
-					'timeout' => 600
+					'timeout' => 3600
 				)
 			)
 		));		

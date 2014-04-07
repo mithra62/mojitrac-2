@@ -4,13 +4,17 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/Application/src/Application/Model/Mail.php
  */
 
 namespace Application\Model;
+
+use Zend\Mime\Message as MimeMessage;
+use Zend\Mime\Part as MimePart;
+use Zend\Mail\Transport\SmtpOptions;
 
 /**
 * Mail Model
@@ -28,20 +32,26 @@ class Mail extends AbstractModel
 	public $sending_transport = null;
 	
 	/**
+	 * The message object
+	 * @var \Zend\Mail\Message
+	 */
+	public $message = null;
+	
+	/**
 	 * The sendmail type transport
-	 * @var object \Zend\Mail\Transport\Smtp
+	 * @var \Zend\Mail\Transport\Smtp
 	 */
 	public $sendmail_transport = null;
 	
 	/**
 	 * The file type transport (mostly used for logging emails sent)
-	 * @var object \Zend\Mail\Transport\File
+	 * @var \Zend\Mail\Transport\File
 	 */
 	public $file_transport = null;
 	
 	/**
 	 * The SMTP type transport
-	 * @var object \Zend\Mail\Transport\Smtp
+	 * @var \Zend\Mail\Transport\Smtp
 	 */
 	public $smtp_transport = null;
 	
@@ -64,7 +74,8 @@ class Mail extends AbstractModel
 		$this->message = $message;
 		$this->message->setEncoding("UTF-8");
 		$this->message->getHeaders()->addHeaderLine('X-MailGenerator', 'MojiTrac');
-		$this->message->addReplyTo("no-reply@mojitrac.com", "No Reply");
+		$this->message->getHeaders()->addHeaderLine('content-type', 'multipart/alternative'); //so we can send both HTML and txt emails
+		$this->message->addReplyTo("no-reply@mojitrac.com", "MojiTrac");
 		$this->message->setSender("no-reply@mojitrac.com", "MojiTrac");
 		$this->message->setFrom("no-reply@mojitrac.com", "MojiTrac");
 		$this->web_url = 'http://'.$_SERVER['HTTP_HOST'];
@@ -101,6 +112,60 @@ class Mail extends AbstractModel
 	{
 		$this->smtp_transport = $smtp;
 		return $this;		
+	}
+	
+	public function setMailConfig(array $config)
+	{
+		$this->config = $config;
+		return $this;
+	}
+	
+	public function setEmailView($view_script, $view_vars)
+	{
+		return $this;
+	}
+	
+	public function addTo($email_address, $name = null)
+	{
+		$this->message->addTo($email_address, $name);
+		return $this;
+	}
+	
+	public function setBody($message)
+	{
+		$this->message->setBody($message);
+		return $this;
+	}
+	
+	public function setSubject($subject)
+	{
+		$this->message->setSubject($subject);
+		return $this;
+	}
+	
+	public function send()
+	{
+		if($this->message->isValid())
+		{
+			//first log it!
+			$this->file_transport->send($this->message);
+			$transport = $this->getTransport();
+			$transport->send($this->message);
+		}
+	}
+	
+	private function getTransport()
+	{
+		//first, we use the value from the config
+		$type = ( empty($this->config['email']['type']) ? $this->config['email']['type'] : 'php');
+		
+		//next, we have to validate we have the proper options for the setting
+		if( !empty($this->config['email']['smtp_options']) && $this->smtp_transport !== null)
+		{
+			$this->smtp_transport->setOptions(new SmtpOptions($this->config['email']['smtp_options']) );
+		}
+
+		return $this->smtp_transport;
 	}
 	
 	public function makeLink($body, $pk, $type = 'project')

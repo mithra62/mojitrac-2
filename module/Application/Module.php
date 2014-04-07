@@ -139,12 +139,14 @@ class Module
 					$db = $sm->get('SqlObject');
 					$message = new \Zend\Mail\Message;
 					$mailer = new Mail($adapter, $db, $message);
-					
+
+					$config = $sm->get('Config');
 					$sendmail = new \Zend\Mail\Transport\Sendmail();
 					$file = new \Zend\Mail\Transport\File();
+					$file_options = new \Zend\Mail\Transport\FileOptions($config['email_logging']['file_options']);
+					$file->setOptions($file_options);
 					$smtp = new \Zend\Mail\Transport\Smtp();
-					
-					$mailer->setSendmailTransport($sendmail)->setFileTransport($file)->setSmtpTransport($smtp);
+					$mailer->setMailConfig($config)->setSendmailTransport($sendmail)->setFileTransport($file)->setSmtpTransport($smtp);
 					return $mailer;
 				},
 				'Application\Model\Roles' => function($sm) {
@@ -165,7 +167,8 @@ class Module
 				'Application\Model\ForgotPassword' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new ForgotPassword($adapter, $db);					
+					$users = $sm->get('Application\Model\Users');
+					return new ForgotPassword($adapter, $db, $users);					
 				},
 				'Application\Model\ForgotPasswordForm' => function($sm) {
 					return new ForgotPasswordForm('forgot_password');

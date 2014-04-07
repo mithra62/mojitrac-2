@@ -30,11 +30,17 @@ class ForgotPassword extends AbstractModel
 {
 	protected $inputFilter;
 	
-	public function __construct(\Zend\Db\Adapter\Adapter $db, \Zend\Db\Sql\Sql $sql)
+	public function __construct(\Zend\Db\Adapter\Adapter $db, \Zend\Db\Sql\Sql $sql, \Application\Model\Users $users = null)
 	{
 		parent::__construct($db, $sql);
+		$this->users = $users;
 	}
 
+	/**
+	 * Sets the Input Filter to use
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
+	 */
 	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
 		throw new \Exception("Not used");
@@ -75,24 +81,29 @@ class ForgotPassword extends AbstractModel
 		return $this->inputFilter;
 	}	
 	
-	public function sendEmail(\Application\Model\Mail $mail, \Application\Model\Hash $hash, $email)
+	/**
+	 * Sends the Forgot Password email
+	 * @param \Application\Model\Mail $mail
+	 * @param \Application\Model\Hash $hash
+	 * @param string $email_address
+	 * @return boolean
+	 */
+	public function sendEmail(\Application\Model\Mail $mail, \Application\Model\Hash $hash, $email_address)
 	{
-		echo $guid = $hash->guidish();
-		exit;
-		$users = new Users($this->adapter, new Sql($this->adapter));
-		$user_data = $users->getUserByEmail($email);
+		$guid = $hash->guidish();
+		$user_data = $this->users->getUserByEmail($email_address);
 		if(!$user_data)
 		{
 			return FALSE;
 		}
 		
-		if($users->upatePasswordHash($user_data['id'], $guid))
+		if($this->users->upatePasswordHash($user_data['id'], $guid))
 		{
-			$mail = new Model_Mail;
+			$mail->addTo($email_address);
+			$mail->setEmailView('emails/forgot-password', $user_data);
 			$change_url = $mail->web_url.'/forgot-password/reset/p/'.$guid;
 			$body = $this->emailBody($change_url);
-			$mail->setBodyText($body);
-			$mail->setBodyHtml($mail->makeHtml($body));
+			$mail->setBody($mail->makeHtml($body));
 			$mail->addTo($user_data['email'], $user_data['first_name'].' '.$user_data['last_name']);
 			$mail->setSubject('MojiTrac Password Recovery');
 			return $mail->send($mail->transport);	

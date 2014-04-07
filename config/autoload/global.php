@@ -23,7 +23,7 @@ return array(
 	),
     //see http://framework.zend.com/manual/2.1/en/modules/zend.mail.smtp.options.html for complete options
     'email' => array(
-	   'type' => 'smtp', //choose between `php` and `smtp`
+	   'type' => 'php', //choose between `php` and `smtp`
        'smtp_options' => array( //if `smtp` chosen above, this must be completed and accurate 
        
            'name' => 'localhost.localdomain',
