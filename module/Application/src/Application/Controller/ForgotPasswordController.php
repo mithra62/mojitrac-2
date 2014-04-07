@@ -47,8 +47,8 @@ class ForgotPasswordController extends AbstractController
 				$hash = $this->getServiceLocator()->get('Application\Model\Hash');
 				if($fp->sendEmail($mail, $hash, $formData['email']))
 				{
-					$this->_flashMessenger->addMessage('Please check your email');
-					$this->_helper->redirector('index', 'login');
+					$this->flashMessenger()->addMessage('Please check your email');
+					return $this->redirect()->toRoute('forgot-password');
 				}
 			}
     	}

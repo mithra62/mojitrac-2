@@ -15,6 +15,10 @@ namespace Application\Model;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Part as MimePart;
 use Zend\Mail\Transport\SmtpOptions;
+use Zend\View\Model\ViewModel;
+use Zend\View\Renderer\PhpRenderer;
+use Zend\View\Resolver\TemplatePathStack;
+use Zend\Form\Annotation\Object;
 
 /**
 * Mail Model
@@ -56,6 +60,18 @@ class Mail extends AbstractModel
 	public $smtp_transport = null;
 	
 	/**
+	 * The View model
+	 * @var \Zend\View\Model\ViewModel
+	 */
+	public $view_model = null;
+	
+	/**
+	 * Used in conjunction with $view_model to render emails
+	 * @var Object
+	 */
+	private $renderer = null;
+		
+	/**
 	 * The URL to reference the main site
 	 * @var mixed
 	 */
@@ -74,7 +90,8 @@ class Mail extends AbstractModel
 		$this->message = $message;
 		$this->message->setEncoding("UTF-8");
 		$this->message->getHeaders()->addHeaderLine('X-MailGenerator', 'MojiTrac');
-		$this->message->getHeaders()->addHeaderLine('content-type', 'multipart/alternative'); //so we can send both HTML and txt emails
+		//$this->message->getHeaders()->addHeaderLine('content-type', 'multipart/alternative'); //so we can send both HTML and txt emails
+		//$this
 		$this->message->addReplyTo("no-reply@mojitrac.com", "MojiTrac");
 		$this->message->setSender("no-reply@mojitrac.com", "MojiTrac");
 		$this->message->setFrom("no-reply@mojitrac.com", "MojiTrac");
@@ -84,7 +101,7 @@ class Mail extends AbstractModel
 	/**
 	 * Sets the Sendmail Tranport object
 	 * @param \Zend\Mail\Transport\Sendmail $sendmail
-	 * @return Mail
+	 * @return \Application\Model\Mail
 	 */	
 	public function setSendmailTransport(\Zend\Mail\Transport\Sendmail $sendmail)
 	{
@@ -95,7 +112,7 @@ class Mail extends AbstractModel
 	/**
 	 * Sets the File Tranport object
 	 * @param \Zend\Mail\Transport\File $file
-	 * @return Mail
+	 * @return \Application\Model\Mail
 	 */
 	public function setFileTransport(\Zend\Mail\Transport\File $file)
 	{
@@ -106,7 +123,7 @@ class Mail extends AbstractModel
 	/**
 	 * Sets the SMTP Tranport object
 	 * @param \Zend\Mail\Transport\Smtp $smtp
-	 * @return Mail
+	 * @return \Application\Model\Mail
 	 */
 	public function setSmtpTransport(\Zend\Mail\Transport\Smtp $smtp)
 	{
@@ -114,46 +131,137 @@ class Mail extends AbstractModel
 		return $this;		
 	}
 	
+	/**
+	 * Sets the Mail configuration array
+	 * @param $config
+	 * @return \Application\Model\Mail
+	 */	
 	public function setMailConfig(array $config)
 	{
 		$this->config = $config;
 		return $this;
 	}
 	
-	public function setEmailView($view_script, $view_vars)
+	/**
+	 * Abstracts out the email body from a view script
+	 * @param template
+	 * @param $variables
+	 * @return \Application\Model\Mail
+	 */
+	public function setEmailView($template, $variables) 
 	{
+		$this->getViewModel()->setTerminal(true)->setTemplate($template)->setVariables($variables);
+		$this->setBody($this->renderer->render($this->getViewModel()));
 		return $this;
 	}
 	
+	/**
+	 * Sets the path to the email templates
+	 * @param string $path
+	 * @return \Application\Model\Mail
+	 */
+	public function setViewDir($path)
+	{
+		$this->view_dir = $path;
+		return $this;
+	}
+	
+	/**
+	 * Returns an instance of the View Model, creating one if it doens't exist
+	 * @return \Zend\View\Model\ViewModel
+	 */
+	public function getViewModel()
+	{
+		if(!$this->view_model)
+		{
+			$this->renderer = new PhpRenderer();	
+			$resolver = new TemplatePathStack();
+			$resolver->setPaths(array(
+				$this->view_dir
+			));
+			$this->renderer->setResolver($resolver);
+			$this->view_model = new ViewModel();
+		}
+		
+		return $this->view_model;
+	}
+	
+	/**
+	 * Adds an emai address to send to
+	 * @param string $email_address
+	 * @param string $name
+	 * @return \Application\Model\Mail
+	 */
 	public function addTo($email_address, $name = null)
 	{
 		$this->message->addTo($email_address, $name);
 		return $this;
 	}
 	
+	/**
+	 * Sets the email body explicitly based on the passed string
+	 * @param string $message
+	 * @return \Application\Model\Mail
+	 */
 	public function setBody($message)
 	{
-		$this->message->setBody($message);
+		$text = new MimePart('');
+		$text->type = "text/plain";
+		
+		$html = new MimePart($message);
+		$html->type = "text/html";
+		
+		$body_html = new MimeMessage();
+		$body_html->setParts(array($text, $html));
+				
+		$this->message->setBody($body_html);
 		return $this;
 	}
 	
+	/**
+	 * Sets the email subject and translates against the view model
+	 * @param unknown $subject
+	 * @return \Application\Model\Mail
+	 */
 	public function setSubject($subject)
 	{
 		$this->message->setSubject($subject);
 		return $this;
 	}
 	
+	/**
+	 * Sends the email
+	 * @return boolean
+	 */
 	public function send()
 	{
-		if($this->message->isValid())
+		if($this->isValid())
 		{
 			//first log it!
 			$this->file_transport->send($this->message);
 			$transport = $this->getTransport();
 			$transport->send($this->message);
+			
+			return true;
 		}
 	}
 	
+	/**
+	 * Verifies we have everything we need to send an email
+	 * @return bool
+	 */
+	public function isValid()
+	{
+		if($this->message->isValid())
+		{
+			return TRUE;
+		}
+	}
+	
+	/**
+	 * Determines how to send the email using which method (php or SMTP)
+	 * @return object
+	 */
 	private function getTransport()
 	{
 		//first, we use the value from the config

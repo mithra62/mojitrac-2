@@ -99,13 +99,12 @@ class ForgotPassword extends AbstractModel
 		
 		if($this->users->upatePasswordHash($user_data['id'], $guid))
 		{
-			$mail->addTo($email_address);
-			$mail->setEmailView('emails/forgot-password', $user_data);
 			$change_url = $mail->web_url.'/forgot-password/reset/p/'.$guid;
-			$body = $this->emailBody($change_url);
-			$mail->setBody($mail->makeHtml($body));
+			$mail->addTo($email_address);
+			$mail->setViewDir($this->getModulePath(__DIR__));
+			$mail->setEmailView('forgot-password', array('change_url' => $change_url, 'user_data' => $user_data));
 			$mail->addTo($user_data['email'], $user_data['first_name'].' '.$user_data['last_name']);
-			$mail->setSubject('MojiTrac Password Recovery');
+			$mail->setSubject('forgot_password_email_subject');
 			return $mail->send($mail->transport);	
 		}	
 	}
