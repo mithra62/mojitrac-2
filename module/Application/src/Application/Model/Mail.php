@@ -77,6 +77,12 @@ class Mail extends AbstractModel
 	public $web_url = FALSE;
 	
 	/**
+	 * The localization domain
+	 * @var string
+	 */
+	private $translation_domain = 'app';
+	
+	/**
 	 * Mail Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $sql
@@ -166,9 +172,20 @@ class Mail extends AbstractModel
 		return $this;
 	}
 	
-	public function setViewHelpers($helpers)
+	/**
+	 * Sets the View Helpers for use in the email view scripts
+	 * @param object $helpers
+	 */
+	public function setViewHelpers(\Zend\View\HelperPluginManager $helpers)
 	{
 		$this->view_helpers = $helpers;
+		return $this;
+	}
+	
+	public function setTranslator(\Zend\Mvc\I18n\Translator $translator)
+	{
+		$this->translator = $translator;
+		return $this;
 	}
 	
 	/**
@@ -233,6 +250,7 @@ class Mail extends AbstractModel
 	 */
 	public function setSubject($subject)
 	{
+		$subject = $this->translator->translate($subject, $this->translation_domain);
 		$this->message->setSubject($subject);
 		return $this;
 	}

@@ -5,7 +5,7 @@ return array(
     'email' => 'Email',
     'password' => 'Password',
     'forgot_password' => 'Forgot Password',
-		
+	'forgot_password_email_subject' => 'MojiTrac Forgot Password',
 	'old_password' => 'Old Password',
 	'new_password' => 'New Password',
 	'confirm_password' => 'Confirm Password',

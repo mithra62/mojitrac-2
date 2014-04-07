@@ -114,7 +114,8 @@ class Module
 				},
 				'AuthService' => function($sm) {
 					$db = $sm->get('Zend\Db\Adapter\Adapter');
-					$user = new Users( $db ,  new Sql($db) );
+					$user = $sm->get('Application\Model\Users');
+							
 					$authService = new AuthenticationService();
 					$authService->setAdapter(new AuthAdapter($user));
 					$authService->setStorage($sm->get('Application\Model\Auth\AuthStorage'));
@@ -132,7 +133,8 @@ class Module
 				'Application\Model\Users' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Users($adapter, $db);
+					$roles = $sm->get('Application\Model\Roles');
+					return new Users($adapter, $db, $roles);
 				},
 				'Application\Model\Mail' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
@@ -150,7 +152,8 @@ class Module
 							->setSendmailTransport($sendmail)
 							->setFileTransport($file)
 							->setSmtpTransport($smtp)
-							->setViewHelpers($sm->get('ViewHelperManager'));
+							->setViewHelpers($sm->get('ViewHelperManager'))
+							->setTranslator($sm->get('viewhelpermanager')->get('_')->getTranslator());
 					return $mailer;
 				},
 				'Application\Model\Roles' => function($sm) {

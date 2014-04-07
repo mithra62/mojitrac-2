@@ -54,13 +54,20 @@ class Users extends AbstractModel
 	protected $registrationInputFilter;	
 	
 	/**
+	 * The Roles Model
+	 * @var object
+	 */
+	public $roles = null;
+	
+	/**
 	 * The User Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param Sql $db
 	 */
-	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db, \Application\Model\Roles $roles)
 	{
 		parent::__construct($adapter, $db);
+		$this->roles = $roles;
 	}
 	
 	/**

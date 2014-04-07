@@ -137,6 +137,7 @@ class UsersController extends AbstractPmController
 
 		$user_data = $user->getUserById($id);
 		$user_data['user_roles'] = $view['user_roles'] = $user->getUserRolesArr($id);
+		$user_form->rolesFields($roles);
 
 		$user_form->setData($user_data);
 		 
@@ -145,7 +146,7 @@ class UsersController extends AbstractPmController
 		if ($this->getRequest()->isPost()) 
 		{
 			$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData)) 
+			if ($user_form->isValid($formData)) 
 			{			
 				if($user->updateUser($formData, $formData['id']))
 				{
