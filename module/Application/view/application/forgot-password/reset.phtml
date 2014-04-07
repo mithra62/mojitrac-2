@@ -1,33 +1,64 @@
-	<h1>Password Reset</h1>		
+<h1>Password Reset</h1>
+
+
 <?php 
-
-if(is_array($this->messages) && count($this->messages) >= 1)
-{
-	foreach($this->messages AS $message) 
-	{
-		echo '<div class="fail large png_bg">'.$message.'</div>';
-	}
-} else {
+$form = $this->form;
+$form->setAttribute('id', 'password_form');
+$form->setAttribute('class', 'sumbitForm');
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>			
 	
-	echo '<div class="information large png_bg">Select your new password and enter it below.</div> ';
-}
-?>		
-<form action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod()) ?>" id="sumbitForm">
-  
-<p><label>New Password</label>
-<?php echo $this->form->new_password; ?>
-</p>
+	<p>
+		<label for="new_password"><?php echo $this->_('new_password', 'app'); ?></label>
+		<?php $field = $form->get('new_password'); echo $this->formRow($field); ?>
+	</p>			
+	
+	<p>
+		<label for="confirm_password"><?php echo $this->_('confirm_password', 'app'); ?></label>
+		<?php $field = $form->get('confirm_password'); echo $this->formRow($field); ?>
+	</p>
+			
+	
+	<p>
+		
+ <input type="submit" name="Submit" id="button" value="<?php echo $this->_('submit', 'app'); ?>"  class="button"/>
+	</p>				
 
-<p><label>Confirm Password</label>
-<?php echo $this->form->confirm_password; ?>
-</p>
-  
-<p>
- <input type="submit" name="Submit" id="button" value="Submit"  class="button"/>
-</p>
-<a href="<?php echo $this->url(array('controller'=>'login','action'=>'index'), null, TRUE);?>" class="blueLink">Back to Login</a>
-</form>
+<?php echo $this->ConfirmPageUnload('#password_form')?>
+<?php echo $this->form()->closeTag() ?>
 
+<script type="text/javascript">
+jQuery(document).ready(function($){
+	$("#password_form").validate({
+		rules: {
+			new_password: {
+				required: true,
+				minlength: 5
+			},
+			confirm_password: {
+				required: true,
+				equalTo: "#new_password",
+				minlength: 5
+			}
+		},
+		messages: {			
+			new_password: {
+				required: "Please enter a new password",
+				minlength: "Your password must be at least 5 characters long"
+			},
+			confirm_password: {
+				required: "Please confirm your new password",
+				equalTo: "Please enter the same password as above",
+				minlength: "Your password must be at least 5 characters long"
+			}
+					
+		}
+	});	
+});
+</script>
 <script type="text/javascript">
 jQuery(document).ready(function($){
 

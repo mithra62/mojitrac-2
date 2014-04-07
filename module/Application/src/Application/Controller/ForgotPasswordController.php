@@ -64,25 +64,21 @@ class ForgotPasswordController extends AbstractController
     
     public function resetAction()
     {
-    	$hash = $this->_request->getParam('p', FALSE);
+    	$hash = $company_id = $this->params()->fromRoute('hash');
     	if(!$hash)
     	{
-    		$this->_helper->redirector('index');
-    		exit;
+    		return $this->redirect()->toRoute('forgot-password');
     	}
     	 
-    	$user = new PM_Model_Users(new PM_Model_DbTable_Users);
-    	$user_data = $user->getUserByPwHash($hash);
+    	$fp = $this->getServiceLocator()->get('Application\Model\ForgotPassword');
+    	$user_data = $fp->users->getUserByPwHash($hash);
     	if(!$user_data)
     	{
-    		$this->_helper->redirector('index');
-    		exit;
+    		return $this->redirect()->toRoute('forgot-password');
     	}
-    	 
-    	$form = $user->getPasswordForm(array(
-    			'action' => '/forgot-password/reset/p/'.$hash,
-    			'method' => 'post',
-    	), FALSE);
+
+    	$form = $this->getServiceLocator()->get('Application\Form\PasswordForm');
+    	$hash = $this->getServiceLocator()->get('Application\Model\Hash');
     
     	if ($this->getRequest()->isPost())
     	{
@@ -97,6 +93,7 @@ class ForgotPasswordController extends AbstractController
     		}
     	}
     
-    	$this->view->form = $form;
+    	$view['form'] = $form;
+    	return $view;
     }    
 }

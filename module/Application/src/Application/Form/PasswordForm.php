@@ -32,17 +32,6 @@ class PasswordForm extends BaseForm
 	public function __construct($name = 'password', $confirm = TRUE) 
 	{
 		parent::__construct($name);		
-		if($confirm)
-		{
-			$this->add(array(
-				'name' => 'old_password',
-				'type' => 'Password',
-				'attributes' => array(
-					'class' => 'input large',
-					'id' => 'old_password'
-				),
-			));
-		}
 
 		$this->add(array(
 			'name' => 'new_password',
@@ -61,5 +50,17 @@ class PasswordForm extends BaseForm
 				'id' => 'confirm_password'
 			),
 		));	
+	}
+	
+	public function confirmField()
+	{
+		$this->add(array(
+			'name' => 'old_password',
+			'type' => 'Password',
+			'attributes' => array(
+				'class' => 'input large',
+				'id' => 'old_password'
+			),
+		));
 	}
 }

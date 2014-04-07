@@ -339,13 +339,14 @@ class Users extends AbstractModel
 	 */
 	public function getUserByPwHash($hash, $expired = TRUE)
 	{
-		$sql = $this->db->select()->where('forgotten_hash = ?', $hash);
+		$sql = $this->db->select()->from(array('u'=> 'users'))->where(array('forgotten_hash' => $hash));
 		if($expired)
 		{
-			$sql = $sql->where('pw_forgotten > ?', date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m")  , date("d")-1, date("Y"))));
-			$sql = $sql->where('pw_forgotten < ?', date('Y-m-d H:i:s'));
+			$where = $sql->where->greaterThan('pw_forgotten', date('Y-m-d H:i:s', mktime(date("H"), date("i"), date("s"), date("m")  , date("d")-1, date("Y"))))->where->lessThan('pw_forgotten', date('Y-m-d H:i:s'));
+			$sql = $sql->where($where);
 		}
-		return $this->db->getUser($sql);
+		
+		return $this->getRow($sql);
 	}	
 	
 	/**

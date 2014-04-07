@@ -151,7 +151,7 @@ class UsersForm extends BaseForm
      * @param \Application\Model\Roles $roles
      * @return \Application\Form\UsersForm
      */
-    public function roles_fields(\Application\Model\Roles $roles)
+    public function rolesFields(\Application\Model\Roles $roles)
     {
     	$roles = $roles->getAllRoleNames();
     	$role_fields = array();
