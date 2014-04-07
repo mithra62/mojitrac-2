@@ -80,15 +80,19 @@ class ForgotPasswordController extends AbstractController
     	$form = $this->getServiceLocator()->get('Application\Form\PasswordForm');
     	$hash = $this->getServiceLocator()->get('Application\Model\Hash');
     
-    	if ($this->getRequest()->isPost())
+    	$request = $this->getRequest();
+    	if ($request->isPost())
     	{
     		$formData = $this->getRequest()->getPost();
+    		$form->setInputFilter($fp->users->getPasswordInputFilter($this->identity, $hash, false));
+    		$form->setData($formData);    		
     		if ($form->isValid($formData))
     		{
-    			if($user->changePassword($user_data['id'], $formData['new_password']))
+    			$formData = $formData->toArray();
+    			if($fp->users->changePassword($user_data['id'], $formData['new_password']))
     			{
-    				$this->_flashMessenger->addMessage('Your password hass been reset!');
-    				$this->_helper->redirector('index', 'login');
+    				$this->flashMessenger()->addMessage('Your password hass been reset!');
+    				return $this->redirect()->toRoute('login');    				
     			}
     		}
     	}
