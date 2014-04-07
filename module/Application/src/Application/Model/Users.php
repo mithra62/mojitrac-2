@@ -413,7 +413,7 @@ class Users extends AbstractModel
 			
 			$ext = $this->trigger(self::EventUserAddPost, $this, compact('user_id', 'data'), $this->setXhooks($data));
 			if($ext->stopped()) return $ext->last(); elseif($ext->last()) $user_id = $ext->last();
-			
+
 			return $user_id;			
 		}
 	}

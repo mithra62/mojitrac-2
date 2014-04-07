@@ -18,7 +18,6 @@ use Zend\Mail\Transport\SmtpOptions;
 use Zend\View\Model\ViewModel;
 use Zend\View\Renderer\PhpRenderer;
 use Zend\View\Resolver\TemplatePathStack;
-use Zend\Form\Annotation\Object;
 
 /**
 * Mail Model

@@ -25,7 +25,6 @@ use PM\Model\Times;
 use PM\Model\Bookmarks;
 use PM\Model\Notes;
 use PM\Model\Options;
-use PM\Model\Notifications;
 use PM\Model\Contacts;
 use PM\Model\ActivityLog;
 use PM\Model\Calendar;
@@ -131,11 +130,6 @@ class Module
 					$db = $sm->get('SqlObject');
 					return new Options($adapter, $db);
 				},
-				'PM\Model\Notifications' => function($sm) {
-					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
-					$db = $sm->get('SqlObject');
-					return new Notifications($adapter, $db);
-				},
 				'PM\Model\ActivityLog' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
@@ -180,8 +174,9 @@ class Module
 				},
 				'PM\Event\NotificationEvent' => function($sm) {
 				    $auth = $sm->get('AuthService');
-				    $al = $sm->get('PM\Model\ActivityLog');
-					return new NotificationEvent($al, $auth->getIdentity());
+				    $mail = $sm->get('Application\Model\Mail');
+				    $users = $sm->get('Application\Model\Users');
+					return new NotificationEvent($mail, $users, $auth->getIdentity());
 				},	
 				'Timezone' => function($sm) {
 				    $auth = $sm->get('AuthService');

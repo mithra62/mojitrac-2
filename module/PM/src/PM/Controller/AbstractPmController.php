@@ -83,7 +83,10 @@ abstract class AbstractPmController extends AbstractController
 	{
 		//setup the Activity Log
 		$al = $this->getServiceLocator()->get('PM\Event\ActivityLogEvent');
-		$al->register($this->getEventManager()->getSharedManager());		
+		$al->register($this->getEventManager()->getSharedManager());
+		
+		$al = $this->getServiceLocator()->get('PM\Event\NotificationEvent');
+		$al->register($this->getEventManager()->getSharedManager());				
 	}
 	
 	/**

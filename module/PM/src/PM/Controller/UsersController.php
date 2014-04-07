@@ -196,7 +196,7 @@ class UsersController extends AbstractPmController
 		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
 		$hash = $this->getServiceLocator()->get('Application\Model\Hash');
 
-		$view['form'] = $user_form->registration_form()->roles_fields($roles);
+		$view['form'] = $user_form->registrationForm()->rolesFields($roles);
 		$view['addPassword'] = TRUE;
 		$view['user_roles'] = $roles->getAllRoleNames();
 		$view['layout_style'] = 'right';

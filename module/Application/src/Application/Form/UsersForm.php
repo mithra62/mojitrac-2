@@ -123,7 +123,7 @@ class UsersForm extends BaseForm
      * Includes the fields needed for Registration to the form
      * @return \Application\Form\UsersForm
      */
-    public function registration_form()
+    public function registrationForm()
     {
 		$this->add(array(
 			'name' => 'password',
