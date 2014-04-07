@@ -46,6 +46,10 @@ class ForgotPassword extends AbstractModel
 		throw new \Exception("Not used");
 	}
 	
+	/**
+	 * Returns the InputFilter to use for validating the Forgot Password data
+	 * @return \Zend\InputFilter\InputFilter
+	 */
 	public function getInputFilter()
 	{
 		if (!$this->inputFilter) 
@@ -99,7 +103,7 @@ class ForgotPassword extends AbstractModel
 		
 		if($this->users->upatePasswordHash($user_data['id'], $guid))
 		{
-			$change_url = $mail->web_url.'/forgot-password/reset/p/'.$guid;
+			$change_url = $mail->web_url.$this->changePasswordUrl($guid);
 			$mail->addTo($email_address);
 			$mail->setViewDir($this->getModulePath(__DIR__));
 			$mail->setEmailView('forgot-password', array('change_url' => $change_url, 'user_data' => $user_data));
@@ -109,15 +113,8 @@ class ForgotPassword extends AbstractModel
 		}	
 	}
 	
-	private function emailBody($change_url)
+	public function changePasswordUrl($guid)
 	{
-		$str = "To reset your password for your MojiTrac account, click the link below:\n\n";
-		$str .= $change_url."\n\n";
-		$str .= "Copy and paste the URL in a new browser window if you can't click on it.\n\n";
-		$str .= "Please keep in mind that the link will only work for 24 hours; after that it will be inactive.\n\n";
-		$str .= "If you didn't request to reset your password you don't need to take any further action and can safely disregard this email.\n\n";
-		$str .= "MojiTrac :).\n\n";
-		$str .= "Please don't respond to this email; all emails are automatically deleted.";
-		return $str;
+		return '/forgot-password/reset/'.$guid;
 	}
 }

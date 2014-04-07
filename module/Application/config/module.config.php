@@ -68,27 +68,32 @@ return array(
         			),
         		)
         	), //end Login Routes
-            
-            'forgot-password' => array(
-            	'type' => 'Zend\Mvc\Router\Http\Literal',
-            	'options' => array(
-            		'route'    => '/forgot-password',
-            		'defaults' => array(
-            			'controller' => 'Application\Controller\ForgotPassword',
-            			'action'     => 'index',
-            		),
-            	),
-            ), 
-            'forgot-password/reset' => array(
-            	'type' => 'Zend\Mvc\Router\Http\Literal',
-            	'options' => array(
-            		'route'    => '/forgot-password/reset',
-            		'defaults' => array(
-            			'controller' => 'Application\Controller\ForgotPassword',
-            			'action'     => 'reset',
-            		),
-            	),
-            ), 
+
+        	'forgot-password' => array( //Forgot Password Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/forgot-password',
+        			'constraints' => array(
+        				'id' => '[0-9]+'
+        			),
+        			'defaults' => array(
+        				'controller' => 'Application\Controller\ForgotPassword',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'reset' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/reset/[:hash]',
+        					'defaults' => array(
+        						'action' => 'reset'
+        					)
+        				)
+        			),
+        		)
+        	), //end Bookmarks Routes
         ),
     ),
     'service_manager' => array(

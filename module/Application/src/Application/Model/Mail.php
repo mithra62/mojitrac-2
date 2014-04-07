@@ -220,6 +220,8 @@ class Mail extends AbstractModel
 	
 	/**
 	 * Sets the email subject and translates against the view model
+	 * @todo hook the subject up for translation
+	 * 
 	 * @param unknown $subject
 	 * @return \Application\Model\Mail
 	 */
