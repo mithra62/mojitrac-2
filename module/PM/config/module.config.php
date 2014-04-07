@@ -1196,7 +1196,20 @@ return array(
 	    	'Truncate' => 'PM\View\Helper\Truncate',
 	    	'UserInfo' => 'PM\View\Helper\UserInfo',
 	    ),
-    ),    
+    ),
+    'helper_map' => array(
+    		'_' => 'Zend\View\Helper\Translator'
+    ),       
+    'translator' => array(
+        'translation_file_patterns' => array(
+            array(
+                'type'     => 'phparray',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern'  => '%s.php',
+                'text_domain' => 'pm',
+            ),
+        ),
+    ),
     // Placeholder for console routes
     'console' => array(
         'router' => array(

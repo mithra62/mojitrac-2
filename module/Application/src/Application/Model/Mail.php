@@ -149,6 +149,7 @@ class Mail extends AbstractModel
 	 */
 	public function setEmailView($template, $variables) 
 	{
+		$variables = array_merge($variables, array('site_url' => $this->web_url));
 		$this->getViewModel()->setTerminal(true)->setTemplate($template)->setVariables($variables);
 		$this->setBody($this->renderer->render($this->getViewModel()));
 		return $this;
@@ -165,6 +166,11 @@ class Mail extends AbstractModel
 		return $this;
 	}
 	
+	public function setViewHelpers($helpers)
+	{
+		$this->view_helpers = $helpers;
+	}
+	
 	/**
 	 * Returns an instance of the View Model, creating one if it doens't exist
 	 * @return \Zend\View\Model\ViewModel
@@ -174,6 +180,7 @@ class Mail extends AbstractModel
 		if(!$this->view_model)
 		{
 			$this->renderer = new PhpRenderer();	
+			$this->renderer->setHelperPluginManager($this->view_helpers);
 			$resolver = new TemplatePathStack();
 			$resolver->setPaths(array(
 				$this->view_dir

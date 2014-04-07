@@ -146,7 +146,11 @@ class Module
 					$file_options = new \Zend\Mail\Transport\FileOptions($config['email_logging']['file_options']);
 					$file->setOptions($file_options);
 					$smtp = new \Zend\Mail\Transport\Smtp();
-					$mailer->setMailConfig($config)->setSendmailTransport($sendmail)->setFileTransport($file)->setSmtpTransport($smtp);
+					$mailer->setMailConfig($config)
+							->setSendmailTransport($sendmail)
+							->setFileTransport($file)
+							->setSmtpTransport($smtp)
+							->setViewHelpers($sm->get('ViewHelperManager'));
 					return $mailer;
 				},
 				'Application\Model\Roles' => function($sm) {
