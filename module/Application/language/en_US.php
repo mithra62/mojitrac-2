@@ -3,6 +3,7 @@ return array(
 	'login_instructions' => 'To log in please enter your credentials below.',
     'login_welcome_message' => 'Welcome to MojiTrac!',
     'email' => 'Email',
+	'user_added' => 'User Added!',
     'password' => 'Password',
     'forgot_password' => 'Forgot Password',
 	'forgot_password_email_subject' => 'MojiTrac Forgot Password',

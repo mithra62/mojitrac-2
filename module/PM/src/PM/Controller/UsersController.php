@@ -109,7 +109,7 @@ class UsersController extends AbstractPmController
 
 	/**
 	 * User Edit Page
-	 * @return void
+	 * @return array
 	 */
 	public function editAction()
 	{
@@ -196,7 +196,8 @@ class UsersController extends AbstractPmController
 		$user_form = $this->getServiceLocator()->get('Application\Form\UsersForm');
 		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
 		$hash = $this->getServiceLocator()->get('Application\Model\Hash');
-
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+		
 		$view['form'] = $user_form->registrationForm()->rolesFields($roles);
 		$view['addPassword'] = TRUE;
 		$view['user_roles'] = $roles->getAllRoleNames();
@@ -214,18 +215,18 @@ class UsersController extends AbstractPmController
 				$user_id = $id = $user->addUser($formData->toArray(), $hash, $roles);
 				if($user_id)
 				{	
-					$this->flashMessenger()->addMessage('User Added!');
+					$this->flashMessenger()->addMessage($translate('user_added', 'pm'));
 					return $this->redirect()->toRoute('users/view', array('user_id' => $id));  
 				} 
 				else 
 				{
-					$view['errors'] = array('Something went wrong...');
+					$view['errors'] = array($translate('something_went_wrong', 'pm'));
 				}
 
 			} 
 			else 
 			{
-				$view['errors'] = array('Please fix the errors below.');
+				$view['errors'] = array($translate('please_fix_the_errors_below', 'pm'));
 				$user_form->setData($formData);
 			}
 		}

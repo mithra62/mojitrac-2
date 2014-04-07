@@ -334,14 +334,5 @@ class Mail extends AbstractModel
 		}
 		
 		return '<a href="'.$this->web_url.$url.'">'.$body.'</a>';
-	}	
-	
-	public function makeHtml($text) 
-	{
-		$text = nl2br($text);
-		$pattern = "@\b(https?://)?(([0-9a-zA-Z_!~*'().&=+$%-]+:)?[0-9a-zA-Z_!~*'().&=+$%-]+\@)?(([0-9]{1,3}\.){3}[0-9]{1,3}|([0-9a-zA-Z_!~*'()-]+\.)*([0-9a-zA-Z][0-9a-zA-Z-]{0,61})?[0-9a-zA-Z]\.[a-zA-Z]{2,6})(:[0-9]{1,4})?((/[0-9a-zA-Z_!~*'().;?:\@&=+$,%#-]+)*/?)@";
-		$text = preg_replace($pattern, '<a href="\0">\0</a>', $text);
-		
-		return $text;
-	} 
+	}
 }
