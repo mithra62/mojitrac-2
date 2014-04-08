@@ -1,5 +1,5 @@
 <div class="content_headers" style="padding-top:0px;">
-	<div class="user_header">Edit User</div>
+	<div class="user_header"><?php echo $this->_('edit_user', 'pm')?></div>
 </div>
 <div class="back_link_content">
 	<a href="<?php echo $this->url('users/view', array('id'=>$this->user_data['id']), null, TRUE); ?>" title="Back to <?php echo $this->user_data['first_name'].' '.$this->user_data['last_name']; ?>">

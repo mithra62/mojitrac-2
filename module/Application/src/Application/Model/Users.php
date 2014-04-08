@@ -253,6 +253,41 @@ class Users extends AbstractModel
 	}
 	
 	/**
+	 * Sets the Input Filter for the registration form
+	 * @return object
+	 */
+	public function getEditInputFilter()
+	{
+		if (!$this->registrationInputFilter) {
+				
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'first_name',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+			)));
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'last_name',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+			)));
+				
+			$this->registrationInputFilter = $inputFilter;
+		}
+	
+		return $this->registrationInputFilter;
+	}	
+	
+	/**
 	 * Changes a users password
 	 * @param int $id
 	 * @param string $password
@@ -431,18 +466,23 @@ class Users extends AbstractModel
 	 * @param int	 $id
 	 * @return bool
 	 */
-	public function updateUser($data, $id)
+	public function updateUser($data, $user_id)
 	{
-		$sql = $this->db->getSQL($data);
-		if($this->db->update($sql, "id = '$id'"))
+		$ext = $this->trigger(self::EventUserUpdatePre, $this, compact('data', 'user_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+				
+		$sql = $this->getSQL($data);
+		if($this->update('users', $sql, array('id' => $user_id)))
 		{
 			if(isset($data['user_roles']))
-			{				
-				$roles = new PM_Model_Roles;
-				$roles->updateUserRoles($data['user_roles'], $id);
-			    $this->cache->remove($id.'_permissions');				
+			{
+				$this->roles->updateUsersRoles($user_id, $data['user_roles']);			
 			}
-			return TRUE;
+			
+			$ext = $this->trigger(self::EventUserUpdatePost, $this, compact('user_id', 'data'), $this->setXhooks($data));
+			if($ext->stopped()) return $ext->last(); elseif($ext->last()) $user_id = $ext->last();			
+			
+			return $user_id;
 		}
 	}
 	

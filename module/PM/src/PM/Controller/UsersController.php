@@ -4,7 +4,7 @@
 *
 * @package		mithra62:Mojitrac
 * @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
 * @filesource 	./module/PM/src/PM/Controller/UsersController.php
@@ -131,6 +131,7 @@ class UsersController extends AbstractPmController
 		$user = $this->getServiceLocator()->get('Application\Model\Users');
 		$user_form = $this->getServiceLocator()->get('Application\Form\UsersForm');
 		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 
 		$view['id'] = $id;
 		$view['add_groups'] = $this->perm->check($this->identity, 'manage_users');
@@ -143,11 +144,15 @@ class UsersController extends AbstractPmController
 		 
 		$view['form'] = $user_form;
 
-		if ($this->getRequest()->isPost()) 
+		$request = $this->getRequest();
+		if ($request->isPost()) 
 		{
-			$formData = $this->getRequest()->getPost();
+
+			$formData = $request->getPost();
+            $user_form->setInputFilter($user->getEditInputFilter());
+			$user_form->setData($request->getPost());
 			if ($user_form->isValid($formData)) 
-			{			
+			{		
 				if($user->updateUser($formData, $formData['id']))
 				{
 					
@@ -156,20 +161,21 @@ class UsersController extends AbstractPmController
 						$noti = new PM_Model_Notifications();
 						$noti->sendUserAdd($formData, TRUE);
 					}
-					$this->_flashMessenger->addMessage('User updated!');
-					$this->_helper->redirector('view','users', 'pm', array('id' => $id));
+					
+					$this->flashMessenger()->addMessage($translate('user_updated', 'pm'));
+					return $this->redirect()->toRoute('users/view', array('user_id' => $id));					
 				} 
 				else 
 				{
-					$this->view->errors = array('Couldn\'t update user...');
-					$form->setData($formData);
+					$this->view->errors = array($translate('something_went_wrong', 'pm'));
+					$user_form->setData($formData);
 				}
 
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
-				$form->setData($formData);
+				$view['errors'] = array($translate('please_fix_the_errors_below', 'pm'));
+				$user_form->setData($formData);
 			}
 
 		}
