@@ -2,20 +2,20 @@
 
 	<div class="user_role_header">View User Role: <?php echo $this->role['name']; ?></div>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'roles', 'page' => 'view'), null, TRUE); ?>" rel="facebox" title="Add Project">
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'roles', 'page' => 'view'), null, TRUE); ?>" rel="facebox" title="Add Project">
 				<?php echo $this->InteractIcon('help', 'About User Roles');?>
 				<div class="action_text">Help</div>
 			</a>
 		</div>	
 		<?php if($this->CheckPermission('manage_roles')):?>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'roles','action'=>'remove', 'id' => $this->role['id']), null, TRUE); ?>" title="Delete">
+			<a href="<?php echo $this->url('roles/remove', array('role_id' => $this->role['id']), null, TRUE); ?>" title="Delete">
 				<?php echo $this->InteractIcon('cross', 'Delete');?>
 				<div class="action_text">Delete</div>
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'roles','action'=>'edit', 'id' => $this->role['id']), null, TRUE); ?>" title="Edit">
+			<a href="<?php echo $this->url('roles/edit', array('role_id' => $this->role['id']), null, TRUE); ?>" title="Edit">
 				<?php echo $this->InteractIcon('pencil', 'Edit');?>
 				<div class="action_text">Edit</div>
 			</a>
@@ -45,7 +45,7 @@ if($this->permissions):
 <div class="content_headers">
 	<div class="permissions_header">Permissions</div>	
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'roles', 'page' => 'permissions'), null, TRUE); ?>" rel="facebox" title="Add Project">
+		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'roles', 'page' => 'permissions'), null, TRUE); ?>" rel="facebox" title="Add Project">
 			<?php echo $this->InteractIcon('help', 'About Role Permissions');?>
 			<div class="action_text">Help</div>
 		</a>
@@ -53,13 +53,13 @@ if($this->permissions):
 </div>
 <?php 
 	$options = array('permissions' => $this->permissions, 'role_permissions' => $this->role_permissions);
-	echo $this->partial('roles/partials/permissions.phtml', $options);
+	echo $this->partial('pm/roles/partials/permissions', $options);
 endif; ?>
 
 <div class="content_headers">
 	<div class="user_header">Users</div>
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'roles', 'page' => 'users'), null, TRUE); ?>" rel="facebox" title="Add Project">
+		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'roles', 'page' => 'users'), null, TRUE); ?>" rel="facebox" title="Add Project">
 			<?php echo $this->InteractIcon('help', 'About Role Users');?>
 			<div class="action_text">Help</div>
 		</a>
@@ -68,7 +68,7 @@ endif; ?>
 <?php 
 if($this->users):
 	$options = array('users' => $this->users);
-	echo $this->partial('users/partials/users.phtml', $options); 
+	echo $this->partial('pm/users/partials/users', $options); 
 else: 
 ?>
 <div class="information png_bg">There aren't any users added to this role yet.</div>

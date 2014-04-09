@@ -87,10 +87,8 @@ class Roles extends AbstractModel
 	 */
 	public function getRoleById($id)
 	{
-		$user = new PM_Model_DbTable_User_Roles;
-		$sql = $user->select()->setIntegrityCheck(false)->from(array('r'=>$user->getTableName()));
-		$sql = $sql->where('r.id = ?', $id);
-		return $user->getUserRole($sql);
+		$sql = $this->db->select()->from(array('r'=>'user_roles'))->where(array('r.id' => $id));
+		return $this->getRow($sql);
 	}
 	
 	/**
@@ -127,10 +125,10 @@ class Roles extends AbstractModel
 	 */
 	public function getUsersOnRole($id)
 	{
-		$users = new PM_Model_DbTable_Users;
-		$sql = $users->select()->setIntegrityCheck(false)->from(array('u' => $users->getTableName()), array('u.*'));
-		$sql = $sql->join(array('u2r' => 'user2role'), 'u2r.user_id = u.id AND u2r.role_id = '.$id, array());
-		return $users->getUsers($sql);
+		$sql = $this->db->select()->from(array('u' => 'users'))
+					->join(array('u2r' => 'user2role'), 'u2r.user_id = u.id', array())
+					->where(array('u2r.role_id' => $id));
+		return $this->getRows($sql);
 	}
 	
 	/**
@@ -140,14 +138,13 @@ class Roles extends AbstractModel
 	 */
 	public function getRolePermissions($id, $return = 'keys')
 	{
-		$perm = new PM_Model_DbTable_User_Role_Permissions;
-		$sql = $perm->select()->setIntegrityCheck(false)->from(array('p' => $this->ur_2_perm), array('p.*'))->where('role_id = ?', $id);
+		$sql = $this->db->select()->from(array('p' => 'user_role_2_permissions'), array('p.*'))->where(array('role_id' => $id));
 		if($return == 'assoc')
 		{
 			$sql = $sql->join(array('urp' => 'user_role_permissions'), 'p.permission_id = urp.id', array('name'));
 		}
 		
-		$perms = $perm->getPermissions($sql);
+		$perms = $this->getRows($sql);
 		$p_arr = array();
 		foreach($perms AS $p)
 		{
@@ -170,9 +167,8 @@ class Roles extends AbstractModel
 	 */
 	public function getAllPermissions()
 	{
-		$perm = new PM_Model_DbTable_User_Role_Permissions;
-		$sql = $perm->select();
-		return $perm->getPermissions($sql);
+		$sql = $this->db->select()->from('user_role_permissions');
+		return $this->getRows($sql);
 	}	
 	
 	/**

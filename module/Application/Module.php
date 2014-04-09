@@ -34,6 +34,7 @@ use Application\Form\LoginForm;
 use Application\Form\PasswordForm;
 use Application\Form\PrefsForm;
 use Application\Form\UsersForm;
+use Application\Form\RolesForm;
 
 /**
  * Application - Module Loader
@@ -209,6 +210,9 @@ class Module
 				},
 				'Application\Form\UsersForm' => function($sm) {
 					return new UsersForm('user');
+				},
+				'Application\Form\RolesForm' => function($sm) {
+					return new RolesForm('roles', $sm->get('Application\Model\Roles'));
 				},
 			),
     	);

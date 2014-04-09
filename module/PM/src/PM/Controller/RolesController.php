@@ -59,25 +59,24 @@ class RolesController extends AbstractPmController
 	 */
 	public function viewAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
-		if (!$id) {
-			$this->_helper->redirector('index','users');
-			exit;
+		$id = $this->params()->fromRoute('role_id');
+		if (!$id) 
+		{
+			return $this->redirect()->toRoute('roles');
 		}
 
-		$roles = new PM_Model_Roles;
-		$this->view->role = $roles->getRoleById($id);
-		if(!$this->view->role)
+		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
+		$view['role'] = $roles->getRoleById($id);
+		if(!$view['role'])
 		{
-			$this->_helper->redirector('index','roles');
-			exit;
+			return $this->redirect()->toRoute('roles');
 		}
 		
-		$this->view->users = $roles->getUsersOnRole($id);
-		$this->view->role_permissions = $roles->getRolePermissions($id);
-		$this->view->permissions = $roles->getAllPermissions();
-		$this->view->id = $id;
-		$this->view->headTitle('Viewing Role', 'PREPEND');
+		$view['users'] = $roles->getUsersOnRole($id);
+		$view['role_permissions'] = $roles->getRolePermissions($id);
+		$view['permissions'] = $roles->getAllPermissions();
+		$view['id'] = $id;
+		return $view;
 	}
 
 	/**
@@ -86,30 +85,26 @@ class RolesController extends AbstractPmController
 	 */
 	public function editAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
-		if (!$id) {
-			$this->_helper->redirector('index','ROLES');
+		$id = $this->params()->fromRoute('role_id');
+		if (!$id) 
+		{
+			return $this->redirect()->toRoute('roles');
 		}
 
-		$role = new PM_Model_Roles;
-		$form = $role->getRolesForm(array(
-            'action' => '/pm/roles/edit/',
-            'method' => 'post',
-		));
+		$role = $this->getServiceLocator()->get('Application\Model\Roles');
+		$form = $this->getServiceLocator()->get('Application\Form\RolesForm');
 		
 		$role_data = $role->getRoleById($id);
 		$role_perms = $role->getRolePermissions($id, 'assoc');
 		$role_data = array_merge($role_data, $role_perms);
 		
-		$perms = new PM_Model_Roles;
-		$this->view->permissions = $perms->getAllPermissions();
+		$view['permissions'] = $role->getAllPermissions();
 
-		$this->view->id = $id;
+		$view['id'] = $id;
 
-		$form->populate($role_data);
+		$form->setData($role_data);
 		 
-		$this->view->form = $form;
-
+		$view['form'] = $form;
 		if ($this->getRequest()->isPost()) {
 			$formData = $this->getRequest()->getPost();
 			if ($form->isValid($formData)) {
@@ -134,9 +129,7 @@ class RolesController extends AbstractPmController
 			}
 		}
 	  
-		$this->view->layout_style = 'right';
-		$this->view->sidebar = 'dashboard';
-		$this->view->headTitle('Edit Role', 'PREPEND');
+		return $view;
 	}
 
 	/**
