@@ -29,8 +29,8 @@
 			<td><?php echo $this->RelativeDate($role['last_modified']); ?></td>
 			<?php if($this->enable_actions && $this->CheckPermission('manage_roles')):?>
 			<td>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'roles','action'=>'edit', 'id'=>$role['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit');?></a>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'roles','action'=>'remove', 'id'=>$role['id']), null, TRUE); ?>" title="Delete" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $this->InteractIcon('cross', 'Delete');?></a>
+			<a href="<?php echo $this->url('roles/edit', array('role_id'=>$role['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit');?></a>
+			<a href="<?php echo $this->url('roles/remove', array('role_id'=>$role['id']), null, TRUE); ?>" title="Delete" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $this->InteractIcon('cross', 'Delete');?></a>
 			</td>
 			<?php endif; ?>
 		</tr>

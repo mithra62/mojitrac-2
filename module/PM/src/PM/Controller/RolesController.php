@@ -29,16 +29,16 @@ class RolesController extends AbstractPmController
 	/**
 	 * Class preDispatch
 	 */
-	public function preDispatch()
+	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
-        parent::check_permission('manage_roles');
-        $this->view->headTitle('User Roles', 'PREPEND');
-		$this->view->layout_style = 'single';
-		$this->view->sidebar = 'dashboard';
-		$this->view->sub_menu = 'admin';
-		$this->view->active_nav = 'admin';
-		$this->view->active_sub = 'roles';
-		$this->view->title = FALSE;          
+        //$this->layout()->setVariable('layout_style', 'single');
+        $this->layout()->setVariable('sidebar', 'dashboard');
+        $this->layout()->setVariable('sub_menu', 'admin');
+        $this->layout()->setVariable('active_nav', 'roles');
+        $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
+        $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
+		$this->layout()->setVariable('active_sub', 'None');
+		return parent::onDispatch( $e );
 	}
 
 	/**
@@ -48,8 +48,9 @@ class RolesController extends AbstractPmController
 	public function indexAction()
 	{
 
-		$roles = new PM_Model_Roles;
-		$this->view->roles = $roles->getAllRoles();
+		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
+		$view['roles'] = $roles->getAllRoles();
+		return $view;
 	}
 
 	/**

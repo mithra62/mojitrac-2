@@ -104,19 +104,20 @@ class Roles extends AbstractModel
 	}
 	
 	/**
-	 * Returns an array of all unique album names with artist names
-	 * @return mixed
+	 * Returns an array of all the created User Roles
+	 * @param string $view_type
+	 * @return array
 	 */
 	public function getAllRoles($view_type = FALSE)
 	{
-		$roles = new PM_Model_DbTable_User_Roles;
-		$sql = $roles->select();
+		$sql = $this->db->select()->from('user_roles');
 		
 		if(is_numeric($view_type))
 		{
-			$sql = $sql->where('type = ?', $view_type);
+			$sql = $sql->where(array('type' => $view_type));
 		}
-		return $roles->getUserRoles($sql);		
+		
+		return $this->getRows($sql);		
 	}
 	
 	/**

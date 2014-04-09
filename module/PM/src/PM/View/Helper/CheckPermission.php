@@ -23,6 +23,10 @@ use Base\View\Helper\BaseViewHelper;
  */
 class CheckPermission extends BaseViewHelper
 {
+	/**
+	 * Checks a given permission 
+	 * @param unknown $permission
+	 */
 	public function __invoke($permission)
 	{
 		return $this->getPermissions()->check($this->getIdentity(), $permission);
