@@ -775,8 +775,6 @@ class Users extends AbstractModel
 			}				
 		}
 		
-		print_r($user_tasks);
-		exit;
 		return $user_tasks;		
 	}
 	
