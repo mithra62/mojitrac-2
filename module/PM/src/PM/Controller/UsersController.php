@@ -151,6 +151,7 @@ class UsersController extends AbstractPmController
 			$user_form->setData($request->getPost());
 			if ($user_form->isValid($formData)) 
 			{		
+				$formData = $formData->toArray();
 				if($user->updateUser($formData, $formData['id']))
 				{	
 					$this->flashMessenger()->addMessage($translate('user_updated', 'pm'));

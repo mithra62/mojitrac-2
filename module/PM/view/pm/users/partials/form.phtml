@@ -103,7 +103,8 @@ if($this->id > 0)
 	</div>	
 	<?php endif; ?>		
 </div>	
-</form>
+<?php echo $this->ConfirmPageUnload('#user_form')?>
+<?php echo $this->form()->closeTag() ?>
 
 <script type="text/javascript">
 jQuery(document).ready(function($){

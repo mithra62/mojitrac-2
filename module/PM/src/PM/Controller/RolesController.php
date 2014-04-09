@@ -97,38 +97,42 @@ class RolesController extends AbstractPmController
 		$role_data = $role->getRoleById($id);
 		$role_perms = $role->getRolePermissions($id, 'assoc');
 		$role_data = array_merge($role_data, $role_perms);
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
 		$view['permissions'] = $role->getAllPermissions();
-
 		$view['id'] = $id;
-
 		$form->setData($role_data);
-		 
-		$view['form'] = $form;
-		if ($this->getRequest()->isPost()) {
-			$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData)) {
-
+		$request = $this->getRequest();
+		if ($request->isPost()) 
+		{
+			$formData = $request->getPost();
+            $form->setInputFilter($role->getInputFilter());
+			$form->setData($request->getPost());
+			if ($form->isValid($formData)) 
+			{	
+				$formData = $formData->toArray();
 				if($role->updateRole($formData, $formData['id']))
 				{
-					$this->_flashMessenger->addMessage('Role updated!');
-					$this->_helper->redirector('view','roles', 'pm', array('id' => $id));
+					$this->flashMessenger()->addMessage($translate('role_updated', 'pm'));
+					return $this->redirect()->toRoute('roles/view', array('role_id' => $id));					
 					 
 				} 
 				else 
 				{
-					$this->view->errors = array('Couldn\'t update role...');
-					$form->populate($formData);
+					$view['errors'] = array('Couldn\'t update role...');
+					$form->setData($formData);
 				}
 
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
-				$form->populate($formData);
+				$view['errors'] = array('Please fix the errors below.');
+				$form->setData($formData);
 			}
 		}
-	  
+
+		$view['form'] = $form;
+		$this->layout()->setVariable('layout_style', 'left');
 		return $view;
 	}
 

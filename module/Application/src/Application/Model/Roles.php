@@ -54,15 +54,54 @@ class Roles extends AbstractModel
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db)
 	{
 		parent::__construct($adapter, $db);
+	}	
+	
+	/**
+	 * Returns an array for modifying $_name
+	 * @param $data
+	 * @return array
+	 */
+	public function getSQL($data){
+		return array(
+			'name' => $data['name'],
+			'description' => $data['description'],
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+	}	
+	
+	/**
+	 * Sets the InputFilter
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
+	 */
+	public function setInputFilter(InputFilterInterface $inputFilter)
+	{
+		throw new \Exception("Not used");
 	}
 	
 	/**
-	 * Returns the User Form
+	 * Role CRUD Validation logic
 	 * @return object
 	 */
-	public function getRolesForm($options = array())
+	public function getInputFilter()
 	{
-        return new PM_Form_Roles($options);	
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+			
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'name',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				)
+			)));			
+			
+			$this->inputFilter = $inputFilter;
+		}
+	
+		return $this->inputFilter;
 	}	
 	
 	/**
@@ -196,25 +235,27 @@ class Roles extends AbstractModel
 	public function addRolePermissions($data, $id)
 	{
 		$perms = $this->getAllPermissions();
-		$linker = new PM_Model_DbTable_User_Role_To_Permissions;
 		
 		//remove old permissions
-		$linker->deletePermissions($id);
+		$this->deleteRolePermissions($id);
+		
 		//add a new set
 		foreach($perms AS $perm)
 		{
 			if(isset($data[$perm['name']]) && $data[$perm['name']] == '1')
 			{
 				//add the permission
-				$linker->addPermission($id, $perm['id']);	
+				$insert = array('role_id' => $id, 'permission_id' => $perm['id']);
+				$this->insert('user_role_2_permissions', $insert);
 			}
 		}
-	    $this->cache->clean(
-	          Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-	          array('permissions', $this->cache_key)
-	    );	
-		    
+		
 		return TRUE;
+	}
+	
+	public function deleteRolePermissions($role_id)
+	{
+		return $this->remove('user_role_2_permissions', array('role_id' => $role_id));
 	}
 	
 	/**
@@ -225,16 +266,11 @@ class Roles extends AbstractModel
 	 */
 	public function updateRole($data, $id)
 	{
-		$role = new PM_Model_DbTable_User_Roles;
-		$sql = $role->getSQL($data);
-		if($role->update($sql, "id = '$id'"))
+		$sql = $this->getSQL($data);
+		if($this->update('user_roles', $sql, array('id' => $id)))
 		{
 			if($this->addRolePermissions($data, $id))
-			{
-			    $this->cache->clean(
-			          Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-			          array('permissions', $this->cache_key)
-			    );				
+			{			
 				return TRUE;
 			}
 		}

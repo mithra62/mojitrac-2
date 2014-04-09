@@ -58,12 +58,12 @@ class RolesForm extends BaseForm
 		foreach($permissions AS $perm)
 		{
 		     $this->add(array(
-	             'type' => 'Zend\Form\Element\Checkbox',
+	             'type' => 'Checkbox',
 	             'name' => $perm['name'],
 	             'options' => array(
                      'use_hidden_element' => true,
-                     'checked_value' => 'yes',
-                     'unchecked_value' => 'no',
+                     'checked_value' => '1',
+                     'unchecked_value' => '0',
 	             	'id' => $perm['name']
 	             )
 		     ));

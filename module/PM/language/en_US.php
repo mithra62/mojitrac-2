@@ -26,7 +26,8 @@ return array(
 	'mobile_phone' => 'Mobile Phone',
 		
 	//roles controller
-	'user_roles' => 'User Roes',
+	'user_roles' => 'User Roles',
+	'role_updated' => 'Role Updated!',
 		
 	//projects
 	'projects' => 'Projects',
