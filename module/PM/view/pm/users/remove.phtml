@@ -10,7 +10,7 @@ Are you sure you want to remove "<?php echo $this->user['first_name']?> <?php ec
 </div>
 
 <p>
-<form action="<?php echo $this->url(array('module' => 'pm','controller'=>'users','action'=>'remove', 'id' => $this->id), null, TRUE); ?>" method="POST">
+<form action="<?php echo $this->url('users/remove', array('id'=>$this->user_data['id']), null, TRUE); ?>" method="POST">
 	<input type="submit" class="submit" value="Yes" name="confirm" /> <input type="submit" class="submit" value="No" name="fail"/>
 </form>
 </p>

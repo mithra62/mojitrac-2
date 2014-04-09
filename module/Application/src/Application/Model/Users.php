@@ -522,24 +522,31 @@ class Users extends AbstractModel
 	 * @param $campaign_id
 	 * @return bool
 	 */
-	public function removeUser($id)
-	{
+	public function removeUser($user_id)
+	{		
+		$ext = $this->trigger(self::EventUserRemovePre, $this, compact('user_id'), array($user_id));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $user_id = $ext->last();
+				
 		//check if the user has any attachments
-		$projets = $this->getAssignedProjectIds($id);
-		$tasks = $this->getAssignedTasks($id);
+		$projets = $this->getAssignedProjectIds($user_id);
+		$tasks = $this->getOpenAssignedTasks($user_id);
 		if($projets || $tasks)
 		{
-			if($this->db->updateUser(array('user_status' => '0'), $id))
+			if($this->update('users', array('user_status' => '0'), array('id' => $user_id)))
 			{
-				return TRUE;
+				$ext = $this->trigger(self::EventUserRemovePost, $this, compact('user_id'), array($user_id));
+				if($ext->stopped()) return $ext->last(); elseif($ext->last()) $user_id = $ext->last();
+				return $user_id;
 			}
 		}
 		else
 		{
 			
-			if($this->db->deleteUser($id))
+			if($this->remove('users', array('id' => $user_id)))
 			{
-				return TRUE;
+				$ext = $this->trigger(self::EventUserRemovePost, $this, compact('user_id'), array($user_id));
+				if($ext->stopped()) return $ext->last(); elseif($ext->last()) $user_id = $ext->last();
+				return $user_id;
 			}			
 		}
 	}
@@ -648,9 +655,8 @@ class Users extends AbstractModel
 	 */
 	public function getAssignedProjectIds($id)
 	{
-		$proj_team = new PM_Model_DbTable_Projects_Teams;
-		$sql = $proj_team->select()->from($proj_team->getTableName(), array('project_id'))->where('user_id = ?', $id);
-		$proj_ids = $proj_team->getProjectTeamMembers($sql);
+		$sql = $this->db->select()->from('project_teams')->columns(array('project_id'))->where(array('user_id' => $id));
+		$proj_ids = $this->getRows($sql);
 		if($proj_ids)
 		{
 			$arr = array();
@@ -715,9 +721,9 @@ class Users extends AbstractModel
 	
 	/**
 	 * Returns all the tasks a user is 
-	 * @param unknown_type $id
-	 * @param unknown_type $upcoming
-	 * @return unknown_type
+	 * @param int $id
+	 * @param int $upcoming
+	 * @return array
 	 */
 	public function getAssignedTasks($id, $upcoming = 30)
 	{
@@ -768,6 +774,9 @@ class Users extends AbstractModel
 				continue;
 			}				
 		}
+		
+		print_r($user_tasks);
+		exit;
 		return $user_tasks;		
 	}
 	
@@ -820,7 +829,7 @@ class Users extends AbstractModel
 		$sql = $sql->where(array('assigned_to' => $id,'progress != 100', 't.end_date != \'0000-00-00 00:00:00\''));
 		if($project)
 		{
-			$sql = $sql->where('project_id = $project');	
+			$sql = $sql->where(array ('project_id' => $project));	
 		}
 		$sql = $sql->where('t.status != 4');
 		

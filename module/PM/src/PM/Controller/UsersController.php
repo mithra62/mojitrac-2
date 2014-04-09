@@ -31,7 +31,6 @@ class UsersController extends AbstractPmController
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
-		parent::onDispatch( $e );
         //$this->layout()->setVariable('layout_style', 'single');
         $this->layout()->setVariable('sidebar', 'dashboard');
         $this->layout()->setVariable('sub_menu', 'admin');
@@ -40,7 +39,7 @@ class UsersController extends AbstractPmController
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
 		$this->layout()->setVariable('active_sub', 'None');
 		    
-		return $e;
+		return parent::onDispatch( $e );
 	}
 
 	/**
@@ -138,8 +137,8 @@ class UsersController extends AbstractPmController
 
 		$user_data = $user->getUserById($id);
 		$user_data['user_roles'] = $view['user_roles'] = $user->getUserRolesArr($id);
+		
 		$user_form->rolesFields($roles);
-
 		$user_form->setData($user_data);
 		 
 		$view['form'] = $user_form;
@@ -147,21 +146,13 @@ class UsersController extends AbstractPmController
 		$request = $this->getRequest();
 		if ($request->isPost()) 
 		{
-
 			$formData = $request->getPost();
             $user_form->setInputFilter($user->getEditInputFilter());
 			$user_form->setData($request->getPost());
 			if ($user_form->isValid($formData)) 
 			{		
 				if($user->updateUser($formData, $formData['id']))
-				{
-					
-					if($this->identity != $id && $user_data['email'] != $formData['email'])
-					{
-						$noti = new PM_Model_Notifications();
-						$noti->sendUserAdd($formData, TRUE);
-					}
-					
+				{	
 					$this->flashMessenger()->addMessage($translate('user_updated', 'pm'));
 					return $this->redirect()->toRoute('users/view', array('user_id' => $id));					
 				} 
@@ -191,11 +182,9 @@ class UsersController extends AbstractPmController
 	 */
 	public function addAction()
 	{
-		
 		if(!$this->perm->check($this->identity, 'manage_users'))
         {
-			$this->_helper->redirector('view','users', 'pm');
-			exit;
+			return $this->redirect()->toRoute('users');  
         }
 
 		$user = $this->getServiceLocator()->get('Application\Model\Users');
@@ -240,64 +229,71 @@ class UsersController extends AbstractPmController
 		return $view;
 	}
 
-	function removeAction()
+	/**
+	 * The Remove User Action
+	 * @return array
+	 */
+	public function removeAction()
 	{
-		
 		if(!$this->perm->check($this->identity, 'manage_users'))
         {
-			$this->_helper->redirector('view','users', 'pm');
-			exit;
+			return $this->redirect()->toRoute('users'); 
         }
-        		
-		$users = new PM_Model_Users(new PM_Model_DbTable_Users);
-		$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
 
+        $view = array();
+		$user = $this->getServiceLocator()->get('Application\Model\Users');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+		
+		$id = $this->params()->fromRoute('user_id');
 		if(!$id)
 		{
-			$this->_helper->redirector('index','users');
-			exit;
+			return $this->redirect()->toRoute('users'); 
 		}
 		
 		if($this->identity == $id)
 		{
-			$this->_flashMessenger->addMessage('You can\'t remove yourself...');
-			$this->_helper->redirector('index','users');
-			exit;
+			$this->flashMessenger()->addMessage($translate('user_cant_remove_self', 'pm'));
+			return $this->redirect()->toRoute('users/view', array('user_id' => $id));  
 		}
 		 
-		$this->view->user = $users->getUserById($id);
-		if(!$this->view->user)
+		$view['user'] = $user->getUserById($id.'f');
+		if(!$view['user'])
 		{
-			$this->_helper->redirector('index','users');
-			exit;
+			return $this->redirect()->toRoute('users'); 
 		}
 
-		if($fail)
+		$request = $this->getRequest();
+		if($request->isPost())
 		{
-			$this->_helper->redirector('view','users', 'pm', array('id' => $id));
-			exit;
-		}
-		 
-		if($confirm)
-		{
-			if($users->removeUser($id))
+			$formData = $request->getPost()->toArray();
+			$fail = (isset($formData['fail']) ? $formData['fail'] : false);
+			$confirm = (isset($formData['confirm']) ? $formData['confirm'] : false);
+			if($fail)
 			{
-				$this->_flashMessenger->addMessage('User Removed');
-				$this->_helper->redirector('index','users');
-				exit;
-
-			} else {
-				 
+				return $this->redirect()->toRoute('users/view', array('user_id' => $id));
+			}
+			 
+			if($confirm)
+			{
+				if($user->removeUser($id))
+				{
+			$this->flashMessenger()->addMessage($translate('user_removed', 'pm'));
+					return $this->redirect()->toRoute('users');
+					exit;
+	
+				} else {
+					 
+				}
 			}
 		}
 		 
 		
-		$this->view->projects_owned_count = count($users->getAssignedProjectIds($id));
-		$this->view->tasks_owned_count = count($users->getAssignedTasks($id));
-		 
-		$this->view->headTitle('Delete User: '. $this->view->user['first_name'].' '.$this->view->user['last_name'], 'PREPEND');
-		$this->view->id = $id;
+		$view['projects_owned_count'] = count($user->getAssignedProjectIds($id));
+		$view['tasks_owned_count'] = count($user->getOpenAssignedTasks($id));
+
+		//$this->view->headTitle('Delete User: '. $this->view->user['first_name'].' '.$this->view->user['last_name'], 'PREPEND');
+		$view['id'] = $id;
+		
+		return $view;
 	}
 }
