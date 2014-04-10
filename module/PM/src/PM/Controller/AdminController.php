@@ -47,42 +47,12 @@ class AdminController extends AbstractPmController
     
     public function clearCacheAction()
     {
-    	$setting = new Model_Settings;
-		if($setting->cache->clean(Zend_Cache::CLEANING_MODE_ALL))
-		{
-	    	$this->_flashMessenger->addMessage('Cache Cleaned!!');
-			$this->_helper->redirector('index','admin');  
-	    	exit;
-		}
+
     }
     
     public function systemResetAction()
     {
-        $this->view->layout_style = 'right';
-        
-        $this->view->phrase = 'Yes, I want to reset MojiTrac to the default system.';
-    	$setting = $this->getServiceLocator()->get('Application\Model\Settings');
-		$form = $setting->getResetForm(array(
-            'action' => '/pm/admin/system-reset',
-            'method' => 'post',
-        ), $this->view->phrase);
-        
-		if ($this->getRequest()->isPost()) 
-		{
-    		$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData)) 
-			{
-				$admin = new PM_Model_Admin;
-				if($admin->systemReset())
-				{
-			    	$this->_flashMessenger->addMessage('System Reset!');
-					return $this->redirect()->toRoute('admin');					
-				}
-			}   
 
-		}
-        
-        $this->view->form = $form;
     } 
 
     /**

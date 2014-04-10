@@ -4,10 +4,10 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
- * @version		1.0
- * @filesource 	./moji/application/modules/pm/models/User.php
+ * @version		2.0
+ * @filesource 	./module/Application/src/Application/Model/Roles.php
  */
 
 namespace Application\Model;
@@ -20,11 +20,11 @@ use Zend\InputFilter\InputFilterInterface;
 use Application\Model\AbstractModel;
 
  /**
- * PM - User Model
+ * PM - User Roles Model
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/modules/pm/models/User.php
+ * @filesource 	./module/Application/src/Application/Model/Roles.php
  */
 class Roles extends AbstractModel
 {
@@ -35,7 +35,7 @@ class Roles extends AbstractModel
 	public $cache;
 	
 	/**
-	 * Contains all the permissions
+	 * Contains all the user permissions
 	 * @var array
 	 */
 	public static $permissions = FALSE;
@@ -203,16 +203,20 @@ class Roles extends AbstractModel
 	 */
 	public function addRole($data)
 	{
+		$ext = $this->trigger(self::EventUserRoleAddPre, $this, compact('data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+		
 		$perms = $this->getAllPermissions();
-		$role = new PM_Model_DbTable_User_Roles;
-		$sql = $role->getSQL($data);
-		if($role_id = $role->addUserRole($sql))
+		$sql = $this->getSQL($data);
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
+		$role_id = $this->insert('user_roles', $sql);
+		if($role_id)
 		{
 			$this->addRolePermissions($data, $role_id);
-		    $this->cache->clean(
-		          Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-		          array('permissions', $this->cache_key)
-		    );				
+			
+			$ext = $this->trigger(self::EventUserRoleAddPost, $this, compact('role_id', 'data'), $this->setXhooks($data));
+			if($ext->stopped()) return $ext->last(); elseif($ext->last()) $entry_id = $ext->last();
+						
 			return $role_id;	
 		}
 	}

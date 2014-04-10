@@ -33,8 +33,8 @@ class RolesController extends AbstractPmController
 	{
         //$this->layout()->setVariable('layout_style', 'single');
         $this->layout()->setVariable('sidebar', 'dashboard');
+        $this->layout()->setVariable('active_nav', 'admin');
         $this->layout()->setVariable('sub_menu', 'admin');
-        $this->layout()->setVariable('active_nav', 'roles');
         $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
 		$this->layout()->setVariable('active_sub', 'None');
@@ -50,6 +50,8 @@ class RolesController extends AbstractPmController
 
 		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
 		$view['roles'] = $roles->getAllRoles();
+        $this->layout()->setVariable('sub_menu', 'admin');
+        $this->layout()->setVariable('active_nav', 'admin');
 		return $view;
 	}
 
@@ -76,11 +78,13 @@ class RolesController extends AbstractPmController
 		$view['role_permissions'] = $roles->getRolePermissions($id);
 		$view['permissions'] = $roles->getAllPermissions();
 		$view['id'] = $id;
+		$this->layout()->setVariable('sub_menu', 'admin');
+		$this->layout()->setVariable('active_nav', 'admin');
 		return $view;
 	}
 
 	/**
-	 * Company Edit Page
+	 * User Role Edit Page
 	 * @return void
 	 */
 	public function editAction()
@@ -119,66 +123,69 @@ class RolesController extends AbstractPmController
 				} 
 				else 
 				{
-					$view['errors'] = array('Couldn\'t update role...');
+					$view['errors'] = array($translate('update_role_fail', 'pm'));
 					$form->setData($formData);
 				}
 
 			} 
 			else 
 			{
-				$view['errors'] = array('Please fix the errors below.');
+				$view['errors'] = array($translate('please_fix_the_errors_below', 'pm'));
 				$form->setData($formData);
 			}
 		}
 
 		$view['form'] = $form;
 		$this->layout()->setVariable('layout_style', 'left');
+		$this->layout()->setVariable('sub_menu', 'admin');
+		$this->layout()->setVariable('active_nav', 'admin');
 		return $view;
 	}
 
 	/**
-	 * Contact Add Page
+	 * User Role Add Page
 	 * @return void
 	 */
 	public function addAction()
 	{
-		$role = new PM_Model_Roles;
-		$form = $role->getRolesForm(array(
-            'action' => '/pm/roles/add/',
-            'method' => 'post',
-		));
+		$role = $this->getServiceLocator()->get('Application\Model\Roles');
+		$form = $this->getServiceLocator()->get('Application\Form\RolesForm');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
-		$perms = new PM_Model_Roles;
-		$this->view->permissions = $perms->getAllPermissions();
-		if ($this->getRequest()->isPost()) 
+		$view['permissions'] = $role->getAllPermissions();
+		$request = $this->getRequest();
+		if ($request->isPost()) 
 		{
-			$formData = $this->getRequest()->getPost();
+			$formData = $request->getPost();
+            $form->setInputFilter($role->getInputFilter());
+			$form->setData($request->getPost());
 			if ($form->isValid($formData)) 
-			{
-				if($id = $role->addRole($formData))
+			{	
+				$formData = $formData->toArray();
+				$role_id = $id = $role->addRole($formData);
+				if($role_id)
 				{
-					$this->_flashMessenger->addMessage('Role Added!');
-					$this->_helper->redirector('view', 'roles', 'pm', array('id' => $id));
+					$this->flashMessenger()->addMessage($translate('role_added', 'pm'));
+					return $this->redirect()->toRoute('roles/view', array('role_id' => $role_id));					
 				} 
 				else 
 				{
-					$this->view->errors = array('Something went wrong...');
+					$view['errors'] = array($translate('something_went_wrong', 'pm'));
 				}
 
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
+				$view['errors'] = array($translate('please_fix_the_errors_below', 'pm'));
 			}
 		}
 
-		$this->view->addPassword = TRUE;
-
-		$this->view->layout_style = 'right';
-		$this->view->sidebar = 'dashboard';
-		$this->view->headTitle('Add Role', 'PREPEND');
-		$this->view->addAction = TRUE;
-		$this->view->form = $form;
+		$view['form'] = $form;
+		$this->layout()->setVariable('layout_style', 'left');
+		$this->layout()->setVariable('sub_menu', 'admin');
+		$this->layout()->setVariable('active_nav', 'admin');
+		
+		return $view;
 	}
 
 	function removeAction()
