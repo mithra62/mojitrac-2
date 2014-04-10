@@ -43,7 +43,7 @@ class Calendar extends AbstractHelper
 	public function __invoke($calendar_data = FALSE, $base_url = FALSE, $date_key = FALSE, $link_rel = 'facebox')
 	{
 		//set the locale
-		$locale = "es_ES";
+		$locale = "en_US";
 		$base_date = null;
 
 		if (array_key_exists('date', $_GET)) {
@@ -221,41 +221,43 @@ class Calendar extends AbstractHelper
 	 $focusDate = $this->getDateAsString();
 	 $calDayNum = 1;
 	
-	 //day numbers display loop
-	 for ($i = 0; $i < $this->getNumWeeks(); $i ++) {
-	 $html .= "<tr class=\"days\">";
-	 for ($j = 0; $j < 7; $j ++) {
-	 $cellNum = ($i * 7 + $j);
-	 $class = '';
-	 	$m_date = FALSE;
-	 			if($this->url_base)
-	 	{
-	 	$m_date = $this->getYear().'-'.(strlen($this->getMonthNum()) == 1 ? '0'.$this->getMonthNum() : $this->getMonthNum()).'-'.(strlen($calDayNum) == 1 ? '0'.$calDayNum : $calDayNum);
-	 	}
-	
+		 //day numbers display loop
+		 for ($i = 0; $i < $this->getNumWeeks(); $i ++) 
+		 {
+			 $html .= "<tr class=\"days\">";
+			 for ($j = 0; $j < 7; $j ++) 
+			 {
+			 $cellNum = ($i * 7 + $j);
+			 $class = '';
+		 	$m_date = FALSE;
+		 			if($this->url_base)
+		 	{
+		 	$m_date = $this->getYear().'-'.(strlen($this->getMonthNum()) == 1 ? '0'.$this->getMonthNum() : $this->getMonthNum()).'-'.(strlen($calDayNum) == 1 ? '0'.$calDayNum : $calDayNum);
+		 	}
+		
 	 		if ($showToday && $nowDate == $focusDate && $today == $calDayNum && $cellNum >= $this->getFirstDayOfWeek())
 	 			$class = "class = \"today\"";
-	 			$html .= "<td $class>";
+	 		$html .= "<td $class>";
 	 			 
-	 			$date = FALSE;
-	 			if ($cellNum >= $this->getFirstDayOfWeek() && $cellNum < ($this->getNumMonthDays() + $this->getFirstDayOfWeek())) {
-	 			$date = Zend_Locale_Format::toNumber($calDayNum, array('locale' => $this->localeStr));
+	 		$date = FALSE;
+	 		if ($cellNum >= $this->getFirstDayOfWeek() && $cellNum < ($this->getNumMonthDays() + $this->getFirstDayOfWeek())) {
+	 			$date = $calDayNum;// Zend_Locale_Format::toNumber($calDayNum, array('locale' => $this->localeStr));
+		
+		 		if($m_date && $this->date_key)
+		 		{
+		 			$date = '<a href="'.$this->url_base.'/'.$this->date_key.'/'.$m_date.'" rel="'.$this->link_rel.'">'.$date.'</a>';
+		 			$html .= $date;
+		 			$html .= $this->process_date_data($m_date);
+		 		}
+				$calDayNum ++;
+	 		}
 	
-	 			if($m_date && $this->date_key)
-	 			{
-	 			$date = '<a href="'.$this->url_base.'/'.$this->date_key.'/'.$m_date.'" rel="'.$this->link_rel.'">'.$date.'</a>';
-	 			$html .= $date;
-	 			$html .= $this->process_date_data($m_date);
-	 			}
-	 			$calDayNum ++;
-	 			}
-	
-	 					$html .= "</td>\n";
-	 			}
-	 			$html .= "</tr>\n";
-	 			}
-	 			$html .= "</table>\n";
-	 			return $html;
+			$html .= "</td>\n";
+	 	}
+	 	$html .= "</tr>\n";
+ 	}
+		$html .= "</table>\n";
+		return $html;
     }
 	
     private function process_date_data($m_date)
@@ -408,42 +410,38 @@ class Calendar extends AbstractHelper
 	
 	public function getMonthName ()
 	{
-        return $this->date->get("MMMM");
+        return $this->date->format('F');
 	}
 
     public function getMonthShortName ()
 	{
-        return $this->date->get("MMM");
+        return $this->date->format("M");
 	}
 	
 	public function getMonthNum ()
 	{
-	    return $this->date->get("MM");
+	    return $this->date->format("m");
 	}
 
     public function getYear ()
 	{
-        return $this->date->get("yyyy");
+        return $this->date->format("y");
 	}
 	
     public function getNextMonthName ()
 	{
-		return $this->nextMonth->get("MMMM");
+		return $this->nextMonth->format("F");
 	}
-		/**
-		* @return int
-		*/
-		public function getNextMonthNum ()
-		{
-		return $this->nextMonth->get("MM");
-		}
-		/**
-     * @return int
-	     */
-	     public function getNextMonthYear ()
-	     {
-	     return $this->nextMonth->get("yyyy");
-	     }
+
+	public function getNextMonthNum ()
+	{
+		return $this->nextMonth->format("m");
+	}
+
+     public function getNextMonthYear ()
+     {
+     	return $this->nextMonth->format("y");
+     }
 	     
     public function getNextMonthAsDateString ()
 	{
