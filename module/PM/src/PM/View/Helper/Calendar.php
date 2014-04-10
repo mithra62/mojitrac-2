@@ -104,10 +104,10 @@ class Calendar extends AbstractHelper
 	    foreach($range AS $key => $dayNum)
 	    {
 	    	$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'eee');
-	    	$key = strtolower(datefmt_format( $fmt , mktime(0,0,0,1,$dayNum,date('Y'))));
+	    	$key = strtolower(datefmt_format( $fmt , mktime(12,0,0,4,$dayNum+5,2014)));
 	    	
 	    	$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'EEEE');
-	    	$return[$key] = datefmt_format( $fmt , mktime(0,0,0,1,$dayNum,date('Y')));
+	    	$return[$key] = datefmt_format( $fmt , mktime(12,0,0,4,$dayNum+5,2014));
 	    }
 
 	    return $return;
@@ -183,9 +183,10 @@ class Calendar extends AbstractHelper
 				$nLinkClass = "id=\"nextMonth\" style=\"visibility: hidden;\"";
 			$nLink = "<a $nLinkClass href=\"?$selectBoxName=" . urlencode($t) . "\">$t&nbsp;&gt;</a>\n";
 		}
-		//month in header display
+
 		$headDate = $this->getDateAsString();
-		if ($selectBox) {
+		if ($selectBox) 
+		{
 			$headDate = "\n<form name=\"$selectBoxFormName\" method=\"get\">\n";
 			$headDate .= $this->getValidDatesSelectBox(array('selectedDateStr'=>$this->getDateAsString(),
 					'selectBoxName'=>$selectBoxName));
@@ -197,65 +198,66 @@ class Calendar extends AbstractHelper
 
 	 public function getCalendarBodyHtml ( $arr = NULL )
 	 {
-	 $showToday=false;
-	 $tableClass="calendar";
-	 if (is_array($arr))
-	 extract($arr);
+	 	$showToday=false;
+	 	$tableClass="calendar";
+	 	if (is_array($arr))
+	 		extract($arr);
 	 	
-	 $html = '';
-	
-	 $html .= "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"$tableClass\">\n";
-	 $html .= "<tr class=\"weekdays\">\n";
-	
-        //days of the week display
-	 foreach ($this->dayNames as $dayShort=>$dayFull)
-	 $html .= "<td class='header'>$dayFull</td>\n";
-	 $html .= "</tr>\n";
-	
-	 //day numbers displaydate
-	 $fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'd');
-	 $today = datefmt_format($fmt, strtotime($this->now->format('r')));
-	 
-	 $fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'MMMM yyyy');
-	 $nowDate = datefmt_format($fmt, strtotime($this->now->format('r')));
-	 $focusDate = $this->getDateAsString();
-	 $calDayNum = 1;
-	
-		 //day numbers display loop
-		 for ($i = 0; $i < $this->getNumWeeks(); $i ++) 
-		 {
-			 $html .= "<tr class=\"days\">";
-			 for ($j = 0; $j < 7; $j ++) 
-			 {
-			 $cellNum = ($i * 7 + $j);
-			 $class = '';
-		 	$m_date = FALSE;
-		 			if($this->url_base)
-		 	{
-		 	$m_date = $this->getYear().'-'.(strlen($this->getMonthNum()) == 1 ? '0'.$this->getMonthNum() : $this->getMonthNum()).'-'.(strlen($calDayNum) == 1 ? '0'.$calDayNum : $calDayNum);
-		 	}
-		
-	 		if ($showToday && $nowDate == $focusDate && $today == $calDayNum && $cellNum >= $this->getFirstDayOfWeek())
-	 			$class = "class = \"today\"";
-	 		$html .= "<td $class>";
-	 			 
-	 		$date = FALSE;
-	 		if ($cellNum >= $this->getFirstDayOfWeek() && $cellNum < ($this->getNumMonthDays() + $this->getFirstDayOfWeek())) {
-	 			$date = $calDayNum;// Zend_Locale_Format::toNumber($calDayNum, array('locale' => $this->localeStr));
-		
-		 		if($m_date && $this->date_key)
-		 		{
-		 			$date = '<a href="'.$this->url_base.'/'.$this->date_key.'/'.$m_date.'" rel="'.$this->link_rel.'">'.$date.'</a>';
-		 			$html .= $date;
-		 			$html .= $this->process_date_data($m_date);
-		 		}
-				$calDayNum ++;
-	 		}
-	
-			$html .= "</td>\n";
-	 	}
+	 	$html = '';
+	 	
+	 	$html .= "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" class=\"$tableClass\">\n";
+	 	$html .= "<tr class=\"weekdays\">\n";
+	 	
+	 	//days of the week display
+	 	foreach ($this->dayNames as $dayShort=>$dayFull)
+	 		$html .= "<td class='header'>$dayFull</td>\n";
+	 	
 	 	$html .= "</tr>\n";
- 	}
+	 	
+	 	//day numbers displaydate
+	 	$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'd');
+	 	$today = datefmt_format($fmt, strtotime($this->now->format('r')));
+	 	
+	 	$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'MMMM yyyy');
+	 	$nowDate = datefmt_format($fmt, strtotime($this->now->format('r')));
+	 	$focusDate = $this->getDateAsString();
+	 	$calDayNum = 1;
+	 	
+	 	//day numbers display loop
+	 	for ($i = 0; $i < $this->getNumWeeks(); $i ++)
+	 	{
+		 	$html .= "<tr class=\"days\">";
+		 	for ($j = 0; $j < 7; $j ++)
+		 	{
+			 	$cellNum = ($i * 7 + $j);
+			 	$class = '';
+			 	$m_date = FALSE;
+			 	if($this->url_base)
+			 	{
+			 		$m_date = $this->getYear().'-'.(strlen($this->getMonthNum()) == 1 ? '0'.$this->getMonthNum() : $this->getMonthNum()).'-'.(strlen($calDayNum) == 1 ? '0'.$calDayNum : $calDayNum);
+			 	}
+			 	
+			 	if ($showToday && $nowDate == $focusDate && $today == $calDayNum && $cellNum >= $this->getFirstDayOfWeek())
+			 		$class = "class = \"today\"";
+			 		$html .= "<td $class>";
+		 	
+		 		$date = FALSE;
+		 		if ($cellNum >= $this->getFirstDayOfWeek() && $cellNum < ($this->getNumMonthDays() + $this->getFirstDayOfWeek()))
+		 		{
+		 			$date = $calDayNum;// Zend_Locale_Format::toNumber($calDayNum, array('locale' => $this->localeStr));
+		 			if($m_date && $this->date_key)
+		 			{
+		 				$date = '<a href="'.$this->url_base.'/'.$this->date_key.'/'.$m_date.'" rel="'.$this->link_rel.'">'.$date.'</a>';
+		 				$html .= $date;
+		 				$html .= $this->process_date_data($m_date);
+		 			}
+		 			$calDayNum ++;
+		 		}
+		 	
+		 		$html .= "</td>\n";
+		 	}
+		 	$html .= "</tr>\n";
+	 	}
 		$html .= "</table>\n";
 		return $html;
     }
