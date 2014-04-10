@@ -188,17 +188,14 @@ class RolesController extends AbstractPmController
 		return $view;
 	}
 
-	function removeAction()
+	public function removeAction()
 	{
-		$role = new PM_Model_Roles;
-		$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
-
+		$role = $this->getServiceLocator()->get('Application\Model\Roles');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+		$id = $this->params()->fromRoute('role_id');
 		if(!$id)
 		{
-			$this->_helper->redirector('index','roles');
-			exit;
+			return $this->redirect()->toRoute('roles');
 		}
 		
 		//don't allow deletion of the user or administrator permissions.
@@ -206,40 +203,34 @@ class RolesController extends AbstractPmController
 		if($id == '1' || $id == '2')
 		{
 			$deny_remove = TRUE;
-			$this->view->deny_remove = TRUE;
+			$view['deny_remove'] = TRUE;
 		}
 		 
-		$this->view->role = $role->getRoleById($id);
-		if(!$this->view->role)
+		$view['role'] = $role->getRoleById($id);
+		if(!$view['role'])
 		{
-			$this->_helper->redirector('index','roles');
-			exit;
-		}
-
-		if($fail)
-		{
-			$this->_helper->redirector('view','roles', 'pm', array('id' => $id));
-			exit;
+			return $this->redirect()->toRoute('roles');
 		}
 		 
-		if($confirm && !$deny_remove)
+		$request = $this->getRequest();
+		if($request->isPost())
 		{
+			$formData = $request->getPost()->toArray();
+			$fail = (isset($formData['fail']) ? $formData['fail'] : false);
+			$confirm = (isset($formData['confirm']) ? $formData['confirm'] : false);
+			if($fail)
+			{
+				return $this->redirect()->toRoute('roles/view', array('role_id' => $id));
+			}
+			
 			if($role->removeRole($id))
 			{
-				$this->_flashMessenger->addMessage('Role Removed');
-				$this->_helper->redirector('index','roles');
-				exit;
-
+				$this->flashMessenger()->addMessage($translate('role_removed', 'pm'));
+				return $this->redirect()->toRoute('roles');
 			} 
 		}
-		 
-		/*
-		$this->view->projects_owned_count = $users->getProjectCount($id);
-		$this->view->tasks_owned_count = $users->getTaskCount($id);
-		$this->view->files_owned_count = $users->getFileCount($id);
-		*/
-		 
-		$this->view->headTitle('Delete Role: '. $this->view->user['name'], 'PREPEND');
-		$this->view->id = $id;
+		
+		$view['id'] = $id;
+		return $view;
 	}
 }

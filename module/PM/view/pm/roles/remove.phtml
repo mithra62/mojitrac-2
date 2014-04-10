@@ -1,9 +1,9 @@
 <div class="content_headers" style="padding-top:0px;">
-	<div class="user_role_header">Remove User Role</div>	
+	<div class="user_role_header"><?php echo $this->_('remove_user_role', 'pm'); ?></div>	
 </div>
 
 <?php if($this->deny_remove): ?>
-<div class="fail png_bg">You can't remove this role.</div>
+<div class="fail png_bg"><?php echo $this->_('cant_remove_role', 'pm'); ?></div>
 <?php else: ?>
 
 <div class="attention png_bg">
@@ -11,7 +11,8 @@ Are you sure you want to remove the "<?php echo $this->role['name']?>" role? Thi
 </div>
 <p>
 <form action="" method="POST">
-	<input type="submit" class="submit" value="Yes" name="confirm" /> <input type="submit" class="submit" value="No" name="fail"/>
+	<input type="submit" class="submit" value="<?php echo $this->_('yes', 'pm'); ?>" name="confirm" /> 
+	<input type="submit" class="submit" value="<?php echo $this->_('no', 'pm'); ?>" name="fail"/>
 </form>
 </p>
 

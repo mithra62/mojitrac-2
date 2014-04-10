@@ -12,6 +12,8 @@ return array(
 	'description' => 'Description',
 	'something_went_wrong' => 'Something went wrong...',
 	'please_fix_the_errors_below' => 'Please fix the errors below.',
+	'no' => 'No',
+	'yes' => 'Yes',
 	
 	
 	//users controller
@@ -30,6 +32,9 @@ return array(
 	'role_updated' => 'Role Updated!',
 	'update_role_fail' => 'Couldn\'t update role...',
 	'role_added' => 'Role Added!',
+	'remove_user_role' => 'Remove User Role',
+	'cant_remove_role' => 'You can\'t remove this role.',
+	'role_removed' => 'Role Removed!',
 		
 	//projects
 	'projects' => 'Projects',

@@ -305,22 +305,21 @@ class Roles extends AbstractModel
 	/**
 	 * Handles everything for removing a role.
 	 * @param $id
-	 * @param $campaign_id
 	 * @return bool
 	 */
-	public function removeRole($id)
+	public function removeRole($role_id)
 	{
+		$ext = $this->trigger(self::EventUserRoleRemovePre, $this, compact('role_id'), $this->setXhooks(array()));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $role_id = $ext->last();
 		
-		$role = new PM_Model_DbTable_User_Roles;
-		if($role->deleteUserRole($id))
+		if($this->remove('user_roles', array('id' => $role_id)))
 		{
-			$linker = new PM_Model_DbTable_User_Role_To_Permissions;
-			$linker->deletePermissions($id);
-		    $this->cache->clean(
-		          Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-		          array('permissions', $this->cache_key)
-		    );			
-			return TRUE;
+			$this->remove('user_role_2_permissions', array('role_id' => $role_id));
+			
+			$ext = $this->trigger(self::EventUserRoleRemovePost, $this, compact('role_id'), $this->setXhooks(array()));
+			if($ext->stopped()) return $ext->last(); elseif($ext->last()) $role_id = $ext->last();
+			
+			return $role_id;
 		}
 	}
 	

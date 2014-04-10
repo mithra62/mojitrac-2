@@ -24,9 +24,11 @@ use PM\Controller\AbstractPmController;
 */
 class IndexController extends AbstractPmController
 {
-	public function preDispatch()
+	public function onDispatch(\Zend\Mvc\MvcEvent $e)
 	{
-		$this->view->headTitle('Dashboard', 'PREPEND');
+		$e = parent::onDispatch($e);
+		$this->layout()->setVariable('active_nav', 'home');	
+		return $e;
 	}
 		
     public function indexAction()

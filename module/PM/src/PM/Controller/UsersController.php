@@ -31,15 +31,17 @@ class UsersController extends AbstractPmController
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
+		$e = parent::onDispatch($e);
         //$this->layout()->setVariable('layout_style', 'single');
         $this->layout()->setVariable('sidebar', 'dashboard');
-        $this->layout()->setVariable('sub_menu', 'admin');
         $this->layout()->setVariable('active_nav', 'users');
         $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
 		$this->layout()->setVariable('active_sub', 'None');
-		    
-		return parent::onDispatch( $e );
+
+		$this->layout()->setVariable('sub_menu', 'admin');
+		$this->layout()->setVariable('active_nav', 'admin');		    
+		return $e;
 	}
 
 	/**
@@ -278,7 +280,7 @@ class UsersController extends AbstractPmController
 			{
 				if($user->removeUser($id))
 				{
-			$this->flashMessenger()->addMessage($translate('user_removed', 'pm'));
+					$this->flashMessenger()->addMessage($translate('user_removed', 'pm'));
 					return $this->redirect()->toRoute('users');
 					exit;
 	

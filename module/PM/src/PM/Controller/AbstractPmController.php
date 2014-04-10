@@ -68,10 +68,7 @@ abstract class AbstractPmController extends AbstractController
 		$translator->setLocale(\Locale::acceptFromHttp($_SERVER['HTTP_ACCEPT_LANGUAGE']))->setFallbackLocale('en_US');		
 				
 		$this->layout()->setVariable('messages',  $this->flashMessenger()->getMessages());
-		//$this->layout()->setVariable('layout_style', 'left');
 		$this->layout()->setVariable('sidebar', 'dashboard');
-		$this->layout()->setVariable('active_nav', 'home');
-		$this->layout()->setVariable('sub_menu', 'dashboard');
 		$this->layout()->setVariable('identity', $this->identity);
 		$this->_initIpBlocker();
 		$this->_initEvents();		
