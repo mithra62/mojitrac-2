@@ -102,21 +102,6 @@ class Roles extends AbstractModel
 		}
 	
 		return $this->inputFilter;
-	}	
-	
-	/**
-	 * Returns the $mbid for a given artist $name
-	 * @param $name
-	 * @return mixed
-	 */
-	public function getUsersIdByName($name)
-	{
-		$user = new PM_Model_DbTable_Users;
-		$sql = $user->select()
-					  ->from($user->getTableName(), array('id'))
-					  ->where('name LIKE ?', $name);
-					  
-		return $user->getUsers($sql);
 	}
 	
 	/**
@@ -266,11 +251,17 @@ class Roles extends AbstractModel
 	 */
 	public function updateRole($data, $id)
 	{
+		$ext = $this->trigger(self::EventUserRoleUpdatePre, $this, compact('data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+		
 		$sql = $this->getSQL($data);
 		if($this->update('user_roles', $sql, array('id' => $id)))
 		{
 			if($this->addRolePermissions($data, $id))
-			{			
+			{		
+				$ext = $this->trigger(self::EventUserRoleUpdatePost, $this, compact('data'), $this->setXhooks($data));
+				if($ext->stopped()) return $ext->last(); elseif($ext->last()) return true;	
+				
 				return TRUE;
 			}
 		}
