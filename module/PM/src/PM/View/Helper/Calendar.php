@@ -12,7 +12,7 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper, DateTime, IntlDateFormatter, DateInterval;
+use Zend\View\Helper\AbstractHelper, DateTime, IntlDateFormatter, DateInterval, Exception;
 
 /**
  * PM - Calendar View Helper
@@ -23,7 +23,7 @@ use Zend\View\Helper\AbstractHelper, DateTime, IntlDateFormatter, DateInterval;
  */
 class Calendar extends AbstractHelper
 {
-    private $locale;
+	private $locale;
     private $now;
     private $date;
     private $monthNames = false;
@@ -39,14 +39,23 @@ class Calendar extends AbstractHelper
     public  $date_key = FALSE;
     public  $date_data = FALSE;
     public  $link_rel = 'facebox';
-        
+	
+    /**
+     * Sets up and calls the Calendar object
+     * @param string $calendar_data
+     * @param string $base_url
+     * @param string $date_key
+     * @param string $link_rel
+     * @return string
+     */
 	public function __invoke($calendar_data = FALSE, $base_url = FALSE, $date_key = FALSE, $link_rel = 'facebox')
 	{
 		//set the locale
 		$locale = "en_US";
 		$base_date = null;
 
-		if (array_key_exists('date', $_GET)) {
+		if (array_key_exists('date', $_GET)) 
+		{
 			$base_date = $_GET['date'];
 		} 
 		
@@ -56,17 +65,17 @@ class Calendar extends AbstractHelper
 		$this->link_rel = $link_rel;
 		
 		$this->setDate($base_date, $locale);
-		
 		$this->setValidDateRange(-12,24);
-		//show the calendar HTML
+
 		return $this->getCalendarHtml(
-			array('showToday'=>TRUE, 
-				  'showPrevMonthLink'=>TRUE, 
-				  'showNextMonthLink'=>TRUE, 
-				  'tableClass'=>"calendar", 
-				  'selectBox'=>TRUE, 
-				  'selectBoxName'=>"date", 
-				  'selectBoxFormName'=>"selectMonthForm"
+			array(
+				'showToday'=>TRUE, 
+				'showPrevMonthLink'=>TRUE, 
+				'showNextMonthLink'=>TRUE, 
+				'tableClass'=>"calendar", 
+				'selectBox'=>TRUE, 
+				'selectBoxName'=>"date", 
+				'selectBoxFormName'=>"selectMonthForm"
 			)
 		);
 		
@@ -91,7 +100,7 @@ class Calendar extends AbstractHelper
 		foreach($range AS $key => $monthNum)
 		{
 		    $fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'MMMM');
-			$return[$monthNum] = datefmt_format( $fmt , mktime(0,0,0,$monthNum,1,date('Y')));
+			$return[$monthNum] = datefmt_format( $fmt , mktime(12,0,0,$monthNum,1,date('Y')));
 		}
 
 		return $return;
@@ -104,7 +113,7 @@ class Calendar extends AbstractHelper
 	    foreach($range AS $key => $dayNum)
 	    {
 	    	$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'eee');
-	    	$key = strtolower(datefmt_format( $fmt , mktime(12,0,0,4,$dayNum+5,2014)));
+	    	$key = strtolower(datefmt_format( $fmt , mktime(12,0,0,4,$dayNum+5,2014))); //we force the date so things start on Sunday
 	    	
 	    	$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'EEEE');
 	    	$return[$key] = datefmt_format( $fmt , mktime(12,0,0,4,$dayNum+5,2014));
@@ -311,33 +320,29 @@ class Calendar extends AbstractHelper
         return $html;
     }
 
-	     public function getValidDatesSelectBox ( $arr = NULL )
-	     {
-	     $selectedDateStr=false;
-	     $selectBoxName="";
-	     if (is_array($arr))
-	     extract($arr);
+	public function getValidDatesSelectBox ( $arr = NULL )
+	{
+		$selectedDateStr=false;
+		$selectBoxName="";
+	    if (is_array($arr))
+	    	extract($arr);
 	
-        $html = "<select name=\"$selectBoxName\" class=\"select\" onchange=\"submit();\">\n";
-	 			foreach ($this->validDates as $option => $value) {
-	 			$sel = "";
-	 			if ($selectedDateStr && $selectedDateStr == $option)
-	 				$sel = "selected";
-	 				$html .= "<option value=\"$option\" $sel>$value</option>\n";
-	 }
-	 $html .= "</select>\n";
+		$html = "<select name=\"$selectBoxName\" class=\"select\" onchange=\"submit();\">\n";
+	 	foreach ($this->validDates as $option => $value) {
+	 		$sel = "";
+	 		if ($selectedDateStr && $selectedDateStr == $option)
+	 			$sel = "selected";
+	 		$html .= "<option value=\"$option\" $sel>$value</option>\n";
+		}
+	 	$html .= "</select>\n";
 	 return $html;
 	}
-	/**
-	* @return Associative Array
-	*/
+	
 	public function getValidDates ()
 	{
-	return $this->validDates;
+		return $this->validDates;
 	}
-	/**
-	* @return Array
-	*/
+	
     public function getMonthNames ()
     {
     	if(!$this->monthNames)
@@ -347,9 +352,7 @@ class Calendar extends AbstractHelper
     	
         return $this->monthNames;
     }
-	/**
-	* @return Array
-	*/
+    
 	public function getDayNames ()
 	{
         if(!$this->dayNames)
@@ -392,11 +395,15 @@ class Calendar extends AbstractHelper
     	$this->now = new DateTime();
     	$this->locale = $locale; 
     	
+    	if($date === null){
+    		$date = date('r', mktime(12, 0, 0, date('m'), '1', date('Y')));
+    	}
+    	
     	//date
     	try {
-    	   $this->date = new DateTime(strtotime($date));
+    	   $this->date = new DateTime($date);
     	} catch (Exception $zde) {
-    	   $this->date = new DateTime(time());
+    	   $this->date = new DateTime();
     	}
     	//date params
     	$this->initDateParams($this->date);
@@ -451,39 +458,29 @@ class Calendar extends AbstractHelper
 	    return datefmt_format($fmt, strtotime($this->nextMonth->format('r')));
 	}
 
-	
     public function getPrevMonthName ()
 	{
-		return $this->prevMonth->get("MMMM");
+		return $this->prevMonth->format("F");
 	}
-	/**
-	* @return int
-	*/
+	
 	public function getPrevMonthNum ()
 	{
-	return $this->prevMonth->get("MM");
+		return $this->prevMonth->format("m");
 	}
-	/**
-	* @return int
-	*/
+	
 	public function getPrevMonthYear ()
 	{
-	return $this->prevMonth->get("yyyy");
-	 }
-	 
-	 /**
-	 * @return String
-	 */
+		return $this->prevMonth->get("y");
+	}
+	
     public function getPrevMonthAsDateString ()
     {
 	 	$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'MMMM yyyy');
 	 	return datefmt_format($fmt, strtotime($this->prevMonth->format('r')));
 	}
-	/**
-	* @return int
-	 */
-	 public function getNumWeeks ()
-	 {
-	 	return $this->numWeeks;
-	 }	
+	
+	public function getNumWeeks ()
+	{
+		return $this->numWeeks;
+	}	
 }

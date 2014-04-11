@@ -30,7 +30,8 @@ class CalendarController extends AbstractPmController
 	 */
 	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{
-		$e = parent::onDispatch( $e );         
+		$e = parent::onDispatch( $e );  
+		return $e;       
 	}
     
     public function indexAction()
