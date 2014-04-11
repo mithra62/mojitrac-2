@@ -43,7 +43,9 @@ return array(
         				'options' => array(
         					'route' => '/view-day/:month/:year/:day',
 		        			'constraints' => array(
-		        				'year' => '[0-9]+'
+		        				'year' => '[0-9]+',
+		        				'month' => '[0-9]+',
+		        				'day' => '[0-9]+'
 		        			),
         					'defaults' => array(
         						'action' => 'viewDay'
@@ -55,7 +57,8 @@ return array(
         				'options' => array(
         					'route' => '/:month/:year',
 		        			'constraints' => array(
-		        				'year' => '[0-9]+'
+		        				'year' => '[0-9]+',
+		        				'month' => '[0-9]+'
 		        			),
         					'defaults' => array(
         						'action' => 'index'

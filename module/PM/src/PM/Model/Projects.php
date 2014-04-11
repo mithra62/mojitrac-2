@@ -195,15 +195,16 @@ class Projects extends AbstractModel
 	 * Returns all the projects that start on a given date
 	 * @param string $date
 	 */
-	public function getProjectsByStartDate($date)
+	public function getProjectsByStartDate($year = null, $month = null, $day = null)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false)
-						->from(array('p'=>$this->db->getTableName()))
-						->where('start_date = ?', $date);
-						
-		$sql = $sql->joinLeft(array('companies'), 'p.company_id = companies.id', array('name AS company_name'));
+		$sql = $this->db->select()->from(array('p'=>'projects'));
+		if($year !== null)
+		{
+			$sql = $sql->where(array('start_year' => $year));
+		}
 		
-		return $this->db->getProjects($sql);
+		$sql = $sql->join(array('c' => 'companies'), 'c.id = p.company_id', array('company_name' => 'name'), 'left');
+		return $this->getRows($sql);
 	}
 	
 	/**

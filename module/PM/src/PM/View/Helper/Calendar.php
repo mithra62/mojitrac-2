@@ -112,6 +112,12 @@ class Calendar extends AbstractHelper
 		{
 			$base_date = date('r', mktime(12,0,0,$month, 1, $year));
 		} 
+		else 
+		{
+			$this->month = date('m');
+			$this->year = date('Y');
+			$base_date = date('r', mktime(12,0,0,date('m'), 1, date('Y')));
+		}
 		//$base_date = '2014-01-01';
 		
 		$this->setDate($base_date, $locale);
@@ -151,9 +157,9 @@ class Calendar extends AbstractHelper
 	 * @param string $link_base
 	 * @return \PM\View\Helper\Calendar
 	 */
-	public function setItemLinkBase($link_base)
+	public function setDayRouteName($link_base)
 	{
-		$this->url_base = $link_base;
+		$this->day_route_name = $link_base;
 		return $this;
 	}
 	
@@ -162,9 +168,9 @@ class Calendar extends AbstractHelper
 	 * @param string $link_base
 	 * @return \PM\View\Helper\Calendar
 	 */
-	public function setDateLinkBase($link_base)
+	public function setMonthRouteName($link_base)
 	{
-		$this->date_key = $link_base;
+		$this->month_route_name = $link_base;
 		return $this;
 	}
 	
@@ -278,7 +284,7 @@ class Calendar extends AbstractHelper
 			$year = $this->getPrevMonthYear();			
 			if (! array_key_exists($date_string, $this->validDates)) //check if the prev month in list of valid dates
 				$pLinkClass = "id=\"prevMonth\" style=\"visibility: hidden;\"";
-			$pLink = "<a $pLinkClass href=\"".$this->view->url($this->base_url, array('month' => $month, 'year' => $year)). "\">&lt;&nbsp;$date_string</a>\n";
+			$pLink = "<a $pLinkClass href=\"".$this->view->url($this->month_route_name, array('month' => $month, 'year' => $year)). "\">&lt;&nbsp;$date_string</a>\n";
 		}
 		if ($showNextMonthLink) 
 		{
@@ -288,7 +294,7 @@ class Calendar extends AbstractHelper
 			
 			if (! array_key_exists($date_string, $this->validDates)) //check if the next month in list of valid dates
 				$nLinkClass = "id=\"nextMonth\" style=\"visibility: hidden;\"";
-			$nLink = "<a $nLinkClass href=\"".$this->view->url($this->base_url, array('month' => $month, 'year' => $year)). "\">$date_string&nbsp;&gt;</a>\n";
+			$nLink = "<a $nLinkClass href=\"".$this->view->url($this->month_route_name, array('month' => $month, 'year' => $year)). "\">$date_string&nbsp;&gt;</a>\n";
 		}
 
 		$headDate = $this->getDateAsString();
@@ -339,7 +345,7 @@ class Calendar extends AbstractHelper
 			 	$cellNum = ($i * 7 + $j);
 			 	$class = '';
 			 	$m_date = FALSE;
-			 	if($this->url_base)
+			 	if($this->day_route_name)
 			 	{
 			 		$m_date = $this->getYear().'-'.(strlen($this->getMonthNum()) == 1 ? '0'.$this->getMonthNum() : $this->getMonthNum()).'-'.(strlen($calDayNum) == 1 ? '0'.$calDayNum : $calDayNum);
 			 	}
@@ -353,10 +359,10 @@ class Calendar extends AbstractHelper
 		 		if ($cellNum >= $this->getFirstDayOfWeek() && $cellNum < ($this->getNumMonthDays() + $this->getFirstDayOfWeek()))
 		 		{
 		 			$date = $calDayNum;// Zend_Locale_Format::toNumber($calDayNum, array('locale' => $this->localeStr));
-		 			if($m_date && $this->date_key)
+		 			if($m_date && $this->day_route_name)
 		 			{
-		 				$date = '<a href="'.$this->view->url($this->url_base, array('month' => $this->date->format('m'), 'year' => $this->date->format('Y'), 'day' => $this->date->format('d'))).'" rel="'.$this->link_rel.'">'.$date.'</a>';
-		 				$html .= $date;
+		 				$link = '<a href="'.$this->view->url($this->day_route_name, array('month' => $this->date->format('m'), 'year' => $this->date->format('Y'), 'day' => $this->date->format('d'))).'" rel="'.$this->link_rel.'">'.$date.'</a>';
+		 				$html .= $link;
 		 				$html .= $this->process_date_data($m_date);
 		 			}
 		 			$calDayNum ++;

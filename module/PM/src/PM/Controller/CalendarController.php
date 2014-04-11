@@ -37,8 +37,8 @@ class CalendarController extends AbstractPmController
     public function indexAction()
     {
     	$cal = $this->getServiceLocator()->get('PM\Model\Calendar');
-    	$month = $this->params()->fromRoute('month');
-    	$year = $this->params()->fromRoute('year');
+    	$month = $this->params()->fromRoute('month', date('m'));
+    	$year = $this->params()->fromRoute('year', date('Y'));
     	
     	$view['month'] = $month;
     	$view['year'] = $year;
@@ -57,20 +57,27 @@ class CalendarController extends AbstractPmController
     
     public function viewDayAction()
     {
-        $date = $this->_request->getParam('date', date('Y-m-d'));
-    	$this->view->date = $date;
+    	$month = $this->params()->fromRoute('month');
+    	$year = $this->params()->fromRoute('year');
+    	$day = $this->params()->fromRoute('day');
+    	
+    	$view['month'] = $month;
+    	$view['day'] = $day;
+    	$view['year'] = $year;
     	if($this->perm->check($this->identity, 'manage_projects'))
     	{
-    		$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-    		$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);    		
-    		$this->view->project_data = $project->getProjectsByStartDate($date);
-    		$this->view->task_data = $task->getTasksByStartDate($date);
+    		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+    		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+    		$view['project_data'] = $project->getProjectsByStartDate($year, $month, $day);
+    		$view['task_data'] = $task->getTasksByStartDate($year, $month, $day);
     	}
     	else
     	{
-    		$user = new PM_Model_Users(new PM_Model_DbTable_Users);
-    		$this->view->project_data = $user->getAssignedProjects($this->identity, $date);
-    		$this->view->task_data = $user->getAssignedTaskByDate($this->identity, $date);
-    	}    	
+    		$user = $this->getServiceLocator()->get('PM\Model\Users');
+    		$this->view->project_data = $user->getAssignedProjects($this->identity, $year, $month, $day);
+    		$this->view->task_data = $user->getAssignedTaskByDate($this->identity, $year, $month, $day);
+    	}   
+
+    	return $view;
     }
 }

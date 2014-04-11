@@ -211,9 +211,9 @@ class Tasks extends AbstractModel
 		return $this->db->getTasks($sql);		
 	}
 	
-	public function getTasksByStartDate($date)
+	public function getTasksByStartDate($year = null, $month = null, $day = null)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('t'=>$this->db->getTableName()));
+		$sql = $this->db->select()->from(array('t'=>'tasks'));
 		$sql = $sql->where(new Zend_Db_Expr('date_format(t.start_date,"%Y-%m-%d")').' = ?', $date);
 		$sql = $sql->orwhere(new Zend_Db_Expr('date_format(t.end_date,"%Y-%m-%d")').' = ?', $date);
 		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = t.project_id', array('name AS project_name', 'id AS project_id'));

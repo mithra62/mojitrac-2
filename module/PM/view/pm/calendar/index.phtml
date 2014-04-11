@@ -25,8 +25,8 @@ foreach($this->calendar_data AS $date => $data)
 
 echo $this->Calendar($this->month, $this->year)
 		  ->setData($calendar_data)
-		  ->setItemLinkBase('calendar/view-day')
-		  ->setDateLinkBase('calendar/month')
+		  ->setDayRouteName('calendar/view-day')
+		  ->setMonthRouteName('calendar/month')
 		  ->getCalendarHtml(			
 			array(
 				'showToday'=>TRUE, 
