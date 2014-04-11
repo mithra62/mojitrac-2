@@ -22,11 +22,19 @@ foreach($this->calendar_data AS $date => $data)
 		$count++;
 	}
 }
-//print_r($calendar_data);
-echo $this->Calendar(
-						$calendar_data,
-						$this->url('pm', array('module' => 'pm','controller'=>'calendar','action'=>'view-day'), null, FALSE),
-						'date',
-						$this->month,
-						$this->year
-					);
+
+echo $this->Calendar($this->month, $this->year)
+		  ->setData($calendar_data)
+		  ->setItemLinkBase('calendar/view-day')
+		  ->setDateLinkBase('calendar/month')
+		  ->getCalendarHtml(			
+			array(
+				'showToday'=>TRUE, 
+				'showPrevMonthLink'=>TRUE, 
+				'showNextMonthLink'=>TRUE, 
+				'tableClass'=>"calendar", 
+				'selectBox'=>TRUE, 
+				'selectBoxName'=>"date", 
+				'selectBoxFormName'=>"selectMonthForm"
+			)
+);

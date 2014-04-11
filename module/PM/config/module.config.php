@@ -23,26 +23,49 @@ return array(
                     ),
                 ),
             ),
-        	'calendar' => array(
+        	'calendar' => array( //Calendar Routes
         		'type' => 'segment',
         		'options' => array(
-        			'route'    => '/pm/calendar',
+        			'route' => '/pm/calendar',
+        			'constraints' => array(
+        				'year' => '[0-9]+',
+        				'month' => '[0-9]+',
+        			),
         			'defaults' => array(
         				'controller' => 'PM\Controller\Calendar',
-        				'action' => 'index',
+        				'action' => 'index'
         			),
         		),
-        	),
-        	'login' => array(
-        		'type' => 'segment',
-        		'options' => array(
-        			'route'    => '/login',
-        			'defaults' => array(
-        				'controller' => 'Application\Controller\Login',
-        				'action' => 'index',
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'view-day' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view-day/:month/:year/:day',
+		        			'constraints' => array(
+		        				'year' => '[0-9]+'
+		        			),
+        					'defaults' => array(
+        						'action' => 'viewDay'
+        					)
+        				)
         			),
+        			'month' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/:month/:year',
+		        			'constraints' => array(
+		        				'year' => '[0-9]+'
+		        			),
+        					'defaults' => array(
+        						'action' => 'index'
+        					)
+        				)
+        			)
         		),
-        	),
+
+        	), //end Calendar Routes
+			
 
         	'admin' => array( //Admin Routes
         		'type' => 'segment',

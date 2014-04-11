@@ -37,18 +37,8 @@ class CalendarController extends AbstractPmController
     public function indexAction()
     {
     	$cal = $this->getServiceLocator()->get('PM\Model\Calendar');
-    	$date = false;//$this->_request->getParam('date', FALSE);
-    	if(!$date)
-    	{
-	    	$month = date('m');
-	    	$year = date('Y');
-    	} 
-    	else 
-    	{
-    		$parts = explode(' ',urldecode($date));
-    		$month = $cal->translateMonth($parts['0']);
-    		$year = $parts['1'];
-    	}
+    	$month = $this->params()->fromRoute('month');
+    	$year = $this->params()->fromRoute('year');
     	
     	$view['month'] = $month;
     	$view['year'] = $year;
@@ -60,14 +50,9 @@ class CalendarController extends AbstractPmController
     	else
     	{
     		$view['calendar_data'] = $cal->getUserProjectItems($month, $year, $this->identity);
-    	} 	
+    	} 
     	
     	return $view;
-    }
-    
-    public function viewAction()
-    {
-    	//$this->view->layout()->disableLayout();
     }
     
     public function viewDayAction()

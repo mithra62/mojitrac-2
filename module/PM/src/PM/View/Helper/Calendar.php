@@ -4,7 +4,7 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/View/Helper/Calendar.php
@@ -23,18 +23,72 @@ use Zend\View\Helper\AbstractHelper, DateTime, IntlDateFormatter, DateInterval, 
  */
 class Calendar extends AbstractHelper
 {
+	/**
+	 * The users set locale
+	 * @var string
+	 */
 	private $locale;
+	
+	/**
+	 * The current datetime
+	 * @var Datetime
+	 */
     private $now;
+    
+    /**
+     * The date we're working with
+     * @var DateTime
+     */
     private $date;
-    private $monthNames = false;
-    private $dayNames;
-    private $validDates;
+    
+    /**
+     * An array of all the month names translated
+     * @var array
+     */
+    private $monthNames = array();
+    
+    /**
+     * An array of the 7 days of the week
+     * @var array
+     */
+    private $dayNames = array();
+    
+    /**
+     * The date range the calendar uses
+     * @var array
+     */
+    private $validDates = array();
+    
+    /**
+     * The number of datys in the current month
+     * @var int
+     */
     private $numMonthDays;
+    
+    /**
+     * A DateTime object with the next month set
+     * @var DateTime
+     */
     private $nextMonth;
+
+    /**
+     * A DateTime object with the previous month set
+     * @var DateTime
+     */    
     private $prevMonth;
+    
+    /**
+     * The first day of the week
+     * @var int
+     */
     private $firstDayOfWeek;
+    
+    /**
+     * The number of weeks in the current month
+     * @var int
+     */
     private $numWeeks;
-    private $localeStr;
+    private $localeStr = null;
     public  $url_base = FALSE;
     public  $date_key = FALSE;
     public  $date_data = FALSE;
@@ -48,51 +102,76 @@ class Calendar extends AbstractHelper
      * @param string $link_rel
      * @return string
      */
-	public function __invoke($calendar_data = FALSE, $base_url = FALSE, $date_key = FALSE, $link_rel = 'facebox')
+	public function __invoke($month = null, $year = null)
 	{
 		//set the locale
 		$locale = "en_US";
 		$base_date = null;
 
-		if (array_key_exists('date', $_GET)) 
+		if ($month != '' && $year != '') 
 		{
-			$base_date = $_GET['date'];
+			$base_date = date('r', mktime(12,0,0,$month, 1, $year));
 		} 
-		
-		$this->url_base = $base_url;
-		$this->date_key = $date_key;
-		$this->date_data = $calendar_data;
-		$this->link_rel = $link_rel;
+		//$base_date = '2014-01-01';
 		
 		$this->setDate($base_date, $locale);
 		$this->setValidDateRange(-12,24);
-
-		return $this->getCalendarHtml(
-			array(
-				'showToday'=>TRUE, 
-				'showPrevMonthLink'=>TRUE, 
-				'showNextMonthLink'=>TRUE, 
-				'tableClass'=>"calendar", 
-				'selectBox'=>TRUE, 
-				'selectBoxName'=>"date", 
-				'selectBoxFormName'=>"selectMonthForm"
-			)
-		);
-		
+		return $this;
 	}
 	
+	/**
+	 * Sets the default values and calculations
+	 * @param string $date
+	 */
 	private function initDateParams ($date)
 	{
-		$this->monthNames = $this->getMonthNames(); //locale month list
-		$this->dayNames = $this->getDayNames(); //locale day list
-		$this->setValidDateRange(); //locale valid dates
-		$this->numMonthDays = $this->date->format('t'); //num days in locale month
-		$this->setNextMonth($date); //the next month
-		$this->setPrevMonth($date); //the previous month
-		$this->firstDayOfWeek = $this->date->format('w'); //first day of the curr month
-		$this->numWeeks = ceil(($this->getFirstDayOfWeek() + $this->getNumMonthDays()) / 7); //num weeks of curr month
+		$this->monthNames = $this->getMonthNames();
+		$this->dayNames = $this->getDayNames(); 
+		$this->setValidDateRange();
+		$this->numMonthDays = $this->date->format('t');
+		$this->setNextMonth($date);
+		$this->setPrevMonth($date);
+		$this->firstDayOfWeek = $this->date->format('w');
+		$this->numWeeks = ceil(($this->getFirstDayOfWeek() + $this->getNumMonthDays()) / 7);
 	}
 	
+	/**
+	 * Sets the data to display in each calendar cell
+	 * @param array $data
+	 * @return \PM\View\Helper\Calendar
+	 */
+	public function setData(array $data)
+	{
+		$this->date_data = $data;
+		return $this;
+	}
+	
+	/**
+	 * Sets the route name for the items to view
+	 * @param string $link_base
+	 * @return \PM\View\Helper\Calendar
+	 */
+	public function setItemLinkBase($link_base)
+	{
+		$this->url_base = $link_base;
+		return $this;
+	}
+	
+	/**
+	 * Sets the route name for date values
+	 * @param string $link_base
+	 * @return \PM\View\Helper\Calendar
+	 */
+	public function setDateLinkBase($link_base)
+	{
+		$this->date_key = $link_base;
+		return $this;
+	}
+	
+	/**
+	 * Sets the month names, handling translations accordingly based on locale
+	 * @return multitype:array
+	 */
 	private function setMonthNames()
 	{
 		$range = range(1,12);
@@ -106,6 +185,10 @@ class Calendar extends AbstractHelper
 		return $return;
 	}
 	
+	/**
+	 * Sets the day names, handling translations
+	 * @return multitype:array
+	 */
 	private function setDayNames()
 	{
 	    $range = range(1,7);
@@ -152,6 +235,10 @@ class Calendar extends AbstractHelper
 		unset($startNum);
 	}
 
+	/**
+	 * Creates an object for the next month based on the current, passed, date object
+	 * @param DateTime $date
+	 */
 	private function setNextMonth (DateTime $date)
 	{
 		$tempDate = clone $date;
@@ -159,6 +246,10 @@ class Calendar extends AbstractHelper
 		unset($tempDate);
 	}
 
+	/**
+	 * Creates an object for the previous month based n the passed date object
+	 * @param DateTime $date
+	 */
 	private function setPrevMonth (DateTime $date)
 	{
 		$tempDate = clone $date;
@@ -168,7 +259,7 @@ class Calendar extends AbstractHelper
 
 	public function getCalendarHeaderHtml ( $arr = NULL )
 	{
-		$showPrevMonthLink=false;
+		$showPrevMonthLink = true;
 		$showNextMonthLink=false;
 		$selectBox=false;
 		$selectBoxName="selectMonth";
@@ -180,17 +271,24 @@ class Calendar extends AbstractHelper
 		$pLink = $nLink = "";
 		$pLinkClass = "id=\"prevMonth\" style=\"visibility: visible;\"";
 		$nLinkClass = "id=\"nextMonth\" style=\"visibility: visible;\"";
-		if ($showPrevMonthLink) {
-			$t = $this->getPrevMonthAsDateString();
-			if (! array_key_exists($t, $this->validDates)) //check if the prev month in list of valid dates
+		if ($showPrevMonthLink) 
+		{
+			$date_string = $this->getPrevMonthAsDateString();
+			$month = $this->getPrevMonthNum();
+			$year = $this->getPrevMonthYear();			
+			if (! array_key_exists($date_string, $this->validDates)) //check if the prev month in list of valid dates
 				$pLinkClass = "id=\"prevMonth\" style=\"visibility: hidden;\"";
-			$pLink = "<a $pLinkClass href=\"?$selectBoxName=" . urlencode($t) . "\">&lt;&nbsp;$t</a>\n";
+			$pLink = "<a $pLinkClass href=\"".$this->view->url($this->base_url, array('month' => $month, 'year' => $year)). "\">&lt;&nbsp;$date_string</a>\n";
 		}
-		if ($showNextMonthLink) {
-			$t = $this->getNextMonthAsDateString();
-			if (! array_key_exists($t, $this->validDates)) //check if the next month in list of valid dates
+		if ($showNextMonthLink) 
+		{
+			$date_string = $this->getNextMonthAsDateString();
+			$month = $this->getNextMonthNum();
+			$year = $this->getNextMonthYear();
+			
+			if (! array_key_exists($date_string, $this->validDates)) //check if the next month in list of valid dates
 				$nLinkClass = "id=\"nextMonth\" style=\"visibility: hidden;\"";
-			$nLink = "<a $nLinkClass href=\"?$selectBoxName=" . urlencode($t) . "\">$t&nbsp;&gt;</a>\n";
+			$nLink = "<a $nLinkClass href=\"".$this->view->url($this->base_url, array('month' => $month, 'year' => $year)). "\">$date_string&nbsp;&gt;</a>\n";
 		}
 
 		$headDate = $this->getDateAsString();
@@ -207,8 +305,8 @@ class Calendar extends AbstractHelper
 
 	 public function getCalendarBodyHtml ( $arr = NULL )
 	 {
-	 	$showToday=false;
-	 	$tableClass="calendar";
+	 	$showToday = true;
+	 	$tableClass = "calendar";
 	 	if (is_array($arr))
 	 		extract($arr);
 	 	
@@ -248,7 +346,8 @@ class Calendar extends AbstractHelper
 			 	
 			 	if ($showToday && $nowDate == $focusDate && $today == $calDayNum && $cellNum >= $this->getFirstDayOfWeek())
 			 		$class = "class = \"today\"";
-			 		$html .= "<td $class>";
+			 	
+			 	$html .= "<td $class>";
 		 	
 		 		$date = FALSE;
 		 		if ($cellNum >= $this->getFirstDayOfWeek() && $cellNum < ($this->getNumMonthDays() + $this->getFirstDayOfWeek()))
@@ -256,7 +355,7 @@ class Calendar extends AbstractHelper
 		 			$date = $calDayNum;// Zend_Locale_Format::toNumber($calDayNum, array('locale' => $this->localeStr));
 		 			if($m_date && $this->date_key)
 		 			{
-		 				$date = '<a href="'.$this->url_base.'/'.$this->date_key.'/'.$m_date.'" rel="'.$this->link_rel.'">'.$date.'</a>';
+		 				$date = '<a href="'.$this->view->url($this->url_base, array('month' => $this->date->format('m'), 'year' => $this->date->format('Y'), 'day' => $this->date->format('d'))).'" rel="'.$this->link_rel.'">'.$date.'</a>';
 		 				$html .= $date;
 		 				$html .= $this->process_date_data($m_date);
 		 			}
@@ -434,7 +533,7 @@ class Calendar extends AbstractHelper
 
     public function getYear ()
 	{
-        return $this->date->format("y");
+        return $this->date->format("Y");
 	}
 	
     public function getNextMonthName ()
@@ -449,7 +548,7 @@ class Calendar extends AbstractHelper
 
      public function getNextMonthYear ()
      {
-     	return $this->nextMonth->format("y");
+     	return $this->nextMonth->format("Y");
      }
 	     
     public function getNextMonthAsDateString ()
@@ -470,7 +569,7 @@ class Calendar extends AbstractHelper
 	
 	public function getPrevMonthYear ()
 	{
-		return $this->prevMonth->get("y");
+		return $this->prevMonth->format("Y");
 	}
 	
     public function getPrevMonthAsDateString ()

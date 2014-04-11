@@ -159,27 +159,5 @@ class Calendar extends AbstractModel
 		}
 						   
 		return $this->getRows($sql);
-	}	
-
-	public function translateMonth($month_name)
-	{
-		$months = array();
-		$months['January'] = '01';
-		$months['Febuary'] = $months['February'] = '02';
-		$months['March'] = '03';
-		$months['April'] = '04';
-		$months['May'] = '05';
-		$months['June'] = '06';
-		$months['July'] = '07';
-		$months['August'] = '08';
-		$months['September'] = '09';
-		$months['October'] = '10';
-		$months['November'] = '11';
-		$months['December'] = '12';
-		
-		if(array_key_exists($month_name, $months))
-		{
-			return $months[$month_name];
-		}
-	}	
+	}
 }
