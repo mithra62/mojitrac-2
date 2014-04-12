@@ -12,7 +12,7 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper, DateTime, IntlDateFormatter, DateInterval, Exception;
+use Base\View\Helper\BaseViewHelper, DateTime, IntlDateFormatter, DateInterval, Exception;
 
 /**
  * PM - Calendar View Helper
@@ -21,7 +21,7 @@ use Zend\View\Helper\AbstractHelper, DateTime, IntlDateFormatter, DateInterval, 
  * @author		Eric Lamb
  * @filesource 	./module/PM/View/Helper/Calendar.php
  */
-class Calendar extends AbstractHelper
+class Calendar extends BaseViewHelper
 {
 	/**
 	 * The users set locale
@@ -105,7 +105,12 @@ class Calendar extends AbstractHelper
 	public function __invoke($month = null, $year = null)
 	{
 		//set the locale
-		$locale = "en_US";
+		$helperPluginManager = $this->getServiceLocator();
+		$serviceManager = $helperPluginManager->getServiceLocator();
+		
+		$settings = $serviceManager->get('Application\Model\Settings');
+		$settings = $settings->getSettings();
+		$locale = $settings['locale'];
 		$base_date = null;
 
 		if ($month != '' && $year != '') 

@@ -37,7 +37,13 @@ class Settings extends AbstractModel
 	  'date_format_custom' => '',  
 	  'time_format' => 'g:i A',  
 	  'time_format_custom' => ''
-	);			
+	);	
+
+	/**
+	 * The system setttings array
+	 * @var array
+	 */
+	private $settings = array();
 	
 	/**
 	 * The Constructor
@@ -132,12 +138,15 @@ class Settings extends AbstractModel
 	 */
 	public function getSettings()
 	{
-		$sql = $this->db->select()->from(array('s' => 'settings'))->columns( array('option_name', 'option_value'));
-		$settings = $this->_translateSettings($this->getRows($sql));
-		return $settings;
+		if(!$this->settings)
+		{
+			$sql = $this->db->select()->from(array('s' => 'settings'))->columns( array('option_name', 'option_value'));
+			$this->settings = $this->_translateSettings($this->getRows($sql));
+		}
+		return $this->settings;
 	}
 	
-	private function _translateSettings($settings)
+	private function _translateSettings(array $settings)
 	{
 		$arr = array();
 		foreach($settings AS $setting)

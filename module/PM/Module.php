@@ -143,7 +143,9 @@ class Module
 				'PM\Model\Calendar' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Calendar($adapter, $db);
+					$project = $sm->get('PM\Model\Projects');
+					$task = $sm->get('PM\Model\Tasks');
+					return new Calendar($adapter, $db, $project, $task);
 				},
 				
 				//forms
