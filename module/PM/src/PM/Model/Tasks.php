@@ -211,6 +211,12 @@ class Tasks extends AbstractModel
 		return $this->db->getTasks($sql);		
 	}
 	
+	/**
+	 * Returns the tasks based on start date paramters
+	 * @param string $year
+	 * @param string $month
+	 * @param string $day
+	 */
 	public function getTasksByStartDate($year = null, $month = null, $day = null)
 	{
 		$sql = $this->db->select()->from(array('t'=>'tasks'));

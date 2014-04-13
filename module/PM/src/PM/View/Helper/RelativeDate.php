@@ -29,8 +29,8 @@ class RelativeDate extends BaseViewHelper
 	 * @param string $date
 	 * @return string
 	 */
-	function __invoke($date, $include_time = FALSE)
-	{	
+	public function __invoke($date, $include_time = FALSE)
+	{					
 		if ( '0000-00-00 00:00:00' == $date || '0000-00-00' == $date || null == $date) 
 		{
 			return 'N/A';
@@ -41,7 +41,7 @@ class RelativeDate extends BaseViewHelper
 			$prefs = $this->getUserData();
 			if(isset($prefs['enable_rel_time']) && $prefs['enable_rel_time'] == '0')
 			{
-				$return = $this->c($str_date).$this->view->formatDate($date);
+				$return = $this->c($str_date).$this->formatDate($date);
 			}
 
 			if(date('Y-m-d') == $date)
@@ -72,7 +72,12 @@ class RelativeDate extends BaseViewHelper
 	 * @param   string  $format		Converted date string
 	 * @return  string				The new time stamp string
 	 */
-	public function formatDate($oldDate, $format) {
+	public function formatDate($oldDate, $format) 
+	{
+		
+		//$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'eee');
+		//$key = strtolower(datefmt_format( $fmt , mktime(12,0,0,4,$dayNum+5,2014))); //we force the date so things start on Sunday
+				
 		$newDate = date($format, strtotime($oldDate));
 		return $newDate;
 	}

@@ -42,14 +42,13 @@ class CalendarController extends AbstractPmController
     	
     	$view['month'] = $month;
     	$view['year'] = $year;
-    	
     	if($this->perm->check($this->identity, 'manage_projects'))
     	{
-    		$view['calendar_data'] = $cal->getAllCalendarItems($month, $year);
+    		$view['calendar_data'] = $cal->getAllItems($month, $year);
     	}
     	else
     	{
-    		$view['calendar_data'] = $cal->getUserProjectItems($month, $year, $this->identity);
+    		$view['calendar_data'] = $cal->getUserItems($month, $year, $this->identity);
     	} 
     	
     	return $view;

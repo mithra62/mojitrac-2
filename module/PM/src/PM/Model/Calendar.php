@@ -40,7 +40,7 @@ class Calendar extends AbstractModel
 	 * @param int $month
 	 * @param int $year
 	 */
-	public function getAllCalendarItems($month, $year)
+	public function getAllItems($month, $year)
 	{
     	$started_projects = $this->getStartedProjectsByDate($month, $year);
     	$started_tasks = $this->getStartedTasksByDate($month, $year);
@@ -71,13 +71,12 @@ class Calendar extends AbstractModel
 	 * @param int $year
 	 * @param int $identity
 	 */
-	public function getUserProjectItems($month, $year, $identity)
+	public function getUserItems($month, $year, $identity)
 	{
 		$sql = $this->db->select()->from(array('pt' => 'project_teams'))->columns( array('project_id' => 'project_id') )->where(array('pt.user_id' => $identity));
 		$sql = $sql->join(array('p' => 'projects'), 'p.id = pt.project_id');
-		$sql = $sql->where(new \Zend\Db\Sql\Expression('date_format(p.start_date,"%Y-%m") = '."'$year-$month'"));	
-		
-		$arr = $this->_translateItems($this->project->getProjectTeamMembers($sql), 'start_date', 'projects');
+		$sql = $sql->where(array('start_year' => $year, 'start_month' => $month));	
+		$arr = $this->_translateItems($this->getRows($sql), 'start_date', 'projects');
 		$arr = $this->_translateItems($this->getStartedTasksByDate($month, $year, $identity), 'start_date', 'tasks', $arr);
 		$arr = $this->_translateItems($this->getCompletedTasksByDate($month, $year, $identity), 'end_date', 'tasks', $arr);
 		

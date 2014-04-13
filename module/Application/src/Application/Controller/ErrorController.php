@@ -13,16 +13,6 @@
 namespace Application\Controller;
 
 use Application\Controller\AbstractController;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Db\Sql\Sql;
-use Zend\Authentication\Result as AuthenticationResult;
-
-use Application\Adapter\AuthAdapter;
-use Application\Model\Login;
-use Application\Form\LoginForm;
-use Application\Model\User;
-use Application\Model\DbTable\UserTable;
 
 /**
 * Default - Error Controller
