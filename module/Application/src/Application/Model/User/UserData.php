@@ -38,23 +38,24 @@ class UserData extends AbstractModel
 	 * @var array
 	 */
 	public $defaults = array(
-					  'timezone', 
-					  'date_format',
-					  'date_format_custom',  
-					  'time_format',  
-					  'time_format_custom',
-					  'noti_assigned_task',
-					  'noti_status_task',
-					  'noti_priority_task',
-					  'noti_daily_task_reminder',
-					  'noti_add_proj_team',
-					  'noti_remove_proj_team',
-					  'noti_file_uploaded',
-					  'noti_file_revision_uploaded',
-					  'timer_data',
-					  'enable_rel_time',
-					  'enable_contextual_help'
-			);			
+		'timezone' => 'America/Los_Angeles', 
+		'locale' => 'en_US',  
+		'date_format',
+		'date_format_custom',  
+		'time_format',  
+		'time_format_custom',
+		'noti_assigned_task',
+		'noti_status_task',
+		'noti_priority_task',
+		'noti_daily_task_reminder',
+		'noti_add_proj_team',
+		'noti_remove_proj_team',
+		'noti_file_uploaded',
+		'noti_file_revision_uploaded',
+		'timer_data',
+		'enable_rel_time',
+		'enable_contextual_help'
+	);			
 	
 	/**
 	 * The User UserData Model
