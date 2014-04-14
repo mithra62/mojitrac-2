@@ -105,12 +105,8 @@ class Calendar extends BaseViewHelper
 	public function __invoke($month = null, $year = null)
 	{
 		//set the locale
-		$helperPluginManager = $this->getServiceLocator();
-		$serviceManager = $helperPluginManager->getServiceLocator();
-		
-		$settings = $serviceManager->get('Application\Model\Settings');
-		$settings = $settings->getSettings();
-		$locale = $settings['locale'];
+		$prefs = $this->getUserData();
+		$locale = $prefs['locale'];
 		$base_date = null;
 
 		if ($month != '' && $year != '') 

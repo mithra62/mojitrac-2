@@ -12,7 +12,7 @@
 
 namespace PM\View\Helper;
 
-use Base\View\Helper\BaseViewHelper;
+use Base\View\Helper\BaseViewHelper, DateTime, IntlDateFormatter, DateInterval;
 
  /**
  * PM - Relative Date View Helper
@@ -39,6 +39,7 @@ class RelativeDate extends BaseViewHelper
 		{	
 			$str_date = strtotime($date);
 			$prefs = $this->getUserData();
+			$this->locale = $prefs['locale'];
 			if(isset($prefs['enable_rel_time']) && $prefs['enable_rel_time'] == '0')
 			{
 				$return = $this->c($str_date).$this->formatDate($date);
@@ -74,15 +75,12 @@ class RelativeDate extends BaseViewHelper
 	 */
 	public function formatDate($oldDate, $format) 
 	{
-		
-		//$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'eee');
-		//$key = strtolower(datefmt_format( $fmt , mktime(12,0,0,4,$dayNum+5,2014))); //we force the date so things start on Sunday
-				
-		$newDate = date($format, strtotime($oldDate));
+		$fmt = datefmt_create ($this->locale, null, null, null, IntlDateFormatter::GREGORIAN, 'MMMM d, yyyy');
+		$newDate = datefmt_format( $fmt , strtotime($oldDate));
 		return $newDate;
 	}
 
-	function relative_datetime($timestamp)
+	public function relative_datetime($timestamp)
 	{
 		if(!$timestamp)
 		{
