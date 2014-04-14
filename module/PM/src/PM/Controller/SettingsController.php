@@ -55,10 +55,10 @@ class SettingsController extends AbstractPmController
      */
     public function passwordAction()
     {	
-    	$user = $this->getServiceLocator()->get('Application\Model\User');
+    	$user = $this->getServiceLocator()->get('Application\Model\Users');
 		$form = $this->getServiceLocator()->get('Application\Form\PasswordForm');
 		$hash = $this->getServiceLocator()->get('Application\Model\Hash');
-        
+		$form = $form->confirmField();
 		$request = $this->getRequest();
         if ($request->isPost()) 
 		{

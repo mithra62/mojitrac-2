@@ -62,5 +62,6 @@ class PasswordForm extends BaseForm
 				'id' => 'old_password'
 			),
 		));
+		return $this;
 	}
 }
