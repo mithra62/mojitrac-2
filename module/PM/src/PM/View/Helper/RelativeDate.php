@@ -80,6 +80,11 @@ class RelativeDate extends BaseViewHelper
 		return $newDate;
 	}
 
+	/**
+	 * Creates the actual date output and returns the string
+	 * @param int $timestamp
+	 * @return string
+	 */
 	public function relative_datetime($timestamp)
 	{
 		if(!$timestamp)
@@ -123,7 +128,7 @@ class RelativeDate extends BaseViewHelper
             $periods[$j].= "s";
 		}
 	
-		$text = "$difference $periods[$j] $ending";
+		$text = "$difference ".$this->view->_($periods[$j], 'pm')." ".$this->view->_($ending, 'pm');
 	
 		return $text;
 	}	
