@@ -409,7 +409,7 @@ class ProjectsController extends AbstractPmController
 		$view['project'] = $project_data;
 
 		$view['proj_team'] = $proj_team;
-		$users = $this->getServiceLocator()->get('Application\Model\User');
+		$users = $this->getServiceLocator()->get('Application\Model\Users');
 		$view['users'] = $users->getAllUsers('d');
 		
 		return $view;
