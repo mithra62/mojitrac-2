@@ -13,6 +13,8 @@
 namespace Application\Form;
 
 use Base\Form\BaseForm;
+use PM\Model\Options\Timezones;
+use PM\Model\Options\Languages;
 
 /**
 * PrefsForm Form
@@ -134,6 +136,30 @@ class PrefsForm extends BaseForm
 			'options' => array(
 				'checked_value' => '1',
 				'unchecked_value' => '0'
+			)
+		));
+		
+		$this->add(array(
+			'name' => 'timezone',
+			'type' => 'Select',
+			'attributes' => array(
+				'class' => 'select input',
+				'id' => 'timezone'
+			),
+			'options' => array(
+				'value_options' => Timezones::tz(),
+			)
+		));
+
+		$this->add(array(
+			'name' => 'locale',
+			'type' => 'Select',
+			'attributes' => array(
+				'class' => 'select input',
+				'id' => 'locale'
+			),
+			'options' => array(
+				'value_options' => Languages::langs(),
 			)
 		));
 			

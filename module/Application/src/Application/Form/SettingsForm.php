@@ -14,8 +14,6 @@ namespace Application\Form;
 
 use Base\Form\BaseForm;
 use PM\Model\Options\Companies;
-use PM\Model\Options\Timezones;
-use PM\Model\Options\Languages;
 
 /**
 * Password Form
@@ -49,30 +47,6 @@ class SettingsForm extends BaseForm
 		));
 
 		$this->add(array(
-			'name' => 'timezone',
-			'type' => 'Select',
-			'attributes' => array(
-				'class' => 'select input',
-				'id' => 'timezone'
-			),
-			'options' => array(
-				'value_options' => Timezones::tz(),
-			)
-		));
-
-		$this->add(array(
-			'name' => 'locale',
-			'type' => 'Select',
-			'attributes' => array(
-				'class' => 'select input',
-				'id' => 'locale'
-			),
-			'options' => array(
-				'value_options' => Languages::langs(),
-			)
-		));
-
-		$this->add(array(
 			'name' => 'enable_ip',
 			'type' => 'Checkbox',
 			'attributes' => array(
@@ -84,16 +58,5 @@ class SettingsForm extends BaseForm
 				'unchecked_value' => '0'
 			)
 		));
-
-        $this->add(array(
-            'type' => 'Zend\Form\Element\Textarea',
-            'name' => 'allowed_file_formats',
-            'attributes' => array(
-                'class' => 'styled_textarea', 
-                'rows' => '7',
-				'id' => 'allowed_file_formats',
-                'cols' => '40',
-            ),
-        ));	
 	}
 }

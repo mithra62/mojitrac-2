@@ -37,6 +37,11 @@ echo $this->formRow($csrf);
 		<p><label for="enable_rel_time"><?php $name = $form->get('enable_rel_time'); echo $this->formRow($name); ?> Enable relative time.</label></p>
 		
 		<p>
+			<label for="timezone">Timezone <a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'settings', 'page' => 'allowed_file_formats'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Allowed File Formats');?></a></label>
+			<?php $field = $form->get('timezone'); echo $this->formRow($field); ?>
+		</p>	
+		
+		<p>
 			<input type="submit" class="submit" value="Submit" />
 		</p>	
 	</div>
@@ -44,6 +49,11 @@ echo $this->formRow($csrf);
 	<div id="misc">
 		<p><label for="enable_contextual_help"><?php $name = $form->get('enable_contextual_help'); echo $this->formRow($name); ?> Enable contextual help.</label></p>
 	
+		<p>
+			<label for="locale">Locale <a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'settings', 'page' => 'allowed_file_formats'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Allowed File Formats');?></a></label>
+			<?php $field = $form->get('locale'); echo $this->formRow($field); ?>
+		</p>	
+			
 		<p>
 			<input type="submit" class="submit" value="Submit" />
 		</p>		

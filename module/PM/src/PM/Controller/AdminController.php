@@ -44,16 +44,6 @@ class AdminController extends AbstractPmController
     {
 
     }
-    
-    public function clearCacheAction()
-    {
-
-    }
-    
-    public function systemResetAction()
-    {
-
-    } 
 
     /**
      * Handles the system global settings.
@@ -75,6 +65,7 @@ class AdminController extends AbstractPmController
        	if ($this->getRequest()->isPost()) 
 		{
     		$formData = $this->getRequest()->getPost();
+    		$formData = $formData->toArray();
 			if($setting->updateSettings($formData))
 			{
 		    	$this->flashMessenger()->addMessage('Settings updated!');

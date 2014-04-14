@@ -4,7 +4,7 @@
 *
 * @package		mithra62:Mojitrac
 * @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
 * @filesource 	./module/PM/src/PM/Controller/SettingsController.php
@@ -40,17 +40,7 @@ class SettingsController extends AbstractPmController
 		    
 		return $e;
 	}
-    
-    /**
-     * Handles managing the system emails
-     */
-    public function emailAction()
-    {
-        $this->view->sub_menu = 'admin';
-        $this->view->active_nav = 'admin';
-		$this->view->active_sub = 'emails';
-    }
-    
+
     /**
      * The default section page
      */
@@ -90,15 +80,6 @@ class SettingsController extends AbstractPmController
 		$this->layout()->setVariable('sub_menu', 'settings');	
 		$view['form'] = $form;
 		return $view;
-    }
-    
-    /**
-     * Handles the user notifications
-     */
-    public function notificationsAction()
-    {
-    	$this->view->sub_menu = 'settings';
-    	$this->view->active_sub = 'notifications';
     }
     
     public function prefsAction()

@@ -4,7 +4,7 @@
 *
 * @package		mithra62:Mojitrac
 * @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
  * @filesource 	./module/Application/src/Application/Model/Settings.php
@@ -12,7 +12,10 @@
 
 namespace Application\Model;
 
-use Zend\Db\Sql\Sql;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
+use Base\Model\KeyValue;
 
 /**
 * Setting Model
@@ -21,160 +24,130 @@ use Zend\Db\Sql\Sql;
 * @author		Eric Lamb
  * @filesource 	./module/Application/src/Application/Model/Settings.php
 */
-class Settings extends AbstractModel
-{			
+class Settings extends KeyValue
+{		
+	/**
+	 * The validation filters
+	 * @var object
+	 */
+	protected $inputFilter;
+		
+	/**
+	 * The databaes table the Moji Settings are stored in
+	 * @var string
+	 */
+	public $table = 'settings';
+		
 	/**
 	 * Contains all the defaults for the global settings
 	 * @var array
 	 */
-	private $defaults = array(
-	  'master_company' => '1', 
-	  'enable_ip' => '0', 
-	  'timezone' => 'America/Los_Angeles', 
-	  'locale' => 'en_US', 
-	  'allowed_file_formats' => 'jpg,gif,png,txt,docx,doc,pdf,php,xls,xlsx,csv,psd,ppt,pptx,pot,potx,rar,zip,tar,gz,tgz,bz2,html,htm,avi,mov,fla,swf,asf,flv,sql,mp3', 
-	  'date_format' => 'F j, Y',
-	  'date_format_custom' => '',  
-	  'time_format' => 'g:i A',  
-	  'time_format_custom' => ''
+	public $defaults = array(
+		'master_company' => '1', 
+		'enable_ip' => '0', 
+		'allowed_file_formats' => 'jpg,gif,png,txt,docx,doc,pdf,php,xls,xlsx,csv,psd,ppt,pptx,pot,potx,rar,zip,tar,gz,tgz,bz2,html,htm,avi,mov,fla,swf,asf,flv,sql,mp3', 
+		'date_format' => 'F j, Y',
+		'date_format_custom' => '',  
+		'time_format' => 'g:i A',  
+		'time_format_custom' => ''
 	);	
 
 	/**
 	 * The system setttings array
 	 * @var array
 	 */
-	private $settings = array();
+	public $settings = array();
 	
 	/**
-	 * The Constructor
+	 * Abstracts handling of key => value style database tables
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $sql
 	 */
-	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter = null, \Zend\Db\Sql\Sql $sql = null)
 	{
-		parent::__construct($adapter, $db);
-	}
+		parent::__construct($adapter, $sql);
+		$this->setTable($this->table);
+		$this->setDefaults($this->defaults);
+	}	
 	
-	public function getSQL($data){
+	/**
+	 * Creates the base SQL query for updates and inserts
+	 * @param array $data
+	 * @return multitype:\Zend\Db\Sql\Expression unknown
+	 */
+	public function getSQL(array $data, $create = TRUE){
 		return array(
 			'option_value' => $data['option_value'],
 			'option_name' => $data['option_name'],
 			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
 		);
-	}
+	}	
 	
 	/**
-	 * Verifies that a submitted setting is valid and exists. If it's valid but doesn't exist it is created.
-	 * @param string $setting
-	 */
-	private function _checkSetting($setting)
-	{
-		if(array_key_exists($setting, $this->defaults))
-		{
-			if(!$this->getSetting($setting))
-			{
-				$this->addSetting($setting);
-			}
-			
-			return TRUE;
-		}		
-	}
-	
-	/**
-	 * Adds a setting to the databse
-	 * @param string $setting
-	 */
-	public function addSetting($setting)
-	{
-		$sql = $this->getSQL(array('option_name' => $setting));
-		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
-		return $this->insert('settings', $sql);
-	}
-	
-	/**
-	 * Returns the value straigt from the database
-	 * @param string $setting
-	 */
-	public function getSetting($setting)
-	{
-		$sql = $this->db->select()->from('settings')->columns( array('id'))->where(array('option_name' => $setting));
-		return $this->getRow($sql);
-	}
-	
-	/**
-	 * Updates the value of a setting
-	 * @param string $key
-	 * @param string $value
-	 */
-	public function updateSetting($key, $value)
-	{
-		if(!$this->_checkSetting($key))
-		{
-			return FALSE;
-		}
-		
-		$sql = $this->getSQL(array('option_name' => $key, 'option_value' => $value));
-		return $this->update('settings', $sql, array('option_name' => $key));
-	}
-	
-	/**
-	 * Updates all the settings for the provided array
-	 * @param array $settings
-	 */
-	public function updateSettings($settings)
-	{
-		foreach($settings AS $key => $value)
-		{
-			$this->updateSetting($key, $value);
-			if($key == 'enable_ip' && $value == '1')
-			{				
-				//ip->addIp(array('ip' => $_SERVER['REMOTE_ADDR'], 'description' => 'Ip Blocking Enabled'), $identity);
-			}
-		}
-		
-		return TRUE;
-	}
-
-	/**
-	 * Returns the settings array and sets the cache accordingly
+	 * Returns the full settings array
+	 * @return multitype:array
 	 */
 	public function getSettings()
 	{
-		if(!$this->settings)
-		{
-			$sql = $this->db->select()->from(array('s' => 'settings'))->columns( array('option_name', 'option_value'));
-			$this->settings = $this->_translateSettings($this->getRows($sql));
-		}
-		return $this->settings;
+		return parent::getItems();
 	}
 	
-	private function _translateSettings(array $settings)
+	/**
+	 * Sets the Input Filter
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
+	 */
+	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
-		$arr = array();
-		foreach($settings AS $setting)
-		{
-			if(in_array(strtolower($setting['option_value']), array('1', 'true', 'yes')))
-			{
-				$arr[$setting['option_name']] = TRUE;
-			}
-			elseif(in_array(strtolower($setting['option_value']), array('0', 'false', 'no')))
-			{
-				$arr[$setting['option_name']] = FALSE;
-			}
-			else
-			{
-				$arr[$setting['option_name']] = $setting['option_value'];
-			}
+		throw new \Exception("Not used");
+	}
+	
+	/**
+	 * Returns an instance of the Input Filter
+	 * @return object
+	 */
+	public function getInputFilter()
+	{
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'email',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+				'validators' => array(
+					array(
+						'name' => 'EmailAddress',
+					),
+					array(
+						'name' => 'Db\RecordExists',
+						'options' => array(
+							'table' => 'users',
+						    'field' => 'email',
+							'adapter' => $this->authAdapter
+						)
+					),
+				),
+			)));
+	
+			$this->inputFilter = $inputFilter;
 		}
-		
-		//now we verify there are settings for everything 
-		foreach($this->defaults AS $key => $value)
-		{
-		    if(!isset($arr[$key]))
-		    {
-		        $arr[$key] = $value;
-		    }
-		}
-		
-		return $arr;
+	
+		return $this->inputFilter;
+	}
+	
+	/**
+	 * Handles updating a setting
+	 * @param array $settings
+	 * @return boolean
+	 */
+	public function updateSettings(array $settings)
+	{
+		return parent::updateItems($settings);
 	}
 	
 }
