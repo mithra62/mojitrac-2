@@ -73,8 +73,8 @@ class CalendarController extends AbstractPmController
     	else
     	{
     		$user = $this->getServiceLocator()->get('PM\Model\Users');
-    		$this->view->project_data = $user->getAssignedProjects($this->identity, $year, $month, $day);
-    		$this->view->task_data = $user->getAssignedTaskByDate($this->identity, $year, $month, $day);
+    		$view['project_data'] = $user->getAssignedProjects($this->identity, $year, $month, $day);
+    		$view['task_data']' = $user->getAssignedTaskByDate($this->identity, $year, $month, $day);
     	}   
 
     	return $view;

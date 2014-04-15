@@ -34,12 +34,6 @@ class Projects extends AbstractModel
 	protected $inputFilter;
 	
 	/**
-	 * The key to use for the cache items
-	 * @var string
-	 */
-	public $cache_key = 'projects';
-	
-	/**
 	 * The Project Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $db
@@ -87,7 +81,7 @@ class Projects extends AbstractModel
 	/**
 	 * Creates the array for modifying the DB
 	 * @param array $data
-	 * @return multitype:\PM\Model\Zend_Db_Expr unknown
+	 * @return array
 	 */
 	private function getSQL($data){
 		$sql = array(
@@ -96,14 +90,14 @@ class Projects extends AbstractModel
     		'start_date' => (!empty($data['start_date']) ? $data['start_date'] : null),
     		'end_date' => (!empty($data['end_date']) ? $data['end_date'] : null),
     		'actual_end_date' => (!empty($data['actual_end_date']) ? $data['actual_end_date'] : null),
-    		'status' => (!empty($data['status']) ? $data['status'] : ''),
+    		'status' => (!empty($data['status']) ? $data['status'] : 0),
     		'percent_complete' => (!empty($data['percent_complete']) ? $data['percent_complete'] : 0),
     		'description' => (!empty($data['description']) ? $data['description'] : ''),
     		'target_budget' => (!empty($data['target_budget']) ? $data['target_budget'] : 0),
     		'actual_budget' => (!empty($data['actual_budget']) ? $data['actual_budget'] : 0),
-    		'creator' => (!empty($data['creator']) ? $data['creator'] : ''),
+    		'creator' => (!empty($data['creator']) ? $data['creator'] : 0),
     		'priority' => (!empty($data['priority']) ? $data['priority'] : 0),
-    		'type' => (!empty($data['type']) ? $data['type'] : ''),
+    		'type' => (!empty($data['type']) ? $data['type'] : 0),
     		'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
 		);
 		
@@ -320,6 +314,7 @@ class Projects extends AbstractModel
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 
 		$sql = $this->getSQL($data);
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 		$data['project_id'] = $project_id = $this->insert('projects', $sql);
 		
 		$ext = $this->trigger(self::EventProjectAddPost, $this, compact('project_id', 'data'), $this->setXhooks($data));

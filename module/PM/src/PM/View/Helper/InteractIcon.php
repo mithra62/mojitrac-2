@@ -101,7 +101,7 @@ class InteractIcon extends BaseViewHelper
 		$url = $this->view->StaticUrl().'/images/'.$icon;
 		if($return == 'img')
 		{
-			return '<img src="'.$url.'" width="16" height="16" class="png_bg" alt="'.$alt.'" title="'.$alt.'" '.$atts.' />';
+			return '<img src="'.$url.'" width="16" height="16" class="png_bg" alt="'.strip_tags($alt).'" title="'.strip_tags($alt).'" '.$atts.' />';
 		}
 		
 		return $url;

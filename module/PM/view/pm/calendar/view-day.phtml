@@ -1,30 +1,36 @@
 <div class="content_headers" style="padding-top:0px;">
-	<div class="calendar_header">Project Activity For <?php echo $this->RelativeDate($this->date); ?></div>
+	<div class="calendar_header">Project Activity For <?php echo $this->RelativeDate(date('Y-m-d', mktime(0, 0, 0, $this->month, $this->day, $this->year))); ?></div>
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'calendar', 'page' => 'view-day'), null, TRUE); ?>" rel="facebox" title="Add Project">
+		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'calendar', 'page' => 'view-day'), null, TRUE); ?>" rel="facebox" title="Add Project">
 			<?php echo $this->InteractIcon('help', 'About Calendar Day View');?>
 			<div class="action_text">Help</div>
 		</a>
 	</div>	
 </div>
 <?php 
-$parts = explode('-', $this->date);
-$next_day = date('Y-m-d', mktime(0, 0, 0, $parts['1'], $parts['2']+1, $parts['0']));
-$prev_day = date('Y-m-d', mktime(0, 0, 0, $parts['1'], $parts['2']-1, $parts['0']));
+$next_day = date('j', mktime(0, 0, 0, $this->month, $this->day+1, $this->year));
+$next_year = date('Y', mktime(0, 0, 0, $this->month, $this->day+1, $this->year));
+$next_month = date('n', mktime(0, 0, 0, $this->month, $this->day+1, $this->year));
+$display_next_date = date('Y-m-d', mktime(0, 0, 0, $this->month, $this->day+1, $this->year));
+
+$prev_day = date('j', mktime(0, 0, 0, $this->month, $this->day-1, $this->year));
+$prev_year = date('Y', mktime(0, 0, 0, $this->month, $this->day-1, $this->year));
+$prev_month = date('n', mktime(0, 0, 0, $this->month, $this->day-1, $this->year));
+$display_prev_date = date('Y-m-d', mktime(0, 0, 0, $this->month, $this->day-1, $this->year));
 ?>
 <div >
 	<div class="left">
 		<div class="back_link_content">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'calendar','action'=>'view-day', 'date'=>$prev_day), null, TRUE); ?>" title="Back to <?php echo $this->user_data['first_name'].' '.$this->user_data['last_name']; ?>">
-				<?php echo $this->RelativeDate($prev_day); ?>	
-			</a><div><?php echo $this->InteractIcon('left-arrow', $this->RelativeDate($prev_day));?></div>
+			<a href="<?php echo $this->url('calendar/view-day', array('day'=>$prev_day, 'month' => $prev_month, 'year' => $prev_year), null, TRUE); ?>" title="Back to <?php echo $this->user_data['first_name'].' '.$this->user_data['last_name']; ?>">
+				<?php echo $this->RelativeDate($display_prev_date); ?>	
+			</a><div><?php echo $this->InteractIcon('left-arrow', $this->RelativeDate($display_prev_date, false));?></div>
 		</div>
 	</div>
 	<div class="right">
 		<div class="back_link_content">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'calendar','action'=>'view-day', 'date'=>$next_day)); ?>">
-				<?php echo $this->RelativeDate($next_day); ?> 
-			</a><div style="float:right; padding-left:5px;"><?php echo $this->InteractIcon('right-arrow', $this->RelativeDate($prev_day));?></div>
+			<a href="<?php echo $this->url('calendar/view-day', array('day' => $next_day,'month'=>$next_month,'year'=>$next_year)); ?>">
+				<?php echo $this->RelativeDate($display_next_date); ?> 
+			</a><div style="float:right; padding-left:5px;"><?php echo $this->InteractIcon('right-arrow', $this->RelativeDate($display_next_date, false));?></div>
 		</div>	
 	</div>
 </div>
@@ -32,7 +38,7 @@ $prev_day = date('Y-m-d', mktime(0, 0, 0, $parts['1'], $parts['2']-1, $parts['0'
 <?php 
 if($this->project_data):
 	$options = array('projects' => $this->project_data, 'enable_company' => 'yes');
-	echo $this->partial('projects/partials/projects.phtml', $options);
+	echo $this->partial('pm/projects/partials/projects', $options);
 
 else: ?>
 <br clear="all" />
@@ -47,7 +53,7 @@ endif;
 <?php 
 if($this->task_data):
 	$options = array('tasks' => $this->task_data, 'enable_project' => 'yes', 'enable_assigned' => 'yes', 'enable_completion' => 'yes', 'enable_due' => 'yes', 'enable_start' => 'yes');
-	echo $this->partial('tasks/partials/tasks.phtml', $options);
+	echo $this->partial('pm/tasks/partials/tasks', $options);
 
 else: ?>
 <br clear="all" />

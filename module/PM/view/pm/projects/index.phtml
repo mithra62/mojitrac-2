@@ -40,7 +40,7 @@ else:
 	<?php echo $this->ProjectStatus($this->project_filter); ?>
 	<?php endif; ?>	
 	
-projects setup yet. <?php if($this->CheckPermission('manage_projects')): ?>Want to <a href="<?php echo $this->url('projects/add', array('company_id' => FALSE)); ?>">add</a> one?.<?php endif; ?></div>
+projects setup yet. <?php if($this->CheckPermission('manage_projects')): ?>Want to <a href="<?php echo $this->url('projects/add'); ?>">add</a> one?.<?php endif; ?></div>
 
 <?php 
 endif; ?>

@@ -31,7 +31,7 @@ class ProjectsController extends AbstractPmController
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
-		parent::onDispatch( $e );
+		$e = parent::onDispatch( $e );
         parent::check_permission('view_projects');
         //$this->layout()->setVariable('layout_style', 'single');
         $this->layout()->setVariable('sidebar', 'dashboard');
@@ -136,8 +136,7 @@ class ProjectsController extends AbstractPmController
 		{	
 			$not = array('bill_status' => 'paid');
 			$view['times'] = $times->getTimesByProjectId($id, null, $not);
-			$view['hours'] = $times->getTotalTimesByProjectId($id);	
-			
+			$view['hours'] = $times->getTotalTimesByProjectId($id);
 			$view['estimated_time'] = $task->getProjectEstimatedTime($id);
 		}		
 
@@ -151,9 +150,7 @@ class ProjectsController extends AbstractPmController
 		$view['identity'] = $this->identity;
 		$view['layout_style'] = 'single';
 		$this->layout()->setVariable('layout_style', 'single');
-		///$this->view->headTitle('Viewing Project: '. $this->view->project['name'], 'PREPEND');
 		$view['id'] = $id;
-		
 		return $view;
 	}
 	
@@ -263,12 +260,7 @@ class ProjectsController extends AbstractPmController
 				$id = $project->addProject($formData->toArray());
 				if($id)
 				{
-					//PM_Model_ActivityLog::logProjectAdd($formData, $id, $this->identity);
-					if($project->addProjectTeamMember($this->identity, $id))
-					{
-						//PM_Model_ActivityLog::logProjectTeamAdd(array('first_user'), $id, $this->identity);
-					}
-					
+					$project->addProjectTeamMember($this->identity, $id);
 					if(is_numeric($formData['company_id']))
 					{
 						$company = $this->getServiceLocator()->get('PM\Model\Companies');

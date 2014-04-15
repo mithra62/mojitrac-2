@@ -362,7 +362,7 @@ class Calendar extends BaseViewHelper
 		 			$date = $calDayNum;// Zend_Locale_Format::toNumber($calDayNum, array('locale' => $this->localeStr));
 		 			if($m_date && $this->day_route_name)
 		 			{
-		 				$link = '<a href="'.$this->view->url($this->day_route_name, array('month' => $this->date->format('m'), 'year' => $this->date->format('Y'), 'day' => $this->date->format('d'))).'" rel="'.$this->link_rel.'">'.$date.'</a>';
+		 				$link = '<a href="'.$this->view->url($this->day_route_name, array('month' => $this->date->format('m'), 'year' => $this->date->format('Y'), 'day' => $date)).'" rel="'.$this->link_rel.'">'.$date.'</a>';
 		 				$html .= $link;
 		 				$html .= $this->process_date_data($m_date);
 		 			}

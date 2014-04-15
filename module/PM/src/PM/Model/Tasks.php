@@ -219,14 +219,30 @@ class Tasks extends AbstractModel
 	 */
 	public function getTasksByStartDate($year = null, $month = null, $day = null)
 	{
-		$sql = $this->db->select()->from(array('t'=>'tasks'));
-		$sql = $sql->where(new Zend_Db_Expr('date_format(t.start_date,"%Y-%m-%d")').' = ?', $date);
-		$sql = $sql->orwhere(new Zend_Db_Expr('date_format(t.end_date,"%Y-%m-%d")').' = ?', $date);
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = t.project_id', array('name AS project_name', 'id AS project_id'));
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = t.assigned_to', array('first_name AS assigned_first_name', 'last_name AS assigned_last_name'));
-		$sql = $sql->joinLeft(array('u2' => 'users'), 'u2.id = t.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));		
+		$sql = $this->db->select()->from(array('t'=>'tasks'));	
 		
-		return $this->db->getTasks($sql);
+		$where = array();
+		if($year)
+		{
+			$where['t.start_year'] = $year;
+		}
+		
+		if($month)
+		{
+			$where['t.start_month'] = $month;
+		}
+		
+		if($day)
+		{
+			$where['t.start_day'] = $day;
+		}
+		
+		$sql = $sql->where($where);
+		
+		$sql = $sql->join(array('p' => 'projects'), 'p.id = t.project_id', array('project_name' => 'name', 'project_id' => 'id'), 'left');
+		$sql = $sql->join(array('u' => 'users'), 'u.id = t.assigned_to', array('assigned_first_name' => 'first_name', 'assigned_last_name' => 'last_name'), 'left');
+		$sql = $sql->join(array('u2' => 'users'), 'u2.id = t.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), 'left');
+		return $this->getRows($sql);
 	}
 	
 	/**
