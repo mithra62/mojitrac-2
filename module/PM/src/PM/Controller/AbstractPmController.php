@@ -115,7 +115,7 @@ abstract class AbstractPmController extends AbstractController
 	 */
 	protected function _initIpBlocker()
 	{
-		if(!empty($this->settings['enable_ip']) && $this->settings['enable_ip'] != '1')
+		if(!empty($this->settings['enable_ip']) && $this->settings['enable_ip'] == '1')
 		{
 			$ip = $this->getServiceLocator()->get('PM\Model\Ips');
 			if(!$ip->isAllowed($_SERVER['REMOTE_ADDR']))

@@ -28,19 +28,10 @@ class IpsController extends AbstractPmController
 	/**
 	 * Class preDispatch
 	 */
-	public function preDispatch()
-	{ 
-		parent::preDispatch();
-        parent::check_permission('manage_ips');
-        $this->view->headTitle('Ip Access Manager', 'PREPEND'); 
-        $this->view->layout_style = 'single';
-        $this->view->sidebar = 'dashboard';
-        $this->view->sub_menu = 'admin';
-        $this->view->active_nav = 'admin';
-		$this->view->active_sub = 'ips';
-        $this->view->sub_menu_options = PM_Model_Options_Projects::status();
-        $this->view->uri = $this->_request->getPathInfo();
-		$this->view->title = FALSE;          
+	public function onDispatch( \Zend\Mvc\MvcEvent $e )
+	{
+		$e = parent::onDispatch( $e ); 
+		return $e;       
 	}
     
     public function enableAction()
@@ -60,9 +51,10 @@ class IpsController extends AbstractPmController
     
     public function indexAction()
     {
-    	$ips = new PM_Model_Ips;
-    	$this->view->ip_block_enabled = $this->settings['enable_ip'];
-    	$this->view->ips = $ips->getAllIps();
+    	$ips = $this->getServiceLocator()->get('PM\Model\Ips');
+    	$view['ip_block_enabled'] = $this->settings['enable_ip'];
+    	$view['ips'] = $ips->getAllIps();
+    	return $view;
     }
     
 	public function viewAction()

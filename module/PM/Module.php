@@ -28,6 +28,7 @@ use PM\Model\Options;
 use PM\Model\Contacts;
 use PM\Model\ActivityLog;
 use PM\Model\Calendar;
+use PM\Model\Ips;
 
 use PM\Form\ProjectForm;
 use PM\Form\CompanyForm;
@@ -146,6 +147,11 @@ class Module
 					$project = $sm->get('PM\Model\Projects');
 					$task = $sm->get('PM\Model\Tasks');
 					return new Calendar($adapter, $db, $project, $task);
+				},
+				'PM\Model\Ips' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Ips($adapter, $db);
 				},
 				
 				//forms

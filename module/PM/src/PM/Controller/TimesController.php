@@ -4,7 +4,7 @@
 *
 * @package		mithra62:Mojitrac
 * @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
 * @filesource 	./module/PM/src/PM/Controller/TimesController.php
@@ -25,42 +25,35 @@ use PM\Controller\AbstractPmController;
 */
 class TimesController extends AbstractPmController
 {
-
 	/**
-	 * Class preDispatch
+	 * Class onDispatch
 	 */
-	public function preDispatch()
+	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{
-		parent::preDispatch();
-        parent::check_permission('view_time');
-        $this->view->headTitle('Time', 'PREPEND');
-		$this->view->layout_style = 'single';
-		$this->view->sidebar = 'dashboard';
-        $this->view->sub_menu = 'times';
-        $this->view->active_nav = 'time';
-		$this->view->active_sub = 'None';
-		$this->view->title = FALSE;          
+		$e = parent::onDispatch( $e );  
+		return $e;       
 	}
     
     public function indexAction()
     {
-    	$date = $this->_request->getParam('date', date('F Y'));
-    	list($month, $year) = explode(' ', $date);
+    	$times = $this->getServiceLocator()->get('PM\Model\Times');
+    	$month = $this->params()->fromRoute('month', date('m'));
+    	$year = $this->params()->fromRoute('year', date('Y'));
+    	
+    	$view['month'] = $month;
+    	$view['year'] = $year;
 
-    	$times = new PM_Model_Times;
     	if($this->perm->check($this->identity, 'manage_time'))
     	{
-    		$items = $times->getCalendarItems($month, $year);
-    		$this->view->calendar_data = $items;
+    		$items = array();//$times->getCalendarItems($month, $year);
+    		$view['calendar_data'] = $items;
     	}
     	else
     	{
-    		$this->view->calendar_data = $times->getCalendarItems($month, $year, $this->identity);
+    		$view['calendar_data'] = $times->getCalendarItems($month, $year, $this->identity);
     	}
     	
-    	$cal = new PM_Model_Calendar(new PM_Model_DbTable_Projects, new PM_Model_DbTable_Tasks);
-    	$month = $cal->translateMonth($month);
-    	$this->view->full_date = $year.'-'.$month;
+    	return $view;
     }
     
     public function removeAction()

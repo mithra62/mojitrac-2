@@ -94,8 +94,8 @@ class Ips extends AbstractModel
 	 */
 	public function getAllIps()
 	{
-		$sql = $this->db->select()->from(array($this->db->getTableName()));
-		return $this->db->getIps($sql);
+		$sql = $this->db->select()->from('ips');
+		return $this->getRows($sql);
 	}
 	
 	/**
@@ -116,13 +116,8 @@ class Ips extends AbstractModel
 	 */
 	public function isAllowed($ip)
 	{
-		$key = 'ip_'.ip2long($ip);
-		if(!$data = $this->cache->load($key)) 
-		{		
-			$sql = $this->db->select()->from(array('ip' => $this->db->getTableName()), array('id'))->where('ip = ?', new Zend_Db_Expr("INET_ATON('$ip')"));
-			$data = $this->db->getIp($sql);
-			$this->cache->save($data, $key, array($this->cache_keys['ips']));
-		}
+		$sql = $this->db->select()->from(array('ip' => 'ips'))->columns( array('id'))->where(array('ip' => ip2long($ip)));
+		$data = $this->getRow($sql);
 		return $data;
 	}
 	

@@ -372,8 +372,8 @@ class Times extends AbstractModel
 	public function getCalendarItems($month = FALSE, $year = FALSE, $user_id = FALSE)
 	{
 		//SELECT SUM(hours),creator,date FROM `times` GROUP BY date,creator
-		$sql = $this->db->select()->setIntegrityCheck(false);
-		$sql = $sql->from(array('i'=>$this->db->getTableName()),
+		$sql = $this->db->select();
+		$sql = $sql->from(array('i'=>'times'),
 						  		array(new Zend_Db_Expr('SUM(hours) AS total'), 'date', 'creator'));
 
 		if($month)

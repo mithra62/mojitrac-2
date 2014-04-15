@@ -85,7 +85,7 @@ if($interval->days <= 30):
 		echo $this->partial('pm/projects/partials/projects', $options); 
 	else: 
 	?>
-	<div class="information png_bg">There aren't any projects added yet. <?php if($this->CheckPermission('manage_projects')): ?>Want to <a href="<?php //echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'add', 'company' => $this->id), null, TRUE); ?>">add</a> one?.<?php endif; ?></div>
+	<div class="information png_bg">There aren't any projects added yet. <?php if($this->CheckPermission('manage_projects')): ?>Want to <a href="<?php echo $this->url('projects/add'); ?>">add</a> one?.<?php endif; ?></div>
 	<?php endif; ?>
 <?php endif; ?>
 
