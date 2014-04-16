@@ -3,7 +3,7 @@
 </div>
 <?php if(!$this->ajax_mode): ?>
 <div class="back_link_content">
-	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'ips','action'=>'index'), null, TRUE); ?>" title="Back to Ips">
+	<a href="<?php echo $this->url('ips', array('module' => 'pm','controller'=>'ips','action'=>'index'), null, TRUE); ?>" title="Back to Ips">
 		Back to Ips
 	</a><div><?php echo $this->InteractIcon('left-arrow', 'Back to Ips');?></div>
 </div>	
@@ -11,5 +11,5 @@
 <?php endif; ?>
 <?php 
 $options = array('form' => $this->form);
-echo $this->partial('ips/partials/form.phtml', $options); 
+echo $this->partial('pm/ips/partials/form', $options); 
 ?>

@@ -196,7 +196,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/[:company_id]',
+        					'route' => '/remove/:company_id',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
@@ -208,7 +208,7 @@ return array(
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/add',
+        					'route' => '/add[/:company_id]',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
@@ -220,7 +220,7 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/[:company_id]',
+        					'route' => '/edit/:company_id',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
@@ -232,7 +232,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/[:company_id]',
+        					'route' => '/:company_id',
         					'constraints' => array(
         						'company_id' => '[0-9]+'
         					),
@@ -270,7 +270,7 @@ return array(
         			'all' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/[:company_id]',
+        					'route' => '[/:company_id]',
         					'constraints' => array(
         						'id' => '[0-9]+'
         					),
@@ -294,7 +294,7 @@ return array(
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/add/[:company_id]',
+        					'route' => '/add/:company_id',
         					'constraints' => array(
         						'company_id' => '[0-9]+'
         					),
@@ -306,7 +306,7 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/[:contact_id]',
+        					'route' => '/edit/:contact_id',
         					'constraints' => array(
         						'contact_id' => '[0-9]+'
         					),
@@ -318,7 +318,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/[:contact_id]',
+        					'route' => '/view/:contact_id',
         					'constraints' => array(
         						'contact_id' => '[0-9]+'
         					),
@@ -448,7 +448,7 @@ return array(
         	'ips' => array( //Ips Routes
         		'type' => 'segment',
         		'options' => array(
-        			'route' => '/pm/ips',
+        			'route' => '/pm/ip-locker',
         			'defaults' => array(
         				'controller' => 'PM\Controller\Ips',
         				'action' => 'index'
@@ -459,7 +459,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/[:ip_id]',
+        					'route' => '/remove/:ip_id',
         					'constraints' => array(
         						'file_id' => '[0-9]+'
         					),
@@ -481,7 +481,7 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/[:ip_id]',
+        					'route' => '/edit/:ip_id',
         					'constraints' => array(
         						'ip_id' => '[0-9]+'
         					),
@@ -493,7 +493,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/[:ip_id]',
+        					'route' => '/:ip_id',
         					'constraints' => array(
         						'ip_id' => '[0-9]+'
         					),

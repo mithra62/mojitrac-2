@@ -142,7 +142,7 @@ class BookmarksController extends AbstractPmController
 
 		//$this->view->headTitle('Viewing Bookmark: '. $this->view->bookmark['name'], 'PREPEND');
 		$view['id'] = $id;
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}
 	
 	/**
@@ -288,7 +288,7 @@ class BookmarksController extends AbstractPmController
 		//$this->view->headTitle('Add Bookmark', 'PREPEND');
 		$form->setAttribute('action', $this->getRequest()->getRequestUri());
 		$view['form'] = $form;		
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}
 	
 	public function removeAction()
@@ -345,6 +345,6 @@ class BookmarksController extends AbstractPmController
     	
 		//$this->view->headTitle('Delete Bookmark: '. $this->view->note['subject'], 'PREPEND');
 		$view['id'] = $id;   
-		return $this->ajax_output($view); 	
+		return $this->ajaxOutput($view); 	
 	}		
 }

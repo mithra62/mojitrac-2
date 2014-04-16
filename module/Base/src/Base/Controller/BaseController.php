@@ -86,7 +86,7 @@ abstract class BaseController extends AbstractActionController
 	 * @param array $view
 	 * @return \Zend\View\Model\ViewModel|boolean
 	 */
-	public function ajax_output(array $view = array())
+	public function ajaxOutput(array $view = array())
 	{
 	    if ($this->getRequest()->isXmlHttpRequest())
 	    {

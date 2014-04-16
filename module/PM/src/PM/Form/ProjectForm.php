@@ -4,9 +4,9 @@
 *
 * @package		mithra62:Mojitrac
 * @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
-* @version		1.0
+* @version		2.0
 * @filesource 	./module/PM/src/PM/Forms/ProjectForm.php
 */
 
@@ -17,9 +17,9 @@ use PM\Model\Options\Companies;
 use Base\Form\BaseForm;
 
 /**
-* LoginForm Form
+* Project Form
 *
-* Generates the LoginForm form
+* Generates the Project form
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb

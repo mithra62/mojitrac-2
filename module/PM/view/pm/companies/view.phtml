@@ -213,7 +213,7 @@ if($this->CheckPermission('view_company_contacts')):?>
 		</div>			
 		<?php if($this->CheckPermission('manage_company_contacts')): ?>	
 		<div class="actions">
-			<a href="<?php echo $this->url('contacts/add', array('company_id' => $this->id)); ?>" title="Add Contact">
+			<a href="<?php echo $this->url('contacts/add', array('company_id' => $this->company['id'])); ?>" title="Add Contact">
 				<?php echo $this->InteractIcon('add', 'Add Company Contact');?>
 				<div class="action_text">Add Contact</div>
 			</a>
@@ -229,7 +229,7 @@ if($this->CheckPermission('view_company_contacts')):?>
 	<div class="information png_bg">
 		There aren't any contacts added yet. 
 		<?php if($this->CheckPermission('manage_company_contacts')): ?>
-			Want to <a href="<?php echo $this->url('contacts/add', array('module' => 'pm','controller'=>'contacts','action'=>'add', 'company' => $this->id), null, TRUE); ?>">add</a> one?
+			Want to <a href="<?php echo $this->url('contacts/add', array('company_id' => $this->company_id)); ?>">add</a> one?
 		<?php endif; ?>
 	</div>
 	<?php 

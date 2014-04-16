@@ -4,7 +4,7 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/src/PM/Model/Ips.php
@@ -51,17 +51,25 @@ class Ips extends AbstractModel
     		$factory = new InputFactory();
     
     		$inputFilter->add($factory->createInput(array(
-    				'name'     => 'name',
-    				'required' => true,
-    				'filters'  => array(
-    						array('name' => 'StripTags'),
-    						array('name' => 'StringTrim'),
-    				),
+				'name'     => 'ip',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+				'validators' => array(
+					array(
+						'name' => '\Zend\Validator\Hostname',
+						'options' => array(
+							'allow' => \Zend\Validator\Hostname::ALLOW_IP
+						)
+					),
+				),
     		)));
     
     		$this->inputFilter = $inputFilter;
     	}
-    
+    	
     	return $this->inputFilter;
     }
     
@@ -104,10 +112,10 @@ class Ips extends AbstractModel
 	 */
 	public function getIpById($id)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('ip'=>$this->db->getTableName()));
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = ip.creator', array('first_name', 'last_name'));
-		$sql = $sql->where('ip.id = ?', $id);
-		return $this->db->getIp($sql);
+		$sql = $this->db->select()->from(array('ip'=>'ips'));
+		$sql = $sql->join(array('u' => 'users'), 'u.id = ip.creator', array('first_name', 'last_name'), 'left');
+		$sql = $sql->where(array('ip.id' => $id));
+		return $this->getRow($sql);
 	}
 	
 	/**
@@ -132,6 +140,7 @@ class Ips extends AbstractModel
 		{
 			return TRUE;
 		}
+		
 		$sql = $this->db->getSQL($data);
 		$sql['creator'] = $creator;
 		if($this->db->addIp($sql))

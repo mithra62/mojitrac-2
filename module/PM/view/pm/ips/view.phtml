@@ -3,13 +3,13 @@
 	<div class="admin_header">Viewing Ip Address: <?php echo $this->ip['ip_raw']; ?></div>
 		
 		<div class="actions">
-			<a rel="facebox" href="<?php echo $this->url(array('module' => 'pm','controller'=>'ips','action'=>'remove'), null, FALSE); ?>" title="Delete">
+			<a rel="facebox" href="<?php echo $this->url('ips/remove', array('ip_id' => $this->ip['id'])); ?>" title="Delete">
 				<?php echo $this->InteractIcon('cross', 'Delete');?>
 				<div class="action_text">Delete</div>
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'ips','action'=>'edit'), null, FALSE); ?>" title="Edit">
+			<a href="<?php echo $this->url('ips/edit', array('ip_id' => $this->ip['id'])); ?>" title="Edit">
 				<?php echo $this->InteractIcon('pencil', 'Edit');?>
 				<div class="action_text">Edit</div>
 			</a> 
@@ -17,7 +17,7 @@
 </div>
 <?php if(!$this->ajax_mode): ?>
 <div class="back_link_content">
-	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'ips','action'=>'index'), null, TRUE); ?>" title="Back to Ips">
+	<a href="<?php echo $this->url('ips'); ?>" title="Back to Ips">
 		Back to Ips
 	</a><div><?php echo $this->InteractIcon('left-arrow', 'Back to Ips');?></div>
 </div>	

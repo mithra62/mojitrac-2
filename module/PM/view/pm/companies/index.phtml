@@ -63,7 +63,7 @@ if($this->companies):
 			<?php endif; ?>
 			
 			<?php if($this->CheckPermission('view_company_contacts')):?>				
-				<a href="<?php echo $this->url('contacts', array('module' => 'pm','controller' => 'contacts','action'=>'index', 'company'=>$company['id']), null, TRUE); ?>" title="Contacts"><?php echo $this->InteractIcon('user', 'View Company Users');?></a>
+				<a href="<?php echo $this->url('contacts', array('company_id'=>$company['id']), null, TRUE); ?>" title="Contacts"><?php echo $this->InteractIcon('user', 'View Company Users');?></a>
 			<?php endif; ?>
 			
 			<?php if($this->CheckPermission('manage_companies')):?>

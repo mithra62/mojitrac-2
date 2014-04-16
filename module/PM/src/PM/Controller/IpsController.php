@@ -4,7 +4,7 @@
 *
 * @package		mithra62:Mojitrac
 * @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
 * @filesource 	./module/PM/src/PM/Controller/IpsController.php
@@ -31,6 +31,10 @@ class IpsController extends AbstractPmController
 	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{
 		$e = parent::onDispatch( $e ); 
+        $this->layout()->setVariable('sidebar', 'dashboard');
+        $this->layout()->setVariable('active_nav', 'admin');
+        $this->layout()->setVariable('sub_menu', 'admin');
+        $this->layout()->setVariable('active_sub', 'ips');
 		return $e;       
 	}
     
@@ -59,52 +63,51 @@ class IpsController extends AbstractPmController
     
 	public function viewAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('ip_id');
 		if (!$id) {
 			$this->_helper->redirector('index','ips');
 			exit;
 		}
 
-		$ips = new PM_Model_Ips;
-		$this->view->ip = $ips->getIpById($id);
-		if(!$this->view->ip)
+		$ips = $this->getServiceLocator()->get('PM\Model\Ips');
+		$view['ip'] = $ips->getIpById($id);
+		if(!$view['ip'])
 		{
-			$this->_helper->redirector('index','ips');
-			exit;
+			return $this->redirect()->toRoute('ips');
 		}
 		
-		$this->view->headTitle('Viewing Ip', 'PREPEND');
+		return $this->ajaxOutput($view);
 	}    
 	
 	/**
-	 * Project Add Page
+	 * IP Address Add Page
 	 * @return void
 	 */
 	public function addAction()
 	{
-		$ip = new PM_Model_Ips;
-		$form = $ip->getIpForm(array(
-            'action' => '/pm/ips/add',
-            'method' => 'post',
-        ));
-        
-       	if ($this->getRequest()->isPost()) 
+		$ip = $this->getServiceLocator()->get('PM\Model\Ips');
+		$form = $this->getServiceLocator()->get('PM\Form\IpForm');
+		$request = $this->getRequest();
+		if ($request->isPost())
 		{
-    		$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData)) 
+			$formData = $this->getRequest()->getPost();
+			$form->setInputFilter($ip->getInputFilter());
+			$form->setData($request->getPost());
+		
+			if ($form->isValid($formData))
 			{
-				if($id = $ip->addIp($formData, $this->identity))
+				$ip_id = $ip->addIp($formData->toArray(), $this->identity);
+				if($ip_id)
 				{
-			    	$this->_flashMessenger->addMessage('Ip Address Added!');
-					$this->_helper->redirector('index','ips', 'pm', array('id' => $id));
-					exit;
+					$this->flashMessenger()->addMessage('IP Address Added!');
+			    	return $this->redirect()->toRoute('ips/view', array('ip_id' => $ip_id));
 				}
 			}
 		}
 		
-		$this->view->layout_style = 'right';
-		$this->view->form = $form;
-
+		$view['form'] = $form;
+        $this->layout()->setVariable('layout_style', 'left');
+		return $this->ajaxOutput($view);
 	}
 	
 	/**

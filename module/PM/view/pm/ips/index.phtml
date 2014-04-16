@@ -8,15 +8,13 @@
 		</div>	
 		<?php if($this->CheckPermission('manage_projects')):?>
 		<div class="actions">
-			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'ips','action'=>'add'), null, FALSE); ?>" title="Add Ip Address" rel="facebox">
+			<a href="<?php echo $this->url('ips/add', array('module' => 'pm','controller' => 'ips','action'=>'add'), null, FALSE); ?>" title="Add Ip Address" rel="facebox">
 				<?php echo $this->InteractIcon('add', 'Add Project');?>
 				<div class="action_text">Add Ip</div>
 			</a>
 		</div>
 		<?php endif; ?>		
 </div>
-
-
 
 <?php 
 if($this->ips):
