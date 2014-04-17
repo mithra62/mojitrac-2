@@ -10,6 +10,6 @@
 <br clear="all" />
 <?php endif; ?>
 <?php 
-$options = array('form' => $this->form);
+$options = array('form' => $this->form, 'form_action' => $this->url('ips/add'));
 echo $this->partial('pm/ips/partials/form', $options); 
 ?>

@@ -4,7 +4,7 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/Base/src/Base/View//Helper/BaseViewHelper.php
@@ -25,10 +25,22 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class BaseViewHelper extends ZFAbstract implements ServiceLocatorAwareInterface 
 {
+	/**
+	 * The users ID
+	 * @var unknown
+	 */
 	public $identity;
 	
+	/**
+	 * The ZF Service Locator object
+	 * @var ServiceLocatorInterface
+	 */
 	public $serviceLocator;
 	
+	/**
+	 * The users custom data including preferences
+	 * @var array
+	 */
 	public $userData;
 	
 	public function getIdentity()

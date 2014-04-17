@@ -40,17 +40,39 @@ class IpsController extends AbstractPmController
     
     public function enableAction()
     {
-    	$settings = new Model_Settings;
-    	$data = array('enable_ip' => '1');
-    	if($settings->updateSettings($data))
+    	$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+		$ip = $this->getServiceLocator()->get('PM\Model\Ips');
+    	$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+    	$request = $this->getRequest();
+    	
+    	if ($request->isPost())
     	{
-	    	$this->_flashMessenger->addMessage('Ip Blocking Enabled!');
-			$this->_helper->redirector('index','ips', 'pm');
-			exit;
-    	}   
+    		$formData = $this->getRequest()->getPost();
+    		$form->setData($request->getPost());
+    		if ($form->isValid($formData))
+    		{
+    			$formData = $formData->toArray();
+    			if(!empty($formData['fail']))
+    			{
+    				return $this->redirect()->toRoute('ips');
+    			}
+    			
+    			$ip->addIp(array('ip' => $request->getServer()->get('REMOTE_ADDR')), $this->identity);
+    			
+    			$settings = $this->getServiceLocator()->get('Application\Model\Settings');
+    			$data = array('enable_ip' => ($this->settings['enable_ip'] == '1' ? '0' : '1'));
+    			if($settings->updateSettings($data))
+    			{
+					$this->flashMessenger()->addMessage($this->settings['enable_ip'] == '1' ? 'Ip Blocking Disabled!' : 'Ip Blocking Enabled!');
+			    	return $this->redirect()->toRoute('ips');
+    			}
+    		}
+    	}
 
-		$this->_helper->redirector('index','ips', 'pm');
-		exit;    	
+    	$view = array();
+    	$view['form'] = $form;
+    	$view['ip_block_enabled'] = $this->settings['enable_ip'];
+    	return $this->ajaxOutput($view);
     }
     
     public function indexAction()
@@ -174,46 +196,52 @@ class IpsController extends AbstractPmController
 	public function removeAction()
 	{
 		$ips = $this->getServiceLocator()->get('PM\Model\Ips');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+		
 		$id = $this->params()->fromRoute('ip_id');
-
 		if(!$id)
 		{
-			$this->_helper->redirector('index','ips');
-			exit;
+			return $this->redirect()->toRoute('ips');
 		}
 				 
 		$ip = $ips->getIpById($id);
 		if(!$ip)
 		{
-			$this->_helper->redirector('index','ips');
-			exit;
+			return $this->redirect()->toRoute('ips');
 		}
 
-		$this->view->ip = $ip;
-		if($this->settings['enable_ip'] && $ip['ip_raw'] == $_SERVER['REMOTE_ADDR'])
+		$view = array();
+		$view['ip'] = $ip;
+		$request = $this->getRequest();
+		if($this->settings['enable_ip'] && $ip['ip_raw'] == $request->getServer()->get('REMOTE_ADDR'))
 		{
-			$this->view->deny = TRUE;
-			return;
+			$this->flashMessenger()->addErrorMessage($translate('cant_remove_own_ip'));
+			return $this->redirect()->toRoute('ips/view', array('ip_id' => $id));
 		}
-
-		if($fail)
+		
+		if ($request->isPost())
 		{
-			$this->_helper->redirector('view','ips', 'pm', array('id' => $id));
-			exit;
-		}
-		 
-		if($confirm)
-		{
-			if($ips->removeIp($id))
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
 			{
-				$this->_flashMessenger->addMessage('Ip Removed');
-				$this->_helper->redirector('index','ips');
-				exit;
-
-			} 
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('ips/view', array('ip_id' => $id));
+				}
+				
+				if($ips->removeIp($id))
+				{
+					$this->flashMessenger()->addErrorMessage($translate('ip_removed'));
+					return $this->redirect()->toRoute('ips');
+				}				
+			}	
 		}
-		$this->view->id = $id;
-		$this->view->headTitle('Delete Ip Address: '. $id, 'PREPEND');		
+		
+		$view['form'] = $form;
+		return $this->ajaxOutput($view);	
 	}
     
 }

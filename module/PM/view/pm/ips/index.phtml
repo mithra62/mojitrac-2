@@ -8,29 +8,33 @@
 		</div>	
 		<?php if($this->CheckPermission('manage_projects')):?>
 		<div class="actions">
-			<a href="<?php echo $this->url('ips/add', array('module' => 'pm','controller' => 'ips','action'=>'add'), null, FALSE); ?>" title="Add Ip Address" rel="facebox">
+			<a href="<?php echo $this->url('ips/add'); ?>" title="Add Ip Address" rel="facebox">
 				<?php echo $this->InteractIcon('add', 'Add Project');?>
 				<div class="action_text">Add Ip</div>
 			</a>
 		</div>
 		<?php endif; ?>		
 </div>
+	<?php if($this->ip_block_enabled != '1'):?>
+	<div class="attention png_bg">
+		IP Blocking isn't enabled. Click <a href="<?php echo $this->url('ips/enable'); ?>" rel="facebox">here</a> to enable.
+	</div>
+	<?php else: ?>
+	<div class="fail png_bg">
+		IP Blocking is enabled. Click <a href="<?php echo $this->url('ips/enable'); ?>" rel="facebox">here</a> to disable.
+	</div>
+	<?php endif;?>
+	
+<?php 
 
-<?php 
 if($this->ips):
-	if($this->ip_block_enabled != 'true'):
-?>
-	<div class="attention canhide png_bg">IP Blocking isn't enabled. Click 
-	<a href="<?php echo $this->url('ips/enable', array('module' => 'pm','controller' => 'ips','action'=>'enable'), null, TRUE); ?>">here</a> to enable.</div>
-<?php 
-	endif;
 	$options = array('ips' => $this->ips, 'enable_actions' => 'yes', 'facebox' => 'yes');
 	echo $this->partial('pm/ips/partials/ips', $options); 
 
 else: 
 ?>
 
-<div class="information png_bg">There aren't any ip addresses setup yet. <?php if($this->CheckPermission('manage_projects')): ?>Want to <a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'ips','action'=>'add'), null, TRUE); ?>" rel="facebox">add</a> one?.<?php endif; ?></div>
+<div class="information png_bg">There aren't any ip addresses setup yet. <?php if($this->CheckPermission('manage_projects')): ?>Want to <a href="<?php echo $this->url('ips/add'); ?>" rel="facebox">add</a> one?.<?php endif; ?></div>
 
 <?php 
 endif; ?>

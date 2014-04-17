@@ -80,10 +80,10 @@ class Ips extends AbstractModel
      */
 	public function getSQL(array $data){
 		return array(
-		'ip' => ip2long($data['ip']),
-		'ip_raw' => $data['ip'],
-		'description' => $data['description'],
-		'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+			'ip' => ip2long($data['ip']),
+			'ip_raw' => $data['ip'],
+			'description' => $data['description'],
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
 		);
 	}
     
@@ -131,9 +131,10 @@ class Ips extends AbstractModel
 			return TRUE;
 		}
 		
-		$sql = $this->db->getSQL($data);
+		$sql = $this->getSQL($data);
 		$sql['creator'] = $creator;
-		if($this->db->addIp($sql))
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
+		if($this->insert('ips', $sql))
 		{
 		    return TRUE;			
 		}	
@@ -144,9 +145,9 @@ class Ips extends AbstractModel
 	 * @param string $key
 	 * @param stirng $col
 	 */
-	public function removeIp($key, $col = 'id')
+	public function removeIp($id)
 	{
-		if($this->db->deleteIp($key, $col))
+		if($this->remove('ips', array('id' => $id)))
 		{
 		    return TRUE;			
 		}

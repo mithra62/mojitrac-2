@@ -37,6 +37,7 @@ use PM\Form\NoteForm;
 use PM\Form\ContactForm;
 use PM\Form\TaskForm;
 use PM\Form\IpForm;
+use PM\Form\ConfirmForm;
 
 use PM\Event\ActivityLogEvent;
 use PM\Event\NotificationEvent;
@@ -176,6 +177,9 @@ class Module
 				},
 				'PM\Form\IpForm' => function($sm) {
 					return new IpForm('ip');
+				},
+				'PM\Form\ConfirmForm' => function($sm) {
+					return new ConfirmForm('confirm');
 				},
 				
 				//events
