@@ -74,28 +74,18 @@ class Ips extends AbstractModel
     }
     
     /**
-     * Returns an array for modifying $_name
-     * @param $data
-     * @return array
+     * Creates the SQL array to update or create an IP entry
+     * @param array $data
+     * @return multitype:\PM\Model\Zend_Db_Expr number unknown
      */
-    public function getSQL($data){
-    	return array(
-    			'name' => $data['name'],
-    			'phone1' => $data['phone1'],
-    			'phone2' => $data['phone2'],
-    			'fax' => $data['fax'],
-    			'address1' => $data['address1'],
-    			'address2' => $data['address2'],
-    			'city' => $data['city'],
-    			'state' => $data['state'],
-    			'zip' => $data['zip'],
-    			'primary_url' => $data['primary_url'],
-    			'description' => $data['description'],
-    			'type' => $data['type'],
-    			'custom' => $data['custom'],
-    			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
-    	);
-    }
+	public function getSQL(array $data){
+		return array(
+		'ip' => ip2long($data['ip']),
+		'ip_raw' => $data['ip'],
+		'description' => $data['description'],
+		'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+	}
     
 	/**
 	 * Returns all the Ip Addresses
@@ -169,8 +159,8 @@ class Ips extends AbstractModel
 	 */
 	public function updateIp(array $data, $id)
 	{
-		$sql = $this->db->getSQL($data);
-		if($this->db->update($sql, "id = '$id'"))
+		$sql = $this->getSQL($data);
+		if($this->update('ips', $sql, array('id' => $id)))
 		{
 		    return TRUE;	
 		}

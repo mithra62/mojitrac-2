@@ -116,69 +116,65 @@ class IpsController extends AbstractPmController
 	 */
 	public function editAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('ip_id');
 		if (!$id) 
 		{
-			$this->_helper->redirector('index','ips');
-			exit;
+			return $this->redirect()->toRoute('ips');
 		}
 
-		$ips = new PM_Model_Ips;
-		$form = $ips->getIpForm(array(
-            'action' => '/pm/ips/edit/',
-            'method' => 'post',
-		));
+		$ip = $this->getServiceLocator()->get('PM\Model\Ips');
+		$form = $this->getServiceLocator()->get('PM\Form\IpForm');
 		
-		$ip_data = $ips->getIpById($id);
+		$ip_data = $ip->getIpById($id);
 		if(!$ip_data)
 		{
-			$this->_helper->redirector('index','ips');
-			exit;			
+			return $this->redirect()->toRoute('ips');			
 		}
 
-		$this->view->id = $id;
-
+		$view = array();
+		$view['id'] = $id;
 		$ip_data['ip'] = $ip_data['ip_raw'];
-		$form->populate($ip_data);
+		$form->setData($ip_data);
 		 
-		$this->view->form = $form;
-
-		if ($this->getRequest()->isPost()) {
+		$view['form'] = $form;
+		
+		$request = $this->getRequest();
+		if ($request->isPost())
+		{
 			$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData)) {
-
-				if($ips->updateIp($formData, $formData['id']))
+			$form->setInputFilter($ip->getInputFilter());
+			$form->setData($request->getPost());
+		
+			if ($form->isValid($formData))
+			{
+				if($ip->updateIp($formData->toArray(), $formData['id']))
 				{
-					$this->_flashMessenger->addMessage('Ip Updated!');
-					$this->_helper->redirector('view','ips', 'pm', array('id' => $id));
-					exit;
-					 
+					$this->flashMessenger()->addMessage('IP Address Updated!');
+			    	return $this->redirect()->toRoute('ips/view', array('ip_id' => $id));
 				} 
 				else 
 				{
-					$this->view->errors = array('Couldn\'t update Ip Address...');
-					$form->populate($formData);
+					$view['errors'] = array('Couldn\'t update Ip Address...');
+					$form->setData($formData);
 				}
 
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
-				$form->populate($formData);
+				$view['errors'] = array('Please fix the errors below.');
+				$form->setData($formData);
 			}
 		}
-	  
-		$this->view->layout_style = 'right';
-		$this->view->sidebar = 'dashboard';
-		$this->view->headTitle('Edit Ip Address', 'PREPEND');
+
+		$this->layout()->setVariable('layout_style', 'left');
+		$view['ip_data'] = $ip_data;
+		return $this->ajaxOutput($view);
 	}	
 	
 	public function removeAction()
 	{
-		$ips = new PM_Model_Ips;
-		$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
+		$ips = $this->getServiceLocator()->get('PM\Model\Ips');
+		$id = $this->params()->fromRoute('ip_id');
 
 		if(!$id)
 		{
