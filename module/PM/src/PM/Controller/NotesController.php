@@ -233,6 +233,7 @@ class NotesController extends AbstractPmController
 	    }
 	    
 	    $view['form'] = $form;  
+		$view['form_action'] = $this->getRequest()->getRequestUri();
 		//$this->view->headTitle('Edit Note', 'PREPEND');  
         $this->layout()->setVariable('layout_style', 'right');
         $this->layout()->setVariable('sidebar', 'dashboard');
@@ -339,10 +340,10 @@ class NotesController extends AbstractPmController
 	public function removeAction()
 	{   		
 		$notes = $this->getServiceLocator()->get('PM\Model\Notes');
-		$id = $this->params()->fromRoute('note_id');
-		$confirm = $this->params()->fromPost('confirm');
-		$fail = $this->params()->fromPost('fail');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
+		$id = $this->params()->fromRoute('note_id');
     	if(!$id)
     	{
     		return $this->redirect()->toRoute('pm');
@@ -384,42 +385,50 @@ class NotesController extends AbstractPmController
 			
 			$view['task'] = $task_data;
 		}
-				
-    	if($fail)
-    	{
-    	    return $this->redirect()->toRoute('notes/view', array('note_id' => $id));
-    	}
     	
-    	if($confirm)
-    	{
-    	   	if($notes->removeNote($id))
-    		{	
-				$formData['task'] = $note_data['task_id'];
-				$formData['company'] = $note_data['company_id'];
-				$formData['project'] = $note_data['project_id'];			
-				$this->flashMessenger()->addMessage('Note Removed');
-				if($note_data['task_id'] > 0)
+	    $request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
+			{
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
 				{
-					return $this->redirect()->toRoute('tasks/view', array('task_id' => $note_data['task_id']));
+					return $this->redirect()->toRoute('notes/view', array('note_id' => $id));
 				}
 				
-    			if($note_data['project_id'] > 0)
-				{
-					return $this->redirect()->toRoute('projects/view', array('project_id' => $note_data['project_id']));
-				}
-
-    			if($note_data['company_id'] > 0)
-				{
-					return $this->redirect()->toRoute('companies/view', array('company_id' => $note_data['company_id']));
-				}				
-				
-				return $this->redirect()->toRoute('notes');
-				
-    		} 
+	    	   	if($notes->removeNote($id))
+	    		{	
+					$formData['task'] = $note_data['task_id'];
+					$formData['company'] = $note_data['company_id'];
+					$formData['project'] = $note_data['project_id'];			
+					$this->flashMessenger()->addMessage('Note Removed');
+					if($note_data['task_id'] > 0)
+					{
+						return $this->redirect()->toRoute('tasks/view', array('task_id' => $note_data['task_id']));
+					}
+					
+	    			if($note_data['project_id'] > 0)
+					{
+						return $this->redirect()->toRoute('projects/view', array('project_id' => $note_data['project_id']));
+					}
+	
+	    			if($note_data['company_id'] > 0)
+					{
+						return $this->redirect()->toRoute('companies/view', array('company_id' => $note_data['company_id']));
+					}				
+					
+					return $this->redirect()->toRoute('notes');
+					
+	    		}
+			} 
     	}
     	
 		//$this->view->headTitle('Delete Note: '. $this->view->note['subject'], 'PREPEND');
 		$view['id'] = $id;
+		$view['form'] = $form;
 		return $this->ajaxOutput($view);
 	}	
 }

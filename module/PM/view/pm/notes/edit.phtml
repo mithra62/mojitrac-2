@@ -7,6 +7,6 @@ $options = array('id' => $this->id, 'controller' => 'notes', 'name' => 'Note', '
 ?>
 
 <?php 
-$options = array('form' => $this->form, 'id' => $this->id);
+$options = array('form' => $this->form, 'company' => $this->company, 'project' => $this->project, 'task' => $this->task, 'form_action' => $this->form_action, 'id' => $this->id);
 echo $this->partial('pm/notes/partials/form', $options); 
 ?>

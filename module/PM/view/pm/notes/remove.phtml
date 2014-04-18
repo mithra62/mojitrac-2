@@ -27,7 +27,15 @@ Are you sure you want to remove "<?php echo $this->note['subject']?>"? This can 
 </div>
 
 <p>
-<form action="<?php echo $this->url('notes/remove', array('note_id' => $this->id), null, TRUE); ?>" method="POST">
-	<input type="submit" class="submit" value="Yes" name="confirm" /> <input type="submit" class="submit" value="No" name="fail"/>
-</form>
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'note_form');
+$form->setAttribute('action', $this->url('notes/remove', array('note_id' => $this->note['id'])));
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>
+	<?php $field = $form->get('confirm'); echo $this->formRow($field); ?> <?php $field = $form->get('fail'); echo $this->formRow($field); ?>
+<?php echo $this->form()->closeTag() ?>
 </p>
