@@ -1,6 +1,7 @@
 <?php 
 $form = $this->form;
 $form->setAttribute('id', 'notes_form');
+$form->setAttribute('action', $this->url('notes/remove', array('note_id' => $this->note['id'])));
 $form->prepare();
 echo $this->form()->openTag($form);
 $csrf = $form->get('_x');

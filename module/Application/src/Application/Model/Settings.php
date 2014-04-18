@@ -53,7 +53,11 @@ class Settings extends KeyValue
 		'default_company_type' => '1',  
 		'default_project_type' => '3',  
 		'default_project_priority' => '3',  
-		'default_project_status' => '3'
+		'default_project_status' => '3',
+			
+		'default_task_type' => '12',  
+		'default_task_priority' => '3',  
+		'default_task_status' => '3'
 	);	
 
 	/**

@@ -140,7 +140,7 @@ endif;
 	
 	else: 
 	?>
-	<div class="information png_bg">There aren't any tasks setup yet. <?php if($this->CheckPermission('manage_tasks')): ?>Want to <a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'tasks','action'=>'add', 'project' => $this->id), null, TRUE); ?>">add</a> one?<?php endif; ?></div>
+	<div class="information png_bg">There aren't any tasks setup yet. <?php if($this->CheckPermission('manage_tasks')): ?>Want to <a href="<?php echo $this->url('tasks/add', array('project_id' => $this->id)); ?>">add</a> one?<?php endif; ?></div>
 	<?php 
 	endif;
 endif;

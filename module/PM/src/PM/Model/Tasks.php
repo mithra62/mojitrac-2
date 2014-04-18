@@ -69,21 +69,21 @@ class Tasks extends AbstractModel
 	public function getSQL(array $data){
 		return array(
     		'name' => (!empty($data['name']) ? $data['name'] : ''),
-    		'parent' => (!empty($data['parent']) ? $data['parent'] : ''),
-    		'milestone' => (!empty($data['milestone']) ? $data['milestone'] : ''),
-    		'assigned_to' => (!empty($data['assigned_to']) ? $data['assigned_to'] : ''),
+    		'parent' => (!empty($data['parent']) ? $data['parent'] : 0),
+    		'milestone' => (!empty($data['milestone']) ? $data['milestone'] : 0),
+    		'assigned_to' => (!empty($data['assigned_to']) ? $data['assigned_to'] : 0),
     		'project_id' => (!empty($data['project_id']) ? $data['project_id'] : 0),
     		'progress' => (!empty($data['progress']) ? $data['progress'] : 0),
-    		'duration' => (!empty($data['duration']) ? $data['duration'] : ''),
-    		'hours_worked' => (!empty($data['hours_worked']) ? $data['hours_worked'] : ''),
-    		'start_date' => (!empty($data['start_date']) ? $data['start_date'] : ''),
-    		'end_date' => (!empty($data['end_date']) ? $data['end_date'] : ''),
-    		'status' => (!empty($data['status']) ? $data['status'] : ''),
-    		'percent_complete' => (!empty($data['percent_complete']) ? $data['percent_complete'] : ''),
+    		'duration' => (!empty($data['duration']) ? $data['duration'] : 0),
+    		'hours_worked' => (!empty($data['hours_worked']) ? $data['hours_worked'] : 0),
+    		'start_date' => (!empty($data['start_date']) ? $data['start_date'] : null),
+    		'end_date' => (!empty($data['end_date']) ? $data['end_date'] : null),
+    		'status' => (!empty($data['status']) ? $data['status'] : 0),
+    		'percent_complete' => (!empty($data['percent_complete']) ? $data['percent_complete'] : 0),
     		'description' => (!empty($data['description']) ? $data['description'] : ''),
     		'notify' => ($data['notify'] != '' ? $data['notify'] : '0'),
-    		'priority' => (!empty($data['priority']) ? $data['priority'] : ''),
-    		'type' => (!empty($data['type']) ? $data['type'] : ''),
+    		'priority' => (!empty($data['priority']) ? $data['priority'] : 0),
+    		'type' => (!empty($data['type']) ? $data['type'] : 0),
     		'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
 		);
 	}
@@ -384,12 +384,11 @@ class Tasks extends AbstractModel
 
 	
 	/**
-	 * Inserts or updates a Company
+	 * Inserts a Task
 	 * @param $data
-	 * @param $bypass_update
-	 * @return mixed
+	 * @return int
 	 */
-	public function addTask(array $data, $bypass_update = FALSE)
+	public function addTask(array $data)
 	{
 		$ext = $this->trigger(self::EventTaskAddPre, $this, compact('data'), $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
@@ -408,6 +407,7 @@ class Tasks extends AbstractModel
 		
 		$sql = $this->getSQL($data);	
 		$sql['creator'] = $data['creator'];
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 		$task_id = $this->insert('tasks', $sql);	
 
 	    if($task_id && $data['assigned_to'] != 0)

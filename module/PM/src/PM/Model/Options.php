@@ -72,15 +72,6 @@ class Options extends AbstractModel
 	{
 		$sql = $this->db->select();
 		return $this->db->getOptions($sql);		
-	}
-	
-	/**
-	 * Returns the Project Form
-	 * @return object
-	 */
-	public function getOptionsForm($options = array())
-	{
-        return new PM_Form_Option($options, $hidden);		
 	}	
 	
 	/**

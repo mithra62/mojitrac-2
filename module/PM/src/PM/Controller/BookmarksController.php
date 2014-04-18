@@ -285,8 +285,6 @@ class BookmarksController extends AbstractPmController
 		
         $this->layout()->setVariable('sidebar', 'dashboard');
         $this->layout()->setVariable('layout_style', 'right');
-		//$this->view->headTitle('Add Bookmark', 'PREPEND');
-		$form->setAttribute('action', $this->getRequest()->getRequestUri());
 		$view['form'] = $form;		
 		return $this->ajaxOutput($view);
 	}

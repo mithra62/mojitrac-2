@@ -300,6 +300,14 @@ class TasksController extends AbstractPmController
 		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
 		$form = $this->getServiceLocator()->get('PM\Form\TaskForm');
 		$form->setup($project);
+		$form->setData(
+			array(
+				'status' => $this->settings['default_task_status'],
+				'type' => $this->settings['default_task_type'],
+				'priority' => $this->settings['default_task_priority'],
+			)
+		);
+				
 		
 		if ($this->getRequest()->isPost()) {
     		
@@ -322,11 +330,11 @@ class TasksController extends AbstractPmController
             							
 					$project = $this->getServiceLocator()->get('PM\Model\Projects');
 					$project->updateProjectTaskCount($formData['project_id']);
-					$task->updateCompanyId($task_id, FALSE, $formData['project_id']);
+					$project_data = $project->getProjectById($formData['project_id']);
+					$task->updateCompanyId($task_id, $project_data['company_id']);
 
 			    	$this->flashMessenger()->addMessage('Task Added!');
 					return $this->redirect()->toRoute('tasks/view', array('task_id' => $task_id));
-					exit;
 				}
 			} 
 			else 

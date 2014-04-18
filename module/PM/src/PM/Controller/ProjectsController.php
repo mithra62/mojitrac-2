@@ -330,7 +330,6 @@ class ProjectsController extends AbstractPmController
 	    			$project->removeProjectTeam($id);
 					$this->flashMessenger()->addMessage('Project Removed');
 					$this->redirect()->toRoute('projects');
-					
 	    		}
 			}
     	}
