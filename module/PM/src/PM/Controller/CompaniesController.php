@@ -300,7 +300,7 @@ class CompaniesController extends AbstractPmController
 		//$this->view->headTitle('Delete Company: '. $this->view->company['name'], 'PREPEND');
 		$view['id'] = $id;
 
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}
 	
 	public function mapAction()
@@ -324,6 +324,6 @@ class CompaniesController extends AbstractPmController
 		}
 		
 		$view['company'] = $company_data;
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}
 }

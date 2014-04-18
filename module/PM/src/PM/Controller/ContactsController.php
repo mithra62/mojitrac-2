@@ -89,7 +89,7 @@ class ContactsController extends AbstractPmController
 		//$this->view->headTitle('Viewing Contact: '. $this->view->contact['first_name'].' '.$this->view->contact['last_name'], 'PREPEND');
 		$view['id'] = $id;
 		
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}
 	
 	/**
@@ -152,7 +152,7 @@ class ContactsController extends AbstractPmController
 		$this->layout()->setVariable('layout_style', 'right');     
 		//$this->view->headTitle('Edit Contact', 'PREPEND');     	
 		
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}
 	
 	/**
@@ -213,7 +213,7 @@ class ContactsController extends AbstractPmController
 		$this->layout()->setVariable('layout_style', 'left');
 		$view['form'] = $form;
 		$view['id'] = $company_id;
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}
 	
 	public function removeAction()
@@ -256,6 +256,6 @@ class ContactsController extends AbstractPmController
 		$view['title'] = "Delete Contact: ". $this->view->contact['first_name'].' '.$this->view->contact['last_name'];
 		//$this->view->headTitle('Delete Contact: '. $this->view->contact['first_name'].' '.$this->view->contact['last_name'], 'PREPEND');
 		$view['id'] = $id;
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}
 }

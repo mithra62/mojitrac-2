@@ -50,7 +50,7 @@ class DocsController extends AbstractPmController
     
     public function indexAction()
     {
-    	return $this->ajax_output(array());
+    	return $this->ajaxOutput(array());
     }
     
     public function projectsAction()
@@ -60,7 +60,7 @@ class DocsController extends AbstractPmController
     
     public function companiesAction()
     {
-        return $this->ajax_output(array());
+        return $this->ajaxOutput(array());
     }
     
     public function tasksAction()

@@ -327,7 +327,7 @@ class ProjectsController extends AbstractPmController
 		//$this->view->headTitle('Delete Project: '. $this->view->project['name'], 'PREPEND');
 		$view['id'] = $id;  
 
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}
 	
 	/**

@@ -157,7 +157,7 @@ class NotesController extends AbstractPmController
 
 		//$this->view->headTitle('Viewing Note: '. $this->view->note['subject'], 'PREPEND');
 		$view['id'] = $id;
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}
 	
 	/**
@@ -237,7 +237,7 @@ class NotesController extends AbstractPmController
         $this->layout()->setVariable('layout_style', 'right');
         $this->layout()->setVariable('sidebar', 'dashboard');
 
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}
 	
 	/**
@@ -333,7 +333,7 @@ class NotesController extends AbstractPmController
 
 		$view['form'] = $form;
 		
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}
 	
 	public function removeAction()
@@ -420,6 +420,6 @@ class NotesController extends AbstractPmController
     	
 		//$this->view->headTitle('Delete Note: '. $this->view->note['subject'], 'PREPEND');
 		$view['id'] = $id;
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}	
 }

@@ -384,6 +384,6 @@ class TasksController extends AbstractPmController
     	
 		//$this->view->headTitle('Delete Task: '. $this->view->task['name'], 'PREPEND');
 		$view['id'] = $id;
-		return $this->ajax_output($view);
+		return $this->ajaxOutput($view);
 	}	
 }
