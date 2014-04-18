@@ -231,7 +231,7 @@ class DashboardTimeline extends BaseViewHelper
 				case 'task_assigned':
 					if(isset($data['task_name']) && $data['task_name'] != '')
 					{
-						return $this->view->url('pm', array('module'=> 'pm', 'controller'=>'tasks','action'=>'view', 'id' => $data['task_id']), null, TRUE);
+						return $this->view->url('tasks/view', array('task_id' => $data['task_id']));
 					}
 				break;
 				
@@ -405,7 +405,7 @@ class DashboardTimeline extends BaseViewHelper
 					{
 						return $data['task_name']; 
 					} 
-					$data['stuff'] = Zend_Json::decode($data['stuff']);
+					$data['stuff'] = \Zend\Json\Json::decode($data['stuff'], \Zend\Json\Json::TYPE_ARRAY);
 					if(isset($data['stuff']['name']) && $data['stuff']['name'] != '')
 					{
 						return $data['stuff']['name'];

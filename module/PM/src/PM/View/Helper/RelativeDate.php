@@ -30,8 +30,8 @@ class RelativeDate extends BaseViewHelper
 	 * @return string
 	 */
 	public function __invoke($date, $include_time = FALSE)
-	{					
-		if ( '0000-00-00 00:00:00' == $date || '0000-00-00' == $date || null == $date) 
+	{
+		if ( '0000-00-00 00:00:00' == $date || '0000-00-00' == $date || null == $date || $date == '') 
 		{
 			return 'N/A';
 		} 

@@ -24,7 +24,7 @@ use PM\Model\Options\Projects;
  */
 class TaskStatus extends BaseViewHelper
 {
-	function __invoke($status)
+	public function __invoke($status)
 	{
 		return Projects::translateStatusId($status); 
 	}

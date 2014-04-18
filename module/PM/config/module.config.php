@@ -709,7 +709,7 @@ return array(
         			'all' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/[:company_id]',
+        					'route' => '/company/[:company_id]',
         					'constraints' => array(
         						'id' => '[0-9]+'
         					),
@@ -721,7 +721,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/[:project_id]',
+        					'route' => '/:project_id',
         					'constraints' => array(
         						'project_id' => '[0-9]+'
         					),
@@ -911,7 +911,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/[:task_id]',
+        					'route' => '/remove/:task_id',
         					'constraints' => array(
         						'note_id' => '[0-9]+'
         					),
@@ -923,7 +923,7 @@ return array(
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/add/[:project_id]',
+        					'route' => '/add/:project_id',
         					'constraints' => array(
         						'project_id' => '[0-9]+'
         					),
@@ -935,7 +935,7 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/[:task_id]',
+        					'route' => '/edit/:task_id',
         					'constraints' => array(
         						'note_id' => '[0-9]+'
         					),
@@ -947,7 +947,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/[:task_id]',
+        					'route' => '/:task_id',
         					'constraints' => array(
         						'note_id' => '[0-9]+'
         					),
@@ -959,7 +959,7 @@ return array(
         			'update-progress' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/[:task_id]/[:progress]',
+        					'route' => '/update-progress/:task_id/:progress',
         					'constraints' => array(
         						'note_id' => '[0-9]+'
         					),

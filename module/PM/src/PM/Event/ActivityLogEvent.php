@@ -50,7 +50,8 @@ class ActivityLogEvent extends BaseEvent
         'project.add.post' => 'logProjectAdd',
         'project.addteam.post' => 'logProjectTeamAdd',
     	'project.remove.pre' => 'prepLogProjectRemove',
-    	'project.remove.post' => 'logProjectRemove'
+    	'project.remove.post' => 'logProjectRemove',
+        'task.add.post' => 'logTaskAdd',
     );
     
     /**
@@ -83,9 +84,13 @@ class ActivityLogEvent extends BaseEvent
 	 * @param int $performed_by
 	 * @return void
 	 */
-	public function logTaskAdd(array $data, $task_id, $project_id, $performed_by)
+	public function logTaskAdd(\Zend\EventManager\Event $event)
 	{
-		$this->al->logActivity(self::setDate(), 'task_add', $performed_by, $data, $project_id, 0, $task_id);
+		$data = $event->getParam('data');
+		$task_id = $event->getParam('task_id');
+		$project_id = $data['project_id'];
+		$data = array('stuff' => $data, 'project_id' => $project_id, 'type' => 'task_add', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);
 	}
 	
 	/**

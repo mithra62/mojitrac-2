@@ -4,7 +4,7 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/View/Helper/IsDatePast.php
@@ -23,8 +23,18 @@ use Base\View\Helper\BaseViewHelper;
  */
 class IsDatePast extends BaseViewHelper
 {
-	public function __invoke($date)
+	/**
+	 * Checks if the passed date string is in the past
+	 * @param string $date
+	 * @return void|boolean
+	 */
+	public function __invoke($date = null)
 	{
+		if($date == '')
+		{
+			return;
+		}
+		
 		$d = strtotime($date);
 		if($d && $d < time())
 		{

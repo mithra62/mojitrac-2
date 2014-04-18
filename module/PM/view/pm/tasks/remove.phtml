@@ -6,9 +6,17 @@ Are you sure you want to remove "<?php echo $this->task['name']?>"? This can not
 </div>
 
 <p>
-<form action="<?php echo $this->url('tasks/remove', array('task_id' => $this->id), null, TRUE); ?>" method="POST">
-	<input type="submit" class="submit" value="Yes" name="confirm" /> <input type="submit" class="submit" value="No" name="fail"/>
-</form>
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'task_form');
+$form->setAttribute('action', $this->url('tasks/remove', array('task_id' => $this->task['id'])));
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>
+	<?php $field = $form->get('confirm'); echo $this->formRow($field); ?> <?php $field = $form->get('fail'); echo $this->formRow($field); ?>
+<?php echo $this->form()->closeTag() ?>
 </p>
 
 <h2>Task Details</h2>

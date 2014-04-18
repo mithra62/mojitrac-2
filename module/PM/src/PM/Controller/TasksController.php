@@ -31,14 +31,15 @@ class TasksController extends AbstractPmController
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
-		parent::onDispatch( $e );
+		$e = parent::onDispatch($e);
         parent::check_permission('view_tasks');
         $this->layout()->setVariable('sidebar', 'dashboard');
         $this->layout()->setVariable('sub_menu', 'projects');
         $this->layout()->setVariable('active_nav', 'projects');
         $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
-		$this->layout()->setVariable('active_sub', 'None');         
+		$this->layout()->setVariable('active_sub', 'None');   
+		return $e;      
 	}
     
     /**
@@ -129,10 +130,7 @@ class TasksController extends AbstractPmController
 		$view['bookmarks'] = $bookmarks->getBookmarksByTaskId($id);	
 
 		$notes = $this->getServiceLocator()->get('PM\Model\Notes');
-		$view['notes'] = $notes->getNotesByTaskId($id);		
-		
-		//$this->view->title = FALSE;
-		//$this->view->headTitle('Viewing Task: '. $this->view->task['name'], 'PREPEND');
+		$view['notes'] = $notes->getNotesByTaskId($id);
 		$view['id'] = $id;
 		return $view;
 	}
@@ -352,10 +350,10 @@ class TasksController extends AbstractPmController
 	{
 		
 		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
-		$id = $this->params()->fromRoute('task_id');
-		$confirm = $this->params()->fromPost('confirm');
-		$fail = $this->params()->fromPost('fail');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
+		$id = $this->params()->fromRoute('task_id');
     	if(!$id)
     	{
     		return $this->redirect()->toRoute('pm');
@@ -374,24 +372,30 @@ class TasksController extends AbstractPmController
 			return $this->redirect()->toRoute('pm');
     	}
 
-    	if($fail)
-    	{
-			return $this->redirect()->toRoute('tasks/view', array('task_id' => $id));
-    	}
-    	
-    	if($confirm)
-    	{
-    	   	if($task->removeTask($id))
-    		{	
-				$this->flashMessenger()->addMessage('Task Removed');
-				return $this->redirect()->toRoute('projects/view', array('project_id' => $task_data['project_id']));
-    		}
+    	$request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
+			{
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('tasks/view', array('task_id' => $id));
+				}
+				
+	    	   	if($task->removeTask($id))
+	    		{	
+					$this->flashMessenger()->addMessage('Task Removed');
+					return $this->redirect()->toRoute('projects/view', array('project_id' => $task_data['project_id']));
+	    		}
+			}
     	}
     	
     	$view['file_count'] = $task->getFileCount($id);
-    	
-		//$this->view->headTitle('Delete Task: '. $this->view->task['name'], 'PREPEND');
 		$view['id'] = $id;
+		$view['form'] = $form;
 		return $this->ajaxOutput($view);
 	}	
 }

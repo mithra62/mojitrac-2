@@ -175,6 +175,7 @@ class ActivityLog extends AbstractModel
 	    
 		$sql = $this->getSQL($data);
 		$sql['date'] = new \Zend\Db\Sql\Expression('NOW()');
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 		$this->insert('activity_logs', $sql);
 		
 		$ext = $this->trigger(self::EventActivityLogAddPre, $this, compact('data'), $this->setXhooks($data));

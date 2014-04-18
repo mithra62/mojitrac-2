@@ -71,7 +71,7 @@ class MakeLink extends BaseViewHelper
 
 	private function makeRoleLink(array $info)
 	{
-		return $this->view->url('roles/view',array('module' => 'pm','controller' => 'roles','action'=>'view', 'role_id' => $info['id']), null, TRUE);
+		return $this->view->url('roles/view',array('role_id' => $info['id']));
 	}	
 	
 	private function makeUserLinkBody(array $info)
