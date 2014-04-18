@@ -241,6 +241,13 @@ class ProjectsController extends AbstractPmController
 		$company_id = $this->params()->fromRoute('company_id');
 		$project = $this->getServiceLocator()->get('PM\Model\Projects');
 		$form = $this->getServiceLocator()->get('PM\Form\ProjectForm');
+		$form->setData(
+			array(
+				'status' => $this->settings['default_project_status'],
+				'type' => $this->settings['default_project_type'],
+				'priority' => $this->settings['default_project_priority'],
+			)
+		);
         
         if($company_id)
         {
@@ -289,10 +296,10 @@ class ProjectsController extends AbstractPmController
 	public function removeAction()
 	{
 		$project = $this->getServiceLocator()->get('PM\Model\Projects');
-		$id = $this->params()->fromRoute('project_id');
-		$confirm = $this->params()->fromPost('confirm');
-		$fail = $this->params()->fromPost('fail');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
+		$id = $this->params()->fromRoute('project_id');
     	if(!$id)
     	{
     		return $this->redirect()->toRoute('projects');
@@ -305,28 +312,33 @@ class ProjectsController extends AbstractPmController
 			return $this->redirect()->toRoute('projects');
     	}
 
-    	if($fail)
-    	{
-    		return $this->redirect()->toRoute('projects/view', array('project_id' => $id));
-    	}
-    	
-    	if($confirm)
-    	{
-    	   	if($project->removeProject($id))
-    		{	
-    			$project->removeProjectTeam($id);
-				$this->flashMessenger()->addMessage('Project Removed');
-				$this->redirect()->toRoute('projects');
+    	$request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
+			{
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('projects/view', array('project_id' => $id));
+				}
 				
-    		}
+	    	   	if($project->removeProject($id))
+	    		{	
+	    			$project->removeProjectTeam($id);
+					$this->flashMessenger()->addMessage('Project Removed');
+					$this->redirect()->toRoute('projects');
+					
+	    		}
+			}
     	}
     	
     	$view['task_count'] = $project->getTaskCount($id);
     	$view['file_count'] = $project->getFileCount($id);
-    	
-		//$this->view->headTitle('Delete Project: '. $this->view->project['name'], 'PREPEND');
 		$view['id'] = $id;  
-
+		$view['form'] = $form;
 		return $this->ajaxOutput($view);
 	}
 	

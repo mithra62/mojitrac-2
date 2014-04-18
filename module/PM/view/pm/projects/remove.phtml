@@ -6,10 +6,17 @@ Are you sure you want to remove "<?php echo $this->project['name']?>"? This can 
 </div>
 
 <p>
-<form action="<?php echo $this->url('projects/remove', array('project_id' => $this->id), null, TRUE); ?>" method="POST">
-	<input type="submit" class="submit" value="Yes" name="confirm" /> <input type="submit" class="submit" value="No" name="fail"/>
-</form>
-</p>
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'project_form');
+$form->setAttribute('action', $this->url('projects/remove', array('project_id' => $this->project['id'])));
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>
+	<?php $field = $form->get('confirm'); echo $this->formRow($field); ?> <?php $field = $form->get('fail'); echo $this->formRow($field); ?>
+<?php echo $this->form()->closeTag() ?>
 
 <h2>Project Details</h2>
 <p>
