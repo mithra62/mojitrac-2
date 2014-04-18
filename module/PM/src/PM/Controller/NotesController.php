@@ -311,7 +311,7 @@ class NotesController extends AbstractPmController
 					$formData['company'] = $temp['company_id'];
 				}				
 				
-				$note_id = $note->addNote($formData, $this->identity);
+				$note_id = $note->addNote($formData->toArray(), $this->identity);
 				if($note_id)
 				{
 			    	$this->flashMessenger()->addMessage('Note Added!');
@@ -332,7 +332,7 @@ class NotesController extends AbstractPmController
         //$this->view->headTitle('Add Note', 'PREPEND');
 
 		$view['form'] = $form;
-		
+		$view['form_action'] = $this->getRequest()->getRequestUri();
 		return $this->ajaxOutput($view);
 	}
 	
