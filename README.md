@@ -1,8 +1,8 @@
 # MojiTrac #
 
-MojiTrac is a next generation Project Management System (PMS) and the third collaboration between Eric Lamb (mithra62) and Christopher Imrie though it will fall under the mithra62 brand. MojiTrac aims to solve the problem of scattered todo, task lists, and project info that's scattered among various other systems and their accounts.
+MojiTrac is a next generation Project Management System (PMS) and the third collaboration from Eric Lamb and mithra62. MojiTrac aims to solve the problem of scattered todo, task lists, and project info that's spread among various other systems and their accounts.
 
-MojiTrac is written using Zend Framework 1.12 and will initially be self hosted software with a subscription support model though a hosted solution (with monthly fees) is expected once the hosted solution is solidified. 
+MojiTrac is written using Zend Framework 2 and will initially be a SaaS app with a self hosted and subscription support model once the key system is worked out. 
 
 ## The Problem ##
 
@@ -38,6 +38,7 @@ In addition to the above, there are also numerous built in sub systems that are 
 1. Bookmarks
 2. Notes
 3. File Management
+4. Discussions
 
 ### Extensiblity Model ###
 
