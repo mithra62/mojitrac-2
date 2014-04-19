@@ -322,11 +322,4 @@ class Roles extends AbstractModel
 			return $role_id;
 		}
 	}
-	
-	public function getUserRoles()
-	{
-		$roles = new PM_Model_DbTable_User_Roles;
-		$sql = $roles->select();
-		return $roles->getUserRoles($sql);
-	}	
 }

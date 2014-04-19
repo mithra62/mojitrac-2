@@ -269,7 +269,7 @@ class Bookmarks extends AbstractModel
 	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 				
 		$sql = $this->getSQL($data);
-		$return = $this->db->update($sql, "id = '$bookmark_id'");
+		$return = $this->update('bookmarks', $sql, array('id' => $bookmark_id));
 		
 	    $ext = $this->trigger(self::EventBookmarkUpdatePost, $this, compact('data', 'bookmark_id'), $this->setXhooks($data));
 	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $return = $ext->last();

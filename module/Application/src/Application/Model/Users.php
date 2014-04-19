@@ -28,13 +28,7 @@ use Application\Model\Hash;
  * @filesource 	./moji/application/modules/pm/models/User.php
  */
 class Users extends AbstractModel
-{		
-	/**
-	 * The cache object
-	 * @var object
-	 */
-	public $cache;	
-	
+{	
 	/**
 	 * Contains all the permissions
 	 * @var array
@@ -518,9 +512,8 @@ class Users extends AbstractModel
 	
 	/**
 	 * Handles everything for removing a user.
-	 * @param $id
-	 * @param $campaign_id
-	 * @return bool
+	 * @param $user_id
+	 * @return int
 	 */
 	public function removeUser($user_id)
 	{		

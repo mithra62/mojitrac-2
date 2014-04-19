@@ -104,7 +104,7 @@ class BookmarksController extends AbstractPmController
 	}
 	
 	/**
-	 * Company View Page
+	 * Bookmark View Page
 	 * @return void
 	 */
 	public function viewAction()
@@ -146,7 +146,7 @@ class BookmarksController extends AbstractPmController
 	}
 	
 	/**
-	 * Company Edit Page
+	 * Bookmark Edit Page
 	 * @return void
 	 */
 	public function editAction()
@@ -192,12 +192,13 @@ class BookmarksController extends AbstractPmController
             }
             
 	    }	    
-		//$this->view->headTitle('Edit Bookmark', 'PREPEND');   
+		//$this->view->headTitle('Edit Bookmark', 'PREPEND');  
+		$view['form_action'] = $this->getRequest()->getRequestUri(); 
 		return $view;  	
 	}
 	
 	/**
-	 * Company Add Page
+	 * Bookmark Add Page
 	 * @return void
 	 */
 	public function addAction()
@@ -245,7 +246,6 @@ class BookmarksController extends AbstractPmController
 
 		$bookmark = $this->getServiceLocator()->get('PM\Model\Bookmarks');
 		$form = $this->getServiceLocator()->get('PM\Form\BookmarkForm');
-        		
 		if ($this->getRequest()->isPost()) 
 		{
     		$formData = $this->getRequest()->getPost();
@@ -285,7 +285,8 @@ class BookmarksController extends AbstractPmController
 		
         $this->layout()->setVariable('sidebar', 'dashboard');
         $this->layout()->setVariable('layout_style', 'right');
-		$view['form'] = $form;		
+		$view['form'] = $form;
+		$view['form_action'] = $this->getRequest()->getRequestUri();
 		return $this->ajaxOutput($view);
 	}
 	

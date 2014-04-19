@@ -245,6 +245,7 @@ class UsersController extends AbstractPmController
 
         $view = array();
 		$user = $this->getServiceLocator()->get('Application\Model\Users');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
 		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
 		$id = $this->params()->fromRoute('user_id');
@@ -265,19 +266,19 @@ class UsersController extends AbstractPmController
 			return $this->redirect()->toRoute('users'); 
 		}
 
-		$request = $this->getRequest();
-		if($request->isPost())
+	    $request = $this->getRequest();
+		if ($request->isPost())
 		{
-			$formData = $request->getPost()->toArray();
-			$fail = (isset($formData['fail']) ? $formData['fail'] : false);
-			$confirm = (isset($formData['confirm']) ? $formData['confirm'] : false);
-			if($fail)
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
 			{
-				return $this->redirect()->toRoute('users/view', array('user_id' => $id));
-			}
-			 
-			if($confirm)
-			{
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('users/view', array('user_id' => $id));
+				}
+
 				if($user->removeUser($id))
 				{
 					$this->flashMessenger()->addMessage($translate('user_removed', 'pm'));
@@ -293,10 +294,8 @@ class UsersController extends AbstractPmController
 		
 		$view['projects_owned_count'] = count($user->getAssignedProjectIds($id));
 		$view['tasks_owned_count'] = count($user->getOpenAssignedTasks($id));
-
-		//$this->view->headTitle('Delete User: '. $this->view->user['first_name'].' '.$this->view->user['last_name'], 'PREPEND');
 		$view['id'] = $id;
-		
-		return $view;
+		$view['form'] = $form;
+		return $this->ajaxOutput($view);
 	}
 }
