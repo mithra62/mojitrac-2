@@ -4,7 +4,7 @@
 *
 * @package		mithra62:Mojitrac
 * @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
 * @filesource 	./module/PM/config/module.config.php
@@ -645,7 +645,7 @@ return array(
         				'options' => array(
         					'route' => '/remove/:option_id',
         					'constraints' => array(
-        						'note_id' => '[0-9]+'
+        						'option_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'remove'
@@ -656,9 +656,6 @@ return array(
         				'type' => 'segment',
         				'options' => array(
         					'route' => '/add',
-        					'constraints' => array(
-        						'note_id' => '[0-9]+'
-        					),
         					'defaults' => array(
         						'action' => 'add'
         					)
@@ -669,7 +666,7 @@ return array(
         				'options' => array(
         					'route' => '/edit/:option_id',
         					'constraints' => array(
-        						'note_id' => '[0-9]+'
+        						'option_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'edit'
@@ -681,7 +678,7 @@ return array(
         				'options' => array(
         					'route' => '/:option_id',
         					'constraints' => array(
-        						'note_id' => '[0-9]+'
+        						'option_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'view'

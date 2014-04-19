@@ -35,9 +35,8 @@ class OptionsController extends AbstractPmController
 		$this->layout()->setVariable('sidebar', 'dashboard');
 		$this->layout()->setVariable('active_nav', 'admin');
 		$this->layout()->setVariable('sub_menu', 'admin');
-		$this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
 		$this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
-		$this->layout()->setVariable('active_sub', 'roles');
+		$this->layout()->setVariable('active_sub', 'options');
 		return $e;
 	}
     
@@ -50,30 +49,32 @@ class OptionsController extends AbstractPmController
     
 	public function viewAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
-		if (!$id) {
-			$this->_helper->redirector('index','ips');
-			exit;
+		$id = $this->params()->fromRoute('option_id');
+		if (!$id) 
+		{
+			return $this->redirect()->toRoute('options');
 		}
 
-		$ips = new PM_Model_Ips;
-		$this->view->ip = $ips->getIpById($id);
-		if(!$this->view->ip)
+		$options = $this->getServiceLocator()->get('PM\Model\Options');
+		
+		$view = array();
+		$view['option_info'] = $options->getOptionById($id);
+		if(!$view['option_info'])
 		{
-			$this->_helper->redirector('index','ips');
-			exit;
+			return $this->redirect()->toRoute('options');
 		}
 		
-		$this->view->headTitle('Viewing Ip', 'PREPEND');
+		$view['id'] = $id;
+		return $view;
 	}    
 	
 	/**
-	 * Project Add Page
+	 * Option Add Page
 	 * @return void
 	 */
 	public function addAction()
 	{
-		$options = new PM_Model_Options(new PM_Model_DbTable_Options);
+		$options = $this->getServiceLocator()->get('PM\Model\Options');
 		$form = $options->getOptionsForm(array(
             'action' => '/pm/options/add',
             'method' => 'post',

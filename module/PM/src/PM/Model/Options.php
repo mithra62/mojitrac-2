@@ -4,7 +4,7 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/src/PM/Model/Options.php
@@ -85,9 +85,9 @@ class Options extends AbstractModel
 	
 	public function getOptionById($id)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('o'=>$this->db->getTableName()));
-		$sql = $sql->where('o.id = ?', $id);
-		return $this->db->getOption($sql);
+		$sql = $this->db->select()->from(array('o'=>'options'));
+		$sql = $sql->where(array('o.id' => $id));
+		return $this->getRow($sql);
 	}
 	
 	/**
