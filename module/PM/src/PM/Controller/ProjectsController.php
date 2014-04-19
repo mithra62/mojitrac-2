@@ -81,7 +81,7 @@ class ProjectsController extends AbstractPmController
 	        }
 	        else
 	        {
-				$user = $this->getServiceLocator()->get('PM\Model\Users');
+				$user = $this->getServiceLocator()->get('Application\Model\Users');
 				$view['projects'] = $user->getAssignedProjects($this->identity);	    		
 	        }
 		}

@@ -79,8 +79,8 @@ class Options extends AbstractModel
 	 */
 	public function getAllOptions()
 	{
-		$sql = $this->db->select()->from(array($this->db->getTableName()));
-		return $this->db->getOptions($sql);
+		$sql = $this->db->select()->from('options');
+		return $this->getRows($sql);
 	}
 	
 	public function getOptionById($id)

@@ -27,18 +27,19 @@ class RolesController extends AbstractPmController
 {
 
 	/**
-	 * Class preDispatch
+	 * Class onDispatch
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
-        //$this->layout()->setVariable('layout_style', 'single');
+		$e = parent::onDispatch( $e );
+        parent::check_permission('manage_roles');
         $this->layout()->setVariable('sidebar', 'dashboard');
         $this->layout()->setVariable('active_nav', 'admin');
         $this->layout()->setVariable('sub_menu', 'admin');
         $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
 		$this->layout()->setVariable('active_sub', 'roles');
-		return parent::onDispatch( $e );
+		return $e;
 	}
 
 	/**

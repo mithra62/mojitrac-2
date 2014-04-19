@@ -4,7 +4,7 @@
 *
 * @package		mithra62:Mojitrac
 * @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
 * @filesource 	./module/PM/src/PM/Controller/OptionsController.php
@@ -25,29 +25,27 @@ use PM\Controller\AbstractPmController;
 */
 class OptionsController extends AbstractPmController
 {
-
 	/**
-	 * Class preDispatch
+	 * Class onDispatch
 	 */
-	public function preDispatch()
+	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
-        parent::preDispatch();
-        parent::check_permission('manage_options');
-        $this->view->headTitle('Option Type Manager', 'PREPEND');
-        $this->view->layout_style = 'single';
-        $this->view->sidebar = 'dashboard';
-        $this->view->sub_menu = 'admin';
-        $this->view->active_nav = 'admin';
-		$this->view->active_sub = 'options';
-        $this->view->sub_menu_options = PM_Model_Options_Companies::types();
-        $this->view->uri = $this->_request->getPathInfo();
-		$this->view->title = FALSE;          
+		$e = parent::onDispatch( $e );
+		parent::check_permission('manage_options');
+		$this->layout()->setVariable('sidebar', 'dashboard');
+		$this->layout()->setVariable('active_nav', 'admin');
+		$this->layout()->setVariable('sub_menu', 'admin');
+		$this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
+		$this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
+		$this->layout()->setVariable('active_sub', 'roles');
+		return $e;
 	}
     
     public function indexAction()
     {
-    	$options = new PM_Model_Options(new PM_Model_DbTable_Options);
-   		$this->view->options = $options->getAllOptions();
+    	$options = $this->getServiceLocator()->get('PM\Model\Options');
+   		$view['options'] = $options->getAllOptions();
+   		return $view;
     }
     
 	public function viewAction()

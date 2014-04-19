@@ -17,7 +17,7 @@
 		?>
 		<tr>
 			<td>
-			<a title="<?php echo $option['name']; ?>" href="<?php echo $this->url(array('module' => 'pm','controller'=>'ips','action'=>'view', 'id'=> $option['id']), null, TRUE); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $option['name']; ?></a>
+			<a title="<?php echo $option['name']; ?>" href="<?php echo $this->url('options/view', array('option_id'=> $option['id'])); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $option['name']; ?></a>
 			</td>
 			<td><?php 
 			echo ucwords(str_replace('_', ' ', $option['area'])); ?></td>
@@ -25,8 +25,8 @@
 			<td><?php echo $this->RelativeDate($option['last_modified']); ?></td>
 			
 			<td>
-				<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'options','action'=>'edit', 'id'=> $option['id']), null, TRUE); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit');?></a>
-				<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'options','action'=>'remove', 'id'=> $option['id']), null, TRUE); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> title="Delete"><?php echo $this->InteractIcon('cross', 'Delete');?></a>
+				<a href="<?php echo $this->url('options/edit', array('option_id'=> $option['id'])); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit');?></a>
+				<a href="<?php echo $this->url('options/remove', array('option_id'=> $option['id'])); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?> title="Delete"><?php echo $this->InteractIcon('cross', 'Delete');?></a>
 			</td>
 		</tr>
 		<?php 
