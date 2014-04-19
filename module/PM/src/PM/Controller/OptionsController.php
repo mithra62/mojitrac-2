@@ -65,7 +65,7 @@ class OptionsController extends AbstractPmController
 		}
 		
 		$view['id'] = $id;
-		return $view;
+		return $this->ajaxOutput($view);
 	}    
 	
 	/**
@@ -75,28 +75,30 @@ class OptionsController extends AbstractPmController
 	public function addAction()
 	{
 		$options = $this->getServiceLocator()->get('PM\Model\Options');
-		$form = $options->getOptionsForm(array(
-            'action' => '/pm/options/add',
-            'method' => 'post',
-        ));
+		$form = $this->getServiceLocator()->get('PM\Form\OptionForm');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
         
-       	if ($this->getRequest()->isPost()) 
+		$request = $this->getRequest();
+		if ($request->isPost()) 
 		{
-    		$formData = $this->getRequest()->getPost();
+			$formData = $request->getPost();
+            $form->setInputFilter($options->getInputFilter($translate));
+			$form->setData($request->getPost());
 			if ($form->isValid($formData)) 
 			{
-				if($id = $options->addOption($formData, $this->identity))
+				$option_id = $options->addOption($formData->toArray(), $this->identity);
+				if($option_id)
 				{
-			    	$this->_flashMessenger->addMessage('Option Added!');
-					$this->_helper->redirector('index','options', 'pm', array('id' => $id));
-					exit;
+					$this->flashMessenger()->addMessage($translate('option_added', 'pm'));
+					return $this->redirect()->toRoute('options/view', array('option_id' => $option_id));
 				}
 			}
 		}
 		
-		$this->view->layout_style = 'right';
-		$this->view->form = $form;
-
+		$view['form'] = $form;
+		$view['form_action'] = $this->getRequest()->getRequestUri();
+        $this->layout()->setVariable('layout_style', 'right');
+		return $this->ajaxOutput($view);
 	}
 	
 	/**
@@ -105,101 +107,103 @@ class OptionsController extends AbstractPmController
 	 */
 	public function editAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('option_id');
 		if (!$id) 
 		{
-			$this->_helper->redirector('index','ips');
-			exit;
+			return $this->redirect()->toRoute('options');
 		}
 
-		$options = new PM_Model_Options(new PM_Model_DbTable_Options);
-		$form = $options->getOptionsForm(array(
-            'action' => '/pm/options/edit/',
-            'method' => 'post',
-		));
+		$options = $this->getServiceLocator()->get('PM\Model\Options');
+		$form = $this->getServiceLocator()->get('PM\Form\OptionForm');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
 		$option_data = $options->getOptionById($id);
 		if(!$option_data)
 		{
-			$this->_helper->redirector('index','options');
-			exit;			
+			return $this->redirect()->toRoute('options');		
 		}
-
-		$this->view->id = $id;
-		$form->populate($option_data);
-		$this->view->form = $form;
-
-		if ($this->getRequest()->isPost()) 
+	
+		$form->setData($option_data);
+		$request = $this->getRequest();
+		if ($request->isPost()) 
 		{
-			$formData = $this->getRequest()->getPost();
+			$formData = $request->getPost();
+            $form->setInputFilter($options->getInputFilter($translate));
+			$form->setData($request->getPost());
 			if ($form->isValid($formData)) 
 			{
-
-				if($options->updateOption($formData, $formData['id']))
+				if($options->updateOption($formData->toArray(), $formData['id']))
 				{
-					$this->_flashMessenger->addMessage('Option Updated!');
-					$this->_helper->redirector('index','options', 'pm', array('id' => $id));
-					exit;
+					$this->flashMessenger()->addMessage($translate('option_updated', 'pm'));
+					return $this->redirect()->toRoute('options/view', array('option_id' => $id));
 					 
 				} 
 				else 
 				{
-					$this->view->errors = array('Couldn\'t update Option...');
-					$form->populate($formData);
+					$view['errors'] = array('Couldn\'t update Option...');
+					$form->setData($formData);
 				}
 
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
-				$form->populate($formData);
+				$view['errors'] = array($translate('please_fix_the_errors_below', 'pm'));
+				$form->setData($formData);
 			}
 		}
-	  
-		$this->view->layout_style = 'right';
-		$this->view->sidebar = 'dashboard';
-		$this->view->headTitle('Edit Option', 'PREPEND');
+		
+		$view = array();
+		$view['id'] = $id;
+		$view['form'] = $form;
+		$view['form_action'] = $this->getRequest()->getRequestUri();
+		$this->layout()->setVariable('layout_style', 'right');
+				
+		return $this->ajaxOutput($view);
 	}	
 	
 	public function removeAction()
 	{
-		$options = new PM_Model_Options(new PM_Model_DbTable_Options);
-		$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
-
-		if(!$id)
+		$options = $this->getServiceLocator()->get('PM\Model\Options');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+		
+		$id = $this->params()->fromRoute('option_id');
+		if (!$id) 
 		{
-			$this->_helper->redirector('index','options');
-			exit;
+			return $this->redirect()->toRoute('options');
 		}
-				 
+			 
 		$option = $options->getOptionById($id);
 		if(!$option)
 		{
-			$this->_helper->redirector('index','options');
-			exit;
+			return $this->redirect()->toRoute('options');
 		}
 
-		$this->view->option = $option;
-		if($fail)
+		$view['option'] = $option;
+		$request = $this->getRequest();
+		if ($request->isPost())
 		{
-			$this->_helper->redirector('view','options', 'pm', array('id' => $id));
-			exit;
-		}
-		 
-		if($confirm)
-		{
-			if($options->removeOption($id))
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
 			{
-				$this->_flashMessenger->addMessage('Option Removed');
-				$this->_helper->redirector('index','options');
-				exit;
-
-			} 
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('options/view', array('option_id' => $id));
+				}
+				
+				if($options->removeOption($id))
+				{
+					$this->flashMessenger()->addMessage($translate('option_removed', 'pm'));
+					return $this->redirect()->toRoute('options');
+				} 
+			}
 		}
-		$this->view->id = $id;
-		$this->view->headTitle('Delete Option: '. $option['name'], 'PREPEND');		
+		
+		$view['id'] = $id;
+		$view['form'] = $form;
+		return $this->ajaxOutput($view);			
 	}
     
 }

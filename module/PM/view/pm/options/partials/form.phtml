@@ -1,6 +1,12 @@
-
-<form action="<?php echo $this->escape($this->form->getAction()); ?>" 
-method="<?php echo $this->escape($this->form->getMethod()) ?>"> 
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'option_form');
+$form->setAttribute('action', $this->form_action);
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>
 <?php 
 if($this->id > 0)
 	echo '<input type="hidden" value="'.$this->id.'" name="id" />';
@@ -8,14 +14,16 @@ if($this->id > 0)
 	
 		<p>
 			<label for="name">Title</label>
-			<?php echo $this->form->name; ?>
+			<?php $field = $form->get('name'); echo $this->formRow($field); ?>
 		</p>
 		<p>
 			<label for="area">Area</label>
-			<?php echo $this->form->area; ?>
+			<?php $field = $form->get('area'); echo $this->formRow($field); ?>
 		</p>
 		
 		<p>
 			<input type="submit" class="submit" value="Submit" />
 		</p>			
-</form>	
+
+<?php echo $this->ConfirmPageUnload('#option_form')?>
+<?php echo $this->form()->closeTag() ?>

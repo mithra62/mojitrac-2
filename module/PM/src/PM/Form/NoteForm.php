@@ -4,7 +4,7 @@
 *
 * @package		mithra62:Mojitrac
 * @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
 * @filesource 	./module/PM/src/PM/Forms/NoteForm.php
@@ -27,20 +27,20 @@ use PM\Model\Options\Notes;
 class NoteForm extends BaseForm
 {
 	/**
-	 * Returns the Ip Locker form
+	 * Returns the Note form
 	 * @param string $options
 	 */	
-	public function __construct($options = null, $hidden = FALSE) 
+	public function __construct($name = null) 
 	{
 
-		parent::__construct($options);
+		parent::__construct($name);
 		
 		$this->add(array(
 			'name' => 'subject',
 			'type' => 'Text',
 			'attributes' => array(
 				'class' => 'input large',
-				'id' => 'name'
+				'id' => 'subject'
 			),
 		));	
 
@@ -49,6 +49,7 @@ class NoteForm extends BaseForm
 			'type' => 'Select',
 			'attributes' => array(
 				'class' => 'select input',
+				'id' => 'topic'
 			),
 			'options' => array(
 				'value_options' => Notes::topics(),
@@ -62,6 +63,7 @@ class NoteForm extends BaseForm
 				'class' => 'styled_textarea',
 				'rows' => '7',
 				'cols' => '40',
+				'id' => 'description'
 			),
 		));
 				

@@ -40,4 +40,13 @@ return array(
 	//projects
 	'projects' => 'Projects',
 	
+	//input validation messages
+	'required' => 'Required',
+		
+
+	//options
+	'option_added' => 'Option Added!',
+	'option_updated' => 'Option Updated!',
+	'option_removed' => 'Option Removed!',
+	
 );

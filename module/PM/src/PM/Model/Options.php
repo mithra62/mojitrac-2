@@ -12,6 +12,9 @@
 
 namespace PM\Model;
 
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
 use Application\Model\AbstractModel;
 
  /**
@@ -23,15 +26,15 @@ use Application\Model\AbstractModel;
  */
 class Options extends AbstractModel
 {
-	public $cache_key = 'options';
+    protected $inputFilter;
 	
 	/**
 	 * The system areas where options are stored
 	 * @var array
 	 */
 	public $areas = array(
-						 'project_type' => 'project_type',
-						 'task_type' => 'task_type'
+		'project_type' => 'project_type',
+		'task_type' => 'task_type'
 	);
 	
 	/**
@@ -42,6 +45,50 @@ class Options extends AbstractModel
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
 		parent::__construct($adapter, $db);
+	}
+	
+	public function getSQL(array $data){
+		return array(
+			'name' => $data['name'],
+			'area' => $data['area'],
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+	}
+	
+	public function setInputFilter(InputFilterInterface $inputFilter)
+	{
+		throw new \Exception("Not used");
+	}
+	
+	public function getInputFilter($translator)
+	{
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'name',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+                'validators' => array(
+                    array(
+                      'name' =>'NotEmpty', 
+                        'options' => array(
+                            'messages' => array(
+                                \Zend\Validator\NotEmpty::IS_EMPTY => $translator('required', 'pm') 
+                            ),
+                        ),
+                    ),
+                ),
+			)));
+	
+			$this->inputFilter = $inputFilter;
+		}
+	
+		return $this->inputFilter;
 	}
 	
 	/**
@@ -97,32 +144,21 @@ class Options extends AbstractModel
 	 */
 	public function addOption(array $data, $creator)
 	{
-		$sql = $this->db->getSQL($data);
+		$sql = $this->getSQL($data);
 		$sql['creator'] = $creator;
-		if($id = $this->db->addOption($sql))
-		{
-		    $this->cache->clean(
-		          Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-		          array($this->cache_key)
-		    );
-		    return $id;			
-		}	
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
+		return $this->insert('options', $sql);
 	}
 	
 	/**
 	 * Removes an option and updates all the entries for that option
-	 * @param string $key
-	 * @param stirng $col
+	 * @param string $id
 	 */
-	public function removeOption($key, $col = 'id')
+	public function removeOption($id)
 	{
-		if($this->db->deleteOption($key, $col))
+		if($this->remove('options', array('id' => $id)))
 		{
-		    $this->cache->clean(
-		          Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-		          array($this->cache_key)
-		    );
-		    return TRUE;			
+			return TRUE;
 		}
 	}
 	
@@ -133,14 +169,7 @@ class Options extends AbstractModel
 	 */
 	public function updateOption(array $data, $id)
 	{
-		$sql = $this->db->getSQL($data);
-		if($this->db->update($sql, "id = '$id'"))
-		{
-		    $this->cache->clean(
-		          Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-		          array($this->cache_key)
-		    );
-		    return TRUE;	
-		}
+		$sql = $this->getSQL($data);
+		return $this->update('options', $sql, array('id' => $id));
 	}
 }

@@ -38,6 +38,7 @@ use PM\Form\ContactForm;
 use PM\Form\TaskForm;
 use PM\Form\IpForm;
 use PM\Form\ConfirmForm;
+use PM\Form\OptionForm;
 
 use PM\Event\ActivityLogEvent;
 use PM\Event\NotificationEvent;
@@ -180,6 +181,10 @@ class Module
 				},
 				'PM\Form\ConfirmForm' => function($sm) {
 					return new ConfirmForm('confirm');
+				},
+				'PM\Form\OptionForm' => function($sm) {
+					$options = $sm->get('PM\Model\Options');
+					return new OptionForm('options', $options);
 				},
 				
 				//events
