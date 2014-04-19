@@ -293,10 +293,10 @@ class BookmarksController extends AbstractPmController
 	public function removeAction()
 	{   		
 		$bookmark = $this->getServiceLocator()->get('PM\Model\Bookmarks');
-		$id = $this->params()->fromRoute('bookmark_id');
-		$confirm = $this->params()->fromPost('confirm');
-		$fail = $this->params()->fromPost('fail');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
+		$id = $this->params()->fromRoute('bookmark_id');
     	if(!$id)
     	{
     		return $this->redirect()->toRoute('pm');
@@ -309,41 +309,48 @@ class BookmarksController extends AbstractPmController
 			return $this->redirect()->toRoute('pm');
     	}
 
-    	if($fail)
-    	{
-    	    return $this->redirect()->toRoute('bookmarks/view', array('bookmark_id' => $id));
-    	}
-    	
-    	if($confirm)
-    	{
-    	   	if($bookmark->removeBookmark($id))
-    		{	
-				$formData['task'] = $bookmark_data['task_id'];
-				$formData['company'] = $bookmark_data['company_id'];
-				$formData['project'] = $bookmark_data['project_id'];
-				$this->flashMessenger()->addMessage('Bookmark Removed');
-				if($bookmark_data['task_id'] > 0)
+		$request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
+			{
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
 				{
-				    return $this->redirect()->toRoute('tasks/view', array('task_id' => $bookmark_data['task_id']));
+					return $this->redirect()->toRoute('bookmarks/view', array('bookmark_id' => $id));
 				}
 				
-    			if($bookmark_data['project_id'] > 0)
-				{
-				    return $this->redirect()->toRoute('projects/view', array('project_id' => $bookmark_data['project_id']));
-				}
-
-    			if($bookmark_data['company_id'] > 0)
-				{
-				    return $this->redirect()->toRoute('companies/view', array('company_id' => $bookmark_data['company_id']));
-				}				
-				
-				return $this->redirect()->toRoute('companies');
-				
-    		} 
+	    	   	if($bookmark->removeBookmark($id))
+	    		{	
+					$formData['task'] = $bookmark_data['task_id'];
+					$formData['company'] = $bookmark_data['company_id'];
+					$formData['project'] = $bookmark_data['project_id'];
+					$this->flashMessenger()->addMessage('Bookmark Removed');
+					if($bookmark_data['task_id'] > 0)
+					{
+					    return $this->redirect()->toRoute('tasks/view', array('task_id' => $bookmark_data['task_id']));
+					}
+					
+	    			if($bookmark_data['project_id'] > 0)
+					{
+					    return $this->redirect()->toRoute('projects/view', array('project_id' => $bookmark_data['project_id']));
+					}
+	
+	    			if($bookmark_data['company_id'] > 0)
+					{
+					    return $this->redirect()->toRoute('companies/view', array('company_id' => $bookmark_data['company_id']));
+					}				
+					
+					return $this->redirect()->toRoute('companies');
+					
+	    		} 
+			}
     	}
     	
-		//$this->view->headTitle('Delete Bookmark: '. $this->view->note['subject'], 'PREPEND');
-		$view['id'] = $id;   
+		$view['id'] = $id;  
+		$view['form'] = $form;
 		return $this->ajaxOutput($view); 	
 	}		
 }
