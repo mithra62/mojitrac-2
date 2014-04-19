@@ -37,7 +37,7 @@ class RolesController extends AbstractPmController
         $this->layout()->setVariable('sub_menu', 'admin');
         $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
-		$this->layout()->setVariable('active_sub', 'None');
+		$this->layout()->setVariable('active_sub', 'roles');
 		return parent::onDispatch( $e );
 	}
 
@@ -191,6 +191,7 @@ class RolesController extends AbstractPmController
 	public function removeAction()
 	{
 		$role = $this->getServiceLocator()->get('Application\Model\Roles');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
 		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		$id = $this->params()->fromRoute('role_id');
 		if(!$id)
@@ -213,24 +214,28 @@ class RolesController extends AbstractPmController
 		}
 		 
 		$request = $this->getRequest();
-		if($request->isPost())
+		if ($request->isPost())
 		{
-			$formData = $request->getPost()->toArray();
-			$fail = (isset($formData['fail']) ? $formData['fail'] : false);
-			$confirm = (isset($formData['confirm']) ? $formData['confirm'] : false);
-			if($fail)
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
 			{
-				return $this->redirect()->toRoute('roles/view', array('role_id' => $id));
-			}
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('roles/view', array('role_id' => $id));
+				}
 			
-			if($role->removeRole($id))
-			{
-				$this->flashMessenger()->addMessage($translate('role_removed', 'pm'));
-				return $this->redirect()->toRoute('roles');
-			} 
+				if($role->removeRole($id))
+				{
+					$this->flashMessenger()->addMessage($translate('role_removed', 'pm'));
+					return $this->redirect()->toRoute('roles');
+				} 
+			}
 		}
 		
 		$view['id'] = $id;
-		return $view;
+		$view['form'] = $form;
+		return $this->ajaxOutput($view);
 	}
 }

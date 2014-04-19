@@ -795,7 +795,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/[:role_id]',
+        					'route' => '/remove/:role_id',
         					'constraints' => array(
         						'note_id' => '[0-9]+'
         					),
@@ -819,7 +819,7 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/[:role_id]',
+        					'route' => '/edit/:role_id',
         					'constraints' => array(
         						'note_id' => '[0-9]+'
         					),
@@ -831,7 +831,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/[:role_id]',
+        					'route' => '/:role_id',
         					'constraints' => array(
         						'note_id' => '[0-9]+'
         					),
@@ -1098,7 +1098,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/[:user_id]',
+        					'route' => '/:user_id',
         					'constraints' => array(
         						'user_id' => '[0-9]+'
         					),
@@ -1110,7 +1110,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/[:user_id]',
+        					'route' => '/remove/:user_id',
         					'constraints' => array(
         						'user_id' => '[0-9]+'
         					),
@@ -1131,7 +1131,7 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit[/:user_id]',
+        					'route' => '/edit/:user_id',
         					'constraints' => array(
         						'user_id' => '[0-9]+'
         					),

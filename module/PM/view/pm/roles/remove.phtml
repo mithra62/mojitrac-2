@@ -10,10 +10,17 @@
 Are you sure you want to remove the "<?php echo $this->role['name']?>" role? This can not be undone...
 </div>
 <p>
-<form action="" method="POST">
-	<input type="submit" class="submit" value="<?php echo $this->_('yes', 'pm'); ?>" name="confirm" /> 
-	<input type="submit" class="submit" value="<?php echo $this->_('no', 'pm'); ?>" name="fail"/>
-</form>
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'user_form');
+$form->setAttribute('action', $this->url('roles/remove', array('role_id' => $this->role['id'])));
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>
+	<?php $field = $form->get('confirm'); echo $this->formRow($field); ?> <?php $field = $form->get('fail'); echo $this->formRow($field); ?>
+<?php echo $this->form()->closeTag() ?>
 </p>
 
 <?php endif; ?>
