@@ -371,29 +371,28 @@ class Times extends AbstractModel
 	
 	public function getCalendarItems($month = FALSE, $year = FALSE, $user_id = FALSE)
 	{
-		//SELECT SUM(hours),creator,date FROM `times` GROUP BY date,creator
 		$sql = $this->db->select();
-		$sql = $sql->from(array('i'=>'times'),
-						  		array(new Zend_Db_Expr('SUM(hours) AS total'), 'date', 'creator'));
+		$sql = $sql->from(array('i'=>'times'))->columns(array(new \Zend\Db\Sql\Expression('SUM(hours) AS total'), 'date', 'creator'));
 
 		if($month)
 		{
-			$sql = $sql->where(new Zend_Db_Expr('DATE_FORMAT(i.date, "%M")').' = ? ', $month);
+			$sql = $sql->where(array('month' => $month));
 		}
+		
 		if($year)
 		{
-			$sql = $sql->where(new Zend_Db_Expr('DATE_FORMAT(i.date, "%Y")').'= ? ', $year);
+			$sql = $sql->where(array('year' => $year));
 		}
+		
 		if($user_id)
 		{
 			$sql = $sql->where('creator = ? ', $user_id);
 		}				
 		
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = i.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));				   
-		
+		$sql = $sql->join(array('u' => 'users'), 'u.id = i.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), 'left');				   
 		$sql = $sql->group('date')
 				   ->group('creator');
-		return $this->_translateCalendarItems($this->db->getTimes($sql), 'date', 'Hours', 'Hour', 'Worked', 'creator');
+		return $this->_translateCalendarItems($this->getRows($sql), 'date', 'Hours', 'Hour', 'Worked', 'creator');
 	}
 	
 	private function _translateCalendarItems($arr, $master_key, $plural, $singular, $tail, $url_view)

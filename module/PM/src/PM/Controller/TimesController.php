@@ -45,7 +45,7 @@ class TimesController extends AbstractPmController
 
     	if($this->perm->check($this->identity, 'manage_time'))
     	{
-    		$items = array();//$times->getCalendarItems($month, $year);
+    		$items = $times->getCalendarItems($month, $year);
     		$view['calendar_data'] = $items;
     	}
     	else

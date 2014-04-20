@@ -1045,40 +1045,34 @@ return array(
         		),
         		'may_terminate' => true,
         		'child_routes' => array(
-        			'view' => array(
+        			'view-day' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/[:user_id]',
-        					'constraints' => array(
-        						'user_id' => '[0-9]+'
-        					),
+        					'route' => '/view-day/:month/:year/:day',
+		        			'constraints' => array(
+		        				'year' => '[0-9]+',
+		        				'month' => '[0-9]+',
+		        				'day' => '[0-9]+'
+		        			),
         					'defaults' => array(
-        						'action' => 'view'
+        						'action' => 'viewDay'
         					)
         				)
         			),
-        			'remove' => array(
+        			'month' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/[:user_id]',
-        					'constraints' => array(
-        						'slug' => '[0-9]+'
-        					),
+        					'route' => '/:month/:year',
+		        			'constraints' => array(
+		        				'year' => '[0-9]+',
+		        				'month' => '[0-9]+'
+		        			),
         					'defaults' => array(
-        						'action' => 'remove'
-        					)
-        				)
-        			),
-        			'add' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => '/add',
-        					'defaults' => array(
-        						'action' => 'add'
+        						'action' => 'index'
         					)
         				)
         			)
-        		)
+        		),
         	), //End Times Routes
 
         	'users' => array( //User Routes

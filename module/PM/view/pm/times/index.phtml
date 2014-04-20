@@ -5,17 +5,17 @@
 </div>
 <?php
 echo $this->Calendar($this->month, $this->year)
-->setData($calendar_data)
-->setDayRouteName('times/view-day')
-->setMonthRouteName('times/month')
-->getCalendarHtml(
-		array(
-				'showToday'=>TRUE,
-				'showPrevMonthLink'=>TRUE,
-				'showNextMonthLink'=>TRUE,
-				'tableClass'=>"calendar",
-				'selectBox'=>TRUE,
-				'selectBoxName'=>"date",
-				'selectBoxFormName'=>"selectMonthForm"
-		)
-);
+			->setData($this->calendar_data)
+			->setDayRouteName('times/view-day')
+			->setMonthRouteName('times/month')
+			->getCalendarHtml(
+					array(
+							'showToday'=>TRUE,
+							'showPrevMonthLink'=>TRUE,
+							'showNextMonthLink'=>TRUE,
+							'tableClass'=>"calendar",
+							'selectBox'=>TRUE,
+							'selectBoxName'=>"date",
+							'selectBoxFormName'=>"selectMonthForm"
+					)
+			);
