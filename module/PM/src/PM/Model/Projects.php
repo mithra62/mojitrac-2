@@ -373,7 +373,7 @@ class Projects extends AbstractModel
 	public function updateProjectTime($id, $time)
 	{
 		$sql = array('hours_worked' => new \Zend\Db\Sql\Expression('hours_worked+'.$time));
-		return $this->db->updateProject($sql, $id);		
+		return $this->update('projects', $sql, array('id' => $id));		
 	}
 	
 	/**

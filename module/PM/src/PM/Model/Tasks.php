@@ -500,22 +500,20 @@ class Tasks extends AbstractModel
 	 */
 	public function updateTaskFileCount($id, $count = 1, $col = 'file_count')
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = array($col => new Zend_Db_Expr($col.'+'.$count));
-		return $task->updateTask($sql, $id);
+		$sql = array($col => new \Zend\Db\Sql\Expression($col.'+'.$count));
+		return $this->update('tasks', $sql, array('id' => $id));
 	}
 
 	/**
 	 * Updates the hours_worked for a given $id
 	 * @param int 	$id
-	 * @param floar $time
+	 * @param float $time
 	 * @return bool
 	 */
 	public function updateTaskTime($id, $time)
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = array('hours_worked' => new Zend_Db_Expr('hours_worked+'.$time));
-		return $task->updateTask($sql, $id);		
+		$sql = array('hours_worked' => new \Zend\Db\Sql\Expression('hours_worked+'.$time));
+		return $this->update('tasks', $sql, array('id' => $id));		
 	}	
 	
 	/**

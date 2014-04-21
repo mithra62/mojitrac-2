@@ -40,16 +40,6 @@ class Times extends AbstractModel
 	}
 	
 	/**
-	 * Returns the Time Form
-	 * @return object
-	 */
-	public function getTimeForm($options = array())
-	{
-        $form = new PM_Form_Time($options);
-        return $form;		
-	}	
-	
-	/**
 	 * Returns the time for a given $id
 	 * @param $name
 	 * @return mixed
@@ -57,14 +47,14 @@ class Times extends AbstractModel
 	public function getTimeById($id)
 	{
 		$sql = $this->db->select()
-					  ->setIntegrityCheck(false)->from(array('t' => $this->db->getTableName()))
-					  ->where('t.id = ?', $id);
-		$sql->joinLeft(array('c' => 'companies'), 'c.id = t.company_id', array('name AS company_name'));
-		$sql->joinLeft(array('p' => 'projects'), 'p.id = t.project_id', array('name AS project_name'));
-		$sql->joinLeft(array('ta' => 'tasks'), 'ta.id = t.task_id', array('name AS task_name'));
-		$sql->joinLeft(array('u' => 'users'), 'u.id = t.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
+					  ->from(array('t' => 'times'))
+					  ->where(array('t.id' => $id));
+		$sql->join(array('c' => 'companies'), 'c.id = t.company_id', array('company_name' => 'name'), 'left');
+		$sql->join(array('p' => 'projects'), 'p.id = t.project_id', array('project_name' => 'name'), 'left');
+		$sql->join(array('ta' => 'tasks'), 'ta.id = t.task_id', array('task_name' => 'name'), 'left');
+		$sql->join(array('u' => 'users'), 'u.id = t.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), 'left');
 					  
-		return $this->db->getTime($sql);
+		return $this->getRow($sql);
 	}
 	
 	/**
@@ -458,23 +448,24 @@ class Times extends AbstractModel
 	
 	/**
 	 * Handles everything for removing a time reference.
-	 * @param $id
-	 * @return bool
+	 * @param int $id
+	 * @param array $data
+	 * @param \PM\Model\Projects $project
+	 * @param \PM\Model\Tasks $task
 	 */
-	public function removeTime($id, array $data = array())
+	public function removeTime($id, array $data = array(), \PM\Model\Projects $project, \PM\Model\Tasks $task)
 	{
 		if(isset($data['project_id']) && is_numeric($data['project_id']))
 		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
 			$project->updateProjectTime($data['project_id'], "-".$data['hours']);
 		}
 		
 		if(isset($data['task_id']) && is_numeric($data['task_id']))
 		{
-			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
 			$task->updateTaskTime($data['task_id'], "-".$data['hours']);
 		}	
-		return $this->db->delete(array("id = '$id'"));
+		
+		return $this->remove('times', array('id' => $id));
 	}
 	
 	/**

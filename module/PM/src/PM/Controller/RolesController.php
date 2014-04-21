@@ -119,7 +119,7 @@ class RolesController extends AbstractPmController
 				if($role->updateRole($formData, $formData['id']))
 				{
 					$this->flashMessenger()->addMessage($translate('role_updated', 'pm'));
-					return $this->redirect()->toRoute('roles/view', array('role_id' => $id));					
+					return $this->redirect()->toRoute('roles/view', array('role_id' => $id));
 					 
 				} 
 				else 

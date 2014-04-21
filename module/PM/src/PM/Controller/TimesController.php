@@ -61,46 +61,6 @@ class TimesController extends AbstractPmController
     	return $view;
     }
     
-    public function removeAction()
-    {
-    	$time = new PM_Model_Times;
-    	$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
-		
-    	if(!$id)
-    	{
-    		$this->_helper->redirector('index','times');
-    		exit;
-    	}
-    	
-    	
-        $time_data = $time->getTimeById($id);
-    	$this->view->time_data = $time_data;
-    	if(!$this->view->time_data)
-    	{
-			$this->_helper->redirector('index','times');
-			exit;
-    	}
-
-    	if($fail)
-    	{
-			$this->_helper->redirector('view','times', 'pm', array('id' => $id));
-			exit;   		
-    	}
-    	
-    	if($confirm)
-    	{
-    		if($time->removeTime($id, $time_data))
-    		{	
-				$this->_flashMessenger->addMessage('Time Removed');
-				$this->_helper->redirector('view-day','times', 'pm', array('date' => $time_data['date']));
-				exit;
-    		}
-    	}
-   	
-    }
-    
     public function viewDayAction()
     {
     	$times = $this->getServiceLocator()->get('PM\Model\Times');
@@ -360,9 +320,52 @@ class TimesController extends AbstractPmController
 		exit;
     }
     
-    public function searchAction()
+    public function removeAction()
     {
-		$this->view->title = "Search Times";
-		$this->view->headTitle("Search Times", 'PREPEND');    	
+    	$time = $this->getServiceLocator()->get('PM\Model\Times');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+		
+    	$id = $this->params()->fromRoute('time_id');
+    	if(!$id)
+    	{
+    		return $this->redirect()->toRoute('times');
+    	}
+    	
+    	
+        $time_data = $time->getTimeById($id);
+        $view = array();
+    	$view['time_data'] = $time_data;
+    	if(!$view['time_data'])
+    	{
+			return $this->redirect()->toRoute('times');
+    	}
+    	
+    	$request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
+			{
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('times/view-day', array('month' => $view['time_data']['month'], 'day' => $view['time_data']['day'], 'year' => $view['time_data']['year']));
+				}
+
+				$project = $this->getServiceLocator()->get('PM\Model\Projects');
+    			$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+	    		if($time->removeTime($id, $time_data, $project, $task))
+	    		{	
+					$this->flashMessenger()->addMessage($translate('time_removed', 'pm'));
+					return $this->redirect()->toRoute('times/view-day', array('month' => $view['time_data']['month'], 'day' => $view['time_data']['day'], 'year' => $view['time_data']['year']));
+	    		}
+			}
+    	}
+    	
+    	$view['form'] = $form;
+    	$view['id'] = $id;
+		return $this->ajaxOutput($view);
     }
 }
