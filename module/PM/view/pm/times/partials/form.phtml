@@ -4,7 +4,15 @@
 	display:none;
 }
 </style>
-<form id="time_form" action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod()) ?>" enctype="<?php echo $this->escape($this->form->getEnctype()); ?>">
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'time_form');
+$form->setAttribute('action', $this->url('times/view-day', array('time_id' => $this->time['id'])));
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>
 <div class="content_headers">
 	<div class="timetracker_header">Add Time</div>
 	<div class="actions">
@@ -45,7 +53,7 @@
 	</tbody>
 </table>
 
-</form>
+<?php echo $this->form()->closeTag() ?>
 
 <script type="text/javascript">
 jQuery(document).ready(function($){

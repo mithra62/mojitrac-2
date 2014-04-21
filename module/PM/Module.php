@@ -39,6 +39,7 @@ use PM\Form\TaskForm;
 use PM\Form\IpForm;
 use PM\Form\ConfirmForm;
 use PM\Form\OptionForm;
+use PM\Form\TimeForm;
 
 use PM\Event\ActivityLogEvent;
 use PM\Event\NotificationEvent;
@@ -185,6 +186,10 @@ class Module
 				'PM\Form\OptionForm' => function($sm) {
 					$options = $sm->get('PM\Model\Options');
 					return new OptionForm('options', $options);
+				},
+				'PM\Form\TimeForm' => function($sm) {
+					$options = $sm->get('PM\Model\Options');
+					return new TimeForm('options', $options);
 				},
 				
 				//events

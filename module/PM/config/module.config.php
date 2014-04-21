@@ -1071,6 +1071,30 @@ return array(
         						'action' => 'index'
         					)
         				)
+        			),
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/:time_id',
+		        			'constraints' => array(
+		        				'time_id' => '[0-9]+'
+		        			),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/view/:type/:id',
+		        			'constraints' => array(
+		        				'time_id' => '[0-9]+'
+		        			),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
         			)
         		),
         	), //End Times Routes

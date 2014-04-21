@@ -50,7 +50,7 @@ class SettingsForm extends BaseForm
 			'name' => 'enable_ip',
 			'type' => 'Checkbox',
 			'attributes' => array(
-				'class' => '', 
+				'class' => 'checkbox', 
 				'id' => 'enable_ip',
 			),
 			'options' => array(

@@ -98,22 +98,15 @@ class TimesController extends AbstractPmController
     
     public function viewDayAction()
     {
-    	
-        $date = $this->_request->getParam('date', FALSE);
-    	if(!$date)
-    	{
-	    	$date = date('Y-m-d');
-    	}
-    	    	
-	    $times = new PM_Model_Times;
-		$form = $times->getTimeForm(array(
-            'action' => '/pm/times/view-day',
-            'method' => 'post',
-        ));
-		
-		 if ($this->getRequest()->isPost()) 
-		 {
-    		
+    	$times = $this->getServiceLocator()->get('PM\Model\Times');
+    	$month = $this->params()->fromRoute('month', date('m'));
+    	$year = $this->params()->fromRoute('year', date('Y'));
+    	$day = $this->params()->fromRoute('day', date('d'));
+		$view = $this->params()->fromRoute('view');
+    	    		    	
+		$form = $this->getServiceLocator()->get('PM\Form\TimeForm');
+		if ($this->getRequest()->isPost()) 
+		{
     		$formData = $this->getRequest()->getPost();
 			if ($form->isValid($formData)) 
 			{
@@ -140,21 +133,23 @@ class TimesController extends AbstractPmController
 			}
 		}    	
     	
-		$this->view->date = $date;
-		$view = $this->_getParam("view",FALSE);
-		$this->view->active_sub = $view;
+		$view['month'] = $month;
+		$view['year'] = $year;
+		$view['day'] = $day;
+		$view['active_sub'] = $view;
 		
 		if($this->perm->check($this->identity, 'manage_time'))
     	{		
-	    	$this->view->times = $times->getAllTimes($date); 
+	    	$view['times'] = $times->getAllTimes($date); 
     	}
     	else
     	{
     		$where = array('i.creator' => $this->identity);
-    		$this->view->times = $times->getAllTimes($date, $where); 
+    		$view['times'] = $times->getAllTimes($date, $where); 
     	}
 
-	    $this->view->form = $form;    
+	    $view['form'] = $form;
+	    return $view;    
     }
     
     public function viewAction()
