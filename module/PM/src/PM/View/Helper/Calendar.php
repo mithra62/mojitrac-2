@@ -92,7 +92,7 @@ class Calendar extends BaseViewHelper
     public  $url_base = FALSE;
     public  $date_key = FALSE;
     public  $date_data = FALSE;
-    public  $link_rel = 'facebox';
+    public  $link_rel = '';
 	
     /**
      * Sets up and calls the Calendar object

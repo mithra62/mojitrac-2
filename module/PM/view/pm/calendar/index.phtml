@@ -24,7 +24,7 @@ foreach($this->calendar_data AS $date => $data)
 }
 
 echo $this->Calendar($this->month, $this->year)
-		  ->setData($calendar_data)
+		  ->setData($this->calendar_data)
 		  ->setDayRouteName('calendar/view-day')
 		  ->setMonthRouteName('calendar/month')
 		  ->getCalendarHtml(			

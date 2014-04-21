@@ -118,9 +118,8 @@ class Calendar extends AbstractModel
 	 */
 	public function getStartedProjectsByDate($month, $year)
 	{
-	    $date = new \Zend\Db\Sql\Expression('date_format(start_date,"%Y-%m")');
 		$sql = $this->db->select()->from('projects')->columns(array('start_date', 'name', 'id', 'status'))
-					   ->where($date->getExpression()." = '$year-$month'");
+					   ->where(array('start_month' => $month, 'start_year' => $year));
 		
 		return $this->getRows($sql);
 	}

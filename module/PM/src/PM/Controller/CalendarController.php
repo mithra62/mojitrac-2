@@ -50,7 +50,7 @@ class CalendarController extends AbstractPmController
     	{
     		$view['calendar_data'] = $cal->getUserItems($month, $year, $this->identity);
     	} 
-    	
+
     	return $view;
     }
     
