@@ -30,7 +30,12 @@ class TimesController extends AbstractPmController
 	 */
 	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{
-		$e = parent::onDispatch( $e );  
+		$e = parent::onDispatch( $e );  ;
+        $this->layout()->setVariable('active_nav', 'time');
+        $this->layout()->setVariable('sub_menu', 'times');
+        $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
+        $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
+		$this->layout()->setVariable('active_sub', '');
 		return $e;       
 	}
     
@@ -137,15 +142,15 @@ class TimesController extends AbstractPmController
 		$view['year'] = $year;
 		$view['day'] = $day;
 		$view['active_sub'] = $view;
-		
+		$where = array('month' => $month, 'year' => $year, 'day' => $day);
 		if($this->perm->check($this->identity, 'manage_time'))
     	{		
-	    	$view['times'] = $times->getAllTimes($date); 
+	    	$view['times'] = $times->getAllTimes($where); 
     	}
     	else
     	{
-    		$where = array('i.creator' => $this->identity);
-    		$view['times'] = $times->getAllTimes($date, $where); 
+    		$where = array_merge($where, array('i.creator' => $this->identity));
+    		$view['times'] = $times->getAllTimes($where); 
     	}
 
 	    $view['form'] = $form;

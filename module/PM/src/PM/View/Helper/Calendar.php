@@ -119,7 +119,6 @@ class Calendar extends BaseViewHelper
 			$this->year = date('Y');
 			$base_date = date('r', mktime(12,0,0,date('m'), 1, date('Y')));
 		}
-		//$base_date = '2014-01-01';
 		
 		$this->setDate($base_date, $locale);
 		$this->setValidDateRange(-12,24);

@@ -71,17 +71,8 @@ class Times extends AbstractModel
 	 * Returns an array of all the times
 	 * @return mixed
 	 */
-	public function getAllTimes($date = FALSE, array $where = null, array $not = null)
-	{
-		if($date)
-		{
-			if(!is_array($where))
-			{
-				$where = array();
-			}
-			$where['i.date'] = $date;
-		}
-		
+	public function getAllTimes(array $where = null, array $not = null)
+	{	
 		return $this->getTimesWhere($where, $not);			
 	}
 	
