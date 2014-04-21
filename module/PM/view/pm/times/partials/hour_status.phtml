@@ -1,7 +1,7 @@
 <p>
 	<span class="bold">Total Hours:</span> 
 	<?php if($this->hours['total']): ?>
-	<a href="<?php echo $this->url('times/view', array('module' => 'pm','controller'=>'times','action'=>'view', $this->type => $this->id), null, TRUE); ?>">
+	<a href="<?php echo $this->url('times/view', array('type' => $this->type, 'id' => $this->id)); ?>">
 	<?php endif; ?>
 	<?php echo number_format($this->hours['total'], 2); ?>
 	<?php if($this->hours['total']): ?>
@@ -11,7 +11,7 @@
 	
 	<span class="bold">Paid Hours:</span> 
 	<?php if($this->hours['paid']): ?>
-	<a href="<?php echo $this->url('times/view', array('module' => 'pm','controller'=>'times','action'=>'view', $this->type => $this->id, 'status' => 'paid'), null, TRUE); ?>">
+	<a href="<?php echo $this->url('times/view', array('type' => $this->type, 'id' => $this->id, 'status' => 'paid')); ?>">
 	<?php endif; ?>			
 	<?php echo number_format($this->hours['paid'], 2); ?> 
 	<?php if($this->hours['paid']): ?>
@@ -21,7 +21,7 @@
 	
 	<span class="bold">Unpaid Hours:</span> 
 	<?php if($this->hours['unsent']): ?>
-	<a href="<?php echo $this->url('times/view', array('module' => 'pm','controller'=>'times','action'=>'view', $this->type => $this->id, 'status' => 'unsent'), null, TRUE); ?>">
+	<a href="<?php echo $this->url('times/view', array('type' => $this->type, 'id' => $this->id, 'status' => 'unsent'), null, TRUE); ?>">
 	<?php endif; ?>				
 	<?php echo number_format($this->hours['unsent'], 2); ?>
 	<?php if($this->hours['unsent']): ?>
@@ -31,7 +31,7 @@
 	
 	<span class="bold">Pending Hours:</span> 
 	<?php if($this->hours['sent']): ?>
-	<a href="<?php echo $this->url('times/view', array('module' => 'pm','controller'=>'times','action'=>'view', $this->type => $this->id, 'status' => 'sent'), null, TRUE); ?>">
+	<a href="<?php echo $this->url('times/view', array('type' => $this->type, 'id' => $this->id, 'status' => 'sent')); ?>">
 	<?php endif; ?>				
 	<?php echo number_format($this->hours['sent'], 2); ?> 
 	<?php if($this->hours['sent']): ?>

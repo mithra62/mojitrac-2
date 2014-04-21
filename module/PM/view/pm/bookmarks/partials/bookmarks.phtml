@@ -24,13 +24,13 @@
 		{
 		?>
 		<tr>
-			<td><a title="<?php echo $bookmark['name']; ?>" href="<?php echo $this->url('bookmarks/view', array('type' => FALSE, 'bookmark_id' => $bookmark['id']), null, TRUE); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $bookmark['name']; ?></a></td>
+			<td><a title="<?php echo $bookmark['name']; ?>" href="<?php echo $this->url('bookmarks/view', array('type' => FALSE, 'bookmark_id' => $bookmark['id'])); ?>" <?php echo ($this->facebox == 'yes' ? 'rel="facebox"' : ''); ?>><?php echo $bookmark['name']; ?></a></td>
 			<td><a title="<?php echo $bookmark['url']; ?>" href="<?php echo $bookmark['url']; ?>"><?php echo $this->Truncate($bookmark['url'], 50); ?></a></td>
 			
 			<?php if($this->enable_project): ?>
 			<td>
 				<?php if($bookmark['project_name']):?>
-					<a title="<?php echo $bookmark['project_name']; ?>" href="<?php echo $this->url('projects/view', array('project_id'=> $bookmark['project_id']), null, TRUE); ?>" ><?php echo $bookmark['project_name']; ?></a>
+					<a title="<?php echo $bookmark['project_name']; ?>" href="<?php echo $this->url('projects/view', array('project_id'=> $bookmark['project_id'])); ?>" ><?php echo $bookmark['project_name']; ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif;?>
@@ -40,7 +40,7 @@
 			<?php if($this->enable_task): ?>
 			<td>
 				<?php if($bookmark['task_name']):?>
-					<a title="<?php echo $bookmark['task_name']; ?>" href="<?php echo $this->url('tasks/view', array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id'=> $bookmark['task_id']), null, TRUE); ?>" ><?php echo $bookmark['task_name']; ?></a>
+					<a title="<?php echo $bookmark['task_name']; ?>" href="<?php echo $this->url('tasks/view', array('task_id'=> $bookmark['task_id'])); ?>" ><?php echo $bookmark['task_name']; ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif;?>			

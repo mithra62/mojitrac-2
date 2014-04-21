@@ -196,6 +196,14 @@ class Projects extends AbstractModel
 		{
 			$sql = $sql->where(array('start_year' => $year));
 		}
+		if($month !== null)
+		{
+			$sql = $sql->where(array('start_month' => $month));
+		}
+		if($day !== null)
+		{
+			$sql = $sql->where(array('start_day' => $day));
+		}				
 		
 		$sql = $sql->join(array('c' => 'companies'), 'c.id = p.company_id', array('company_name' => 'name'), 'left');
 		return $this->getRows($sql);

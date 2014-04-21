@@ -41,13 +41,13 @@
 			
 			<td><?php echo $time['hours']; ?></td>
 			<?php if($this->enable_company):?>
-			<td nowrap><a title="<?php echo $time['company_name']; ?>" href="<?php echo $this->url('companies/view', array('company_id'=>$time['company_id'])); ?>"><?php echo $time['company_name']; ?></a></td>
+			<td nowrap><a title="<?php echo $time['company_name']; ?>" href="<?php echo $this->url('companies/view', array('type' => 'company', 'company_id'=>$time['company_id'])); ?>"><?php echo $time['company_name']; ?></a></td>
 			<?php endif; ?>
 			
 			<?php if($this->enable_project):?>
 				<td nowrap>
 				<?php if($time['project_name']):?>
-					<a title="<?php echo $time['project_name']; ?>" href="<?php echo $this->url('projects/view', array('project_id'=>$time['project_id'])); ?>"><?php echo $this->Truncate($time['project_name'], 50); ?></a>
+					<a title="<?php echo $time['project_name']; ?>" href="<?php echo $this->url('projects/view', array('type' => 'project', 'project_id'=>$time['project_id'])); ?>"><?php echo $this->Truncate($time['project_name'], 50); ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif; ?>					
@@ -57,7 +57,7 @@
 			<?php if($this->enable_task):?>	
 				<td nowrap>
 				<?php if($time['task_name']):?>
-					<a title="<?php echo $time['task_name']; ?>" href="<?php echo $this->url('tasks/view', array('task_id'=>$time['task_id'])); ?>"><?php echo $this->Truncate($time['task_name'], '30'); ?></a>
+					<a title="<?php echo $time['task_name']; ?>" href="<?php echo $this->url('tasks/view', array('type' => 'task', 'task_id'=>$time['task_id'])); ?>"><?php echo $this->Truncate($time['task_name'], '30'); ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif; ?>

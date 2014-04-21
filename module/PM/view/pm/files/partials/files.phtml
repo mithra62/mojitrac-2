@@ -30,7 +30,7 @@
 			<?php if($this->enable_project): ?>
 			<td>
 				<?php if($file['project_name']):?>
-					<a title="<?php echo $file['project_name']; ?>" href="<?php echo $this->url('projects/view', array('module' => 'pm','controller'=>'projects','action'=>'view', 'id'=> $file['project_id']), null, TRUE); ?>" ><?php echo $file['project_name']; ?></a>
+					<a title="<?php echo $file['project_name']; ?>" href="<?php echo $this->url('projects/view', array('project_id'=> $file['project_id'])); ?>" ><?php echo $file['project_name']; ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif;?>
@@ -40,7 +40,7 @@
 			<?php if($this->enable_task): ?>
 			<td>
 				<?php if($file['task_name']):?>
-					<a title="<?php echo $file['task_name']; ?>" href="<?php echo $this->url('tasks/view', array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id'=> $file['task_id']), null, TRUE); ?>" ><?php echo $file['task_name']; ?></a>
+					<a title="<?php echo $file['task_name']; ?>" href="<?php echo $this->url('tasks/view', array('task_id'=> $file['task_id'])); ?>" ><?php echo $file['task_name']; ?></a>
 				<?php else: ?>
 					N/A
 				<?php endif;?>			

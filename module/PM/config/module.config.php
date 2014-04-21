@@ -1087,7 +1087,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/:type/:id',
+        					'route' => '/view/:type/:id[/:status]',
 		        			'constraints' => array(
 		        				'time_id' => '[0-9]+'
 		        			),
