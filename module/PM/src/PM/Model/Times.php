@@ -4,7 +4,7 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		1.0
  * @filesource 	./module/PM/src/PM/Model/Times.php
@@ -13,6 +13,9 @@
 namespace PM\Model;
 
 use Application\Model\AbstractModel;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
 
  /**
  * PM - Times Model
@@ -37,6 +40,32 @@ class Times extends AbstractModel
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
 		parent::__construct($adapter, $db);
+	}
+	
+	public function setInputFilter(InputFilterInterface $inputFilter)
+	{
+		throw new \Exception("Not used");
+	}
+	
+	public function getInputFilter()
+	{
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'subject',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+			)));
+	
+			$this->inputFilter = $inputFilter;
+		}
+	
+		return $this->inputFilter;
 	}
 	
 	/**

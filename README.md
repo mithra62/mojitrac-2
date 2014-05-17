@@ -62,13 +62,13 @@ As mentioned above, each integration module will be sold and marketed separately
 
 ## Pricing Model ##
 
-To start, MojiTrac will be sold as a 1 time purchase with a year of free upgrades. Future upgrades will require the customer join a subscription service. There will be no free support outside of a support forum style repository, documentation, FAQ, and other user generated support mechanisms. 
+Initially, MojiTrac will be a hosted system with monthly, recurring, revenue. 
+
+Eventually, MojiTrac will be sold as a 1 time purchase with a year of free upgrades. Future upgrades will require the customer join a subscription service. There will be no free support outside of a support forum style repository, documentation, FAQ, and other user generated support mechanisms. 
 
 The initial price point for MojiTrac is still TBD but will likely be comparable with the competition (at around $200 to $500).
 
 There will also be additional items, in terms of the integration add-ons mentioned above, as well as other items that are TBD. 
 
 Further, all support where a person is required direct access to investigate will be charged for and require payment. This will likely hover around the $50 an hour mark though a subscription model, ala EllisLab, is being considered. 
-
-Once the core software is solidified we also anticipate moving to a hosted model with a monthly subscription. 
 

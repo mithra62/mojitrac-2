@@ -44,7 +44,6 @@ class IpsController extends AbstractPmController
 		$ip = $this->getServiceLocator()->get('PM\Model\Ips');
     	$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
     	$request = $this->getRequest();
-    	
     	if ($request->isPost())
     	{
     		$formData = $this->getRequest()->getPost();

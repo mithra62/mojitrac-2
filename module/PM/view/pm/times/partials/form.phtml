@@ -7,7 +7,7 @@
 <?php 
 $form = $this->form;
 $form->setAttribute('id', 'time_form');
-$form->setAttribute('action', $this->url('times/view-day', array('time_id' => $this->time['id'])));
+$form->setAttribute('action', $this->url('times/view-day', array('month' => $this->month, 'day' => $this->day, 'year' => $this->year)));
 $form->prepare();
 echo $this->form()->openTag($form);
 $csrf = $form->get('_x');
@@ -16,13 +16,13 @@ echo $this->formRow($csrf);
 <div class="content_headers">
 	<div class="timetracker_header">Add Time</div>
 	<div class="actions">
-		<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'times', 'page' => 'add'), null, TRUE); ?>" rel="facebox" title="Add Project">
+		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'times', 'page' => 'add'), null, TRUE); ?>" rel="facebox" title="Add Project">
 			<?php echo $this->InteractIcon('help', 'About Existing Time');?>
 			<div class="action_text">Help</div>
 		</a>
 	</div>	
 	<div class="actions" style="padding-top:0;">	
-		<label><?php echo $this->form->billable; ?> <div style="padding-bottom:5px; float:right;">Billable</div></label>
+		<label><?php $name = $form->get('billable'); echo $this->formRow($name); ?> <div style="padding-bottom:5px; float:right;">Billable</div></label>
 	</div>			
 </div>
 <input type="hidden" name="date_default" id="date_default" value="<?php echo ($this->date ? $this->date : date('Y-m-d')); ?>" />
@@ -42,12 +42,12 @@ echo $this->formRow($csrf);
 
 	<tbody>
 		<tr>
-			<td style="padding-top:15px;"><?php echo $this->form->date; ?></td>
-			<td style="padding-top:15px;"><?php echo $this->form->hours; ?></td>
-			<td style="padding-top:15px;"><?php echo $this->form->company_id; ?></td>
-			<td style="padding-top:15px;"><?php echo $this->form->project_id; ?></td>
-			<td style="padding-top:15px;"><div id="tasks"><?php echo $this->form->task_id; ?></div></td>
-			<td style="padding-top:15px;"><?php echo $this->form->description; ?></td>
+			<td style="padding-top:15px;"><?php $name = $form->get('date'); echo $this->formRow($name); ?></td>
+			<td style="padding-top:15px;"><?php $name = $form->get('hours'); echo $this->formRow($name); ?></td>
+			<td style="padding-top:15px;"><?php $name = $form->get('company_id'); echo $this->formRow($name); ?></td>
+			<td style="padding-top:15px;"><?php $name = $form->get('project_id'); echo $this->formRow($name); ?></td>
+			<td style="padding-top:15px;"><div id="tasks"><?php $name = $form->get('task_id'); echo $this->formRow($name); ?></div></td>
+			<td style="padding-top:15px;"><?php $name = $form->get('description'); echo $this->formRow($name); ?></td>
 			<td><input type="submit" class="submit" value="Submit" /></td>
 		</tr>
 	</tbody>

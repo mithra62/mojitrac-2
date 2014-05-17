@@ -12,6 +12,7 @@
 
 namespace Application;
 
+use DateTime;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Db\Sql\Sql;
@@ -122,12 +123,20 @@ class Module
 					$authService->setStorage($sm->get('Application\Model\Auth\AuthStorage'));
 					return $authService;
 				},
-				//end Auth 
-				
-				//db object
 				'SqlObject' => function($sm) {
 					$db = $sm->get('Zend\Db\Adapter\Adapter');
 					return new Sql($db);
+				},
+				'Timezone' => function($sm) {
+					$auth = $sm->get('AuthService');
+					$settings = $sm->get('Application\Model\User\Data');
+					$data = $settings->getUsersData($auth->getIdentity());
+					date_default_timezone_set($data['timezone']);
+						
+					$dt = new DateTime();
+					$offset = $dt->format('P');
+					$settings->query("SET time_zone='$offset'");
+					return true;
 				},
 
 				//models

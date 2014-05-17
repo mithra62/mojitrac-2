@@ -33,7 +33,7 @@ class IndexController extends AbstractPmController
 		
     public function indexAction()
     {
-        $user = $this->getServiceLocator()->get('Application\Model\Users');
+        $user = $this->getServiceLocator()->get('PM\Model\Users');
 		
         $view = array();
 		$view['projects'] = $user->getAssignedProjects($this->identity);

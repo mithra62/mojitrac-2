@@ -233,7 +233,6 @@ class Calendar extends BaseViewHelper
 		    
 		    $month = $startDate->add(DateInterval::createFromDateString('1 month'));
 		    $str = datefmt_format( $key_fmt , strtotime($month->format('r')));
-			//$str = $startMonth->addMonth(1)->get("MMMM yyyy");
 			$this->validDates[$str] = $str;
 		}
 		unset($startDate);
@@ -361,7 +360,7 @@ class Calendar extends BaseViewHelper
 		 			$date = $calDayNum;// Zend_Locale_Format::toNumber($calDayNum, array('locale' => $this->localeStr));
 		 			if($m_date && $this->day_route_name)
 		 			{
-		 				$link = '<a href="'.$this->view->url($this->day_route_name, array('month' => $this->date->format('m'), 'year' => $this->date->format('Y'), 'day' => $date)).'" rel="'.$this->link_rel.'">'.$date.'</a>';
+		 				$link = '<a href="'.$this->view->url($this->day_route_name, array('month' => $this->date->format('n'), 'year' => $this->date->format('Y'), 'day' => $date)).'" rel="'.$this->link_rel.'">'.$date.'</a>';
 		 				$html .= $link;
 		 				$html .= $this->process_date_data($m_date);
 		 			}
@@ -534,7 +533,7 @@ class Calendar extends BaseViewHelper
 	
 	public function getMonthNum ()
 	{
-	    return $this->date->format("m");
+	    return $this->date->format("n");
 	}
 
     public function getYear ()
@@ -549,7 +548,7 @@ class Calendar extends BaseViewHelper
 
 	public function getNextMonthNum ()
 	{
-		return $this->nextMonth->format("m");
+		return $this->nextMonth->format("n");
 	}
 
      public function getNextMonthYear ()
@@ -570,7 +569,7 @@ class Calendar extends BaseViewHelper
 	
 	public function getPrevMonthNum ()
 	{
-		return $this->prevMonth->format("m");
+		return $this->prevMonth->format("n");
 	}
 	
 	public function getPrevMonthYear ()

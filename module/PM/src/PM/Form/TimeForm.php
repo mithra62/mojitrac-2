@@ -29,7 +29,7 @@ class TimeForm extends BaseForm
 	 * Returns the Time Tracker form
 	 * @param string $options
 	 */
-	public function __construct($name = null) 
+	public function __construct($name = null, array $company_options = array(), array $project_options = array(), array $task_options = array()) 
 	{
 		parent::__construct($name);
 		$this->add(array(
@@ -62,7 +62,7 @@ class TimeForm extends BaseForm
 				'id' => 'company_id'
 			),
 			'options' => array(
-				'value_options' => array(),
+				'value_options' => $company_options,
 			)
 		));	
 
@@ -74,7 +74,7 @@ class TimeForm extends BaseForm
 				'id' => 'task_id'
 			),
 			'options' => array(
-				'value_options' => array(),
+				'value_options' => $task_options,
 			)
 		));	
 
@@ -86,17 +86,18 @@ class TimeForm extends BaseForm
 				'id' => 'project_id'
 			),
 			'options' => array(
-				'value_options' => array(),
+				'value_options' => $project_options,
 			)
 		));	
 
 		$this->add(array(
-			'type' => 'Zend\Form\Element\Textarea',
+			'type' => 'Zend\Form\Element\Text',
 			'name' => 'description',
 			'attributes' => array(
 				'class' => 'input large timetracker',
 				'style' => 'min-width:150px;',
-				'id' => 'description'
+				'id' => 'description',
+				'rows' => '1'
 			),
 		));	
 

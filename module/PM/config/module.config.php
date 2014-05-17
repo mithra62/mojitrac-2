@@ -1037,7 +1037,7 @@ return array(
         	'times' => array( //Times Routes
         		'type' => 'segment',
         		'options' => array(
-        			'route' => '/pm/times',
+        			'route' => '/pm/time-tracker',
         			'defaults' => array(
         				'controller' => 'PM\Controller\Times',
         				'action' => 'index'

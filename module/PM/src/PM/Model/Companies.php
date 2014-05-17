@@ -4,7 +4,7 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/src/PM/Model/Companies.php
@@ -15,9 +15,7 @@ namespace PM\Model;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
-
 use Application\Model\AbstractModel;
-use PM\Model\Projects;
 
  /**
  * PM - Companies Model
@@ -147,10 +145,8 @@ class Companies extends AbstractModel
 		$sql = $this->db->select()->from('companies', array('id','name'));
 		if($type && is_array($type))
 		{ 
-			foreach($type AS $t)
-			{
-				$sql = $sql->orwhere('type = ?', $t);
-			}
+			$where = $sql->where->in('type', $type);
+			$sql = $sql->where($where);
 		}
 		
 		if($ids && is_array($ids))

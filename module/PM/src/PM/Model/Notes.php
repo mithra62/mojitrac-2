@@ -61,7 +61,7 @@ class Notes extends AbstractModel
 			$factory = new InputFactory();
 	
 			$inputFilter->add($factory->createInput(array(
-				'name'     => 'subject',
+				'name'     => 'hours',
 				'required' => true,
 				'filters'  => array(
 					array('name' => 'StripTags'),

@@ -29,6 +29,7 @@ use PM\Model\Contacts;
 use PM\Model\ActivityLog;
 use PM\Model\Calendar;
 use PM\Model\Ips;
+use PM\Model\Users;
 
 use PM\Form\ProjectForm;
 use PM\Form\CompanyForm;
@@ -157,6 +158,12 @@ class Module
 					$db = $sm->get('SqlObject');
 					return new Ips($adapter, $db);
 				},
+				'PM\Model\Users' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					$role = $sm->get('Application\Model\Roles');
+					return new Users($adapter, $db, $role);
+				},
 				
 				//forms
 				'PM\Form\ProjectForm' => function($sm) {
@@ -188,8 +195,29 @@ class Module
 					return new OptionForm('options', $options);
 				},
 				'PM\Form\TimeForm' => function($sm) {
-					$options = $sm->get('PM\Model\Options');
-					return new TimeForm('options', $options);
+					
+					$auth = $sm->get('AuthService');
+					$perm = $sm->get('Application\Model\Permissions');
+					$companies = $sm->get('PM\Model\Companies');
+					if($perm->check($auth->getIdentity(), 'view_companies'))
+					{
+						$types = array('1', '6');
+						$options = \PM\Model\Options\Companies::companies($companies, TRUE, FALSE, $types);
+					}
+					else
+					{
+						$user = $sm->get('PM\Model\Users');
+						$projects = $user->getAssignedProjects($auth->getIdentity());
+						$ids = array();
+						foreach($projects AS $project)
+						{
+							$ids[$project['company_id']] = $project['company_id'];
+						}
+							
+						$options = \PM\Model\Options\Companies::companies($companies, TRUE, FALSE, FALSE, $ids);
+					}	
+					
+					return new TimeForm('time', $options);
 				},
 				
 				//events
@@ -203,18 +231,7 @@ class Module
 				    $mail = $sm->get('Application\Model\Mail');
 				    $users = $sm->get('Application\Model\Users');
 					return new NotificationEvent($mail, $users, $auth->getIdentity());
-				},	
-				'Timezone' => function($sm) {
-				    $auth = $sm->get('AuthService');
-					$settings = $sm->get('Application\Model\Settings');
-					$data = $settings->getSettings();
-					date_default_timezone_set($data['timezone']);
-					
-					$dt = new DateTime();
-					$offset = $dt->format('P');
-					$settings->query("SET time_zone='$offset'");
-					return true;
-				},											
+				},										
 			),
     	);
     }    

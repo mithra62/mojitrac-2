@@ -10,3 +10,4 @@ composer.lock
 vendor/bin
 /logs
 /data/mail/*.txt
+/vendor

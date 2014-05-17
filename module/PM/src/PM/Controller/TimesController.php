@@ -70,15 +70,21 @@ class TimesController extends AbstractPmController
 		$view = $this->params()->fromRoute('view');
     	    		    	
 		$form = $this->getServiceLocator()->get('PM\Form\TimeForm');
-		if ($this->getRequest()->isPost()) 
-		{
+
+		//$form->setData(array('date' => date('Y-m-d', mktime(0,0,0,$month, $day, $year))));
+		$request = $this->getRequest();
+    	if ($request->isPost())
+    	{
     		$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData)) 
-			{
+			$form->setInputFilter($times->getInputFilter());
+    		$form->setData($request->getPost());
+    		if ($form->isValid($formData))
+    		{
+    			$formData = $formData->toArray();
 				$formData['creator'] = $this->identity;
 				$formData['user_id'] = $this->identity;
-				
-				if($id = $times->addTime($formData))
+				$time_id = $times->addTime($formData);
+				if($time_id)
 				{
 					$date = $this->_request->getParam('date', FALSE);
 			    	$this->_flashMessenger->addMessage('Time Added!');
@@ -88,13 +94,13 @@ class TimesController extends AbstractPmController
 				} 
 				else 
 				{	
-					$this->view->errors = array('Something went wrong...');
+					$view['errors'] = array('Something went wrong...');
 				}
 				
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
+				$view['errors'] = array('Please fix the errors below.');
 			}
 		}    	
     	
