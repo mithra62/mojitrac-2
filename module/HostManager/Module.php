@@ -3,6 +3,7 @@
  * mithra62 - MojiTrac
  *
  * @package		mithra62:Mojitrac
+ * @subpackage	HostManager
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
@@ -12,12 +13,11 @@
 
 namespace HostManager;
 
-use Zend\ModuleManager\ModuleManager;
-
 /**
  * HostManager - Module Object
  *
  * @package 	mithra62:Mojitrac
+ * @subpackage	HostManager
  * @author		Eric Lamb
  * @filesource 	./module/HostManager/Module.php
  */
@@ -37,5 +37,19 @@ class Module
                 ),
             ),
         );
+    }
+    
+
+    public function getServiceConfig()
+    {
+    	return array(
+		'factories' => array(
+					'HostManager\Model\Sql' => function($sm) {
+					//$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					//$db = $sm->get('SqlObject');
+					return '';//new Projects($adapter, $db);
+				},
+			)
+		);
     }
 }
