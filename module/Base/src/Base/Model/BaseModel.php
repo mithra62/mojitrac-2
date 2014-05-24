@@ -96,10 +96,15 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	 */
 	public function getRows(\Zend\Db\Sql\Select $sql)
 	{
+		$ext = $this->trigger(self::EventDbSelectPre, $this, compact('sql'), array());
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $sql = $ext->last();
+				
 		$selectString = $this->db->getSqlStringForSqlObject($sql);
-		
-		//echo $selectString.'<br /><br />';
 		$result = $this->adapter->query($selectString, 'execute')->toArray();
+
+		$ext = $this->trigger(self::EventDbSelectPost, $this, compact('result'), array());
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $result = $ext->last();
+		
 		if(!empty($result))
 		{
 			return $result;
@@ -117,10 +122,19 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	 * @param array $where
 	 */
 	public function update($table, array $what = null, array $where = null)
-	{
+	{			
 		$sql = $this->db->update($table)->set($what)->where($where);
+
+		$ext = $this->trigger(self::EventDbUpdatePre, $this, compact('sql'), array());
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $sql = $ext->last();
+		
 		$updateString = $this->db->getSqlStringForSqlObject($sql);
-		return ($this->adapter->query($updateString, 'execute'));
+		$result = ($this->adapter->query($updateString, 'execute'));
+
+		$ext = $this->trigger(self::EventDbUpdatePost, $this, compact('sql', 'result'), array());
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $result = $ext->last();
+		
+		return $result->getAffectedRows();
 	}
 
 	/**
@@ -132,8 +146,16 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	public function insert($table, array $data)
 	{
 		$sql = $this->db->insert($table)->values($data);
+
+		$ext = $this->trigger(self::EventDbInsertPre, $this, compact('sql'), array());
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $sql = $ext->last();
+				
 		$insertString = $this->db->getSqlStringForSqlObject($sql);		
 		$result = ($this->adapter->query($insertString, 'execute'));
+
+		$ext = $this->trigger(self::EventDbInsertPost, $this, compact('sql', 'result'), array());
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $result = $ext->last();
+				
 		return $result->getGeneratedValue(); 
 	}
 	
@@ -146,8 +168,16 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	public function remove($table, array $where)
 	{
 	    $sql = $this->db->delete($table)->where($where);
+
+	    $ext = $this->trigger(self::EventDbRemovePre, $this, compact('sql'), array());
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $sql = $ext->last();
+	    
 		$removeString = $this->db->getSqlStringForSqlObject($sql);	
 		$result = ($this->adapter->query($removeString, 'execute'));
+
+		$ext = $this->trigger(self::EventDbRemovePost, $this, compact('sql', 'result'), array());
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $result = $ext->last();
+		
 		return $result->getAffectedRows(); 
 	}
 	

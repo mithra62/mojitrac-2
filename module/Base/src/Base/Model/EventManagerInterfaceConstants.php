@@ -109,5 +109,15 @@ interface EventManagerInterfaceConstants extends EventManagerAwareInterface
 	
 	const EventActivityLogAddPre = 'activitylog.add.pre';
 	const EventActivityLogAddPost = 'activitylog.add.post';
+	
+	//database events
+	const EventDbSelectPre = 'db.select.pre';
+	const EventDbSelectPost = 'db.select.post';
+	const EventDbUpdatePre = 'db.update.pre';
+	const EventDbUpdatePost = 'db.update.post';
+	const EventDbInsertPre = 'db.insert.pre';
+	const EventDbInsertPost = 'db.insert.post';
+	const EventDbRemovePre = 'db.remove.pre';
+	const EventDbRemovePost = 'db.remove.post';
 
 }
