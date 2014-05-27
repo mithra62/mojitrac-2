@@ -25,6 +25,36 @@ abstract class SqlAbstract {
 	 * Handles the SELECT statements for filtering by Account
 	 * @param \Zend\Db\Sql\Select $sql
 	 */
-	public abstract function Select(\Zend\Db\Sql\Select $sql, $account_id);
+	public function Select(\Zend\Db\Sql\Select $sql, $account_id)
+	{
+		$raw_state = $sql->getRawState();
+		$table = $this->getTableName($raw_state['table']);
+		$sql->where(array($table.'.account_id' => $account_id));
+		return $sql;
+	}
+	
+	/**
+	 * Returns the name of the table we're working
+	 *
+	 * Parses the output from getRawState() to determine which table we're working with.
+	 *
+	 * @param mixed $table
+	 * @return string
+	 */
+	public function getTableName($table)
+	{
+		if( is_array($table) )
+		{
+			$string = '';
+			foreach($table AS $key => $value)
+			{
+				$string = $key;
+			}
+	
+			$table = $string;
+		}
+		
+		return $table;
+	}	
 
 }

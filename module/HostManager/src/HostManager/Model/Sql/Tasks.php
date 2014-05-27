@@ -15,13 +15,13 @@ namespace HostManager\Model\Sql;
 use HostManager\Model\Sql\SqlAbstract;
 
 /**
- * HostManager - settings table class
+ * HostManager - tasks table class
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/HostManager/src/HostManager/Model/Sql/settings.php
+ * @filesource 	./module/HostManager/src/HostManager/Model/Sql/tasks.php
  */
-class Settings extends SqlAbstract {
+class Tasks extends SqlAbstract {
 	
 	/**
 	 * Appends the account_id column to all SELECT calls to filter database queries

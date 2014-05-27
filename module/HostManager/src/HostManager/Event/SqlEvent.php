@@ -74,7 +74,7 @@ class SqlEvent extends BaseEvent
      */
     public function getAccountId()
     {
-    	return 2;
+    	return 1;
     }
     
     /**
@@ -92,9 +92,18 @@ class SqlEvent extends BaseEvent
     		$string = '';
     		foreach($table AS $key => $value)
     		{
-    			$string = $value;
+    			$parts = explode('_', $value);
+    			$parts = array_map('ucfirst', $parts);
+    			$string = implode('', $parts);
     		}
     		
+    		$table = $string;
+    	}
+    	else 
+    	{
+    		$parts = explode('_', $table);
+    		$parts = array_map('ucfirst', $parts);
+    		$string = implode('', $parts);
     		$table = $string;
     	}
     	
