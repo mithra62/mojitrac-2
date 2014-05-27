@@ -79,4 +79,14 @@ class Accounts extends AbstractModel
 	
 		return $this->inputFilter;
 	}
+	
+	public function getAccountId(array $where = array())
+	{
+		$sql = $this->db->select()->from(array('a'=> 'accounts'))->columns(array('id'))->where($where);
+		$account = $this->getRow($sql);
+		if( !empty($account['id']) )
+		{
+			return $account['id'];
+		}
+	}
 }

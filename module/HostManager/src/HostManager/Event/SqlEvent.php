@@ -47,10 +47,11 @@ class SqlEvent extends BaseEvent
      * The Hosted SQL Event
      * @param int $identity
      */
-    public function __construct($identity = null, $account)
+    public function __construct($identity = null, \HostManager\Model\Accounts $account = null, $base_url = null)
     {
         $this->identity = $identity;
         $this->account = $account;
+        $this->base_url = $base_url;
         $this->account_id = $this->getAccountId();
     }
 
@@ -72,9 +73,21 @@ class SqlEvent extends BaseEvent
      * Parses the URL and uses the sudomain slug to determine the account.
      * @return number
      */
-    public function getAccountId()
+    public function getAccountId($forced = FALSE)
     {
-    	return 1;
+    	if( !$this->account_id || $forced)
+    	{
+	    	$parts = parse_url($_SERVER['HTTP_HOST']);
+			$sub = str_replace($this->base_url, '', $parts['path']);
+	    	$this->account_id = $this->account->getAccountId(array('slug' => $sub));
+	    	if( !$this->account_id )
+	    	{
+	    		//do some error handling
+	    		throw(new \Exception('NO!!!'));
+	    	}
+    	}
+    	
+    	return $this->account_id;
     }
     
     /**

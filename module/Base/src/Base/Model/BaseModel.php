@@ -78,7 +78,7 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	public function getRow(\Zend\Db\Sql\Select $sql)
 	{
 		$selectString = $this->db->getSqlStringForSqlObject($sql);
-		$result = $this->adapter->query($selectString, 'execute')->toArray();
+		$result = $this->query($selectString, 'execute')->toArray();
 		if(!empty($result['0']))
 		{
 			return $result['0']; 
@@ -100,7 +100,7 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $sql = $ext->last();
 				
 		$selectString = $this->db->getSqlStringForSqlObject($sql);
-		$result = $this->adapter->query($selectString, 'execute')->toArray();
+		$result = $this->query($selectString, 'execute')->toArray();
 
 		$ext = $this->trigger(self::EventDbSelectPost, $this, compact('result'), array());
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $result = $ext->last();
@@ -129,7 +129,7 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $sql = $ext->last();
 		
 		$updateString = $this->db->getSqlStringForSqlObject($sql);
-		$result = ($this->adapter->query($updateString, 'execute'));
+		$result = ($this->query($updateString, 'execute'));
 
 		$ext = $this->trigger(self::EventDbUpdatePost, $this, compact('sql', 'result'), array());
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $result = $ext->last();
@@ -151,7 +151,7 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $sql = $ext->last();
 				
 		$insertString = $this->db->getSqlStringForSqlObject($sql);		
-		$result = ($this->adapter->query($insertString, 'execute'));
+		$result = ($this->query($insertString, 'execute'));
 
 		$ext = $this->trigger(self::EventDbInsertPost, $this, compact('sql', 'result'), array());
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $result = $ext->last();
@@ -173,7 +173,7 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $sql = $ext->last();
 	    
 		$removeString = $this->db->getSqlStringForSqlObject($sql);	
-		$result = ($this->adapter->query($removeString, 'execute'));
+		$result = ($this->query($removeString, 'execute'));
 
 		$ext = $this->trigger(self::EventDbRemovePost, $this, compact('sql', 'result'), array());
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $result = $ext->last();
@@ -181,9 +181,10 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		return $result->getAffectedRows(); 
 	}
 	
-	public function query($sql)
+	public function query($sql, $type = 'execute')
 	{
-	    $result = ($this->adapter->query($sql, 'execute'));
+		//echo $sql."<br />\n";
+	    return ($this->adapter->query($sql, $type));
 	}
 	
 	/**
