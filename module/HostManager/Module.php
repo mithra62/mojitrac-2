@@ -74,10 +74,8 @@ class Module
 			'factories' => array(
 						'HostManager\Event\SqlEvent' => function($sm) {
 							$auth = $sm->get('AuthService');
-							$adapter = $sm->get('Zend\Db\Adapter\Adapter');
-							$db = $sm->get('SqlObject');
-														
-							return new SqlEvent($auth->getIdentity());
+							$account = $sm->get('HostManager\Model\Accounts');
+							return new SqlEvent($auth->getIdentity(), $account);
 						},
 						'HostManager\Model\Accounts' => function($sm) {
 							$auth = $sm->get('AuthService');

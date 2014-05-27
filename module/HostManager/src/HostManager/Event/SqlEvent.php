@@ -12,7 +12,7 @@
 
 namespace HostManager\Event;
 
-use Base\Event\BaseEvent;
+use Base\Event\BaseEvent, Exception;
 
  /**
  * HostManager - SQL Events
@@ -23,6 +23,12 @@ use Base\Event\BaseEvent;
  */
 class SqlEvent extends BaseEvent
 {
+	/**
+	 * What account we're limiting things to
+	 * @var int
+	 */
+	public $account_id = null;
+	
     /**
      * User Identity
      * @var int
@@ -38,14 +44,14 @@ class SqlEvent extends BaseEvent
     );
     
     /**
-     * The Notification Event
-     * @param \Application\Model\Mail $mail
-     * @param \Application\Model\Users $users
-     * @param string $identity
+     * The Hosted SQL Event
+     * @param int $identity
      */
-    public function __construct($identity = null )
+    public function __construct($identity = null, $account)
     {
         $this->identity = $identity;
+        $this->account = $account;
+        $this->account_id = $this->getAccountId();
     }
 
     /**
@@ -61,12 +67,62 @@ class SqlEvent extends BaseEvent
     }
     
     /**
-     * Sends the user registration notification
+     * Returns which account_id we're working with
+     * 
+     * Parses the URL and uses the sudomain slug to determine the account.
+     * @return number
+     */
+    public function getAccountId()
+    {
+    	return 2;
+    }
+    
+    /**
+     * Returns the name of the table we're working
+     * 
+     * Parses the output from getRawState() to determine which table we're working with.
+     * 
+     * @param mixed $table
+     * @return string
+     */
+    public function getTableName($table)
+    {
+    	if( is_array($table) )
+    	{
+    		$string = '';
+    		foreach($table AS $key => $value)
+    		{
+    			$string = $value;
+    		}
+    		
+    		$table = $string;
+    	}
+    	
+    	return $table;
+    }
+    
+    /**
+     * Modifies all the SELECT calls to inject account_id to all WHERE clauses (where appropriate)
      * @param \Zend\EventManager\Event $event
      */
     public function selectPre(\Zend\EventManager\Event $event)
     {
     	$sql = $event->getParam('sql');
-
+    	$raw_data = $sql->getRawState();
+    	$table_name = $this->getTableName($raw_data['table']);
+    	try {
+    		$class_name = "HostManager\Model\Sql\\".$table_name;
+    		if(class_exists($class_name))
+    		{
+    			$class = new $class_name($sql);
+    			$sql = $class->Select($sql, $this->account_id);
+    		}
+    	}
+    	catch (Exception $e)
+    	{
+    		return $sql;
+    	}
+    	
+		return $sql;
     }
 }
