@@ -54,6 +54,18 @@ abstract class SqlAbstract {
 		$sql->where(array($table.'.account_id' => $account_id));
 		return $sql;
 	}
+
+	/**
+	 * Handles the UPDATE statements to append the Account
+	 * @param \Zend\Db\Sql\Update $sql
+	 */
+	public function UPDATE(\Zend\Db\Sql\Update $sql, $account_id)
+	{
+		$raw_state = $sql->getRawState();
+		$table = $this->getTableName($raw_state['table']);
+		$sql->where(array($table.'.account_id' => $account_id));
+		return $sql;
+	}	
 	
 	/**
 	 * Returns the name of the table we're working

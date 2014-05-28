@@ -43,6 +43,7 @@ class SqlEvent extends BaseEvent
         'db.select.pre' => 'selectPre',
         'db.insert.pre' => 'insertPre',
         'db.remove.pre' => 'removePre',
+        'db.update.pre' => 'updatePre',
     );
     
     /**
@@ -198,5 +199,30 @@ class SqlEvent extends BaseEvent
     	}
     
     	return $sql;
-    }      
+    }  
+
+    /**
+     * Modifies all the UPDATE calls to inject account_id into statements (where appropriate)
+     * @param \Zend\EventManager\Event $event
+     */
+    public function updatePre(\Zend\EventManager\Event $event)
+    {
+    	$sql = $event->getParam('sql');
+    	$raw_data = $sql->getRawState();
+    	$table_name = $this->getTableName($raw_data['table']);
+    	try {
+    		$class_name = "HostManager\Model\Sql\\".$table_name;
+    		if(class_exists($class_name))
+    		{
+    			$class = new $class_name($sql);
+    			$sql = $class->Update($sql, $this->account_id);
+    		}
+    	}
+    	catch (Exception $e)
+    	{
+    		return $sql;
+    	}
+    
+    	return $sql;
+    }        
 }
