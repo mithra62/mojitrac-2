@@ -42,6 +42,7 @@ class SqlEvent extends BaseEvent
     private $hooks = array(
         'db.select.pre' => 'selectPre',
         'db.insert.pre' => 'insertPre',
+        'db.remove.pre' => 'removePre',
     );
     
     /**
@@ -150,7 +151,7 @@ class SqlEvent extends BaseEvent
     }
 
     /**
-     * Modifies all the INSERT calls to inject account_id INSERT statements (where appropriate)
+     * Modifies all the INSERT calls to inject account_id into statements (where appropriate)
      * @param \Zend\EventManager\Event $event
      */
     public function insertPre(\Zend\EventManager\Event $event)
@@ -172,5 +173,30 @@ class SqlEvent extends BaseEvent
     	}
     	 
     	return $sql;
-    }    
+    }  
+    
+    /**
+     * Modifies all the DELETE calls to inject account_id into statements (where appropriate)
+     * @param \Zend\EventManager\Event $event
+     */
+    public function removePre(\Zend\EventManager\Event $event)
+    {
+    	$sql = $event->getParam('sql');
+    	$raw_data = $sql->getRawState();
+    	$table_name = $this->getTableName($raw_data['table']);
+    	try {
+    		$class_name = "HostManager\Model\Sql\\".$table_name;
+    		if(class_exists($class_name))
+    		{
+    			$class = new $class_name($sql);
+    			$sql = $class->Delete($sql, $this->account_id);
+    		}
+    	}
+    	catch (Exception $e)
+    	{
+    		return $sql;
+    	}
+    
+    	return $sql;
+    }      
 }

@@ -34,12 +34,24 @@ abstract class SqlAbstract {
 	}
 		
 	/**
-	 * Handles the SELECT statements for filtering by Account
+	 * Handles the INSERT statements to append the Account
 	 * @param \Zend\Db\Sql\Insert $sql
 	 */
 	public function Insert(\Zend\Db\Sql\Insert $sql, $account_id)
 	{
 		$sql->values(array('account_id' => $account_id), $sql::VALUES_MERGE);
+		return $sql;
+	}
+		
+	/**
+	 * Handles the DELETE statements to append the Account
+	 * @param \Zend\Db\Sql\Delete $sql
+	 */
+	public function Delete(\Zend\Db\Sql\Delete $sql, $account_id)
+	{
+		$raw_state = $sql->getRawState();
+		$table = $this->getTableName($raw_state['table']);
+		$sql->where(array($table.'.account_id' => $account_id));
 		return $sql;
 	}
 	
