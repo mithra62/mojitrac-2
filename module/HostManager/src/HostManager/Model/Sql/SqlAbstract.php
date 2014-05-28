@@ -32,6 +32,16 @@ abstract class SqlAbstract {
 		$sql->where(array($table.'.account_id' => $account_id));
 		return $sql;
 	}
+		
+	/**
+	 * Handles the SELECT statements for filtering by Account
+	 * @param \Zend\Db\Sql\Insert $sql
+	 */
+	public function Insert(\Zend\Db\Sql\Insert $sql, $account_id)
+	{
+		$sql->values(array('account_id' => $account_id), $sql::VALUES_MERGE);
+		return $sql;
+	}
 	
 	/**
 	 * Returns the name of the table we're working
@@ -43,6 +53,7 @@ abstract class SqlAbstract {
 	 */
 	public function getTableName($table)
 	{
+		//we're dealing with an alias so parse it for its parts
 		if( is_array($table) )
 		{
 			$string = '';
