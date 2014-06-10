@@ -88,6 +88,9 @@ class SqlEvent extends BaseEvent
 	    		//do some error handling
 	    		throw(new \Exception('NO!!!'));
 	    	}
+	    	
+	    	//now verify the member is actually attached to this account
+	    	//TODO
     	}
     	
     	return $this->account_id;

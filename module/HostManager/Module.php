@@ -72,21 +72,21 @@ class Module
     {
     	return array(
 			'factories' => array(
-						'HostManager\Event\SqlEvent' => function($sm) {
-							$auth = $sm->get('AuthService');
-							$config = $sm->get('Config');
-							$account = $sm->get('HostManager\Model\Accounts');
-							$sqlEvent = new SqlEvent($auth->getIdentity(), $account, $config['sub_primary_url']);
-							return $sqlEvent;
-						},
-						'HostManager\Model\Accounts' => function($sm) {
-							$auth = $sm->get('AuthService');
-							$adapter = $sm->get('Zend\Db\Adapter\Adapter');
-							$db = $sm->get('SqlObject');	
-							$account = new Accounts($adapter, $db);
-							return $account;
-						},
-					)
-			);
+				'HostManager\Event\SqlEvent' => function($sm) {
+					$auth = $sm->get('AuthService');
+					$config = $sm->get('Config');
+					$account = $sm->get('HostManager\Model\Accounts');
+					$sqlEvent = new SqlEvent($auth->getIdentity(), $account, $config['sub_primary_url']);
+					return $sqlEvent;
+				},
+				'HostManager\Model\Accounts' => function($sm) {
+					$auth = $sm->get('AuthService');
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');	
+					$account = new Accounts($adapter, $db);
+					return $account;
+				},
+			)
+		);
     }
 }
