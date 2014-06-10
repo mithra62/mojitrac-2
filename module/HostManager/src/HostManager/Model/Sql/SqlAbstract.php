@@ -59,7 +59,7 @@ abstract class SqlAbstract {
 	 * Handles the UPDATE statements to append the Account
 	 * @param \Zend\Db\Sql\Update $sql
 	 */
-	public function UPDATE(\Zend\Db\Sql\Update $sql, $account_id)
+	public function Update(\Zend\Db\Sql\Update $sql, $account_id)
 	{
 		$raw_state = $sql->getRawState();
 		$table = $this->getTableName($raw_state['table']);
