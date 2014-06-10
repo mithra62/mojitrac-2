@@ -13,7 +13,7 @@ return array(
         'Application',
         'Clients',
         'ZendDeveloperTools',
-        'HostManager'
+        //'HostManager'
 	),
     'module_listener_options' => array(
         'module_paths' => array(
