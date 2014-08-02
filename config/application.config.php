@@ -13,6 +13,7 @@ return array(
         'Application',
         'Clients',
         'ZendDeveloperTools',
+    	'ZF\ApiProblem',
         //'HostManager'
 	),
     'module_listener_options' => array(

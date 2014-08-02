@@ -69,7 +69,7 @@ class IndexController extends AbstractRestfulJsonController
     		$arr[] = array($project['id'] => $project['name']);
     	}
     
-    	echo Zend_Json::encode( $arr );
+    	return new JsonModel( $arr );
     }
     
     public function chainTasksAction()
@@ -98,6 +98,6 @@ class IndexController extends AbstractRestfulJsonController
     		$arr[] = array($task['id'] => $task['name']);
     	}
     
-    	echo Zend_Json::encode( $arr );
+    	return new JsonModel( $arr );
     }    
 }
