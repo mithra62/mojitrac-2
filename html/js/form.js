@@ -58,7 +58,7 @@ jQuery(document).ready(function($){
 		}
 	});	
 	
-	$('#company_id').chainSelect('#project_id','/pm/json/chain-projects',
+	$('#company_id').chainSelect('#project_id','/api/chain-projects',
 	{ 
 		before:function (target) //before request hide the target combobox and display the loading message
 		{ 
@@ -74,7 +74,7 @@ jQuery(document).ready(function($){
 		}
 	});
 	
-	$('#project_id').chainSelect('#task_id','/pm/json/chain-tasks',
+	$('#project_id').chainSelect('#task_id','/api/chain-tasks',
 	{ 
 		before:function (target) 
 		{ 
