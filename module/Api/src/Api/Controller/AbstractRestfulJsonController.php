@@ -56,7 +56,7 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 		$this->identity = $this->getServiceLocator()->get('AuthService')->getIdentity();
 		if( empty($this->identity) )
 		{
-			return new ApiProblemResponse(new ApiProblem(401, 'Authorization Required!'));
+			return $this->setError(401, 'Authorization Required!');
 		}
 	
 		$settings = $this->getServiceLocator()->get('Application\Model\Settings');
@@ -72,12 +72,17 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 
 		if( !$this->_initIpBlocker() )
 		{
-			return new ApiProblemResponse(new ApiProblem(401, 'Unallowed IP Address!'));
+			return $this->setError(401, 'Unallowed IP Address!');
 		}
 		
 		$this->_initEvents();
 	
 		return parent::onDispatch( $e );
+	}
+	
+	public function setError($code, $detail)
+	{
+		return new ApiProblemResponse(new ApiProblem($code, $detail));
 	}
 	
 	private function _initEvents()
@@ -100,12 +105,12 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 		$this->identity = $this->getServiceLocator()->get('AuthService')->getIdentity();
 		if( empty($this->identity) )
 		{
-			return new ApiProblemResponse(new ApiProblem(401, 'Authorization Required!'));
+			return $this->setError(401, 'Authorization Required!');
 		}
 			
 		if(!$this->perm->check($this->identity, $permission))
 		{
-			return new ApiProblemResponse(new ApiProblem(401, 'You aren\'t allowed to perform this request!'));
+			return $this->setError(401, 'You aren\'t allowed to perform this request!');
 		}
 	}
 	
@@ -148,8 +153,7 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 		
     protected function methodNotAllowed()
     {
-        $this->response->setStatusCode(405);
-        throw new \Exception('Method Not Allowed');
+    	return $this->setError(405, 'Method Not Allowed');
     }
 
     # Override default actions as they do not return valid JsonModels

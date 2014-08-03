@@ -252,16 +252,17 @@ class Tasks extends AbstractModel
 	 */
 	public function getTaskOptions($project_id = FALSE)
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->select()->from($task->getTableName(), array('name', 'id'));
-		$sql = $sql->where('status != ?', '6');
+		$sql = $this->db->select()->from(array('t'=>'tasks'), array('name', 'id'));
+		
+		$predicate = new \Zend\Db\Sql\Where();
+		$sql = $sql->where($predicate->notEqualTo('status', '6'));
 		if($project_id)
 		{
-			$sql = $sql->where('project_id = ?', $project_id);
+			$sql = $sql->where(array('project_id' => $project_id));
 		}
 		
 		$sql = $sql->order('name ASC');
-		return $task->getTasks($sql);
+		return $this->getRows($sql);
 	}
 	
 	/**

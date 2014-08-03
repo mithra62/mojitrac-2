@@ -245,17 +245,17 @@ class Projects extends AbstractModel
 	 * @param int $company_id
 	 * @return array
 	 */
-	public function getProjectOptions($company_id = FALSE, $identity = FALSE)
+	public function getProjectOptions($company_id = FALSE)
 	{
-		$sql = $this->db->select()->from($this->db->getTableName(), array('name', 'id'));
+		$sql = $this->db->select()->from(array('p'=> 'projects'))->columns(array('name', 'id'));
 		if($company_id)
 		{
-			$sql = $sql->where('company_id = ?', $company_id);
+			$sql = $sql->where(array('company_id' => $company_id));
 		}
 		
 		$sql = $sql->order('name ASC');
 		
-		return $this->db->getProjects($sql);
+		return $this->getRows($sql);
 	}
 	
 	/**
