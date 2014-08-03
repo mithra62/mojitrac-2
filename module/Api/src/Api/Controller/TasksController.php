@@ -30,37 +30,9 @@ class TasksController extends AbstractRestfulJsonController
 	{
 		return new JsonModel( array() );
 	}
-		
-	/**
-	 * Creates a JSON array to feed to drop down fields
-	 * @return \Zend\View\Model\JsonModel
-	 */
-    public function chainTasksAction()
-    {
-    	$project_id = (int)$this->getRequest()->getQuery('_value', false);
-    	if($project_id == 0)
-    	{
-    		return $this->setError(422, 'Bad, or no, project_id parameter');
-    	}
-    
-    	if($this->perm->check($this->identity, 'manage_tasks'))
-    	{
-    		$task = $this->getServiceLocator()->get('PM\Model\Tasks'); 
-    		$tasks = $task->getTaskOptions($project_id);
-    	}
-    	else
-    	{
-    		$user = $this->getServiceLocator()->get('PM\Model\Users'); 
-    		$tasks = $user->getOpenAssignedTasks($this->identity, $project_id);
-    	}
-    
-    	$arr = array();
-    	$arr[] = array('none' => '');
-    	foreach($tasks AS $task)
-    	{
-    		$arr[] = array($task['id'] => $task['name']);
-    	}
-    
-    	return new JsonModel( $arr );
-    }    
+	
+	public function get($id)
+	{
+		return new JsonModel( array($id) );
+	}   
 }

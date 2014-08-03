@@ -12,60 +12,64 @@ return array(
 						'action'     => 'index',
 					),
 				),
+        		'may_terminate' => true,
+        		'child_routes' => array(    			
+					'chain-projects' => array(
+						'type' => 'segment',
+						'options' => array(
+							'route' => '/chain-projects',
+							'defaults' => array(
+								'action' => 'chainProjects'
+							)
+						)
+					),   			
+					'chain-tasks' => array(
+						'type' => 'segment',
+						'options' => array(
+							'route' => '/chain-tasks[/:project_id]',
+							'constraints' => array(
+								'project_id' => '[0-9]*'
+							),
+							'defaults' => array(
+								'action' => 'chainTasks'
+							)
+						)
+					)
+        		)
+			),
+			'api/projects/chain-projects' => array(
+				'type'    => 'Zend\Mvc\Router\Http\Literal',
+				'options' => array(
+					'route'    => '/api/projects/chain-projects',
+					'defaults' => array(
+        				'controller' => 'Api\Controller\Projects',
+						'action' => 'chainTasksAction'
+					),
+				),
 			),
 			'api/projects' => array( //Project Routes
         		'type' => 'segment',
         		'options' => array(
-        			'route' => '/api/projects',
+        			'route' => '/api/projects[/:id]',
         			'defaults' => array(
         				'controller' => 'Api\Controller\Projects'
         			),
         		),
         		'may_terminate' => true,
-        		'child_routes' => array(     			      			
-					'chain-projects' => array(
-						'type' => 'segment',
-						'options' => array(
-							'route' => '/chain-projects[/:company_id]',
-							'defaults' => array(
-        						'controller' => 'Api\Controller\Projects',
-								'action' => 'chainProjects'
-							)
-						)
-					),
-        			'restful' => array(
-						'type' => 'segment',
-						'options' => array(
-							'route' => '/:action[/:id]',
-							'defaults' => array(
-								'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-								'id' => '[a-zA-Z0-9_-]*'									
-							)
-						)
-					)
+        		'child_routes' => array(   
         		),
         	),   
         	//end Project Routes
         	'api/tasks' => array( //Tasks Routes
         		'type' => 'segment',
         		'options' => array(
-        			'route' => '/api/tasks',
+        			'route' => '/api/tasks[/:id]',
         			'defaults' => array(
         				'controller' => 'Api\Controller\Tasks',
         			),
         		),
         		'may_terminate' => true,
-        		'child_routes' => array(    			
-					'chain-tasks' => array(
-						'type' => 'segment',
-						'options' => array(
-							'route' => '/chain-tasks[/:project_id]',
-							'constraints' => ['project_id' => '[0-9]*'],
-							'defaults' => array(
-								'action' => 'chainTasks'
-							)
-						)
-					)
+        		'child_routes' => array( 
         		)
         	), //end Tasks Routes
         			
