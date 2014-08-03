@@ -8,9 +8,9 @@
 return array(
     'modules' => array(
         'Base',
+        'Application',
         'PM',
         'Api',
-        'Application',
         'Clients',
         'ZendDeveloperTools',
     	'ZF\ApiProblem',

@@ -45,8 +45,8 @@ echo $this->formRow($csrf);
 			<td style="padding-top:15px;"><?php $name = $form->get('date'); echo $this->formRow($name); ?></td>
 			<td style="padding-top:15px;"><?php $name = $form->get('hours'); echo $this->formRow($name); ?></td>
 			<td style="padding-top:15px;"><?php $name = $form->get('company_id'); echo $this->formRow($name); ?></td>
-			<td style="padding-top:15px;"><?php $name = $form->get('project_id'); echo $this->formRow($name); ?></td>
-			<td style="padding-top:15px;"><div id="tasks"><?php $name = $form->get('task_id'); echo $this->formRow($name); ?></div></td>
+			<td style="padding-top:15px;"><select name="project_id" id="project_id" class="select input timetracker"><option value="0">None</option></select></td>
+			<td style="padding-top:15px;"><select name="task_id" id="task_id" class="select input timetracker"><option></option></select></td>
 			<td style="padding-top:15px;"><?php $name = $form->get('description'); echo $this->formRow($name); ?></td>
 			<td><input type="submit" class="submit" value="Submit" /></td>
 		</tr>

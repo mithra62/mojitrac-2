@@ -26,6 +26,11 @@ use Zend\View\Model\JsonModel;
  */
 class ProjectsController extends AbstractRestfulJsonController
 {
+	public function getList()
+	{
+		return new JsonModel( array() );
+	}
+	
 	/**
 	 * Creates a JSON array to feed to drop down fields
 	 * @return \Zend\View\Model\JsonModel

@@ -67,30 +67,6 @@ class TimeForm extends BaseForm
 		));	
 
 		$this->add(array(
-			'name' => 'task_id',
-			'type' => 'Select',
-			'attributes' => array(
-				'class' => 'select input timetracker',
-				'id' => 'task_id'
-			),
-			'options' => array(
-				'value_options' => $task_options,
-			)
-		));	
-
-		$this->add(array(
-			'name' => 'project_id',
-			'type' => 'Select',
-			'attributes' => array(
-				'class' => 'select input timetracker',
-				'id' => 'project_id'
-			),
-			'options' => array(
-				'value_options' => $project_options,
-			)
-		));	
-
-		$this->add(array(
 			'type' => 'Zend\Form\Element\Text',
 			'name' => 'description',
 			'attributes' => array(

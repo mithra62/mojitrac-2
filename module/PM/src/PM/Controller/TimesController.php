@@ -76,6 +76,9 @@ class TimesController extends AbstractPmController
     	if ($request->isPost())
     	{
     		$formData = $this->getRequest()->getPost();
+    		
+    		print_r($formData);
+    		exit;
 			$form->setInputFilter($times->getInputFilter());
     		$form->setData($request->getPost());
     		if ($form->isValid($formData))
