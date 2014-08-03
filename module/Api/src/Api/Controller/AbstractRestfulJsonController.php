@@ -13,6 +13,7 @@
 namespace Api\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
+use Zend\EventManager\EventManagerInterface;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 
@@ -93,6 +94,13 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 	
 		$al = $this->getServiceLocator()->get('PM\Event\NotificationEvent');
 		$al->register($this->getEventManager()->getSharedManager());
+	}
+	
+	public function setEventManager(EventManagerInterface $events)
+	{
+		parent::setEventManager($events);
+		$this->events = $events;
+		$events->attach('dispatch', array($this, 'checkOptions'), 10);
 	}
 	
 	/**
@@ -189,8 +197,40 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 
     public function options()
     {
-        return $this->methodNotAllowed();
+        if($this->params()->fromRoute('id', false))
+        {
+        	$options = $this->resourceOptions;
+        }
+        else
+        {
+        	$options = $this->collectionOptions;
+        }
+        
+        $response = $this->getResponse();
+        $response->getHeaders()->addHeaderLine('Allow', implode(',', $options));
+        return $response;
     }
+    
+    public function checkOptions($e)
+    {
+    	if($this->params()->fromRoute('id', false))
+    	{
+    		$options = $this->resourceOptions;
+    	}
+    	else
+    	{
+    		$options = $this->collectionOptions;
+    	}
+    	
+    	if(in_array($e->getRequest()->getMethod(), $options))
+    	{
+    		return;
+    	}
+    
+    	$response = $this->getResponse();
+    	$response->setStatusCode(405);
+    	return $response;
+    }    
 
     public function patch($id, $data)
     {

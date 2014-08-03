@@ -26,6 +26,10 @@ use Zend\View\Model\JsonModel;
  */
 class ProjectsController extends AbstractRestfulJsonController
 {
+	protected $collectionOptions = array('GET', 'POST', 'OPTIONS');
+	
+	protected $resourceOptions = array('GET', 'POST', 'DELETE', 'PATCH', 'PUT', 'OPTIONS');
+		
 	public function getList()
 	{
 		return new JsonModel( array() );
