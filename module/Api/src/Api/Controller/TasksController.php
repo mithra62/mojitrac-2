@@ -14,6 +14,7 @@ namespace Api\Controller;
 
 use Api\Controller\AbstractRestfulJsonController;
 use Zend\View\Model\JsonModel;
+use Zend\Zend_Exception;
 
 /**
  * Api - Tasks Controller
@@ -144,9 +145,50 @@ class TasksController extends AbstractRestfulJsonController
 		
 		if(!$task->removeTask($id))
 		{
-			return $this->setError(500, 'Task remove failed!');
+			return $this->setError(500, 'Task remove failed');
 		}
 			
-		return new JsonModel( array() );
+		return new JsonModel( );
 	}	
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Api\Controller\AbstractRestfulJsonController::update()
+	 */
+	public function update($id, $data)
+	{
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+		$task_data = $task->getTaskById($id);
+		if (!$task_data)
+		{
+			return $this->setError(404, 'Not found');
+		}
+		
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_projects'))
+		{
+			return $this->setError(403, 'Unauthorized to perform that action');
+		}
+		
+		$inputFilter = $task->getInputFilter();
+		$inputFilter->setData($data);
+		if (!$inputFilter->isValid($data))
+		{
+			return $this->setError(422, 'Missing input data', null, null, array('errors' => $inputFilter->getMessages()));
+		}
+
+		$data = array_merge($task_data, $data);
+
+		try {
+			
+			$task->updateTask($data, $id);
+			
+		} catch(Zend_Exception $e)
+		{
+			return $this->setError(500, 'Task update failed');
+		}		
+
+		$task_data = $task->getTaskById($id);
+		return new JsonModel( $task_data );
+	}
 }
