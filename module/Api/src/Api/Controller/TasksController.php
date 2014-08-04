@@ -109,11 +109,44 @@ class TasksController extends AbstractRestfulJsonController
 			return $this->setError(500, 'Task create failed!');
 		}
 		
-		$response = $this->getResponse();
-		$response->setStatusCode(201);
+		$this->setStatusCode(201);
 		
 		//and now let's pull the created task for the response
 		$task_data = $task->getTaskById($task_id);
 		return new JsonModel( $task_data );
 	}  
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Api\Controller\AbstractRestfulJsonController::delete()
+	 */
+	public function delete($id)
+	{
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+		$task_data = $task->getTaskById($id);
+		
+		if(!$task_data)
+		{
+			return $this->setError(404, 'Not found');
+		}
+
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_projects'))
+		{
+			return $this->redirect()->toRoute('tasks/view', array('task_id' => $id));
+		}		
+		
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_projects'))
+		{
+			return $this->setError(403, 'Unauthorized to perform that action');
+		}
+		
+		if(!$task->removeTask($id))
+		{
+			return $this->setError(500, 'Task remove failed!');
+		}
+			
+		return new JsonModel( array() );
+	}	
 }

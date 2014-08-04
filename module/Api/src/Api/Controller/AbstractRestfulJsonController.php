@@ -158,6 +158,53 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 			}
 		}
 	}
+	
+	public function options()
+	{
+		if($this->params()->fromRoute('id', false))
+		{
+			$options = $this->resourceOptions;
+		}
+		else
+		{
+			$options = $this->collectionOptions;
+		}
+	
+		$response = $this->getResponse();
+		$response->getHeaders()->addHeaderLine('Allow', implode(',', $options));
+		return $response;
+	}
+	
+	public function checkOptions($e)
+	{
+		if($this->params()->fromRoute('id', false))
+		{
+			$options = $this->resourceOptions;
+		}
+		else
+		{
+			$options = $this->collectionOptions;
+		}
+		 
+		if(in_array($e->getRequest()->getMethod(), $options))
+		{
+			return;
+		}
+	
+		$response = $this->getResponse();
+		$response->setStatusCode(405);
+		return $response;
+	}	
+	
+	/**
+	 * Sets the HTTP header code that's passed
+	 * @param int $code
+	 */
+	public function setStatusCode($code)
+	{
+		$response = $this->getResponse();
+		$response->setStatusCode($code);
+	}
 		
     protected function methodNotAllowed()
     {
@@ -193,44 +240,7 @@ class AbstractRestfulJsonController extends AbstractRestfulController
     public function head($id = null)
     {
         return $this->methodNotAllowed();
-    }
-
-    public function options()
-    {
-        if($this->params()->fromRoute('id', false))
-        {
-        	$options = $this->resourceOptions;
-        }
-        else
-        {
-        	$options = $this->collectionOptions;
-        }
-        
-        $response = $this->getResponse();
-        $response->getHeaders()->addHeaderLine('Allow', implode(',', $options));
-        return $response;
-    }
-    
-    public function checkOptions($e)
-    {
-    	if($this->params()->fromRoute('id', false))
-    	{
-    		$options = $this->resourceOptions;
-    	}
-    	else
-    	{
-    		$options = $this->collectionOptions;
-    	}
-    	
-    	if(in_array($e->getRequest()->getMethod(), $options))
-    	{
-    		return;
-    	}
-    
-    	$response = $this->getResponse();
-    	$response->setStatusCode(405);
-    	return $response;
-    }    
+    }   
 
     public function patch($id, $data)
     {
