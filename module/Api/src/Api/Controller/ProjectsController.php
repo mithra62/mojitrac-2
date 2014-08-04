@@ -26,9 +26,29 @@ use Zend\View\Model\JsonModel;
  */
 class ProjectsController extends AbstractRestfulJsonController
 {
-	protected $collectionOptions = array('GET', 'POST', 'OPTIONS');
+	/**
+	 * Maps the available HTTP verbs we support for groups of data
+	 * @var array
+	 */
+	protected $collectionOptions = array(
+		'GET', 'POST', 'OPTIONS'
+	);
 	
-	protected $resourceOptions = array('GET', 'POST', 'DELETE', 'PATCH', 'PUT', 'OPTIONS');
+	/**
+	 * Maps the available HTTP verbs for single items
+	 * @var array
+	 */
+	protected $resourceOptions = array(
+		'GET', 'POST', 'DELETE', 'PATCH', 'PUT', 'OPTIONS'
+	);
+	
+	/**
+	 * The format for Project data we're goign to return
+	 * @var unknown
+	 */
+	private $replaceMap = array(
+		
+	);
 		
 	public function getList()
 	{

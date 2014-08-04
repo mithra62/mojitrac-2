@@ -26,13 +26,94 @@ use Zend\View\Model\JsonModel;
  */
 class TasksController extends AbstractRestfulJsonController
 {
+	/**
+	 * Maps the available HTTP verbs we support for groups of data
+	 * @var array
+	 */
+	protected $collectionOptions = array(
+		'GET', 'POST', 'OPTIONS'
+	);
+	
+	/**
+	 * Maps the available HTTP verbs for single items
+	 * @var array
+	*/
+	protected $resourceOptions = array(
+		'GET', 'POST', 'DELETE', 'PATCH', 'PUT', 'OPTIONS'
+	);
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Api\Controller\AbstractRestfulJsonController::getList()
+	 */
 	public function getList()
 	{
 		return new JsonModel( array() );
 	}
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Api\Controller\AbstractRestfulJsonController::get()
+	 */
 	public function get($id)
 	{
-		return new JsonModel( array($id) );
-	}   
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+		$task_data = $task->getTaskById($id);
+		if (!$task_data)
+		{
+			return $this->setError(404, 'Not Found');
+		}
+	
+		if($task_data['assigned_to'] == $this->identity)
+		{
+			$view['assigned_to'] = TRUE;
+		}
+	
+		return new JsonModel( array($task_data) );
+	}	
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Api\Controller\AbstractRestfulJsonController::create()
+	 */
+	public function create($data)
+	{
+		if(empty($data['project_id']))
+		{
+			return $this->setError(422, 'Invalid project_id parameter');
+		}
+		
+		//make sure we're dealing with a valid project
+		$projects = $this->getServiceLocator()->get('PM\Model\Projects');
+		$project_data = $projects->getProjectById($data['project_id']);
+		if(!$project_data)
+		{
+			return $this->setError(422, 'Invalid project_id parameter');
+		}
+
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+		
+		//we have to validate the data has everything we need
+		$inputFilter = $task->getInputFilter();
+		$inputFilter->setData($data);
+		if (!$inputFilter->isValid($data))
+		{
+			return $this->setError(422, 'Missing input data', null, null, array('errors' => $inputFilter->getMessages()));
+		}
+		
+		//now we can add it to the db...
+		$data['creator'] = $this->identity;
+		$task_id = $task->addTask($data);
+		if(!$task_id)
+		{
+			return $this->setError(500, 'Task create failed!');
+		}
+		
+		$response = $this->getResponse();
+		$response->setStatusCode(201);
+		
+		//and now let's pull the created task for the response
+		$task_data = $task->getTaskById($task_id);
+		return new JsonModel( $task_data );
+	}  
 }

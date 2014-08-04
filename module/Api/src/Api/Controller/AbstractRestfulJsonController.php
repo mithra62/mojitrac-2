@@ -81,9 +81,9 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 		return parent::onDispatch( $e );
 	}
 	
-	public function setError($code, $detail)
+	public function setError($code, $detail, $type = null, $title = null, array $additional = array())
 	{
-		return new ApiProblemResponse(new ApiProblem($code, $detail));
+		return new ApiProblemResponse(new ApiProblem($code, $detail, $type, $title, $additional));
 	}
 	
 	private function _initEvents()

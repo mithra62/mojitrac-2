@@ -26,6 +26,22 @@ use Zend\View\Model\JsonModel;
  */
 class IndexController extends AbstractRestfulJsonController
 {
+	/**
+	 * Maps the available HTTP verbs we support for groups of data
+	 * @var array
+	 */
+	protected $collectionOptions = array(
+		'GET', 'OPTIONS'
+	);
+	
+	/**
+	 * Maps the available HTTP verbs for single items
+	 * @var array
+	*/
+	protected $resourceOptions = array(
+		'GET', 'OPTIONS'
+	);
+		
     public function indexAction()
     {
     	return new JsonModel(array('data' => "The MojiTrac API is alive."));
