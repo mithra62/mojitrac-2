@@ -87,7 +87,17 @@ return array(
 				
 				
 		),
-	),
+	),      
+    'translator' => array(
+        'translation_file_patterns' => array(
+            array(
+                'type'     => 'phparray',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern'  => '%s.php',
+                'text_domain' => 'api',
+            ),
+        ),
+    ),
     'controllers' => array(
 		'invokables' => array(
             'Api\Controller\Index' => 'Api\Controller\IndexController',

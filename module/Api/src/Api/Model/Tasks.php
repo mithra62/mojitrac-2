@@ -24,6 +24,12 @@ use PM\Model\Tasks as PmTasks;
 class Tasks extends PmTasks
 {
 	/**
+	 * Determines wheher we should filter results based on REST output
+	 * @var bool
+	 */
+	private $filter = TRUE;
+	
+	/**
 	 * The REST output for the tasks db table 
 	 * @var array
 	 */
@@ -33,7 +39,12 @@ class Tasks extends PmTasks
 		'company_name' => 'company_name',
 		'project_name' => 'project_name',
 		'project_id' => 'project_id',
-		'company_id' => 'company_id'
+		'company_id' => 'company_id',
+		'description' => 'description',
+		'type' => 'type_id',
+		'priority' => 'priority_id',
+		'status' => 'status_id',
+		'progress' => 'progress'
 	);
 	
 	/**
@@ -105,13 +116,23 @@ class Tasks extends PmTasks
 	}	
 	
 	/**
+	 * Sets `filter`
+	 * @param string $filter
+	 */
+	public function setFilter($filter = FALSE)
+	{
+		$this->filter = $filter;
+		return $this;
+	}
+	
+	/**
 	 * (non-PHPdoc)
 	 * @see \PM\Model\Tasks::getTaskById()
 	 */
 	public function getTaskById($id, array $what = null)
 	{
 		$tasks = parent::getTaskById($id, $what);
-		return $this->cleanResourceOutput($tasks, $this->taskOutputMap);
+		return ($this->filter ? $this->cleanResourceOutput($tasks, $this->taskOutputMap) : $tasks);
 	}
 	
 	/**

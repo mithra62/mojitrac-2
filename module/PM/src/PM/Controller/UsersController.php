@@ -81,7 +81,7 @@ class UsersController extends AbstractPmController
         	$id = $this->identity;
         }		
 
-		$user = $this->getServiceLocator()->get('Application\Model\Users');
+		$user = $this->getServiceLocator()->get('Pm\Model\Users');
 		$view['user'] = $user->getUserById($id);
 		if(!$view['user'])
 		{
