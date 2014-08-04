@@ -114,12 +114,12 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 		$this->identity = $this->getServiceLocator()->get('AuthService')->getIdentity();
 		if( empty($this->identity) )
 		{
-			return $this->setError(401, 'Authorization Required!');
+			return FALSE;
 		}
 			
 		if(!$this->perm->check($this->identity, $permission))
 		{
-			return $this->setError(401, 'You aren\'t allowed to perform this request!');
+			return FALSE;
 		}
 	}
 	
@@ -209,7 +209,7 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 		
     protected function methodNotAllowed()
     {
-    	return $this->setError(405, 'Method Not Allowed');
+    	return $this->setError(405, 'method_not_allowed');
     }
 
     # Override default actions as they do not return valid JsonModels

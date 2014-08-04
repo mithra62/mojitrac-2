@@ -179,15 +179,17 @@ class TasksController extends AbstractRestfulJsonController
 	 */
 	public function update($id, $data)
 	{
-		$task = $this->getServiceLocator()->get('Api\Model\Tasks');
-		$task_data = $task->setFilter(FALSE)->getTaskById($id);
+		//we have to use the PM model to avoid filtering results automatically
+		$task = $this->getServiceLocator()->get('Pm\Model\Tasks');
+		$task_data = $task->getTaskById($id);
 		
-		$task->setFilter(TRUE);
 		if (!$task_data)
 		{
 			return $this->setError(404, 'not_found');
 		}
 		
+		//and now we grab the API model
+		$task = $this->getServiceLocator()->get('Api\Model\Tasks');
 		$project = $this->getServiceLocator()->get('Api\Model\Projects');
 		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_projects'))
 		{

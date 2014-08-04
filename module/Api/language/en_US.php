@@ -6,6 +6,7 @@ return array(
 	'not_found' => 'Not Found',
 	'missing_input_data' => 'Missing input data',
 	'unauthorized_action' => 'Unauthorized to perform that action',
+	'method_not_allowed' => 'Method Not Allowed',
 		
 	//projects
 	'invalid_project_id' => 'Invalid project_id parameter',
