@@ -49,7 +49,22 @@ class TasksController extends AbstractRestfulJsonController
 	 */
 	public function getList()
 	{
-		return new JsonModel( array() );
+		$project_id = $this->getRequest()->getQuery('project_id', false);
+		if(empty($project_id))
+		{
+			return $this->setError(422, 'Invalid project_id parameter');
+		}
+
+		$project = $this->getServiceLocator()->get('Api\Model\Projects');
+		if(!$project->isUserOnProjectTeam($this->identity, $project_id) && !$this->perm->check($this->identity, 'manage_projects'))
+		{
+			return $this->setError(404, 'Not Found');
+		}
+
+		$task = $this->getServiceLocator()->get('Api\Model\Tasks');
+		$tasks = $task->getTasksByProjectId($project_id);
+			
+		return new JsonModel( $tasks );
 	}
 	
 	/**
@@ -58,19 +73,32 @@ class TasksController extends AbstractRestfulJsonController
 	 */
 	public function get($id)
 	{
-		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+		$task = $this->getServiceLocator()->get('Api\Model\Tasks');
 		$task_data = $task->getTaskById($id);
 		if (!$task_data)
 		{
 			return $this->setError(404, 'Not Found');
 		}
 	
-		if($task_data['assigned_to'] == $this->identity)
+		if(!$this->perm->check($this->identity, 'view_tasks'))
 		{
-			$view['assigned_to'] = TRUE;
+			return $this->setError(404, 'Not Found');
 		}
+		
+		$project = $this->getServiceLocator()->get('Api\Model\Projects');
+		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_projects'))
+		{
+			return $this->setError(404, 'Not Found');
+		}
+		
+		$task_data['assignment_history'] = $task->getTaskAssignments($id);
+		if($this->perm->check($this->identity, 'view_time'))
+		{
+			$times = $this->getServiceLocator()->get('PM\Model\Times');
+			$task_data['hours'] = $times->getTotalTimesByTaskId($id);
+		}	
 	
-		return new JsonModel( array($task_data) );
+		return new JsonModel( $task_data );
 	}	
 	
 	/**

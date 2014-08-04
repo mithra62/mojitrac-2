@@ -16,6 +16,9 @@ use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
 use Zend\View\Model\JsonModel;
 
+use Api\Model\Projects;
+use Api\Model\Tasks;
+
 /**
  * Api - Module Object
  *
@@ -40,7 +43,29 @@ class Module implements Feature\BootstrapListenerInterface
 		$em->attach(__NAMESPACE__, MvcEvent::EVENT_DISPATCH_ERROR, function($e) use ($sm) {
 			return $this->getJsonModelError($e);
 		});		
-	}
+	}   
+	
+	public function getServiceConfig()
+    {
+    	return array(
+			'factories' => array(
+					
+				//models
+				'Api\Model\Projects' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Projects($adapter, $db);
+				}, 
+				'Api\Model\Tasks' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Tasks($adapter, $db);
+				},									
+			),
+    	);
+    } 
+	
+	
 	
 	public function onDispatchError($e)
 	{
