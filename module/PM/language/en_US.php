@@ -19,6 +19,7 @@ return array(
 	
 	//users controller
 	'user_added' => 'User Added!',
+	'user_updated' => 'User Updated!',
 	'edit_user' => 'Edit User',
 	'user_cant_remove_self' => 'You can\'t remove yourself',
 	'user_removed' => 'User Removed!',

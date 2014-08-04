@@ -1239,7 +1239,7 @@ return array(
 	    ),
     ),
     'helper_map' => array(
-    		'_' => 'Zend\View\Helper\Translator'
+    	'_' => 'Zend\View\Helper\Translator'
     ),       
     'translator' => array(
         'translation_file_patterns' => array(

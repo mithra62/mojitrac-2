@@ -14,7 +14,7 @@ namespace Api\Controller;
 
 use Api\Controller\AbstractRestfulJsonController;
 use Zend\View\Model\JsonModel;
-use Zend\Zend_Exception;
+use Zend_Exception;
 
 /**
  * Api - Tasks Controller
@@ -52,13 +52,13 @@ class TasksController extends AbstractRestfulJsonController
 		$project_id = $this->getRequest()->getQuery('project_id', false);
 		if(empty($project_id))
 		{
-			return $this->setError(422, 'Invalid project_id parameter');
+			return $this->setError(422, 'invalid_project_id');
 		}
 
 		$project = $this->getServiceLocator()->get('Api\Model\Projects');
 		if(!$project->isUserOnProjectTeam($this->identity, $project_id) && !$this->perm->check($this->identity, 'manage_projects'))
 		{
-			return $this->setError(404, 'Not Found');
+			return $this->setError(404, 'not_found');
 		}
 
 		$task = $this->getServiceLocator()->get('Api\Model\Tasks');
@@ -73,25 +73,22 @@ class TasksController extends AbstractRestfulJsonController
 	 */
 	public function get($id)
 	{
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-		return $this->setError(404, $translate('not_found', 'api'));
-		
 		$task = $this->getServiceLocator()->get('Api\Model\Tasks');
 		$task_data = $task->getTaskById($id);
 		if (!$task_data)
 		{
-			return $this->setError(404, $translate('not_found', 'api'));
+			return $this->setError(404, 'not_found');
 		}
 	
 		if(!$this->perm->check($this->identity, 'view_tasks'))
 		{
-			return $this->setError(404, 'Not Found');
+			return $this->setError(404, 'not_found');
 		}
 		
 		$project = $this->getServiceLocator()->get('Api\Model\Projects');
 		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_projects'))
 		{
-			return $this->setError(404, 'Not Found');
+			return $this->setError(404, 'not_found');
 		}
 		
 		$task_data['assignment_history'] = $task->getTaskAssignments($id);
@@ -112,7 +109,7 @@ class TasksController extends AbstractRestfulJsonController
 	{
 		if(empty($data['project_id']))
 		{
-			return $this->setError(422, 'Invalid project_id parameter');
+			return $this->setError(422, 'invalid_project_id');
 		}
 		
 		//make sure we're dealing with a valid project
@@ -120,7 +117,7 @@ class TasksController extends AbstractRestfulJsonController
 		$project_data = $projects->getProjectById($data['project_id']);
 		if(!$project_data)
 		{
-			return $this->setError(422, 'Invalid project_id parameter');
+			return $this->setError(422, 'invalid_project_id');
 		}
 
 		$task = $this->getServiceLocator()->get('Api\Model\Tasks');
@@ -130,7 +127,7 @@ class TasksController extends AbstractRestfulJsonController
 		$inputFilter->setData($data);
 		if (!$inputFilter->isValid($data))
 		{
-			return $this->setError(422, 'Missing input data', null, null, array('errors' => $inputFilter->getMessages()));
+			return $this->setError(422, 'missing_input_data', null, null, array('errors' => $inputFilter->getMessages()));
 		}
 		
 		//now we can add it to the db...
@@ -138,7 +135,7 @@ class TasksController extends AbstractRestfulJsonController
 		$task_id = $task->addTask($data);
 		if(!$task_id)
 		{
-			return $this->setError(500, 'Task create failed!');
+			return $this->setError(500, 'task_create_failed');
 		}
 		
 		$this->setStatusCode(201);
@@ -159,18 +156,18 @@ class TasksController extends AbstractRestfulJsonController
 		
 		if(!$task_data)
 		{
-			return $this->setError(404, 'Not found');
+			return $this->setError(404, 'not_found');
 		}
 		
 		$project = $this->getServiceLocator()->get('PM\Model\Projects');
 		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_projects'))
 		{
-			return $this->setError(403, 'Unauthorized to perform that action');
+			return $this->setError(403, 'unauthorized_action');
 		}
 		
 		if(!$task->removeTask($id))
 		{
-			return $this->setError(500, 'Task remove failed');
+			return $this->setError(500, 'task_remove_failed');
 		}
 
 		return new JsonModel( );
@@ -188,20 +185,20 @@ class TasksController extends AbstractRestfulJsonController
 		$task->setFilter(TRUE);
 		if (!$task_data)
 		{
-			return $this->setError(404, 'Not found');
+			return $this->setError(404, 'not_found');
 		}
 		
 		$project = $this->getServiceLocator()->get('Api\Model\Projects');
 		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_projects'))
 		{
-			return $this->setError(403, 'Unauthorized to perform that action');
+			return $this->setError(403, 'unauthorized_action');
 		}
 		
 		$inputFilter = $task->getInputFilter();
 		$inputFilter->setData($data);
 		if (!$inputFilter->isValid($data))
 		{
-			return $this->setError(422, 'Missing input data', null, null, array('errors' => $inputFilter->getMessages()));
+			return $this->setError(422, 'missing_input_data', null, null, array('errors' => $inputFilter->getMessages()));
 		}
 
 		$data = array_merge($task_data, $data);
@@ -212,7 +209,7 @@ class TasksController extends AbstractRestfulJsonController
 			
 		} catch(Zend_Exception $e)
 		{
-			return $this->setError(500, 'Task update failed');
+			return $this->setError(500, 'task_update_failed');
 		}		
 
 		$task_data = $task->getTaskById($id);

@@ -133,10 +133,7 @@ return array(
 	    'invokables' => array(
 	    	'StaticUrl' => 'Application\View\Helper\StaticUrl',
 	    ),
-    ), 
-    'helper_map' => array(
-    		'_' => 'Zend\View\Helper\Translator'
-    ),       
+    ),      
     'translator' => array(
         'translation_file_patterns' => array(
             array(
