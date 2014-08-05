@@ -132,7 +132,7 @@ class Tasks extends PmTasks
 	public function getTaskById($id, array $what = null)
 	{
 		$tasks = parent::getTaskById($id, $what);
-		return ($this->filter ? $this->cleanResourceOutput($tasks, $this->taskOutputMap) : $tasks);
+		return $this->cleanResourceOutput($tasks, $this->taskOutputMap);
 	}
 	
 	/**
@@ -152,6 +152,20 @@ class Tasks extends PmTasks
 	public function getTasksByProjectId($id, array $where = null, array $not = null)
 	{
 		$tasks = parent::getTasksByProjectId($id, $where, $not);
-		return $this->cleanCollectionOutput($tasks, $this->taskOutputMap);
+		$total_results = $this->getTotalResults();
+
+		$tasks = $this->cleanCollectionOutput($tasks, $this->taskOutputMap);
+		if(count($tasks) >= 1)
+		{
+			$return = array(
+				'data' => $tasks,
+				'total_results' => (int)$total_results,
+				'total' => count($tasks),
+				'page' => (int)$this->getPage(),
+				'limit' => $this->getLimit()
+			);
+			
+			return $return;
+		}
 	}
 }

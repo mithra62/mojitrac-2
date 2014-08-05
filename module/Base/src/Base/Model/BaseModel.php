@@ -258,14 +258,55 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		return $this;		
 	}
 	
+	/**
+	 * Returns the limit the SQL is using
+	 * @return number
+	 */
+	public function getLimit()
+	{
+		return $this->limit;
+	}
+	
+	/**
+	 * Sets the offset based on $page number
+	 * 
+	 * Note that $this->limit needs to be set before
+	 * @param string $page
+	 * @return \Base\Model\BaseModel
+	 */
 	public function setPage($page = null)
 	{
-		if($page)
+		if($page && $this->limit)
 		{
 			$this->offset = ($page-1)*$this->limit;
+			$this->page = $page;
 		}
 		
 		return $this;		
+	}
+	
+	/**
+	 * Returns the page number a pagination set is on
+	 * @return string
+	 */
+	public function getPage()
+	{
+		return $this->page;
+	}
+	
+	/**
+	 * Returns the number of rows a given SQL query would return without pagination
+	 * @return string
+	 */
+	public function getTotalResults()
+	{
+		$result = $this->query("SELECT FOUND_ROWS() AS total_rows", 'execute')->toArray();
+		$total = 0;
+		if(!empty($result['0']['total_rows']))
+		{
+			$total = $result['0']['total_rows'];
+		}
+		return $total;
 	}
 	
 	/**
