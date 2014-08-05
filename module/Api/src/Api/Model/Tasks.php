@@ -152,6 +152,9 @@ class Tasks extends PmTasks
 	public function getTasksByProjectId($id, array $where = null, array $not = null)
 	{
 		$tasks = parent::getTasksByProjectId($id, $where, $not);
+		
+		print_r($tasks);
+		exit;
 		return $this->cleanCollectionOutput($tasks, $this->taskOutputMap);
 	}
 }

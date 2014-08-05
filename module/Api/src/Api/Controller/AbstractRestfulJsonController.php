@@ -52,6 +52,10 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 	 */
 	protected $prefs;
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\Mvc\Controller\AbstractRestfulController::onDispatch()
+	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
 		$this->identity = $this->getServiceLocator()->get('AuthService')->getIdentity();
@@ -81,12 +85,31 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 		return parent::onDispatch( $e );
 	}
 	
+	/**
+	 * Wrapper to handle error output
+	 * 
+	 * Note that $detail should be a key for language translation
+	 * 
+	 * @param int $code
+	 * @param string $detail
+	 * @param string $type
+	 * @param string $title
+	 * @param array $additional
+	 * @return \ZF\ApiProblem\ApiProblemResponse
+	 */
 	public function setError($code, $detail, $type = null, $title = null, array $additional = array())
 	{
 		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		return new ApiProblemResponse(new ApiProblem($code, $translate($detail, 'api'), $type, $title, $additional));
 	}
 	
+	/**
+	 * Setup the Events we're gonna piggyback on
+	 * 
+	 * Note, we have to implement the other module events since we can't extend the Base\Controller
+	 * 
+	 * @todo Abstract the registering of events
+	 */
 	private function _initEvents()
 	{
 		//setup the Activity Log
@@ -97,6 +120,10 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 		$al->register($this->getEventManager()->getSharedManager());
 	}
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\Mvc\Controller\AbstractController::setEventManager()
+	 */
 	public function setEventManager(EventManagerInterface $events)
 	{
 		parent::setEventManager($events);
@@ -160,23 +187,12 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 		}
 	}
 	
-	public function options()
-	{
-		if($this->params()->fromRoute('id', false))
-		{
-			$options = $this->resourceOptions;
-		}
-		else
-		{
-			$options = $this->collectionOptions;
-		}
-	
-		$response = $this->getResponse();
-		$response->getHeaders()->addHeaderLine('Allow', implode(',', $options));
-		return $response;
-	}
-	
-	public function checkOptions($e)
+	/**
+	 * Event to handle OPTION requests
+	 * @param \Zend\Mvc\MvcEvent $e
+	 * @return void|\Zend\Stdlib\ResponseInterface
+	 */
+	public function checkOptions(\Zend\Mvc\MvcEvent $e)
 	{
 		if($this->params()->fromRoute('id', false))
 		{
@@ -207,57 +223,120 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 		$response->setStatusCode($code);
 	}
 		
+	/**
+	 * Handy little method to disable unused HTTP verb methods
+	 * @return \ZF\ApiProblem\ApiProblemResponse
+	 */
     protected function methodNotAllowed()
     {
     	return $this->setError(405, 'method_not_allowed');
     }
+    
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractRestfulController::options()
+     */
+    public function options()
+    {
+    	if($this->params()->fromRoute('id', false))
+    	{
+    		$options = $this->resourceOptions;
+    	}
+    	else
+    	{
+    		$options = $this->collectionOptions;
+    	}
+    
+    	$response = $this->getResponse();
+    	$response->getHeaders()->addHeaderLine('Allow', implode(',', $options));
+    	return $response;
+    }    
 
-    # Override default actions as they do not return valid JsonModels
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractRestfulController::create()
+     */
     public function create($data)
     {
         return $this->methodNotAllowed();
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractRestfulController::delete()
+     */
     public function delete($id)
     {
         return $this->methodNotAllowed();
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractRestfulController::deleteList()
+     */
     public function deleteList()
     {
         return $this->methodNotAllowed();
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractRestfulController::get()
+     */
     public function get($id)
     {
         return $this->methodNotAllowed();
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractRestfulController::getList()
+     */
     public function getList()
     {
         return $this->methodNotAllowed();
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractRestfulController::head()
+     */
     public function head($id = null)
     {
         return $this->methodNotAllowed();
     }   
 
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractRestfulController::patch()
+     */
     public function patch($id, $data)
     {
         return $this->methodNotAllowed();
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractRestfulController::replaceList()
+     */
     public function replaceList($data)
     {
         return $this->methodNotAllowed();
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractRestfulController::patchList()
+     */
     public function patchList($data)
     {
         return $this->methodNotAllowed();
     }
 
+    /**
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractRestfulController::update()
+     */
     public function update($id, $data)
     {
         return $this->methodNotAllowed();

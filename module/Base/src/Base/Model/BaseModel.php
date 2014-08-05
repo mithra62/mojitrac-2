@@ -57,6 +57,24 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	protected $adapter = null;
 	
 	/**
+	 * The sort order for SQL queries
+	 * @var string
+	 */
+	protected $sortOrder = null;
+	
+	/**
+	 * The direction sorts will use
+	 * @var string
+	 */
+	protected $sortOrderDir = 'ASC';
+	
+	/**
+	 * The number or rows to return from the db
+	 * @var int
+	 */
+	protected $limit = null;
+	
+	/**
 	 * Moji Abstract Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $sql
@@ -103,6 +121,7 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	 */
 	public function getRows(\Zend\Db\Sql\Select $sql)
 	{
+		$sql = $this->prepSql($sql);
 		$ext = $this->trigger(self::EventDbSelectPre, $this, compact('sql'), array());
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $sql = $ext->last();
 				
@@ -188,9 +207,80 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		return $result->getAffectedRows(); 
 	}
 	
+	/**
+	 * Sets the SQL sort order
+	 * @param string $order
+	 * @return \Base\Model\BaseModel
+	 */
+	public function setOrder($order = null)
+	{
+		if($order)
+		{
+			$this->sortOrder = $order;
+		}
+		
+		return $this;
+	}
+	
+	/**
+	 * Sets the direction of the db SELECT sort order
+	 * @param string $dir
+	 * @return \Base\Model\BaseModel
+	 */
+	public function setOrderDir($dir = null)
+	{
+		if($dir)
+		{
+			$this->sortOrderDir = $dir;
+		}
+		
+		return $this;		
+	}
+	
+	/**
+	 * Sets the amount of rows to return on SELECT db calls
+	 * @param string $limit
+	 * @return \Base\Model\BaseModel
+	 */
+	public function setLimit($limit = null)
+	{
+		if($limit)
+		{
+			$this->limit = $limit;
+		}
+		
+		return $this;		
+	}
+	
+	/**
+	 * Applies all the chained options for the SQL object
+	 * @param \Zend\Db\Sql\Select $sql
+	 * @return \Zend\Db\Sql\Select
+	 */
+	private function prepSql(\Zend\Db\Sql\Select $sql)
+	{
+		if($this->sortOrder)
+		{
+			$sql->order($this->sortOrder.' '.$this->sortOrderDir);
+		}
+		
+		if($this->limit)
+		{
+			$sql->limit($this->limit);
+			$sql = $sql->quantifier(new \Zend\Db\Sql\Expression('SQL_CALC_FOUND_ROWS'));
+		}
+		
+		return $sql;
+	}
+	
+	/**
+	 * Executes a SQL string
+	 * @param string $sql
+	 * @param string $type
+	 * @return Ambigous <\Zend\Db\Adapter\Driver\StatementInterface, \Zend\Db\ResultSet\Zend\Db\ResultSet, \Zend\Db\Adapter\Driver\ResultInterface, \Zend\Db\ResultSet\Zend\Db\ResultSetInterface>
+	 */
 	public function query($sql, $type = 'execute')
 	{
-		//echo $sql."<br />\n";
 	    return ($this->adapter->query($sql, $type));
 	}
 	
