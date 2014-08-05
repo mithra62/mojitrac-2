@@ -75,6 +75,12 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	protected $limit = null;
 	
 	/**
+	 * Where the SQL queries should start
+	 * @var int
+	 */
+	protected $offset = null;
+	
+	/**
 	 * Moji Abstract Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $sql
@@ -252,6 +258,16 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		return $this;		
 	}
 	
+	public function setPage($page = null)
+	{
+		if($page)
+		{
+			$this->offset = ($page-1)*$this->limit;
+		}
+		
+		return $this;		
+	}
+	
 	/**
 	 * Applies all the chained options for the SQL object
 	 * @param \Zend\Db\Sql\Select $sql
@@ -268,6 +284,11 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		{
 			$sql->limit($this->limit);
 			$sql = $sql->quantifier(new \Zend\Db\Sql\Expression('SQL_CALC_FOUND_ROWS'));
+		}
+		
+		if($this->offset)
+		{
+			$sql->offset($this->offset);
 		}
 		
 		return $sql;

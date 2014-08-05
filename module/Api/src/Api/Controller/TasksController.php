@@ -52,7 +52,8 @@ class TasksController extends AbstractRestfulJsonController
 		$project_id = $this->getRequest()->getQuery('project_id', false);
 		$order = $this->getRequest()->getQuery('order', false);
 		$order_dir = $this->getRequest()->getQuery('order_dir', false);
-		$limit = $this->getRequest()->getQuery('limit', false);
+		$limit = $this->getRequest()->getQuery('limit', 10);
+		$page = $this->getRequest()->getQuery('page', 1);
 		
 		if(empty($project_id))
 		{
@@ -66,8 +67,17 @@ class TasksController extends AbstractRestfulJsonController
 		}
 
 		$task = $this->getServiceLocator()->get('Api\Model\Tasks');
-		$tasks = $task->setLimit($limit)->setOrderDir($order_dir)->setOrder($order)->getTasksByProjectId($project_id);
-			
+		$tasks = $task->setLimit($limit)
+					  ->setOrderDir($order_dir)
+					  ->setOrder($order)
+					  ->setPage($page)
+					  ->getTasksByProjectId($project_id);
+
+		if(count($tasks) == 0)
+		{
+			return $this->setError(404, 'not_found');
+		}
+		
 		return new JsonModel( $tasks );
 	}
 	
