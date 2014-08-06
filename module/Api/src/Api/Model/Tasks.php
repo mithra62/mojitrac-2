@@ -34,11 +34,12 @@ class Tasks extends PmTasks
 	 * @var array
 	 */
 	public $taskOutputMap = array(
-		'id' => 'task_id',
-		'name' => 'task_name',
+		'id' => 'id',
+		'name' => 'name',
 		'company_name' => 'company_name',
 		'project_name' => 'project_name',
 		'project_id' => 'project_id',
+		'project_name' => 'project_name',
 		'company_id' => 'company_id',
 		'description' => 'description',
 		'type' => 'type_id',

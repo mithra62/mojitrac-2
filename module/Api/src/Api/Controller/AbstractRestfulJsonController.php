@@ -16,6 +16,8 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\EventManager\EventManagerInterface;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
+use Hal\Resource;
+use Hal\Link;
 
 /**
  * Api - Abstract Controller
@@ -186,6 +188,121 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 			}
 		}
 	}
+	
+	/**
+	 * Creates the HAL Collection object for output
+	 * 
+	 * $api_route must match a route from the API module.config file
+	 * $pm_route must match a route from the PM module.config file
+	 * 
+	 * @param array $data
+	 * @param string $api_route
+	 * @param string $pm_route
+	 * @param string $pm_route_pk
+	 * @param string $embed_node_name
+	 * @return array
+	 */
+	protected function setupHalCollection(array $data, $api_route, $embed_node_name = 'items', $pm_route = FALSE, $pm_route_pk = 'task_id')
+	{
+		if(!empty($data['data']))
+		{
+			$url = $this->getRequest()->getRequestUri();
+			$total_pages = ceil($data['total_results']/$data['limit']);
+			$parent_data = array(
+				'count' => $data['total'], 
+				'total_results' => $data['total_results'], 
+				'page' => $data['page'], 
+				'total_pages' => $total_pages,
+				'limit' => (int)$data['limit']
+			);
+			$parent = new Resource($url, $parent_data);
+			
+			$url_parts = parse_url($url);
+			if($url_parts['query'] && $total_pages > 1)
+			{
+				parse_str($url_parts['query'], $get_array);
+				
+				$origial_get_array = $get_array;
+				$get_array['page'] = 1;
+				$parent->setLink(new Link($url_parts['path'].'?'.http_build_query($get_array), 'first'));
+				
+				if($data['page'] < $total_pages)
+				{
+					$get_array['page'] = $origial_get_array['page']+1;
+					$parent->setLink(new Link($url_parts['path'].'?'.http_build_query($get_array), 'next'));
+				}
+				
+				if(($origial_get_array['page']-1) != 0)
+				{
+					$get_array['page'] = $origial_get_array['page']-1;
+					$parent->setLink(new Link($url_parts['path'].'?'.http_build_query($get_array), 'prev'));
+				}				
+				
+				if($total_pages != $data['page'])
+				{
+					$get_array['page'] = $total_pages;
+					$parent->setLink(new Link($url_parts['path'].'?'.http_build_query($get_array), 'last'));
+				}
+			}
+			
+			foreach($data['data'] AS $key => $value)
+			{
+				$api_url = $this->url()->fromRoute($api_route, array('id' => $value['id']));
+				$item =  new Resource($api_url);
+				$item->setData($value);
+				
+				if($pm_route)
+				{
+					$pm_url = $this->url()->fromRoute($pm_route, array($pm_route_pk => $value['id']));
+					$item->setLink(new Link($pm_url, 'pm'));
+				}
+				
+				$parent->setEmbedded($embed_node_name, $item);
+			}
+			return $parent->toArray();
+		}
+	}	
+	
+	/**
+	 * Creates the HAL Resource for output
+	 * 
+	 * @param array $data
+	 * @param string $api_route
+	 * @param array $_embedded
+	 * @param string $pm_route
+	 * @param string $pm_route_pk
+	 * @return Ambigous <multitype:, multitype:unknown , void, multitype:multitype: >
+	 */
+	protected function setupHalResource(array $data, $api_route, array $_embedded = array(), $pm_route = FALSE, $pm_route_pk = 'task_id')
+	{
+		$url = $this->getRequest()->getRequestUri();
+		$parent = new Resource($url, $data);
+		if($pm_route)
+		{
+			$pm_url = $this->url()->fromRoute($pm_route, array($pm_route_pk => $data['id']));
+			$parent->setLink(new Link($pm_url, 'pm'));
+		}		
+
+		foreach($_embedded AS $key => $value)
+		{
+			if( !$_embedded['links'] )
+			{
+				foreach($value['data'] AS $k => $v)
+				{
+					$item =  new Resource($url);
+					$item->setData($v);	
+					if($pm_route)
+					{
+						$pm_url = $this->url()->fromRoute($pm_route, array($pm_route_pk => $data['id']));
+						$item->setLink(new Link($pm_url, 'pm'));
+					}									
+					$parent->setEmbedded($key, $item);
+				}
+			}
+		}
+		
+		return $parent->toArray();
+	}	
 	
 	/**
 	 * Event to handle OPTION requests

@@ -71,7 +71,7 @@ return array(
         		),
         	),   
         	//end Project Routes
-        	'api/tasks' => array( //Tasks Routes
+        	'api-tasks' => array( //Tasks Routes
         		'type' => 'segment',
         		'options' => array(
         			'route' => '/api/tasks[/:id]',

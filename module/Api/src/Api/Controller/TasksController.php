@@ -78,7 +78,7 @@ class TasksController extends AbstractRestfulJsonController
 			return $this->setError(404, 'not_found');
 		}
 		
-		return new JsonModel( $tasks );
+		return new JsonModel( $this->setupHalCollection($tasks, 'api-tasks', 'tasks', 'tasks/view', 'task_id') );
 	}
 	
 	/**
@@ -110,9 +110,9 @@ class TasksController extends AbstractRestfulJsonController
 		{
 			$times = $this->getServiceLocator()->get('PM\Model\Times');
 			$task_data['hours'] = $times->getTotalTimesByTaskId($id);
-		}	
-	
-		return new JsonModel( $task_data );
+		}
+		
+		return new JsonModel( $this->setupHalResource($task_data, 'api-tasks', array(), 'tasks/view', 'task_id') );
 	}	
 	
 	/**
