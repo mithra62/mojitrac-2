@@ -285,15 +285,16 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 
 		foreach($_embedded AS $key => $value)
 		{
-			if( !$_embedded['links'] )
+			if( !empty($value['link_meta']))
 			{
 				foreach($value['data'] AS $k => $v)
 				{
+					$url = $this->url()->fromRoute($value['link_meta']['route'], array('id' => $v[$value['link_meta']['pm_route_pk']]));
 					$item =  new Resource($url);
 					$item->setData($v);	
-					if($pm_route)
+					if($value['link_meta']['pm_route'])
 					{
-						$pm_url = $this->url()->fromRoute($pm_route, array($pm_route_pk => $data['id']));
+						$pm_url = $this->url()->fromRoute($value['link_meta']['pm_route'], array($value['link_meta']['pm_route_pk'] => $v[$value['link_meta']['pm_route_pk']]));
 						$item->setLink(new Link($pm_url, 'pm'));
 					}									
 					$parent->setEmbedded($key, $item);
@@ -355,6 +356,28 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 	
 		return $return;
 	}	
+	
+	/**
+	 * Creates the meta array for the _embed nodes of the HAL object
+	 * @param array $meta
+	 * @param string $api_route
+	 * @param string $pm_route
+	 * @param string $pm_route_pk
+	 * @return multitype:unknown multitype:string
+	 */
+	public function setupCollectionMeta(array $meta, $api_route = 'api-users', $pm_route = 'users/view', $pm_route_pk = 'user_id')
+	{
+		$return = array(
+			'data' => $meta,
+			'link_meta' => array(
+				'route' => $api_route,
+				'pm_route' => $pm_route,
+				'pm_route_pk' => $pm_route_pk
+			)
+		);	
+
+		return $return;
+	}
 	
 	/**
 	 * Event to handle OPTION requests

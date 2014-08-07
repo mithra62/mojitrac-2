@@ -32,7 +32,7 @@ class TasksController extends AbstractRestfulJsonController
 	 * @var array
 	 */
 	protected $collectionOptions = array(
-		'GET', 'OPTIONS'
+		'GET', 'POST', 'OPTIONS'
 	);
 	
 	/**

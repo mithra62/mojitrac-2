@@ -83,6 +83,18 @@ return array(
         		'child_routes' => array( 
         		)
         	), //end Tasks Routes
+        	'api-users' => array( //Users Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/api/users[/:id]',
+        			'defaults' => array(
+        				'controller' => 'Api\Controller\Tasks',
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array( 
+        		)
+        	), //end Users Routes
         			
 				
 				
