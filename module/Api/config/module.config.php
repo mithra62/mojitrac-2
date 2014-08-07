@@ -48,16 +48,6 @@ return array(
 					)
         		)
 			),
-			'api/projects/chain-projects' => array(
-				'type'    => 'Zend\Mvc\Router\Http\Literal',
-				'options' => array(
-					'route'    => '/api/projects/chain-projects',
-					'defaults' => array(
-        				'controller' => 'Api\Controller\Projects',
-						'action' => 'chainTasksAction'
-					),
-				),
-			),
 			'api-projects' => array( //Project Routes
         		'type' => 'segment',
         		'options' => array(

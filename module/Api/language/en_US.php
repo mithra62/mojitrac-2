@@ -8,6 +8,9 @@ return array(
 	'unauthorized_action' => 'Unauthorized to perform that action',
 	'method_not_allowed' => 'Method Not Allowed',
 		
+	//companies
+	'invalid_company_id' => 'Invalid company_id parameter',
+		
 	//projects
 	'invalid_project_id' => 'Invalid project_id parameter',
 	'project_remove_failed' => 'Project remove failed!',

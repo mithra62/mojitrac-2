@@ -125,8 +125,23 @@ class ProjectsController extends AbstractRestfulJsonController
 		return new JsonModel( $this->setupHalResource($project_data, 'api-projects', $embeds, 'projects/view', 'project_id') );
 	}	
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Api\Controller\AbstractRestfulJsonController::create()
+	 */
 	public function create($data)
 	{
+		if(!$this->perm->check($this->identity, 'manage_projects'))
+		{
+			return $this->setError(403, 'unauthorized_action');
+		}
+				
+		if(empty($data['company_id']))
+		{
+			return $this->setError(422, 'invalid_company_id');
+		}
+
+		$project = $this->getServiceLocator()->get('Api\Model\Projects');
 		$project = $this->getServiceLocator()->get('Api\Model\Projects');
 
 		//we have to validate the data has everything we need
@@ -194,5 +209,53 @@ class ProjectsController extends AbstractRestfulJsonController
 		}
 	
 		return new JsonModel( );
+	}	
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Api\Controller\AbstractRestfulJsonController::update()
+	 */
+	public function update($id, $data)
+	{
+		$project = $this->getServiceLocator()->get('Api\Model\Projects');
+		$project_data = $project->getProjectById($id);
+	
+		if (!$project_data)
+		{
+			return $this->setError(404, 'not_found');
+		}
+	
+		if(!$project->isUserOnProjectTeam($this->identity, $id) && !$this->perm->check($this->identity, 'manage_projects'))
+		{
+			return $this->setError(403, 'unauthorized_action');
+		}
+		
+		$inputFilter = $project->getInputFilter();
+		$inputFilter->setData($data);
+		if (!$inputFilter->isValid($data))
+		{
+			return $this->setError(422, 'missing_input_data', null, null, array('errors' => $inputFilter->getMessages()));
+		}
+	
+		$data = array_merge($project_data, $data);
+	
+		try {
+				
+			$project->updateProject($data, $id);
+				
+		} catch(Zend_Exception $e)
+		{
+			return $this->setError(500, 'project_update_failed');
+		}
+	
+		$project_data = $project->getProjectById($id);
+		$project_data = $this->cleanResourceOutput($project_data, $project->projectOutputMap);
+		$proj_team = $this->cleanCollectionOutput($project->getProjectTeamMembers($id), $project->projectTeamOutputMap);
+
+		$embeds = array();
+		$embeds['proj_team'] = $this->setupCollectionMeta($proj_team, 'api-users', 'users/view', 'user_id');
+		
+		$project_data['project_id'] = $id;
+		return new JsonModel( $this->setupHalResource($project_data, 'api-projects', $embeds, 'projects/view', 'project_id') );
 	}	
 }

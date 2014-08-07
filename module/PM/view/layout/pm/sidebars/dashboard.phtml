@@ -14,7 +14,7 @@ if(count($logs) >= 1)
 			continue;
 		}
 		
-		if($project_name != $log['project_name'])
+		if($project_name != $log['project_name'] && $log['project_id'] != '')
 		{
 			$url = $this->url('projects/view', array('project_id'=>$log['project_id']));
 			echo '<h3><a href="'.$url.'" class="project_dashboard" title="'.$log['project_name'].'">'.$log['project_name'].'</a></h3><ul style="padding-bottom:10px;">';

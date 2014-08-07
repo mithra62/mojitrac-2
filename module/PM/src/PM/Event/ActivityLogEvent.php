@@ -49,8 +49,6 @@ class ActivityLogEvent extends BaseEvent
         'project.update.pre' => 'logProjectUpdate',
         'project.add.post' => 'logProjectAdd',
         'project.addteam.post' => 'logProjectTeamAdd',
-    	'project.remove.pre' => 'prepLogProjectRemove',
-    	'project.remove.post' => 'logProjectRemove',
         'task.add.post' => 'logTaskAdd',
     );
     
