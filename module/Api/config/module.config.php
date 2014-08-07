@@ -58,7 +58,7 @@ return array(
 					),
 				),
 			),
-			'api/projects' => array( //Project Routes
+			'api-projects' => array( //Project Routes
         		'type' => 'segment',
         		'options' => array(
         			'route' => '/api/projects[/:id]',

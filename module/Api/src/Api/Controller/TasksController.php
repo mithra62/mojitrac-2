@@ -78,6 +78,7 @@ class TasksController extends AbstractRestfulJsonController
 			return $this->setError(404, 'not_found');
 		}
 		
+		$tasks['data'] = $this->cleanCollectionOutput($tasks['data'], $task->taskOutputMap);
 		return new JsonModel( $this->setupHalCollection($tasks, 'api-tasks', 'tasks', 'tasks/view', 'task_id') );
 	}
 	
@@ -105,7 +106,8 @@ class TasksController extends AbstractRestfulJsonController
 			return $this->setError(404, 'not_found');
 		}
 		
-		$task_data['assignment_history'] = $task->getTaskAssignments($id);
+		$task_data = $this->cleanResourceOutput($task_data, $task->taskOutputMap);
+		$task_data['assignment_history'] = $this->cleanCollectionOutput($task->getTaskAssignments($id), $task->taskAssignmentMap);
 		if($this->perm->check($this->identity, 'view_time'))
 		{
 			$times = $this->getServiceLocator()->get('PM\Model\Times');
@@ -156,7 +158,8 @@ class TasksController extends AbstractRestfulJsonController
 		
 		//and now let's pull the created task for the response
 		$task_data = $task->getTaskById($task_id);
-		return new JsonModel( $task_data );
+		$task_data = $this->cleanResourceOutput($task_data, $task->taskOutputMap);
+		return new JsonModel( $this->setupHalResource($task_data, 'api-tasks', array(), 'tasks/view', 'task_id') );
 	}  
 	
 	/**
@@ -229,6 +232,7 @@ class TasksController extends AbstractRestfulJsonController
 		}		
 
 		$task_data = $task->getTaskById($id);
-		return new JsonModel( $task_data );
+		$task_data = $this->cleanResourceOutput($task_data, $task->taskOutputMap);
+		return new JsonModel( $this->setupHalResource($task_data, 'api-tasks', array(), 'tasks/view', 'task_id') );
 	}
 }

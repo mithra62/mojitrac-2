@@ -18,6 +18,8 @@ use Zend\View\Model\JsonModel;
 
 use Api\Model\Projects;
 use Api\Model\Tasks;
+use Api\Model\Users;
+use Api\Model\Companies;
 
 /**
  * Api - Module Object
@@ -60,6 +62,16 @@ class Module implements Feature\BootstrapListenerInterface
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					return new Tasks($adapter, $db);
+				},	 
+				'Api\Model\Users' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Users($adapter, $db);
+				},	 
+				'Api\Model\Companies' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Companies($adapter, $db);
 				},									
 			),
     	);

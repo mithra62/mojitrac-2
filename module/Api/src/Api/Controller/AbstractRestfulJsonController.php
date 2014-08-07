@@ -305,6 +305,58 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 	}	
 	
 	/**
+	 * Cleans up single resources to remove unwanted fields/keys
+	 * @param array $data
+	 * @param array $map
+	 * @return multitype:array
+	 */
+	public function cleanResourceOutput(array $data, array $map)
+	{
+		//first, tidy things up so we're not just dumping db results
+		$return = array();
+		foreach($data AS $key => $value)
+		{
+			foreach($map AS $k => $v)
+			{
+				if( $key == $k )
+				{
+					$return[$v] = $value;
+				}
+			}
+		}
+	
+		return $return;
+	}
+	
+	/**
+	 * Cleans up collections to remove unwanted fields/keys
+	 * @param array $data
+	 * @param array $map
+	 * @return multitype:array
+	 */
+	public function cleanCollectionOutput(array $data, array $map)
+	{
+		//first, tidy things up so we're not just dumping db results
+		$return = array();
+		foreach($data AS $key => $value)
+		{
+			$return[$key] = array();
+			foreach($value AS $k => $v)
+			{
+				foreach($map AS $map_key => $map_value)
+				{
+					if( $k == $map_key )
+					{
+						$return[$key][$map_value] = $v;
+					}
+				}
+			}
+		}
+	
+		return $return;
+	}	
+	
+	/**
 	 * Event to handle OPTION requests
 	 * @param \Zend\Mvc\MvcEvent $e
 	 * @return void|\Zend\Stdlib\ResponseInterface

@@ -7,27 +7,33 @@
  * @copyright	Copyright (c) 2014 mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/Api/src/Api/Model/Tasks.php
+ * @filesource 	./module/Api/src/Api/Model/Users.php
  */
 
 namespace Api\Model;
 
-use PM\Model\Tasks as PmTasks;
+use PM\Model\Users as PmUsers;
 
 /**
- * Api - Tasks Model
+ * Api - Users Model
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./module/Api/src/Api/Model/Tasks.php
+ * @filesource 	./module/Api/src/Api/Model/Users.php
  */
-class Tasks extends PmTasks
-{	
+class Users extends PmUsers
+{
+	/**
+	 * Determines wheher we should filter results based on REST output
+	 * @var bool
+	 */
+	private $filter = TRUE;
+	
 	/**
 	 * The REST output for the tasks db table 
 	 * @var array
 	 */
-	public $taskOutputMap = array(
+	public $companiesOutputMap = array(
 		'id' => 'id',
 		'name' => 'name',
 		'company_name' => 'company_name',
@@ -43,42 +49,6 @@ class Tasks extends PmTasks
 	);
 	
 	/**
-	 * The REST output for the assignments db table
-	 * @var array
-	 */
-	public $taskAssignmentMap = array(
-		'id' => 'assignment_id',
-		'assigned_by' => 'assigned_by_member_id',
-		'assigned_to' => 'assigned_to_member_id',
-		'comments' => 'comments',
-		'assigned_date' => 'created_date',
-		'to_first_name' => 'assigned_to_first_name',
-		'to_last_name' => 'assigned_to_last_name',
-		'by_first_name' => 'assigned_by_first_name',
-		'by_last_name' => 'assigned_by_last_name',
-	);
-	
-	/**
-	 * (non-PHPdoc)
-	 * @see \PM\Model\Tasks::getTaskById()
-	 */
-	public function getTaskById($id, array $what = null)
-	{
-		$tasks = parent::getTaskById($id, $what);
-		return $tasks;
-	}
-	
-	/**
-	 * (non-PHPdoc)
-	 * @see \PM\Model\Tasks::getTaskAssignments()
-	 */
-	public function getTaskAssignments($id)
-	{
-		$assignments = parent::getTaskAssignments($id);
-		return $assignments;
-	}
-	
-	/**
 	 * (non-PHPdoc)
 	 * @see \PM\Model\Tasks::getTasksByProjectId()
 	 */
@@ -87,6 +57,7 @@ class Tasks extends PmTasks
 		$tasks = parent::getTasksByProjectId($id, $where, $not);
 		$total_results = $this->getTotalResults();
 
+		$tasks = $this->cleanCollectionOutput($tasks, $this->taskOutputMap);
 		if(count($tasks) >= 1)
 		{
 			$return = array(
