@@ -24,7 +24,7 @@ use PM\Model\Projects as PmProjects;
 class Projects extends PmProjects
 {
 	/**
-	 * The REST output for the tasks db table 
+	 * The REST output for the projects db table 
 	 * @var array
 	 */
 	public $projectOutputMap = array(
@@ -39,6 +39,19 @@ class Projects extends PmProjects
 		'status' => 'status_id',
 		'hours_worked' => 'hours_worked',
 		'task_count' => 'total_tasks'
+	);
+	
+	/**
+	 * The REST output for the project teams db table 
+	 * @var array
+	 */
+	public $projectTeamOutputMap = array(
+		'project_id' => 'project_id',
+		'first_name' => 'first_name',
+		'last_name' => 'last_name',
+		'email' => 'email',
+		'user_id' => 'user_id',
+		'created_date' => 'added_to_team'
 	);
 	
 	public function getProjectsByCompanyId($id, $exclude_archive = FALSE)
