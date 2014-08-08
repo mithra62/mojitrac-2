@@ -166,45 +166,39 @@ class CompaniesController extends AbstractRestfulJsonController
 	 */
 	public function update($id, $data)
 	{
-		$project = $this->getServiceLocator()->get('Api\Model\Projects');
-		$project_data = $project->getProjectById($id);
-	
-		if (!$project_data)
-		{
-			return $this->setError(404, 'not_found');
-		}
-	
-		if(!$project->isUserOnProjectTeam($this->identity, $id) && !$this->perm->check($this->identity, 'manage_projects'))
+		if(!parent::check_permission('manage_companies'))
 		{
 			return $this->setError(403, 'unauthorized_action');
 		}
 		
-		$inputFilter = $project->getInputFilter();
+		$company = $this->getServiceLocator()->get('Api\Model\Companies');
+		$company_data = $company->getCompanyById($id);
+	
+		if (!$company_data)
+		{
+			return $this->setError(404, 'not_found');
+		}
+		
+		$inputFilter = $company->getInputFilter();
 		$inputFilter->setData($data);
 		if (!$inputFilter->isValid($data))
 		{
 			return $this->setError(422, 'missing_input_data', null, null, array('errors' => $inputFilter->getMessages()));
 		}
 	
-		$data = array_merge($project_data, $data);
+		$data = array_merge($company_data, $data);
 	
 		try {
 				
-			$project->updateProject($data, $id);
+			$company->updateCompany($data, $id);
 				
 		} catch(Zend_Exception $e)
 		{
-			return $this->setError(500, 'project_update_failed');
+			return $this->setError(500, 'company_update_failed');
 		}
-	
-		$project_data = $project->getProjectById($id);
-		$project_data = $this->cleanResourceOutput($project_data, $project->projectOutputMap);
-		$proj_team = $this->cleanCollectionOutput($project->getProjectTeamMembers($id), $project->projectTeamOutputMap);
 
-		$embeds = array();
-		$embeds['proj_team'] = $this->setupCollectionMeta($proj_team, 'api-users', 'users/view', 'user_id');
-		
-		$project_data['project_id'] = $id;
-		return new JsonModel( $this->setupHalResource($project_data, 'api-projects', $embeds, 'projects/view', 'project_id') );
+		$company_data = $company->getCompanyById($id);
+		$company_data = $this->cleanResourceOutput($company_data, $company->companiesOutputMap);
+		return new JsonModel( $this->setupHalResource($company_data, 'api-companies', array(), 'companies/view', 'company_id') );
 	}	
 }
