@@ -42,6 +42,20 @@ class ProjectsController extends AbstractRestfulJsonController
 	protected $resourceOptions = array(
 		'GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'
 	);
+	
+	/**
+	 * Class preDispatch
+	 */
+	public function onDispatch( \Zend\Mvc\MvcEvent $e )
+	{
+		$e = parent::onDispatch( $e );
+		if(!parent::check_permission('view_projects'))
+		{
+			return $this->setError(403, 'unauthorized_action');
+		}
+	
+		return $e;
+	}
 		
 	/**
 	 * (non-PHPdoc)
@@ -191,6 +205,11 @@ class ProjectsController extends AbstractRestfulJsonController
 	 */
 	public function delete($id)
 	{
+		if(!$this->perm->check($this->identity, 'manage_projects'))
+		{
+			return $this->setError(403, 'unauthorized_action');
+		}
+				
 		$project = $this->getServiceLocator()->get('Api\Model\Projects');
 		$project_data = $project->getProjectById($id);
 		if(!$project_data)
@@ -217,6 +236,11 @@ class ProjectsController extends AbstractRestfulJsonController
 	 */
 	public function update($id, $data)
 	{
+		if(!$this->perm->check($this->identity, 'manage_projects'))
+		{
+			return $this->setError(403, 'unauthorized_action');
+		}
+				
 		$project = $this->getServiceLocator()->get('Api\Model\Projects');
 		$project_data = $project->getProjectById($id);
 	
