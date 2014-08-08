@@ -36,34 +36,33 @@ class Companies extends PmCompanies
 	public $companiesOutputMap = array(
 		'id' => 'id',
 		'name' => 'name',
-		'company_name' => 'company_name',
-		'project_name' => 'project_name',
-		'project_id' => 'project_id',
-		'project_name' => 'project_name',
-		'company_id' => 'company_id',
+		'phone1' => 'phone1',
+		'phone2' => 'phone2',
+		'address1' => 'address1',
+		'address2' => 'address2',
+		'city' => 'city',
+		'state' => 'state',
+		'zip' => 'zip',
+		'primary_url' => 'primary_url',
 		'description' => 'description',
-		'type' => 'type_id',
-		'priority' => 'priority_id',
-		'status' => 'status_id',
-		'progress' => 'progress'
+		'type' => 'type'
 	);
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see \PM\Model\Tasks::getTasksByProjectId()
+	 * @see \PM\Model\Companies::getAllCompanies()
 	 */
-	public function getTasksByProjectId($id, array $where = null, array $not = null)
+	public function getAllCompanies($view_type = FALSE)
 	{
-		$tasks = parent::getTasksByProjectId($id, $where, $not);
+		$companies = parent::getAllCompanies($view_type);
 		$total_results = $this->getTotalResults();
 
-		$tasks = $this->cleanCollectionOutput($tasks, $this->taskOutputMap);
-		if(count($tasks) >= 1)
+		if(count($companies) >= 1)
 		{
 			$return = array(
-				'data' => $tasks,
+				'data' => $companies,
 				'total_results' => (int)$total_results,
-				'total' => count($tasks),
+				'total' => count($companies),
 				'page' => (int)$this->getPage(),
 				'limit' => $this->getLimit()
 			);

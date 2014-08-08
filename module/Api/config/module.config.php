@@ -85,6 +85,18 @@ return array(
         		'child_routes' => array( 
         		)
         	), //end Users Routes
+        	'api-companies' => array( //Companies Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/api/companies[/:id]',
+        			'defaults' => array(
+        				'controller' => 'Api\Controller\Companies',
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array( 
+        		)
+        	), //end Companies Routes
         			
 				
 				
@@ -105,6 +117,7 @@ return array(
             'Api\Controller\Index' => 'Api\Controller\IndexController',
             'Api\Controller\Projects' => 'Api\Controller\ProjectsController',
             'Api\Controller\Tasks' => 'Api\Controller\TasksController',
+            'Api\Controller\Companies' => 'Api\Controller\CompaniesController',
 		),
 	),
 );

@@ -287,14 +287,14 @@ class Companies extends AbstractModel
 	 */
 	public function removeCompany($company_id)
 	{
-		$ext = $this->trigger(self::EventCompanyRemovePre, $this, compact('company_id'), $this->setXhooks($data));
+		$ext = $this->trigger(self::EventCompanyRemovePre, $this, compact('company_id'), $this->setXhooks(array()));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 				
-		if($this->db->deleteCompany($company_id))
-		{
-			$ext = $this->trigger(self::EventCompanyRemovePost, $this, compact('company_id'), $this->setXhooks($data));
-			if($ext->stopped()) return $ext->last(); elseif($ext->last()) $update = $ext->last();
-		}
+		$where = array('id' => $company_id);
+		$delete = $this->remove('companies', $where);
+		
+		$ext = $this->trigger(self::EventCompanyRemovePost, $this, compact('company_id'), $this->setXhooks(array()));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $update = $ext->last();
 		
 		return TRUE;
 	}

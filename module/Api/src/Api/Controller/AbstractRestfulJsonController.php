@@ -150,6 +150,8 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 		{
 			return FALSE;
 		}
+		
+		return TRUE;
 	}
 	
 	/**
