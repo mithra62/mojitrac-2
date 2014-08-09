@@ -146,8 +146,6 @@ class UsersController extends AbstractRestfulJsonController
 		$user_data = $user->getUserById($user_id);
 		$user_data = $this->cleanResourceOutput($user_data, $user->usersOutputMap);
 		$embeds['user_roles'] = $user->getUserRoles($user_id);
-		
-
 		$embeds['user_roles'] = $this->cleanCollectionOutput($embeds['user_roles'], $user->userRolesOutputMap);
 		$embeds['user_roles'] = $this->setupCollectionMeta($embeds['user_roles'], 'api-roles', 'roles/view', 'role_id'); 
 
@@ -163,7 +161,7 @@ class UsersController extends AbstractRestfulJsonController
 	 */
 	public function delete($id)
 	{
-		if(!parent::check_permission('manage_users'))
+		if(!parent::check_permission('manage_users') || $this->identity == $id) //ensure they aren't removing themselves
 		{
 			return $this->setError(403, 'unauthorized_action');
 		}
@@ -189,39 +187,45 @@ class UsersController extends AbstractRestfulJsonController
 	 */
 	public function update($id, $data)
 	{
-		if(!parent::check_permission('manage_companies'))
+		if(!parent::check_permission('manage_users'))
 		{
-			return $this->setError(403, 'unauthorized_action');
+			$id = $this->identity; //if they can't manage all users they can only update themselves
 		}
 		
-		$company = $this->getServiceLocator()->get('Api\Model\Companies');
-		$company_data = $company->getCompanyById($id);
+		$user = $this->getServiceLocator()->get('Api\Model\Users');
+		$user_data = $user->getUserById($id);
 	
-		if (!$company_data)
+		if (!$user_data)
 		{
 			return $this->setError(404, 'not_found');
 		}
 		
-		$inputFilter = $company->getInputFilter();
-		$inputFilter->setData($data);
+		$inputFilter = $user->getEditInputFilter();
+		$inputFilter->setData($data);	
+		$data = array_merge($user_data, $data);
 		if (!$inputFilter->isValid($data))
 		{
 			return $this->setError(422, 'missing_input_data', null, null, array('errors' => $inputFilter->getMessages()));
 		}
 	
-		$data = array_merge($company_data, $data);
-	
 		try {
 				
-			$company->updateCompany($data, $id);
+			$user->updateUser($data, $id);
 				
 		} catch(Zend_Exception $e)
 		{
-			return $this->setError(500, 'company_update_failed');
+			return $this->setError(500, 'user_update_failed');
 		}
 
-		$company_data = $company->getCompanyById($id);
-		$company_data = $this->cleanResourceOutput($company_data, $company->companiesOutputMap);
-		return new JsonModel( $this->setupHalResource($company_data, 'api-companies', array(), 'companies/view', 'company_id') );
+		$user_data = $user->getUserById($id);
+		$user_data = $this->cleanResourceOutput($user_data, $user->usersOutputMap);
+		$embeds['user_roles'] = $user->getUserRoles($id);
+		$embeds['user_roles'] = $this->cleanCollectionOutput($embeds['user_roles'], $user->userRolesOutputMap);
+		$embeds['user_roles'] = $this->setupCollectionMeta($embeds['user_roles'], 'api-roles', 'roles/view', 'role_id'); 
+
+		$times = $this->getServiceLocator()->get('PM\Model\Times');
+		$user_data['hours'] = $times->getTotalTimesByUserId($id);		
+		
+		return new JsonModel( $this->setupHalResource($user_data, 'api-users', $embeds, 'users/view', 'user_id') );
 	}	
 }
