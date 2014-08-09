@@ -73,9 +73,10 @@ class UsersController extends AbstractRestfulJsonController
 	public function get($id)
 	{
 		$user = $this->getServiceLocator()->get('Api\Model\Users');
+		$prefs = $this->getServiceLocator()->get('Application\Model\User\Data');
 		
 		//if we can't view all users than we can only view ourselves
-		if(!$this->perm->check($this->identity, 'view_users_data'))
+		if(!parent::check_permission($this->identity, 'view_users_data'))
 		{
 			$id = $this->identity;
 		}		
@@ -94,7 +95,8 @@ class UsersController extends AbstractRestfulJsonController
 		$embeds['user_roles'] = $this->setupCollectionMeta($embeds['user_roles'], 'api-roles', 'roles/view', 'role_id'); 
 
 		$times = $this->getServiceLocator()->get('PM\Model\Times');
-		$user_data['hours'] = $times->getTotalTimesByUserId($id);		
+		$user_data['hours'] = $times->getTotalTimesByUserId($id);	
+		$user_data['prefs']	= $prefs->getUsersData($id);
 		
 		return new JsonModel( $this->setupHalResource($user_data, 'api-users', $embeds, 'users/view', 'user_id') );
 	}	
@@ -227,5 +229,5 @@ class UsersController extends AbstractRestfulJsonController
 		$user_data['hours'] = $times->getTotalTimesByUserId($id);		
 		
 		return new JsonModel( $this->setupHalResource($user_data, 'api-users', $embeds, 'users/view', 'user_id') );
-	}	
+	}
 }

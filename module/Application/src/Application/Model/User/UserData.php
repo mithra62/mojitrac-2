@@ -57,7 +57,7 @@ class UserData extends KeyValue
 		'noti_remove_proj_team' => '1',
 		'noti_file_uploaded' => '1',
 		'noti_file_revision_uploaded' => '1',
-		'timer_data',
+		'timer_data' => '0',
 		'enable_rel_time' => '1',
 		'enable_contextual_help' => '1'
 	);			

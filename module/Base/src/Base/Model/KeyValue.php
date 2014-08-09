@@ -189,7 +189,7 @@ abstract class KeyValue extends BaseModel
 				$arr[$item['option_name']] = $item['option_value'];
 			}
 		}
-	
+		
 		//now we verify there are settings for everything
 		foreach($this->defaults AS $key => $value)
 		{

@@ -7,7 +7,7 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./moji/application/modules/pm/models/User.php
+ * @filesource 	./moji/Application/src/Application/Model/Permissions.php
  */
 
 namespace Application\Model;
@@ -16,11 +16,11 @@ use Zend\Db\Sql\Sql;
 use Application\Model\AbstractModel;
 
  /**
- * PM - User Model
+ * PM - Permission Model
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/modules/pm/models/User.php
+ * @filesource 	./moji/Application/src/Application/Model/Permissions.php
  */
 class Permissions extends AbstractModel
 {
@@ -70,4 +70,5 @@ class Permissions extends AbstractModel
 			return FALSE;
 		}
 	}
+	
 }
