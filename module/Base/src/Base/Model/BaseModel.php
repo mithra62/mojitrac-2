@@ -75,6 +75,12 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	protected $limit = null;
 	
 	/**
+	 * The WHERE clause array for SQL
+	 * @var array
+	 */
+	protected $where = null;
+	
+	/**
 	 * Where the SQL queries should start
 	 * @var int
 	 */
@@ -213,6 +219,12 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		return $result->getAffectedRows(); 
 	}
 	
+	public function setWhere(array $where = null)
+	{
+		$this->where = $where;
+		return $this;
+	}
+	
 	/**
 	 * Sets the SQL sort order
 	 * @param string $order
@@ -330,6 +342,11 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		if($this->offset)
 		{
 			$sql->offset($this->offset);
+		}
+		
+		if($this->where)
+		{
+			$sql->where($this->where);
 		}
 		
 		return $sql;

@@ -20,6 +20,7 @@ use Api\Model\Projects;
 use Api\Model\Tasks;
 use Api\Model\Users;
 use Api\Model\Companies;
+use Api\Model\Options;
 
 /**
  * Api - Module Object
@@ -73,6 +74,11 @@ class Module implements Feature\BootstrapListenerInterface
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					return new Companies($adapter, $db);
+				},	 
+				'Api\Model\Options' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Options($adapter, $db);
 				},									
 			),
     	);

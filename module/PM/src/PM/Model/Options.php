@@ -85,6 +85,27 @@ class Options extends AbstractModel
                 ),
 			)));
 	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'area',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+                'validators' => array(
+                    array(
+                      'name' =>'NotEmpty', 
+                        'options' => array(
+                            'messages' => array(
+                                \Zend\Validator\NotEmpty::IS_EMPTY => $translator('required', 'pm') 
+                            ),
+                        ),
+                    ),
+                ),
+			)));
+			
+			
+	
 			$this->inputFilter = $inputFilter;
 		}
 	
