@@ -7,6 +7,8 @@ return array(
 	'missing_input_data' => 'Missing input data',
 	'unauthorized_action' => 'Unauthorized to perform that action',
 	'method_not_allowed' => 'Method Not Allowed',
+	'isEmpty' => 'Value is required and can\'t be empty',
+	'invalidValue' => 'The selected values aren\'t allowed',
 		
 	//companies
 	'invalid_company_id' => 'Invalid company_id parameter',
@@ -19,5 +21,10 @@ return array(
 	'task_create_failed' => 'Task create failed!',
 	'task_remove_failed' => 'Task remove failed!',
 	'task_update_failed' => 'Task update failed!',
+		
+	//users
+	'user_create_failed' => 'User create failed',
+	'user_remove_failed' => 'User remove failed',
+	'user_update_failed' => 'User update failed',
 	
 );

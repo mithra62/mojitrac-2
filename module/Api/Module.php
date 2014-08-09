@@ -66,7 +66,8 @@ class Module implements Feature\BootstrapListenerInterface
 				'Api\Model\Users' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Users($adapter, $db);
+					$role = $sm->get('Application\Model\Roles');
+					return new Users($adapter, $db, $role);
 				},	 
 				'Api\Model\Companies' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');

@@ -78,13 +78,25 @@ return array(
         		'options' => array(
         			'route' => '/api/users[/:id]',
         			'defaults' => array(
-        				'controller' => 'Api\Controller\Tasks',
+        				'controller' => 'Api\Controller\Users',
         			),
         		),
         		'may_terminate' => true,
         		'child_routes' => array( 
         		)
         	), //end Users Routes
+        	'api-roles' => array( //User Roles Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/api/roles[/:id]',
+        			'defaults' => array(
+        				'controller' => 'Api\Controller\Users',
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array( 
+        		)
+        	), //end User Roles Routes
         	'api-companies' => array( //Companies Routes
         		'type' => 'segment',
         		'options' => array(
@@ -118,6 +130,7 @@ return array(
             'Api\Controller\Projects' => 'Api\Controller\ProjectsController',
             'Api\Controller\Tasks' => 'Api\Controller\TasksController',
             'Api\Controller\Companies' => 'Api\Controller\CompaniesController',
+            'Api\Controller\Users' => 'Api\Controller\UsersController',
 		),
 	),
 );

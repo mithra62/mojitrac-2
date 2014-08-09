@@ -30,45 +30,73 @@ class Users extends PmUsers
 	private $filter = TRUE;
 	
 	/**
-	 * The REST output for the tasks db table 
+	 * The REST output for the users db table 
 	 * @var array
 	 */
-	public $companiesOutputMap = array(
+	public $usersOutputMap = array(
 		'id' => 'id',
-		'name' => 'name',
-		'company_name' => 'company_name',
-		'project_name' => 'project_name',
-		'project_id' => 'project_id',
-		'project_name' => 'project_name',
-		'company_id' => 'company_id',
+		'email' => 'email',
+		'first_name' => 'first_name',
+		'last_name' => 'last_name',
+		'phone_mobile' => 'phone_mobile',
+		'phone_home' => 'phone_home',
+		'phone_work' => 'phone_work',
+		'phone_fax' => 'phone_fax',
+		'job_title' => 'job_title',
 		'description' => 'description',
-		'type' => 'type_id',
-		'priority' => 'priority_id',
-		'status' => 'status_id',
-		'progress' => 'progress'
+		'user_status' => 'status'
+	);
+	
+	/**
+	 * The REST output for the user_roles db table 
+	 * @var array
+	 */
+	public $userRolesOutputMap = array(
+		'id' => 'id',
+		'id' => 'role_id',
+		'name' => 'name',
+		'description' => 'description'
 	);
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see \PM\Model\Tasks::getTasksByProjectId()
+	 * @see \Application\Model\Users::getAllUsers()
 	 */
-	public function getTasksByProjectId($id, array $where = null, array $not = null)
+	public function getAllUsers($status = FALSE)
 	{
-		$tasks = parent::getTasksByProjectId($id, $where, $not);
+		$users = parent::getAllUsers($status);
 		$total_results = $this->getTotalResults();
-
-		$tasks = $this->cleanCollectionOutput($tasks, $this->taskOutputMap);
-		if(count($tasks) >= 1)
+		if(count($users) >= 1)
 		{
 			$return = array(
-				'data' => $tasks,
+				'data' => $users,
 				'total_results' => (int)$total_results,
-				'total' => count($tasks),
+				'total' => count($users),
 				'page' => (int)$this->getPage(),
 				'limit' => $this->getLimit()
 			);
 			
 			return $return;
 		}
+	}
+	
+	/**
+	 * Takes the passed $roles array and returns only valid user groups ids
+	 * @param array $roles
+	 * @return array
+	 */
+	public function filterUserRoles(array $roles)
+	{
+		$user_roles = $this->roles->getAllRoles();
+		$return = array();
+		foreach($user_roles AS $user_role)
+		{
+			if( in_array($user_role['id'], $roles) )
+			{
+				$return[] = $user_role['id'];
+			}
+		}
+		
+		return $return;
 	}
 }

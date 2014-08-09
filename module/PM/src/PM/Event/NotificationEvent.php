@@ -74,6 +74,6 @@ class NotificationEvent extends BaseEvent
     	$this->mail->setViewDir($this->mail->getModulePath(__DIR__));
     	$this->mail->setEmailView('user-registration', array('user_data' => $data, 'user_id' => $user_id));
     	$this->mail->setSubject('user_registration_email_subject');
-    	return $this->mail->send($mail->transport);    	
+    	$this->mail->send($mail->transport);    	
     }
 }

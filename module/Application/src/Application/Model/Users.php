@@ -430,12 +430,13 @@ class Users extends AbstractModel
 	 * @param \Application\Model\Roles $roles
 	 * @return unknown
 	 */
-	public function addUser(array $data, \Application\Model\Hash $hash, \Application\Model\Roles $roles)
+	public function addUser(array $data, \Application\Model\Hash $hash)
 	{
 		$ext = $this->trigger(self::EventUserAddPre, $this, compact('data'), $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 		
 		$sql = $this->getSQL($data);
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 		$sql['hash'] = $hash->gen_salt();
 		$sql['password'] = $hash->password($data['password'], $sql['hash']);
 		$user_id = $data['user_id'] = $this->insert('users', $sql);
@@ -444,7 +445,7 @@ class Users extends AbstractModel
 		{
 			if(isset($data['user_roles']))
 			{
-				$roles->updateUsersRoles($user_id, $data['user_roles']);
+				$this->roles->updateUsersRoles($user_id, $data['user_roles']);
 			}
 			
 			$ext = $this->trigger(self::EventUserAddPost, $this, compact('user_id', 'data'), $this->setXhooks($data));
@@ -517,7 +518,7 @@ class Users extends AbstractModel
 	 */
 	public function removeUser($user_id)
 	{		
-		$ext = $this->trigger(self::EventUserRemovePre, $this, compact('user_id'), array($user_id));
+		$ext = $this->trigger(self::EventUserRemovePre, $this, compact('user_id'), array());
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $user_id = $ext->last();
 				
 		//check if the user has any attachments
@@ -527,7 +528,7 @@ class Users extends AbstractModel
 		{
 			if($this->update('users', array('user_status' => '0'), array('id' => $user_id)))
 			{
-				$ext = $this->trigger(self::EventUserRemovePost, $this, compact('user_id'), array($user_id));
+				$ext = $this->trigger(self::EventUserRemovePost, $this, compact('user_id'), array());
 				if($ext->stopped()) return $ext->last(); elseif($ext->last()) $user_id = $ext->last();
 				return $user_id;
 			}
@@ -537,7 +538,7 @@ class Users extends AbstractModel
 			
 			if($this->remove('users', array('id' => $user_id)))
 			{
-				$ext = $this->trigger(self::EventUserRemovePost, $this, compact('user_id'), array($user_id));
+				$ext = $this->trigger(self::EventUserRemovePost, $this, compact('user_id'), array());
 				if($ext->stopped()) return $ext->last(); elseif($ext->last()) $user_id = $ext->last();
 				return $user_id;
 			}			
