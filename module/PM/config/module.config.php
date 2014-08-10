@@ -800,19 +800,7 @@ return array(
         						'action' => 'remove'
         					)
         				)
-        			),
-        			'add' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => '/add',
-        					'constraints' => array(
-        						'note_id' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'add'
-        					)
-        				)
-        			),        			
+        			),    			
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
@@ -837,6 +825,15 @@ return array(
         					)
         				)
         			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add',
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),    
         		)
         	), //end Roles Routes
 

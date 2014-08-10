@@ -21,6 +21,7 @@ use Api\Model\Tasks;
 use Api\Model\Users;
 use Api\Model\Companies;
 use Api\Model\Options;
+use Api\Model\Roles;
 
 /**
  * Api - Module Object
@@ -67,7 +68,7 @@ class Module implements Feature\BootstrapListenerInterface
 				'Api\Model\Users' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					$role = $sm->get('Application\Model\Roles');
+					$role = $sm->get('Api\Model\Roles');
 					return new Users($adapter, $db, $role);
 				},	 
 				'Api\Model\Companies' => function($sm) {
@@ -79,6 +80,11 @@ class Module implements Feature\BootstrapListenerInterface
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					return new Options($adapter, $db);
+				},	 
+				'Api\Model\Roles' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Roles($adapter, $db);
 				},									
 			),
     	);
