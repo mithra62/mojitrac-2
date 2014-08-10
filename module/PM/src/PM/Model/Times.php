@@ -37,9 +37,33 @@ class Times extends AbstractModel
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $db
 	 */
-	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db, \PM\Model\Projects $project, \PM\Model\Tasks $task)
 	{
 		parent::__construct($adapter, $db);
+		$this->task = $task;
+		$this->project = $project;
+	}	
+    
+	/**
+	 * Returns an array for modifying $_name
+	 * @param $data
+	 * @return array
+	 */
+	public function getSQL($data){
+		return array(
+			'date' => $data['date'],
+			'year' => $data['year'],
+			'month' => $data['month'],
+			'day' => $data['day'],
+			'company_id' => $data['company_id'],
+			'user_id' => $data['user_id'],
+			'project_id' => $data['project_id'],
+			'task_id' => $data['task_id'],
+			'hours' => $data['hours'],
+			'billable' => $data['billable'],
+			'description' => $data['description'],
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
 	}
 	
 	public function setInputFilter(InputFilterInterface $inputFilter)
@@ -54,7 +78,7 @@ class Times extends AbstractModel
 			$factory = new InputFactory();
 	
 			$inputFilter->add($factory->createInput(array(
-				'name'     => 'subject',
+				'name'     => 'description',
 				'required' => true,
 				'filters'  => array(
 					array('name' => 'StripTags'),
@@ -436,22 +460,24 @@ class Times extends AbstractModel
 		}	
 
 		//update the date to ensure we're dealing with the right format
-		
-		$sql = $this->db->getSQL($data);
+		$date = strtotime($data['date']);
+		$data['month'] = date('n', $date);
+		$data['day'] = date('j', $date);
+		$data['year'] = date('Y', $date);
+		$sql = $this->getSQL($data);
 		$sql['creator'] = $data['creator'];
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 
-		$time_id = $this->db->addTime($sql);
+		$time_id = $this->insert('times', $sql);
 		
 		if(is_numeric($data['project_id']))
 		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-			$project->updateProjectTime($data['project_id'], $data['hours']);
+			$this->project->updateProjectTime($data['project_id'], $data['hours']);
 		}
 		
 		if(is_numeric($data['task_id']))
 		{
-			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-			$task->updateTaskTime($data['task_id'], $data['hours']);
+			$this->task->updateTaskTime($data['task_id'], $data['hours']);
 		}
 		
 		return $time_id;

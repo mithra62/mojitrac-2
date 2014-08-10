@@ -119,7 +119,10 @@ class Module
 				'PM\Model\Times' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Times($adapter, $db);
+					
+					$project = $sm->get('PM\Model\Projects');
+					$task = $sm->get('PM\Model\Tasks');
+					return new Times($adapter, $db, $project, $task);
 				},
 				'PM\Model\Bookmarks' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');

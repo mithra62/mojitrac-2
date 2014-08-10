@@ -76,12 +76,9 @@ class TimesController extends AbstractPmController
     	if ($request->isPost())
     	{
     		$formData = $this->getRequest()->getPost();
-    		
-    		print_r($formData);
-    		exit;
 			$form->setInputFilter($times->getInputFilter());
-    		$form->setData($request->getPost());
-    		if ($form->isValid($formData))
+    		$form->setData($formData->toArray());
+    		if ($form->isValid($formData->toArray()))
     		{
     			$formData = $formData->toArray();
 				$formData['creator'] = $this->identity;
@@ -89,10 +86,9 @@ class TimesController extends AbstractPmController
 				$time_id = $times->addTime($formData);
 				if($time_id)
 				{
-					$date = $this->_request->getParam('date', FALSE);
-			    	$this->_flashMessenger->addMessage('Time Added!');
-					$this->_helper->redirector('view-day','times', 'pm', array('date' => $formData['date']));
-					exit;
+					$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+					$this->flashMessenger()->addMessage($translate('time_added', 'pm'));
+					return $this->redirect()->toRoute('times/view-day', array('month' => $month, 'year' => $year, 'day' => $day));
 					
 				} 
 				else 
