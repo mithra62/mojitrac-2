@@ -89,7 +89,16 @@ class Login extends AbstractModel
 					),
 				),
 			)));
-	
+			
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'password',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				)
+			)));
+
 			$this->inputFilter = $inputFilter;
 		}
 	

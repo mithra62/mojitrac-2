@@ -48,6 +48,40 @@ return array(
 					)
         		)
 			),
+			'api-login' => array(
+				'type'    => 'Zend\Mvc\Router\Http\Literal',
+				'options' => array(
+					'route'    => '/api/login',
+					'defaults' => array(
+						'controller' => 'Api\Controller\Login',
+						'action'     => 'index',
+					),
+				),
+        		'may_terminate' => true,
+        		'child_routes' => array(    			
+					'logout' => array(
+						'type' => 'segment',
+						'options' => array(
+							'route' => '/logout',
+							'defaults' => array(
+								'action' => 'logout'
+							)
+						)
+					),   			
+					'chain-tasks' => array(
+						'type' => 'segment',
+						'options' => array(
+							'route' => '/chain-tasks[/:project_id]',
+							'constraints' => array(
+								'project_id' => '[0-9]*'
+							),
+							'defaults' => array(
+								'action' => 'chainTasks'
+							)
+						)
+					)
+        		)
+			),
 			'api-projects' => array( //Project Routes
         		'type' => 'segment',
         		'options' => array(
@@ -145,6 +179,7 @@ return array(
             'Api\Controller\Users' => 'Api\Controller\UsersController',
             'Api\Controller\Options' => 'Api\Controller\OptionsController',
             'Api\Controller\Roles' => 'Api\Controller\RolesController',
+            'Api\Controller\Login' => 'Api\Controller\LoginController',
 		),
 	),
 );

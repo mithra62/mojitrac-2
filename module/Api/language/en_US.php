@@ -10,6 +10,9 @@ return array(
 	'isEmpty' => 'Value is required and can\'t be empty',
 	'invalidValue' => 'The selected values aren\'t allowed',
 		
+	//login
+	'invalid_credentials' => 'Invalid Credentials! Please Try Again',
+		
 	//companies
 	'invalid_company_id' => 'Invalid company_id parameter',
 		

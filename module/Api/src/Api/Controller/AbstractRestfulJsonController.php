@@ -55,13 +55,22 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 	protected $prefs;
 	
 	/**
+	 * The API Controllers that don't require authentication
+	 * @var array
+	 */
+	protected $whitelist = array(
+		'Api\Controller\Login'
+	);
+	
+	/**
 	 * (non-PHPdoc)
 	 * @see \Zend\Mvc\Controller\AbstractRestfulController::onDispatch()
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
 		$this->identity = $this->getServiceLocator()->get('AuthService')->getIdentity();
-		if( empty($this->identity) )
+		$controller = $this->getEvent()->getRouteMatch()->getParam('controller', FALSE);
+		if( empty($this->identity) && !in_array($controller, $this->whitelist))
 		{
 			return $this->setError(401, 'Authorization Required!');
 		}
@@ -190,6 +199,33 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 			}
 		}
 	}
+	
+	public function getAuthService()
+	{
+		if (! $this->authservice) {
+			$this->authservice = $this->getServiceLocator()->get('AuthService');
+		}
+	
+		return $this->authservice;
+	}
+	
+	public function getSessionStorage()
+	{
+		if (! $this->storage) {
+			$this->storage = $this->getServiceLocator()->get('Application\Model\Auth\AuthStorage');
+		}
+	
+		return $this->storage;
+	}
+	
+	public function getAdapter()
+	{
+		if (!$this->adapter) {
+			$sm = $this->getServiceLocator();
+			$this->adapter = $sm->get('Zend\Db\Adapter\Adapter');
+		}
+		return $this->adapter;
+	}	
 	
 	/**
 	 * Creates the HAL Collection object for output
