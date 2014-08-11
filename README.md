@@ -1,8 +1,8 @@
 # MojiTrac #
 
-MojiTrac is a next generation Project Management System (PMS) and the third collaboration from Eric Lamb and mithra62. MojiTrac aims to solve the problem of scattered todo, task lists, and project info that's spread among various other systems and their accounts.
+MojiTrac is a next generation Project Management System (PMS) from Eric Lamb and [mithra62](http://www.mithra62.com "mithra62"). MojiTrac aims to solve the problem of scattered todo, task lists, and project info that's spread among various other systems and their accounts.
 
-MojiTrac is written using Zend Framework 2 and will initially be a SaaS app with a self hosted and subscription support model once the key system is worked out. 
+MojiTrac is written using [Zend Framework 2](http://framework.zend.com/ "Zend Framework 2") and will initially be a SaaS app with a self hosted and subscription support model once the key system is worked out. 
 
 ## The Problem ##
 
@@ -30,6 +30,7 @@ At the core, MojiTrac is a stand alone PMS with all the expected functionality a
 8. User and User Role Administration
 9. IP Locker
 10. Global Settings
+11. REST API
 
 ### Sub Systems ###
 
@@ -70,5 +71,5 @@ The initial price point for MojiTrac is still TBD but will likely be comparable 
 
 There will also be additional items, in terms of the integration add-ons mentioned above, as well as other items that are TBD. 
 
-Further, all support where a person is required direct access to investigate will be charged for and require payment. This will likely hover around the $50 an hour mark though a subscription model, ala EllisLab, is being considered. 
+Further, all support where a person is required direct access to investigate will be charged for and require payment. This will likely hover around the $100 an hour mark though a subscription model, ala EllisLab, is being considered. 
 
