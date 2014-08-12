@@ -25,7 +25,7 @@ For the most part, MojiTrac 2 is just like any other installed software:
 	1. Rename `config/local.php.dist` to `config/local.php` and modify settings within
 4. Run `composer update`
 5. Ensure the permissions are writable on the `data\*` directory
-6. Crack a beer. 
+6. Crack a <strike>beer</strike> paper bag of champagne. 
  
 ## Credentials ##
 
