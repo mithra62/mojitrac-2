@@ -108,7 +108,8 @@ class TimersController extends AbstractPmController
     
     public function removeAction()
     {
-		$this->timer->clearTimerData($this->identity);
+    	$timer = $this->getServiceLocator()->get('PM\Model\Timers');
+		$timer->clearTimerData($this->identity);
 		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
         $this->flashMessenger()->addMessage($translate('timer_removed', 'pm'));
         return $this->redirect()->toRoute('pm');    	

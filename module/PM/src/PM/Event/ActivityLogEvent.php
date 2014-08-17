@@ -4,7 +4,7 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/src/PM/Event/ActivityLogEvent.php
@@ -50,6 +50,7 @@ class ActivityLogEvent extends BaseEvent
         'project.add.post' => 'logProjectAdd',
         'project.addteam.post' => 'logProjectTeamAdd',
         'task.add.post' => 'logTaskAdd',
+        'task.update.pre' => 'logTaskUpdate',
     );
     
     /**
@@ -98,7 +99,7 @@ class ActivityLogEvent extends BaseEvent
 	 * @param int $performed_by
 	 * @return void
 	 */
-	public function logTaskUpdate(array $data, $task_id, $project_id, $performed_by)
+	public function logTaskUpdate(\Zend\EventManager\Event $event)
 	{
 		$this->al->logActivity(self::setDate(), 'task_update', $performed_by, $data, $project_id, 0, $task_id);
 	}	
@@ -110,7 +111,7 @@ class ActivityLogEvent extends BaseEvent
 	 * @param int $performed_by
 	 * @return void
 	 */
-	public function logTaskAssignment(array $data, $task_id, $project_id, $performed_by)
+	public function logTaskAssignment(\Zend\EventManager\Event $event)
 	{
 		$this->al->logActivity(self::setDate(), 'task_assigned', $performed_by, $data, $project_id, 0, $task_id, 0, 0, $data['assigned_to']);
 	}
@@ -122,7 +123,7 @@ class ActivityLogEvent extends BaseEvent
 	 * @param int $performed_by
 	 * @return void
 	 */
-	public function logTaskRemove(array $data, $task_id, $project_id, $performed_by)
+	public function logTaskRemove(\Zend\EventManager\Event $event)
 	{
 		$this->al->logActivity(self::setDate(), 'task_remove', $performed_by, $data, $project_id, 0, $task_id);
 	}	
