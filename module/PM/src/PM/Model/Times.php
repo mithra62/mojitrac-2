@@ -465,6 +465,7 @@ class Times extends AbstractModel
 		$data['day'] = date('j', $date);
 		$data['year'] = date('Y', $date);
 		$sql = $this->getSQL($data);
+		
 		$sql['creator'] = $data['creator'];
 		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 

@@ -13,6 +13,9 @@
 namespace PM\Model;
 
 use Application\Model\User\UserData;
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
 
  /**
  * PM - Timers Model
@@ -130,4 +133,30 @@ class Timers extends UserData
 	{
 		return date('F d Y H:i:s', $str);
 	}
+	
+
+	/**
+	 * Returns the InputFilter
+	 * @return \Zend\InputFilter\InputFilter
+	 */
+	public function getInputFilter()
+	{
+		if (!$this->inputFilter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'description',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+			)));
+	
+			$this->inputFilter = $inputFilter;
+		}
+	
+		return $this->inputFilter;
+	}	
 }

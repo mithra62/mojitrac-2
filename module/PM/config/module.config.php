@@ -980,10 +980,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/:timer_id',
-        					'constraints' => array(
-        						'timer_id' => '[0-9]+'
-        					),
+        					'route' => '/remove',
         					'defaults' => array(
         						'action' => 'remove'
         					)
@@ -1007,7 +1004,7 @@ return array(
         				'options' => array(
         					'route' => '/start/:type/:id',
         					'constraints' => array(
-        						'project_id' => '[0-9]+'
+        						'id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'start'
@@ -1017,12 +1014,11 @@ return array(
         			'stop' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/[:task_id]',
+        					'route' => '/stop',
         					'constraints' => array(
-        						'note_id' => '[0-9]+'
         					),
         					'defaults' => array(
-        						'action' => 'edit'
+        						'action' => 'stop'
         					)
         				)
         			),

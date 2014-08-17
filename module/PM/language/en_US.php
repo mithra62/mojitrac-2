@@ -40,6 +40,7 @@ return array(
 		
 	//projects
 	'projects' => 'Projects',
+	'project_team_modified' => 'Project Team Modified',
 	
 	//input validation messages
 	'required' => 'Required',
@@ -49,5 +50,10 @@ return array(
 	'option_added' => 'Option Added!',
 	'option_updated' => 'Option Updated!',
 	'option_removed' => 'Option Removed!',
+		
+	//timers
+	'timer_stopped' => 'Timer Stopped',
+	'timer_started' => 'Timer Started',
+	'timer_removed' => 'Timer Removed',
 	
 );

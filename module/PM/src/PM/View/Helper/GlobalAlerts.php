@@ -67,7 +67,7 @@ class GlobalAlerts extends BaseViewHelper
 			
 			if(isset($timer_data['name']))
 			{
-				$return .= '<div class="global-alert global-information"><div class="timer-alert"> <a href="'.$this->view->url('pm', array('module' => 'pm','controller'=>'timers','action'=>'stop'), null, TRUE).'" rel="facebox" style="text-decoration:none; color: #0033FF">Timer running for '.$timer_data['name'].': <span id="timer_countdown"></span></a></div></div>';
+				$return .= '<div class="global-alert global-information"><div class="timer-alert"> <a href="'.$this->view->url('timers/stop', array('module' => 'pm','controller'=>'timers','action'=>'stop'), null, TRUE).'" rel="facebox" style="text-decoration:none; color: #0033FF">Timer running for '.$timer_data['name'].': <span id="timer_countdown"></span></a></div></div>';
 				$return .= "<script>$('#timer_countdown').countdown({since: new Date('".$timer->makeCountdownDate($timer_data['start_time'])."'), compact: true, format: 'yowdhmS', description: ''});</script>";
 			}					
 		}

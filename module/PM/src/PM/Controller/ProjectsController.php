@@ -402,9 +402,10 @@ class ProjectsController extends AbstractPmController
 			
 			if(!$errors)
 			{
-				$this->_flashMessenger->addMessage('Project Team Modified!');
 				$this->_helper->redirector('view','projects', 'pm', array('id' => $id));
-				exit;
+				$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+		        $this->flashMessenger()->addMessage($translate('project_team_modified', 'pm'));
+		        return $this->redirect()->toRoute('pm');
 			}
 		}
 		

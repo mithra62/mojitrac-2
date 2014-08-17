@@ -41,6 +41,7 @@ use PM\Form\IpForm;
 use PM\Form\ConfirmForm;
 use PM\Form\OptionForm;
 use PM\Form\TimeForm;
+use PM\Form\TimerForm;
 
 use PM\Event\ActivityLogEvent;
 use PM\Event\NotificationEvent;
@@ -221,6 +222,9 @@ class Module
 					}	
 					
 					return new TimeForm('time', $options);
+				},
+				'PM\Form\TimerForm' => function($sm) {
+					return new TimerForm('timer');
 				},
 				
 				//events
