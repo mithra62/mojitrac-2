@@ -28,7 +28,7 @@
 		
 		<?php if($this->CheckPermission('track_time')):?>
 		<div class="actions">
-			<a href="<?php //echo $this->url('timers/view', array('type' => 'company', 'id' => $this->company_id)); ?>" title="Timer" rel="facebox">
+			<a href="<?php echo $this->url('timers/view', array('type' => 'company', 'id' => $this->company_id)); ?>" title="Timer" rel="facebox">
 				<?php echo $this->InteractIcon('timer', 'Timer');?>
 				<div class="action_text">Timer</div>
 			</a>

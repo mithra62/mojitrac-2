@@ -80,7 +80,7 @@ abstract class KeyValue extends BaseModel
 	 * Verifies that a submitted setting is valid and exists. If it's valid but doesn't exist it is created.
 	 * @param string $setting
 	 */
-	private function checkItem($item, array $where = array())
+	protected function checkItem($item, array $where = array())
 	{
 		if(array_key_exists($item, $this->defaults))
 		{
@@ -171,7 +171,7 @@ abstract class KeyValue extends BaseModel
 	 * @param array $items
 	 * @return multitype:boolean array
 	 */
-	private function translateItems(array $items)
+	protected function translateItems(array $items)
 	{
 		$arr = array();
 		foreach($items AS $item)

@@ -128,6 +128,23 @@ class UserData extends KeyValue
 	{;
 		return $this->getItem($data, array('user_id' => $identity));
 	}
+	
+	/**
+	 * Updates the value of a setting
+	 * @param string $key
+	 * @param string $value
+	 */
+	public function updateUserDataEntry($key, $value, $identity)
+	{
+		$where = array('user_id' => $identity);
+		$this->identity = $identity;
+		if(!$this->checkItem($key, $where))
+		{
+			return FALSE;
+		}
+	
+		return parent::updateItem($key, $value, $where);
+	}	
 		
 	/**
 	 * Updates all the settings for the provided array

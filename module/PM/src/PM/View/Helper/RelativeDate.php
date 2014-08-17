@@ -55,7 +55,7 @@ class RelativeDate extends BaseViewHelper
 
 			if ( ($time_diff > 0 && $time_diff < (24*60*60)*7) || ($time_diff < 0 && $time_diff < (24*60*60)*7))
 			{
-				$return = $this->c($str_date).$this->relative_datetime($date); 
+				$return = $this->c($str_date).$this->relativeDateTime($date); 
 			}
 			else
 			{			
@@ -85,7 +85,7 @@ class RelativeDate extends BaseViewHelper
 	 * @param int $timestamp
 	 * @return string
 	 */
-	public function relative_datetime($timestamp)
+	public function relativeDateTime($timestamp)
 	{
 		if(!$timestamp)
 		{

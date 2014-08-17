@@ -4,7 +4,7 @@
 *
 * @package		mithra62:Mojitrac
 * @author		Eric Lamb
-* @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
 * @filesource 	./module/PM/src/PM/Controller/TimersController.php
@@ -13,8 +13,6 @@
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 
 /**
 * PM - Timers Controller
@@ -27,79 +25,19 @@ use Zend\View\Model\ViewModel;
 */
 class TimersController extends AbstractPmController
 {
-
-	/**
-	 * Class preDispatch
-	 */
-	public function preDispatch()
+	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{
-		parent::preDispatch();
-        parent::check_permission('track_time');
-        $this->view->headTitle('Timers', 'PREPEND');
-		$this->view->layout_style = 'single';
-		$this->view->sidebar = 'dashboard';
-        $this->view->sub_menu = 'times';
-        $this->view->active_nav = 'time';
-		$this->view->active_sub = 'None';
-		$this->view->title = FALSE;
-
-		$this->timer = new PM_Model_Timers;
-    	$this->company_id = $this->_getParam("company",FALSE);
-    	$this->task_id = $this->_getParam("task",FALSE);
-    	$this->project_id = $this->_getParam("project",FALSE);
-    	
-    	$where = array();
-        if($this->company_id)
-    	{
-	        parent::check_permission('view_companies');	    		
-			$this->company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
-			$this->company_data = $this->company->getCompanyById($this->company_id);
-			if(!$this->company_data) 
-			{
-				$this->_helper->redirector('index','companies');
-				exit;				
-			}
-			$this->view->company = $this->company_data;
-    	}
-    	
-    	if($this->project_id) 
-		{
-			$this->project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-			$this->project_data = $this->project->getProjectById($this->project_id);
-			if(!$this->project_data)
-			{
-				$this->_helper->redirector('index','projects');
-				exit;				
-			}
-			
-			if(!$this->project->isUserOnProjectTeam($this->identity, $this->project_id) && !$this->perm->check($this->identity, 'manage_time'))
-			{		
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
-			}
-						
-			$this->view->project = $this->project_data;
-		}    
-
-    	if($this->task_id) 
-		{
-			$this->task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-			$this->project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-			$this->task_data = $this->task->getTaskById($this->task_id);
-			if(!$this->task_data)
-			{
-				$this->_helper->redirector('index','tasks');
-				exit;				
-			}
-			
-			if(!$this->project->isUserOnProjectTeam($this->identity, $this->task_data['project_id']) && !$this->perm->check($this->identity, 'manage_time'))
-			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
-			}
-						
-			$this->view->task = $this->task_data;
-		}
+		$e = parent::onDispatch( $e );
+		parent::check_permission('track_time');
+		//$this->layout()->setVariable('layout_style', 'single');
+		$this->layout()->setVariable('sidebar', 'dashboard');
+		$this->layout()->setVariable('sub_menu', 'tasks');
+		$this->layout()->setVariable('active_nav', 'timers');
+        $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
+		$this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
+		$this->layout()->setVariable('active_sub', 'None');
+	
+		return $e;
 	}
     
     public function indexAction()
@@ -109,7 +47,63 @@ class TimersController extends AbstractPmController
     
     public function viewAction()
     {	
+    	$id = $this->params()->fromRoute('id');
+    	$type = $this->params()->fromRoute('type');
+    	$view = array('type' => $type, 'id' => $id);
+    	
+    	$where = array();
+    	if($type == 'company')
+    	{
+    		parent::check_permission('view_companies');
+		    $company_id = $id;
+    		$company = $this->getServiceLocator()->get('PM\Model\Companies');
+    		$company_data = $company->getCompanyById($company_id);
+    		if(!$company_data)
+    		{
+    			return $this->redirect()->toRoute('companies');
+    		}
+    		
+    		$view['company'] = $company_data;
+    	}
+    	 
+    	if($type == 'project')
+    	{
+		    $project_id = $id;
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
+			$project_data = $project->getProjectById($project_id);
+			if(!$project_data)
+			{
+			    return $this->redirect()->toRoute('projects');
+			}
+				
+    		if(!$project->isUserOnProjectTeam($this->identity, $project_id) && !$this->perm->check($this->identity, 'manage_time'))
+    		{
+    			return $this->redirect()->toRoute('projects');
+    		}
 
+    		$view['project'] = $project_data;
+    	}
+    	
+    	if($type == 'task')
+    	{
+    		$task_id = $id;
+    		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+    		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+    		$task_data = $task->getTaskById($task_id);
+    		if(!$task_data)
+    		{
+    			return $this->redirect()->toRoute('tasks');
+    		}
+    			
+    		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_time'))
+    		{
+    			return $this->redirect()->toRoute('pm');
+    		}
+
+    		$view['task'] = $task_data;
+    	}    	
+    	
+    	return $this->ajaxOutput($view);
     }
     
     public function removeAction()
@@ -124,21 +118,24 @@ class TimersController extends AbstractPmController
     {
     	if ($this->getRequest()->isPost()) 
         { 
-        	if($this->task_id)
+    		$id = $this->params()->fromRoute('id');
+    		$type = $this->params()->fromRoute('type');
+    		$timer = $this->getServiceLocator()->get('PM\Model\Timers');
+        	if($type == 'task')
         	{
-        		$timer = $this->timer->startTaskTimer($this->identity, $this->task_id);
+        		$timer_data = $timer->startTaskTimer($this->identity, $id);
         	} 
-        	elseif($this->project_id)
+        	elseif($type == 'project')
         	{
-        		$timer = $this->timer->startProjectTimer($this->identity, $this->project_id);
+        		$timer_data = $timer->startProjectTimer($this->identity, $id);
         	}
-        	elseif($this->company_id)
+        	elseif($type == 'company')
         	{
-        		$timer = $this->timer->startCompanyTimer($this->identity, $this->company_id);
+        		$timer_data = $timer->startCompanyTimer($this->identity, $id);
         	}
         	
         	
-        	if($timer)
+        	if($timer_data)
         	{
 			    $this->_flashMessenger->addMessage('Timer Started!');
 				$this->_helper->redirector('view','tasks', 'pm', array('id' => $this->task_id));  

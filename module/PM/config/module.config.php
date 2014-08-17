@@ -980,7 +980,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/[:timer_id]',
+        					'route' => '/remove/:timer_id',
         					'constraints' => array(
         						'timer_id' => '[0-9]+'
         					),
@@ -1005,12 +1005,12 @@ return array(
         			'start' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/add/[:project_id]',
+        					'route' => '/start/:type/:id',
         					'constraints' => array(
         						'project_id' => '[0-9]+'
         					),
         					'defaults' => array(
-        						'action' => 'add'
+        						'action' => 'start'
         					)
         				)
         			),        			

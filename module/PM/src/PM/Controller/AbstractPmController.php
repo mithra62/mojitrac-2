@@ -105,8 +105,6 @@ abstract class AbstractPmController extends AbstractController
 			{
 				return $this->redirect()->toRoute('pm');
 			}
-			 
-			exit;
 		}
 	}
 	

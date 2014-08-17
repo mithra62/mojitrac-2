@@ -4,26 +4,31 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
- * @version		1.0
+ * @version		2.0
  * @filesource 	./module/PM/src/PM/Model/Timers.php
  */
 
 namespace PM\Model;
 
-use Application\Model\AbstractModel;
+use Application\Model\User\UserData;
 
  /**
- * PM - Projects Model
+ * PM - Timers Model
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/Model/Timers.php
  */
-class Timers extends AbstractModel
+class Timers extends UserData
 {
-	private $options = array('task_id' => 0, 'project_id' => 0, 'company_id' => 0, 'start_time' => FALSE);
+	private $options = array(
+		'task_id' => 0, 
+		'project_id' => 0, 
+		'company_id' => 0, 
+		'start_time' => FALSE
+	);
 	
 	/**
 	 * Used to determine cache uniqueness
@@ -72,8 +77,8 @@ class Timers extends AbstractModel
 	 */
 	public function startTimer($identity, array $options)
 	{
-		$options['start_time'] = mktime();
-		return $this->updateUserDataEntry('timer_data', Zend_Json::encode($options), $identity);
+		$options['start_time'] = @mktime();
+		return $this->updateUserDataEntry('timer_data', \Zend\Json\Json::encode($options), $identity);
 	}
 	
 	/**
@@ -83,34 +88,16 @@ class Timers extends AbstractModel
 	 */
 	public function decodeTimerData($str)
 	{
-		$data = Zend_Json::decode($str);
-		if(isset($data['task_id']))
-		{
-			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
-			$task_data = $task->getTaskById($data['task_id'], array('t.name AS name'));
-			$data = array_merge($data, $task_data);
-		}
-		elseif(isset($data['project_id']))
-		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-			$project_data = $project->getProjectById($data['project_id'], array('p.name AS name', 'p.company_id'));
-			$data = array_merge($data, $project_data);			
-		}
-		elseif(isset($data['company_id']))
-		{
-			$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
-			$company_data = $company->getCompanyById($data['company_id'], array('c.name AS name'));
-			$data = array_merge($data, $company_data);			
-		}		
-		
-		if(!isset($data['name']))
-		{
-			return FALSE;
-		}
-		
+		$data = \Zend\Json\Json::decode($str, 1);
 		$data['date'] = date('Y-m-d', $data['start_time']);
 		$data['time_running'] = $this->makeTimeRunning($data['start_time']);
 		return $data;
+	}
+	
+	public function getTimerData(array $where = array())
+	{
+		$user_data = $this->getUserData('timer_data', $where);
+		return $this->decodeTimerData($user_data['option_value']);
 	}
 	
 	/**
@@ -142,14 +129,5 @@ class Timers extends AbstractModel
 	public function makeCountdownDate($str)
 	{
 		return date('F d Y H:i:s', $str);
-	}
-	
-	/**
-	 * Returns the timer form
-	 * @param object $options
-	 */
-	public function getTimerForm($options)
-	{
-		return new PM_Form_Timer($options);
 	}
 }
