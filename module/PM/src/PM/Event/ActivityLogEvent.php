@@ -79,10 +79,7 @@ class ActivityLogEvent extends BaseEvent
     
 	/**
 	 * Wrapper to log a task add entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * @param \Zend\EventManager\Event $event
 	 */
 	public function logTaskAdd(\Zend\EventManager\Event $event)
 	{
@@ -95,10 +92,7 @@ class ActivityLogEvent extends BaseEvent
 	
 	/**
 	 * Wrapper to log a task update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * @param \Zend\EventManager\Event $event
 	 */
 	public function logTaskUpdate(\Zend\EventManager\Event $event)
 	{
@@ -111,22 +105,22 @@ class ActivityLogEvent extends BaseEvent
 	
 	/**
 	 * Wrapper to log a task assignment entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * @param \Zend\EventManager\Event $event
 	 */
 	public function logTaskAssignment(\Zend\EventManager\Event $event)
 	{
-		$this->al->logActivity(self::setDate(), 'task_assigned', $performed_by, $data, $project_id, 0, $task_id, 0, 0, $data['assigned_to']);
+		$task_id = $event->getParam('task_id');
+		$assigned_to = $event->getParam('assigned_to');
+		$task = $event->getTarget();
+		$task_data = $task->getTaskById($task_id);
+		$project_id = $task_data['project_id'];
+		$data = array('stuff' => $task_data, 'project_id' => $task_data['project_id'], 'type' => 'task_assigned', 'performed_by' => $this->identity, 'user_id' => $assigned_to);
+		$this->al->logActivity($data);
 	}
 	
 	/**
-	 * Wrapper to log a project removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * Wrapper to log a task removal
+	 * @param \Zend\EventManager\Event $event
 	 */
 	public function logTaskRemove(\Zend\EventManager\Event $event)
 	{

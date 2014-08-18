@@ -618,7 +618,7 @@ class Tasks extends AbstractModel
 	}
 	
 	/**
-	 * Logs the assignment of the task to the user
+	 * Logs the assignment of the task to a particular user
 	 * @param int $id
 	 * @param int $assigned_to
 	 * @param int $assigned_by
@@ -627,15 +627,21 @@ class Tasks extends AbstractModel
 	 */
 	public function logTaskAssignment($task_id, $assigned_to, $assigned_by, $assign_comment = null)
 	{
-	    $data = array('task_id' => $task_id, 'assigned_to' => $assigned_to, 'assigned_by' => $assigned_by);
-	    $ext = $this->trigger(self::EventTaskAssignPre, $this, compact('task_id', 'assigned_to', 'assigned_by'), $this->setXhooks($data));
+	    $data = array(
+    		'task_id' => $task_id, 
+    		'assigned_to' => $assigned_to, 
+    		'assigned_by' => $assigned_by, 
+    		'assign_comment' => $assign_comment
+	    );
+	    
+	    $ext = $this->trigger(self::EventTaskAssignPre, $this, $data, $this->setXhooks($data));
 	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 	    	    
-		$sql = $this->getAssignmentSQL(array('task_id'=>$task_id, 'assigned_to' => $assigned_to, 'assigned_by' => $assigned_by, 'assign_comment' => $assign_comment));
+		$sql = $this->getAssignmentSQL($data);
 		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 		$return = $this->insert('task_assignments', $sql);
 		
-		$ext = $this->trigger(self::EventTaskAssignPost, $this, compact('task_id', 'assigned_to', 'assigned_by'), $this->setXhooks($data));
+		$ext = $this->trigger(self::EventTaskAssignPost, $this, $data, $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $return = $ext->last();		
 		
 		return $return;
