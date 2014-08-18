@@ -74,7 +74,7 @@ interface EventManagerInterfaceConstants extends EventManagerAwareInterface
 	
 	const EventNoteUpdatePre = 'note.update.pre';
 	const EventNoteUpdatePost = 'note.update.post';
-	const EventNoteAddPre = 'file.add.pre';
+	const EventNoteAddPre = 'note.add.pre';
 	const EventNoteAddPost = 'note.add.post';
 	const EventNoteRemovePre = 'note.remove.pre';
 	const EventNoteRemovePost = 'note.remove.post';		
