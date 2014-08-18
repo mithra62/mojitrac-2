@@ -502,13 +502,14 @@ class Projects extends AbstractModel
 	 */
 	public function removeProjectTeamMember($id, $project)
 	{
-	    $ext = $this->trigger(self::EventProjectRemoveTeamMemberPre, $this, compact('id', 'project'), $this->setXhooks(array('id' => $project)));
-	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $project = $ext->last();
-	    	    
 		$where = array('user_id' => $id, 'project_id' => $project);
+		
+	    $ext = $this->trigger(self::EventProjectRemoveTeamMemberPre, $this, $where, $this->setXhooks(array('id' => $project)));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $where = $ext->last();
+	    	    
 		$delete = $this->remove('project_teams', $where);
 		
-		$ext = $this->trigger(self::EventProjectRemoveTeamMemberPost, $this, compact('id', 'project'), $this->setXhooks(array('id' => $project)));
+		$ext = $this->trigger(self::EventProjectRemoveTeamMemberPost, $this, $where, $this->setXhooks(array('id' => $project)));
 		if($ext->stopped()) return $ext->last();
 
 		return $delete;

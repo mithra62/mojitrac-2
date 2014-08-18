@@ -85,9 +85,9 @@ class IpsController extends AbstractPmController
 	public function viewAction()
 	{
 		$id = $this->params()->fromRoute('ip_id');
-		if (!$id) {
-			$this->_helper->redirector('index','ips');
-			exit;
+		if (!$id) 
+		{	
+			return $this->redirect()->toRoute('ips');
 		}
 
 		$ips = $this->getServiceLocator()->get('PM\Model\Ips');

@@ -358,7 +358,7 @@ class ProjectsController extends AbstractPmController
 		$project_data = $project->getProjectById($id);
 		if(!$project_data)
 		{
-			$this->_helper->redirector('index','projects');
+			return $this->redirect()->toRoute('projects');
 		}
 		
 		$proj_team = $project->getProjectTeamMemberIds($id);
@@ -402,10 +402,9 @@ class ProjectsController extends AbstractPmController
 			
 			if(!$errors)
 			{
-				$this->_helper->redirector('view','projects', 'pm', array('id' => $id));
 				$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		        $this->flashMessenger()->addMessage($translate('project_team_modified', 'pm'));
-		        return $this->redirect()->toRoute('pm');
+		        return $this->redirect()->toRoute('projects/view', array('project_id' => $id));
 			}
 		}
 		

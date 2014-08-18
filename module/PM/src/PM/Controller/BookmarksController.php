@@ -152,16 +152,18 @@ class BookmarksController extends AbstractPmController
 	public function editAction()
 	{
 		$id = $this->params()->fromRoute('bookmark_id');
-		if (!$id) {
-			$this->_helper->redirector('index','bookmarks');
+		if (!$id) 
+		{
+			return $this->redirect()->toRoute('bookmarks');
 		}
 
 		$bookmark = $this->getServiceLocator()->get('PM\Model\Bookmarks');
 		$form = $this->getServiceLocator()->get('PM\Form\BookmarkForm');
 				
 		$bookmark_data = $bookmark->getBookmarkById($id);
-		if (!$bookmark_data) {
-			$this->_helper->redirector('index','bookmarks');
+		if (!$bookmark_data) 
+		{
+			return $this->redirect()->toRoute('bookmarks');
 		}
         
         $view['id'] = $id;      

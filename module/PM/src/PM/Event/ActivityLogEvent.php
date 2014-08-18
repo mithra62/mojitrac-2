@@ -49,6 +49,7 @@ class ActivityLogEvent extends BaseEvent
         'project.update.pre' => 'logProjectUpdate',
         'project.add.post' => 'logProjectAdd',
         'project.addteam.post' => 'logProjectTeamAdd',
+    	'project.removeteammember.pre' => 'logProjectTeamRemove',
         'task.add.post' => 'logTaskAdd',
         'task.update.pre' => 'logTaskUpdate',
     	'task.assign.post' => 'logTaskAssignment',
@@ -187,21 +188,23 @@ class ActivityLogEvent extends BaseEvent
 	}
 	
 	/**
-	 * Wrapper to log a project removal
+	 * Wrapper to log a team member removal from a project
 	 * @param \Zend\EventManager\Event $event
-	 * @return void
 	 */
-	public function logProjectTeamRemove(array $data, $id, $performed_by)
+	public function logProjectTeamRemove(\Zend\EventManager\Event $event)
 	{
-		$this->al->logActivity(self::setDate(), 'project_team_remove', $performed_by, $data, $id);
+		$user_id = $event->getParam('user_id');
+		$project_id = $event->getParam('project_id');
+
+		$project = $event->getTarget();
+		$stuff = $project_team = $project->getProjectTeamMemberIds($project_id);
+		$data = array('stuff' => $stuff, 'user_id' => $user_id, 'project_id' => $project_id, 'type' => 'project_team_remove', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);
 	}
 
 	/**
-	 * Wrapper to log a project removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * Wrapper to log a team member being added to a project
+	 * @param \Zend\EventManager\Event $event
 	 */
 	public function logProjectTeamAdd(\Zend\EventManager\Event $event)
 	{
