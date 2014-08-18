@@ -54,7 +54,8 @@ class ActivityLogEvent extends BaseEvent
         'task.update.pre' => 'logTaskUpdate',
     	'task.assign.post' => 'logTaskAssignment',
     	'task.remove.pre' => 'logTaskRemove',
-    	'note.add.post' => 'logNoteAdd'
+    	'note.add.post' => 'logNoteAdd',
+    	'note.update.post' => 'logNoteUpdate'
     );
     
     /**
@@ -231,15 +232,16 @@ class ActivityLogEvent extends BaseEvent
 	
 	/**
 	 * Wrapper to log a note update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * @param \Zend\EventManager\Event $event
 	 */
-	public function logNoteUpdate(array $data, $id, $performed_by)
+	public function logNoteUpdate(\Zend\EventManager\Event $event)
 	{
+		$note_id = $event->getParam('note_id');
+		$data = $event->getParam('data');
 		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'note_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], $id);
+		
+		$data = array('stuff' => $data, 'note_id' => $note_id, 'project_id' => $data['project_id'], 'company_id' => $data['company_id'], 'task_id' => $data['task_id'], 'type' => 'note_update', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);		
 	}
 	
 	/**

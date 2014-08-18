@@ -206,13 +206,12 @@ class NotesController extends AbstractPmController
             $form->setData($formData);
             if ($form->isValid($formData)) 
             {
-				          	
-            	if($note->updateNote($formData->toArray(), $id))
+            	$formData = $formData->toArray();
+            	$formData['task'] = $note_data['task_id'];
+            	$formData['company'] = $note_data['company_id'];
+            	$formData['project'] = $note_data['project_id'];
+            	if($note->updateNote($formData, $id))
 	            {	
-	            	$formData['task'] = $note_data['task_id'];
-	            	$formData['company'] = $note_data['company_id'];
-	            	$formData['project'] = $note_data['project_id'];
-	            	
 			    	$this->flashMessenger()->addMessage('Note updated!');
 					return $this->redirect()->toRoute('notes/view', array('note_id' => $id));
 					        		
