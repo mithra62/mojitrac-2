@@ -526,7 +526,7 @@ class Tasks extends AbstractModel
 	public function removeTask($task_id)
 	{
 	    $data = $this->getTaskById($task_id);
-		$ext = $this->trigger(self::EventTaskRemovePre, $this, compact('task_id'), $this->setXhooks($data));
+		$ext = $this->trigger(self::EventTaskRemovePre, $this, compact('task_id', 'data'), $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 		
 		$remove = $this->remove('tasks', array('id' => $task_id));

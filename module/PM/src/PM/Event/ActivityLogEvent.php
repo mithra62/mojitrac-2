@@ -52,6 +52,7 @@ class ActivityLogEvent extends BaseEvent
         'task.add.post' => 'logTaskAdd',
         'task.update.pre' => 'logTaskUpdate',
     	'task.assign.post' => 'logTaskAssignment',
+    	'task.remove.pre' => 'logTaskRemove',
     );
     
     /**
@@ -124,7 +125,11 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logTaskRemove(\Zend\EventManager\Event $event)
 	{
-		$this->al->logActivity(self::setDate(), 'task_remove', $performed_by, $data, $project_id, 0, $task_id);
+		$data = $event->getParam('data');
+		$task_id = $event->getParam('task_id');
+		$project_id = $data['project_id'];
+		$data = array('stuff' => $data, 'project_id' => $project_id, 'type' => 'task_remove', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);
 	}	
 	
 	/**
