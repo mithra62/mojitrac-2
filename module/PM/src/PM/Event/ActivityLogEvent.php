@@ -51,6 +51,7 @@ class ActivityLogEvent extends BaseEvent
         'project.addteam.post' => 'logProjectTeamAdd',
         'task.add.post' => 'logTaskAdd',
         'task.update.pre' => 'logTaskUpdate',
+    	'task.assign.post' => 'logTaskAssignment',
     );
     
     /**
@@ -101,7 +102,11 @@ class ActivityLogEvent extends BaseEvent
 	 */
 	public function logTaskUpdate(\Zend\EventManager\Event $event)
 	{
-		$this->al->logActivity(self::setDate(), 'task_update', $performed_by, $data, $project_id, 0, $task_id);
+		$data = $event->getParam('data');
+		$task_id = $event->getParam('task_id');
+		$project_id = $data['project_id'];
+		$data = array('stuff' => $data, 'project_id' => $project_id, 'type' => 'task_update', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);		
 	}	
 	
 	/**
