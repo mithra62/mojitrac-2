@@ -55,7 +55,8 @@ class ActivityLogEvent extends BaseEvent
     	'task.assign.post' => 'logTaskAssignment',
     	'task.remove.pre' => 'logTaskRemove',
     	'note.add.post' => 'logNoteAdd',
-    	'note.update.post' => 'logNoteUpdate'
+    	'note.update.post' => 'logNoteUpdate',
+    	'note.remove.pre' => 'logNoteRemove'
     );
     
     /**
@@ -197,7 +198,6 @@ class ActivityLogEvent extends BaseEvent
 	{
 		$user_id = $event->getParam('user_id');
 		$project_id = $event->getParam('project_id');
-
 		$project = $event->getTarget();
 		$stuff = $project_team = $project->getProjectTeamMemberIds($project_id);
 		$data = array('stuff' => $stuff, 'user_id' => $user_id, 'project_id' => $project_id, 'type' => 'project_team_remove', 'performed_by' => $this->identity);
@@ -225,7 +225,6 @@ class ActivityLogEvent extends BaseEvent
 		$note_id = $event->getParam('note_id');
 		$data = $event->getParam('data');
 		$data = $this->filterForKeys($data);
-
 		$data = array('stuff' => $data, 'note_id' => $note_id, 'project_id' => $data['project_id'], 'company_id' => $data['company_id'], 'task_id' => $data['task_id'], 'type' => 'note_add', 'performed_by' => $this->identity);
 		$this->al->logActivity($data);		
 	}
@@ -239,22 +238,21 @@ class ActivityLogEvent extends BaseEvent
 		$note_id = $event->getParam('note_id');
 		$data = $event->getParam('data');
 		$data = $this->filterForKeys($data);
-		
 		$data = array('stuff' => $data, 'note_id' => $note_id, 'project_id' => $data['project_id'], 'company_id' => $data['company_id'], 'task_id' => $data['task_id'], 'type' => 'note_update', 'performed_by' => $this->identity);
 		$this->al->logActivity($data);		
 	}
 	
 	/**
 	 * Wrapper to log a note removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * @param \Zend\EventManager\Event $event
 	 */
-	public function logNoteRemove(array $data, $id, $performed_by)
+	public function logNoteRemove(\Zend\EventManager\Event $event)
 	{
-		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'note_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], $id);
+		$note_id = $event->getParam('note_id');
+		$note = $event->getTarget();
+		$note_data = $note->getNoteById($note_id);
+		$data = array('stuff' => $note_data, 'note_id' => $note_id, 'project_id' => $note_data['project_id'], 'company_id' => $note_data['company_id'], 'task_id' => $note_data['task_id'], 'type' => 'note_remove', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);		
 	}
 	
 	/**

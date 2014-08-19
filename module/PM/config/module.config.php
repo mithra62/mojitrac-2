@@ -360,7 +360,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/[:file_id]',
+        					'route' => '/remove/:file_id',
         					'constraints' => array(
         						'file_id' => '[0-9]+'
         					),

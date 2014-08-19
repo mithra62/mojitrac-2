@@ -287,15 +287,15 @@ class Notes extends AbstractModel
 	 * @param $campaign_id
 	 * @return bool
 	 */
-	public function removeNote($id)
+	public function removeNote($note_id)
 	{
-	    $data = $this->getNoteById($id);
-	    $ext = $this->trigger(self::EventNoteRemovePre, $this, compact('id', 'data'), $this->setXhooks($data));
-	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $id = $ext->last();
+		$data = $this->getNoteById($note_id);
+	    $ext = $this->trigger(self::EventNoteRemovePre, $this, compact('note_id'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $note_id = $ext->last();
 	    	    
-		$remove = $this->remove('notes', array('id' => $id));
+		$remove = $this->remove('notes', array('id' => $note_id));
 		
-		$ext = $this->trigger(self::EventNoteRemovePost, $this, compact('id', 'data'), $this->setXhooks($data));
+		$ext = $this->trigger(self::EventNoteRemovePost, $this, compact('note_id'), $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $remove = $ext->last();
 				
 		return $remove;
