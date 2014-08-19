@@ -211,7 +211,7 @@ class DashboardTimeline extends BaseViewHelper
 				case 'note_update':
 					if(isset($data['note_subject']) && $data['note_subject'] != '')
 					{
-						return $this->view->url('pm', array('module'=> 'pm', 'controller'=>'notes','action'=>'view', 'id' => $data['note_id']), null, TRUE);
+						return $this->view->url('notes/view', array('note_id' => $data['note_id']));
 					}
 				break;
 	
@@ -242,7 +242,7 @@ class DashboardTimeline extends BaseViewHelper
 					{
 						return $this->view->url('pm', array('module'=> 'pm', 'controller'=>'files','action'=>'view', 'id' => $data['file_id']), null, TRUE);
 					} 
-					$data['stuff'] = Zend_Json::decode($data['stuff']);
+					$data['stuff'] = \Zend\Json\Json::decode($data['stuff'], \Zend\Json\Json::TYPE_ARRAY);
 
 				break;
 				
@@ -251,7 +251,7 @@ class DashboardTimeline extends BaseViewHelper
 					{
 						return $this->view->url(array('module'=> 'pm', 'controller'=>'files','action'=>'view-review', 'id' => $data['file_review_id']), null, TRUE);
 					} 
-					$data['stuff'] = Zend_Json::decode($data['stuff']);
+					$data['stuff'] = \Zend\Json\Json::decode($data['stuff'], \Zend\Json\Json::TYPE_ARRAY);
 				break;	
 
 				case 'file_revision_add':	
@@ -259,7 +259,7 @@ class DashboardTimeline extends BaseViewHelper
 					{
 						return $this->view->url('pm', array('module'=> 'pm', 'controller'=>'files','action'=>'preview-revision', 'id' => $data['file_rev_id']), null, TRUE);
 					} 
-					$data['stuff'] = Zend_Json::decode($data['stuff']);
+					$data['stuff'] = \Zend\Json\Json::decode($data['stuff'], \Zend\Json\Json::TYPE_ARRAY);
 				break;					
 			}
 			return $this->view->url('pm', array('module'=> 'pm', 'controller'=>'activity','action'=>'view', 'id' => $data['id']), null, TRUE);
@@ -361,7 +361,7 @@ class DashboardTimeline extends BaseViewHelper
 					{
 						return $data['bookmark_name']; 
 					} 
-					$data['stuff'] = Zend_Json::decode($data['stuff']);
+					$data['stuff'] = \Zend\Json\Json::decode($data['stuff'], \Zend\Json\Json::TYPE_ARRAY);
 					if(isset($data['stuff']['name']) && $data['stuff']['name'] != '')
 					{
 						return $data['stuff']['name'];
@@ -376,7 +376,7 @@ class DashboardTimeline extends BaseViewHelper
 					{
 						return $data['note_subject']; 
 					} 
-					$data['stuff'] = Zend_Json::decode($data['stuff']);
+					$data['stuff'] = \Zend\Json\Json::decode($data['stuff'], \Zend\Json\Json::TYPE_ARRAY);
 					if(isset($data['stuff']['subject']) && $data['stuff']['subject'] != '')
 					{
 						return $data['stuff']['subject'];
@@ -425,7 +425,7 @@ class DashboardTimeline extends BaseViewHelper
 					{
 						return $data['file_name']; 
 					} 
-					$data['stuff'] = Zend_Json::decode($data['stuff']);
+					$data['stuff'] = \Zend\Json\Json::decode($data['stuff'], \Zend\Json\Json::TYPE_ARRAY);
 					if(isset($data['stuff']['file_name']) && $data['stuff']['file_name'] != '')
 					{
 						return $data['stuff']['file_name'];
