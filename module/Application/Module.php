@@ -144,7 +144,8 @@ class Module
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					$roles = $sm->get('Application\Model\Roles');
-					return new Users($adapter, $db, $roles);
+					$ud = $sm->get('Application\Model\User\Data');
+					return new Users($adapter, $db, $roles, $ud);
 				},
 				'Application\Model\Mail' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');

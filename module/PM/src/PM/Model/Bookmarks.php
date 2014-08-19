@@ -251,7 +251,7 @@ class Bookmarks extends AbstractModel
 			
 		$bookmark_id = $data['bookmark_id'] = $this->insert('bookmarks', $sql);
 		
-		$ext = $this->trigger(self::EventBookmarkAddPost, $this, compact('data', 'bookmark_id'), $this->setXhooks($data));
+		$ext = $this->trigger(self::EventBookmarkAddPost, $this, compact('bookmark_id'), $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $bookmark_id = $ext->last();
 				
 		return $bookmark_id;
@@ -271,7 +271,7 @@ class Bookmarks extends AbstractModel
 		$sql = $this->getSQL($data);
 		$return = $this->update('bookmarks', $sql, array('id' => $bookmark_id));
 		
-	    $ext = $this->trigger(self::EventBookmarkUpdatePost, $this, compact('data', 'bookmark_id'), $this->setXhooks($data));
+	    $ext = $this->trigger(self::EventBookmarkUpdatePost, $this, compact('bookmark_id'), $this->setXhooks($data));
 	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $return = $ext->last();
 
 		return $return;
@@ -282,15 +282,15 @@ class Bookmarks extends AbstractModel
 	 * @param $id
 	 * @return bool
 	 */
-	public function removeBookmark($id)
+	public function removeBookmark($bookmark_id)
 	{
-	    $data = $this->getBookmarkById($id);
-	    $ext = $this->trigger(self::EventBookmarkRemovePre, $this, compact('id', 'data'), $this->setXhooks($data));
-	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $id = $ext->last();
+	    $data = $this->getBookmarkById($bookmark_id);
+	    $ext = $this->trigger(self::EventBookmarkRemovePre, $this, compact('bookmark_id', 'data'), $this->setXhooks($data));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $bookmark_id = $ext->last();
 	    	    
-		$remove = $this->remove('bookmarks', array('id' => $id));
+		$remove = $this->remove('bookmarks', array('id' => $bookmark_id));
 		
-		$ext = $this->trigger(self::EventBookmarkRemovePost, $this, compact('id', 'data'), $this->setXhooks($data));
+		$ext = $this->trigger(self::EventBookmarkRemovePost, $this, compact('bookmark_id'), $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $remove = $ext->last();
 				
 		return $remove;

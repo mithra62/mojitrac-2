@@ -13,6 +13,10 @@
 namespace PM\Event;
 
 use Base\Event\BaseEvent;
+use Application\Model\Mail;
+use PM\Model\Users;
+use PM\Model\Projects;
+use PM\Model\Tasks;
 
  /**
  * PM - Notification Events
@@ -35,6 +39,7 @@ class NotificationEvent extends BaseEvent
      */
     private $hooks = array(
         'user.add.post' => 'sendUserAdd',
+    	'task.update.pre' => 'sendTaskUpdate'
     );
     
     /**
@@ -43,11 +48,13 @@ class NotificationEvent extends BaseEvent
      * @param \Application\Model\Users $users
      * @param string $identity
      */
-    public function __construct( \Application\Model\Mail $mail, \Application\Model\Users $users, $identity = null)
+    public function __construct( Mail $mail, Users $users, Projects $project, Tasks $task, $identity = null)
     {
         $this->mail = $mail;
         $this->identity = $identity;
-        $this->users = $users;
+        $this->user = $users;
+        $this->project = $project;
+        $this->task = $task;
     }
 
     /**
@@ -71,9 +78,80 @@ class NotificationEvent extends BaseEvent
     	$data = $event->getParam('data');
     	$user_id = $event->getParam('user_id');
     	$this->mail->addTo($data['email'], $data['first_name'].' '.$data['last_name']);
-    	$this->mail->setViewDir($this->mail->getModulePath(__DIR__));
+    	$this->mail->setViewDir($this->mail->getModulePath(__DIR__).'view/emails');
     	$this->mail->setEmailView('user-registration', array('user_data' => $data, 'user_id' => $user_id));
     	$this->mail->setSubject('user_registration_email_subject');
     	$this->mail->send($mail->transport);    	
+    }
+    
+
+    /**
+     * Sends the Task Change email notifications
+     * @param int $task_id
+     * @param array $new_data
+     * @param array $old_data
+     */
+    public function sendTaskStatusChange($task_id, array $new_data, array $old_data)
+    {
+    	$team = $this->project->getProjectTeamMembers($new_data['project_id']);
+    	$project_data = $this->project->getProjectById($new_data['project_id']);
+    	$sending = FALSE;
+    	foreach($team AS $member)
+    	{
+    		if($this->user->checkPreference($member['user_id'], 'noti_status_task', '1') == '0')
+    		{
+    			continue;
+    		}
+    		
+    		$sending = TRUE;
+    		$this->mail->addTo($member['email'], $member['first_name'].' '.$member['last_name']);
+    	}   
+
+    	if( !$sending )
+    	{
+    		return; //no emails were added to send to so bounce out
+    	}
+    	
+    	$view_data = array(
+    		'task_data' => $new_data, 
+    		'task_id' => $task_id, 
+    		'project_data' => $project_data
+    	);
+    	
+    	$view_path = $this->mail->getModulePath(__DIR__).'/view/emails';
+    	$this->mail->setViewDir($view_path);
+    	$this->mail->setEmailView('task-status-change', $view_data);
+    	$this->mail->setSubject($this->mail->translator->translate('email_subject_task_status_change', 'pm').': '.$new_data['name']);
+    	$this->mail->send($mail->transport);
+    }    
+    
+    /**
+     * Sends the emails for when a task is modified
+     * @param \Zend\EventManager\Event $event
+     */
+    public function sendTaskUpdate(\Zend\EventManager\Event $event)
+    {
+    	$task_id = $event->getParam('task_id');
+    	$new_data = $event->getParam('data');
+    	$task_data = $this->task->getTaskById($task_id);
+    	if($new_data['status'] != $task_data['status'] && ($new_data['priority'] == $task_data['priority']))
+    	{
+    		$this->sendTaskStatusChange($task_id, $new_data, $task_data);
+    	}
+    	else if($new_data['priority'] != $task_data['priority'])
+    	{
+    		//todo
+    		//$noti->sendTaskPriorityChange($formData);
+    		echo "sendTaskPriorityChange";
+    		exit;
+    	}
+    	
+    	if($new_data['end_date'] != $task_data['end_date'])
+    	{
+    		//$noti = new PM_Model_Notifications;
+    		//$noti->sendTaskEndDateChange($task_data);
+    		//echo "sendTaskEndDateChange";
+    		//exit;
+    	}    	
     }
 }

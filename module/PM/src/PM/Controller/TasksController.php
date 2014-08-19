@@ -195,25 +195,7 @@ class TasksController extends AbstractPmController
             {
                 $formData['creator'] = $this->identity;
             	if($task->updateTask($formData->toArray(), $id))
-	            {		            	
-	            	if($formData['status'] != $task_data['status'] && ($formData['priority'] == $task_data['priority']))
-	            	{
-	            	    //todo
-	            		//$noti->sendTaskStatusChange($formData);	            		
-	            	}
-	            	
-	            	if($formData['priority'] != $task_data['priority'])
-	            	{
-	            	    //todo
-	            		//$noti->sendTaskPriorityChange($formData);	            		
-	            	}
-	            	
-	            	if($formData['end_date'] != $task_data['end_date'])
-	            	{
-	            		//$noti = new PM_Model_Notifications;
-	            		//$noti->sendTaskEndDateChange($task_data);	            		
-	            	}
-
+	            {	
 	            	//$task->updateCompanyId($id, FALSE, $formData['project_id']);	            	
 			    	$this->flashMessenger()->addMessage('Task updated!');
 					return $this->redirect()->toRoute('tasks/view', array('task_id' => $id));

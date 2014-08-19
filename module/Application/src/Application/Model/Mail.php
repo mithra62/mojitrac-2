@@ -245,7 +245,7 @@ class Mail extends AbstractModel
 	 * Sets the email subject and translates against the view model
 	 * @todo hook the subject up for translation
 	 * 
-	 * @param unknown $subject
+	 * @param string $subject
 	 * @return \Application\Model\Mail
 	 */
 	public function setSubject($subject)

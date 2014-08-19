@@ -166,7 +166,8 @@ class Module
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					$role = $sm->get('Application\Model\Roles');
-					return new Users($adapter, $db, $role);
+					$ud = $sm->get('Application\Model\User\Data');
+					return new Users($adapter, $db, $role, $ud);
 				},
 				
 				//forms
@@ -236,8 +237,10 @@ class Module
 				'PM\Event\NotificationEvent' => function($sm) {
 				    $auth = $sm->get('AuthService');
 				    $mail = $sm->get('Application\Model\Mail');
-				    $users = $sm->get('Application\Model\Users');
-					return new NotificationEvent($mail, $users, $auth->getIdentity());
+				    $user = $sm->get('PM\Model\Users');
+				    $task = $sm->get('PM\Model\Tasks');
+				    $project = $sm->get('PM\Model\Projects');
+					return new NotificationEvent($mail, $user, $project, $task, $auth->getIdentity());
 				},										
 			),
     	);

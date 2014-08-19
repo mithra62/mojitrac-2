@@ -56,7 +56,10 @@ class ActivityLogEvent extends BaseEvent
     	'task.remove.pre' => 'logTaskRemove',
     	'note.add.post' => 'logNoteAdd',
     	'note.update.post' => 'logNoteUpdate',
-    	'note.remove.pre' => 'logNoteRemove'
+    	'note.remove.pre' => 'logNoteRemove',
+    	'bookmark.add.post' => 'logBookmarkAdd',
+    	'bookmark.update.post' => 'logBookmarkUpdate',
+    	'bookmark.remove.pre' => 'logBookmarkRemove',
     );
     
     /**
@@ -256,42 +259,42 @@ class ActivityLogEvent extends BaseEvent
 	}
 	
 	/**
-	 * Wrapper to log a bookmark update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * Wrapper to log a bookmark creation
+	 * @param \Zend\EventManager\Event $event
 	 */
-	public function logBookmarkAdd(array $data, $id, $performed_by)
+	public function logBookmarkAdd(\Zend\EventManager\Event $event)
 	{
-		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'bookmark_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, $id);
+		$bookmark_id = $event->getParam('bookmark_id');
+		$bookmark = $event->getTarget();
+		$bookmark_data = $bookmark->getBookmarkById($bookmark_id);
+		$data = array('stuff' => $bookmark_data, 'bookmark_id' => $bookmark_id, 'project_id' => $bookmark_data['project_id'], 'company_id' => $bookmark_data['company_id'], 'task_id' => $bookmark_data['task_id'], 'type' => 'bookmark_add', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);		
 	}
 	
 	/**
 	 * Wrapper to log a bookmark update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * @param \Zend\EventManager\Event $event
 	 */
-	public function logBookmarkUpdate(array $data, $id, $performed_by)
+	public function logBookmarkUpdate(\Zend\EventManager\Event $event)
 	{
-		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'bookmark_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, $id);
+		$bookmark_id = $event->getParam('bookmark_id');
+		$bookmark = $event->getTarget();
+		$bookmark_data = $bookmark->getBookmarkById($bookmark_id);
+		$data = array('stuff' => $bookmark_data, 'bookmark_id' => $bookmark_id, 'project_id' => $bookmark_data['project_id'], 'company_id' => $bookmark_data['company_id'], 'task_id' => $bookmark_data['task_id'], 'type' => 'bookmark_update', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);		
 	}
 	
 	/**
 	 * Wrapper to log a bookmark removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * @param \Zend\EventManager\Event $event
 	 */
-	public function logBookmarkRemove(array $data, $id, $performed_by)
+	public function logBookmarkRemove(\Zend\EventManager\Event $event)
 	{
-		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'bookmark_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, $id);
+		$bookmark_id = $event->getParam('bookmark_id');
+		$bookmark = $event->getTarget();
+		$bookmark_data = $bookmark->getBookmarkById($bookmark_id);
+		$data = array('stuff' => $bookmark_data, 'bookmark_id' => $bookmark_id, 'project_id' => $bookmark_data['project_id'], 'company_id' => $bookmark_data['company_id'], 'task_id' => $bookmark_data['task_id'], 'type' => 'bookmark_remove', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);		
 	}
 
 	/**

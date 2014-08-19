@@ -474,6 +474,6 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	 */
 	public function getModulePath($path)
 	{
-		return realpath($path.'/../../../view/emails');
+		return realpath($path.'/../../../');
 	}
 }

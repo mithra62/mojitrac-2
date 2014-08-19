@@ -6,4 +6,4 @@ A new account was created for you on MojiTrac:
 Email: <?php echo $user_data['email']; ?><br />
 <br /><br />
 You can log into your MojiTrac account by going to:<br />
-<a href="<?php echo $this->url('login'); ?>"><?php echo $this->url('login'); ?></a>
+<a href="<?php echo $this->ServerUrl($this->url('login')); ?>"><?php echo $this->url('login'); ?></a>

@@ -55,5 +55,8 @@ return array(
 	'timer_stopped' => 'Timer Stopped',
 	'timer_started' => 'Timer Started',
 	'timer_removed' => 'Timer Removed',
+		
+	//emails
+	'email_subject_task_status_change' => 'Task status changed',
 	
 );

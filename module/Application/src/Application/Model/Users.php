@@ -58,10 +58,11 @@ class Users extends AbstractModel
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param Sql $db
 	 */
-	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db, \Application\Model\Roles $roles)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db, \Application\Model\Roles $roles, \Application\Model\User\UserData $user_data)
 	{
 		parent::__construct($adapter, $db);
 		$this->roles = $roles;
+		$this->user_data = $user_data;
 	}
 	
 	/**
@@ -636,8 +637,7 @@ class Users extends AbstractModel
 	
 	public function checkPreference($id, $pref, $default = FALSE)
 	{
-		$ud = new PM_Model_User_Data;
-		$data = $ud->getUsersData($id);
+		$data = $this->user_data->getUsersData($id);
 		if($data)
 		{
 			if(isset($data[$pref]))
