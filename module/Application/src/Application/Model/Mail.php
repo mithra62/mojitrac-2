@@ -198,12 +198,14 @@ class Mail extends AbstractModel
 		{
 			$this->renderer = new PhpRenderer();	
 			$this->renderer->setHelperPluginManager($this->view_helpers);
+			
 			$resolver = new TemplatePathStack();
 			$resolver->setPaths(array(
 				$this->view_dir
 			));
 			$this->renderer->setResolver($resolver);
 			$this->view_model = new ViewModel();
+			$this->view_model->setTerminal(TRUE);
 		}
 		
 		return $this->view_model;

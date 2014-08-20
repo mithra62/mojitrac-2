@@ -55,6 +55,8 @@ class NotificationEvent extends BaseEvent
         $this->user = $users;
         $this->project = $project;
         $this->task = $task;
+        
+        $this->email_view_path = $this->mail->getModulePath(__DIR__).'/view/emails';
     }
 
     /**
@@ -78,7 +80,7 @@ class NotificationEvent extends BaseEvent
     	$data = $event->getParam('data');
     	$user_id = $event->getParam('user_id');
     	$this->mail->addTo($data['email'], $data['first_name'].' '.$data['last_name']);
-    	$this->mail->setViewDir($this->mail->getModulePath(__DIR__).'view/emails');
+    	$this->mail->setViewDir($this->email_view_path);
     	$this->mail->setEmailView('user-registration', array('user_data' => $data, 'user_id' => $user_id));
     	$this->mail->setSubject('user_registration_email_subject');
     	$this->mail->send($mail->transport);    	
@@ -118,8 +120,7 @@ class NotificationEvent extends BaseEvent
     		'project_data' => $project_data
     	);
     	
-    	$view_path = $this->mail->getModulePath(__DIR__).'/view/emails';
-    	$this->mail->setViewDir($view_path);
+    	$this->mail->setViewDir($this->email_view_path);
     	$this->mail->setEmailView('task-status-change', $view_data);
     	$this->mail->setSubject($this->mail->translator->translate('email_subject_task_status_change', 'pm').': '.$new_data['name']);
     	$this->mail->send($mail->transport);
