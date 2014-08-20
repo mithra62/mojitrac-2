@@ -124,6 +124,45 @@ class NotificationEvent extends BaseEvent
     	$this->mail->setEmailView('task-status-change', $view_data);
     	$this->mail->setSubject($this->mail->translator->translate('email_subject_task_status_change', 'pm').': '.$new_data['name']);
     	$this->mail->send($mail->transport);
+    }
+
+    /**
+     * Sends the Task Change email notifications
+     * @param int $task_id
+     * @param array $new_data
+     * @param array $old_data
+     */
+    public function sendTaskPriorityChange($task_id, array $new_data, array $old_data)
+    {
+    	$team = $this->project->getProjectTeamMembers($new_data['project_id']);
+    	$project_data = $this->project->getProjectById($new_data['project_id']);
+    	$sending = FALSE;
+    	foreach($team AS $member)
+    	{
+    		if($this->user->checkPreference($member['user_id'], 'noti_priority_task', '1') == '0')
+    		{
+    			continue;
+    		}
+    
+    		$sending = TRUE;
+    		$this->mail->addTo($member['email'], $member['first_name'].' '.$member['last_name']);
+    	}
+    
+    	if( !$sending )
+    	{
+    		return; //no emails were added to send to so bounce out
+    	}
+    	 
+    	$view_data = array(
+    		'task_data' => $new_data,
+    		'task_id' => $task_id,
+    		'project_data' => $project_data
+    	);
+    	 
+    	$this->mail->setViewDir($this->email_view_path);
+    	$this->mail->setEmailView('task-priority-change', $view_data);
+    	$this->mail->setSubject($this->mail->translator->translate('email_subject_task_priority_change', 'pm').': '.$new_data['name']);
+    	$this->mail->send($mail->transport);
     }    
     
     /**
@@ -141,10 +180,7 @@ class NotificationEvent extends BaseEvent
     	}
     	else if($new_data['priority'] != $task_data['priority'])
     	{
-    		//todo
-    		//$noti->sendTaskPriorityChange($formData);
-    		echo "sendTaskPriorityChange";
-    		exit;
+    		$this->sendTaskPriorityChange($task_id, $new_data, $task_data);
     	}
     	
     	if($new_data['end_date'] != $task_data['end_date'])

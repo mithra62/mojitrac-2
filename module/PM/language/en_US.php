@@ -58,5 +58,6 @@ return array(
 		
 	//emails
 	'email_subject_task_status_change' => 'Task status changed',
+	'email_subject_task_priority_change' => 'Task priority changed',
 	
 );
