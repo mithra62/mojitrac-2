@@ -32,7 +32,7 @@ class DocsController extends AbstractPmController
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
-        parent::onDispatch($e);
+		$e = parent::onDispatch( $e );
         //$this->view->headTitle('Documentation', 'PREPEND');
         $this->layout()->setVariable('layout_style', 'left');
         $this->layout()->setVariable('sidebar', 'dashboard');
@@ -40,6 +40,9 @@ class DocsController extends AbstractPmController
         //$this->view->uri = $this->_request->getPathInfo();
 		$this->layout()->setVariable('active_sub', 'None');
 		$this->layout()->setVariable('title', FALSE);
+		
+		$type = $this->params()->fromRoute('type');
+		$this->layout()->setVariable('type', $type); 
 		$page = $this->params()->fromRoute('page');
 		$this->layout()->setVariable('page', $page); 
 		
@@ -54,13 +57,13 @@ class DocsController extends AbstractPmController
     }
     
     public function projectsAction()
-    {  	
-    	$this->view->project_filter = $this->_getParam("view",FALSE);
+    { 
+    	return $this->ajaxOutput(array());
     }
     
     public function companiesAction()
     {
-        return $this->ajaxOutput(array());
+        return $this->ajaxOutput();
     }
     
     public function tasksAction()
