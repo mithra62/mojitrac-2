@@ -4,7 +4,7 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/src/PM/Model/Projects.php
@@ -500,16 +500,16 @@ class Projects extends AbstractModel
 	 * @param int $project
 	 * @return unknown_type
 	 */
-	public function removeProjectTeamMember($id, $project)
+	public function removeProjectTeamMember($user_id, $project_id)
 	{
-		$where = array('user_id' => $id, 'project_id' => $project);
+		$where = array('user_id' => $user_id, 'project_id' => $project_id);
 		
-	    $ext = $this->trigger(self::EventProjectRemoveTeamMemberPre, $this, $where, $this->setXhooks(array('id' => $project)));
+	    $ext = $this->trigger(self::EventProjectRemoveTeamMemberPre, $this, $where, $this->setXhooks(array('id' => $project_id)));
 	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $where = $ext->last();
 	    	    
 		$delete = $this->remove('project_teams', $where);
 		
-		$ext = $this->trigger(self::EventProjectRemoveTeamMemberPost, $this, $where, $this->setXhooks(array('id' => $project)));
+		$ext = $this->trigger(self::EventProjectRemoveTeamMemberPost, $this, $where, $this->setXhooks(array('id' => $project_id)));
 		if($ext->stopped()) return $ext->last();
 
 		return $delete;

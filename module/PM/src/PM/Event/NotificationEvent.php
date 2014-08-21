@@ -40,13 +40,16 @@ class NotificationEvent extends BaseEvent
     private $hooks = array(
         'user.add.post' => 'sendUserAdd',
     	'task.update.pre' => 'sendTaskUpdate',
-    	'task.assign.pre' => 'sendTaskAssign'
+    	'task.assign.pre' => 'sendTaskAssign',
+    	'project.removeteammember.pre' => 'sendRemoveFromProjectTeam'
     );
     
     /**
      * The Notification Event
-     * @param \Application\Model\Mail $mail
-     * @param \Application\Model\Users $users
+     * @param Mail $mail
+     * @param Users $users
+     * @param Projects $project
+     * @param Tasks $task
      * @param string $identity
      */
     public function __construct( Mail $mail, Users $users, Projects $project, Tasks $task, $identity = null)
@@ -259,6 +262,34 @@ class NotificationEvent extends BaseEvent
     		$this->mail->setEmailView('task-assigned', $view_data);
     		$this->mail->setSubject($this->mail->translator->translate('email_subject_task_assigned', 'pm').': '.$task_data['name']);
     		$this->mail->send($mail->transport);    		
+    	}
+    }
+    
+    /**
+     * Sends the email for when a user is removed from a project team
+     * @param \Zend\EventManager\Event $event
+     */
+    public function sendRemoveFromProjectTeam(\Zend\EventManager\Event $event)
+    {
+    	$user_id = $event->getParam('user_id');
+    	$project_id = $event->getParam('project_id');
+        if($this->user->checkPreference($user_id, 'noti_remove_proj_team', '1') != '0')
+    	{
+    		$user_data = $this->user->getUserById($user_id);
+    		$project_data = $this->project->getProjectById($project_id);
+    		$this->mail->addTo($user_data['email'], $user_data['first_name'].' '.$user_data['last_name']);
+    		$this->mail->setViewDir($this->email_view_path);
+    		
+    		$view_data = array(
+    			'user_id' => $user_id,
+    			'project_id' => $project_id,
+    			'user_data' => $user_data,
+    			'project_data' => $project_data
+    		);
+    		    		
+    		$this->mail->setEmailView('project-team-remove', $view_data);
+    		$this->mail->setSubject($this->mail->translator->translate('email_subject_project_team_remove', 'pm').': '.$project_data['name']);
+    		$this->mail->send($mail->transport);
     	}
     }
 }
