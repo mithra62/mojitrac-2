@@ -4,7 +4,7 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/src/PM/Event/NotificationEvent.php
@@ -39,7 +39,8 @@ class NotificationEvent extends BaseEvent
      */
     private $hooks = array(
         'user.add.post' => 'sendUserAdd',
-    	'task.update.pre' => 'sendTaskUpdate'
+    	'task.update.pre' => 'sendTaskUpdate',
+    	'task.assign.pre' => 'sendTaskAssign'
     );
     
     /**
@@ -88,7 +89,7 @@ class NotificationEvent extends BaseEvent
     
 
     /**
-     * Sends the Task Change email notifications
+     * Sends the Task Status Change email notifications
      * @param int $task_id
      * @param array $new_data
      * @param array $old_data
@@ -127,7 +128,7 @@ class NotificationEvent extends BaseEvent
     }
 
     /**
-     * Sends the Task Change email notifications
+     * Sends the Task Priority Change email notifications
      * @param int $task_id
      * @param array $new_data
      * @param array $old_data
@@ -163,6 +164,45 @@ class NotificationEvent extends BaseEvent
     	$this->mail->setEmailView('task-priority-change', $view_data);
     	$this->mail->setSubject($this->mail->translator->translate('email_subject_task_priority_change', 'pm').': '.$new_data['name']);
     	$this->mail->send($mail->transport);
+    } 
+
+    /**
+     * Sends the Task End Date Update email notifications
+     * @param int $task_id
+     * @param array $new_data
+     * @param array $old_data
+     */
+    public function sendTaskEndDateChange($task_id, array $new_data, array $old_data)
+    {
+    	$team = $this->project->getProjectTeamMembers($new_data['project_id']);
+    	$project_data = $this->project->getProjectById($new_data['project_id']);
+    	$sending = FALSE;
+    	foreach($team AS $member)
+    	{
+    		if($this->user->checkPreference($member['user_id'], 'noti_priority_task', '1') == '0')
+    		{
+    			continue;
+    		}
+    
+    		$sending = TRUE;
+    		$this->mail->addTo($member['email'], $member['first_name'].' '.$member['last_name']);
+    	}
+    
+    	if( !$sending )
+    	{
+    		return; //no emails were added to send to so bounce out
+    	}
+    
+    	$view_data = array(
+    		'task_data' => $new_data,
+    		'task_id' => $task_id,
+    		'project_data' => $project_data
+    	);
+    
+    	$this->mail->setViewDir($this->email_view_path);
+    	$this->mail->setEmailView('task-priority-change', $view_data);
+    	$this->mail->setSubject($this->mail->translator->translate('email_subject_task_priority_change', 'pm').': '.$new_data['name']);
+    	$this->mail->send($mail->transport);
     }    
     
     /**
@@ -190,5 +230,35 @@ class NotificationEvent extends BaseEvent
     		//echo "sendTaskEndDateChange";
     		//exit;
     	}    	
+    }
+    
+    /**
+     * Sends the email when a task is assigned to someone
+     * @param \Zend\EventManager\Event $event
+     */
+    public function sendTaskAssign(\Zend\EventManager\Event $event)
+    {
+    	$task_id = $event->getParam('task_id');
+    	$assigned_to = $event->getParam('assigned_to');
+    	if($this->user->checkPreference($assigned_to, 'noti_assigned_task', '1') != '0')
+    	{
+    		$user_data = $this->user->getUserById($assigned_to);
+    		$task_data = $this->task->getTaskById($task_id);
+    		$project_data = $this->project->getProjectById($task_data['project_id']);
+    		$this->mail->addTo($user_data['email'], $user_data['first_name'].' '.$user_data['last_name']);
+    		$this->mail->setViewDir($this->email_view_path);
+    		
+    		$view_data = array(
+    			'assigned_to' => $assigned_to,
+    			'task_id' => $task_id,
+    			'user_data' => $user_data,
+    			'task_data' => $task_data,
+    			'project_data' => $project_data
+    		);
+    		    		
+    		$this->mail->setEmailView('task-assigned', $view_data);
+    		$this->mail->setSubject($this->mail->translator->translate('email_subject_task_assigned', 'pm').': '.$task_data['name']);
+    		$this->mail->send($mail->transport);    		
+    	}
     }
 }

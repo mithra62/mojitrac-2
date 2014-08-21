@@ -536,28 +536,6 @@ class Tasks extends AbstractModel
 
 		return $remove;
 	}
-	
-	/**
-	 * Removes all the tasks for the given $company_id
-	 * @param int $company_id
-	 * @return bool
-	 */
-	public function removeTasksByCompany($company_id)
-	{
-		$task = new PM_Model_DbTable_Tasks;
-		return $task->deleteTask($company_id, 'company_id');		
-	}
-
-	/**
-	 * Removes all the tasks for the given $company_id
-	 * @param int $company_id
-	 * @return bool
-	 */
-	public function removeTasksByProject($project_id)
-	{
-		$task = new PM_Model_DbTable_Tasks;
-		return $task->deleteTask($project_id, 'project_id');		
-	}
 
 	/**
 	 * Returns the total files a task has
