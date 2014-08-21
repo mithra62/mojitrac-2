@@ -41,7 +41,8 @@ class NotificationEvent extends BaseEvent
         'user.add.post' => 'sendUserAdd',
     	'task.update.pre' => 'sendTaskUpdate',
     	'task.assign.pre' => 'sendTaskAssign',
-    	'project.removeteammember.pre' => 'sendRemoveFromProjectTeam'
+    	'project.removeteammember.pre' => 'sendRemoveFromProjectTeam',
+    	'project.addteam.post' => 'sendAddProjectTeam'
     );
     
     /**
@@ -291,5 +292,33 @@ class NotificationEvent extends BaseEvent
     		$this->mail->setSubject($this->mail->translator->translate('email_subject_project_team_remove', 'pm').': '.$project_data['name']);
     		$this->mail->send($mail->transport);
     	}
+    }
+    
+    /**
+     * Sends the email for a user being added to a project team
+     * @param \Zend\EventManager\Event $event
+     */
+    public function sendAddProjectTeam(\Zend\EventManager\Event $event)
+    {
+    	$user_id = $event->getParam('id');
+    	$project_id = $event->getParam('project');
+    	if($this->user->checkPreference($user_id, 'noti_add_proj_team', '1') != '0')
+    	{
+    		$user_data = $this->user->getUserById($user_id);
+    		$project_data = $this->project->getProjectById($project_id);
+    		$this->mail->addTo($user_data['email'], $user_data['first_name'].' '.$user_data['last_name']);
+    		$this->mail->setViewDir($this->email_view_path);
+    	
+    		$view_data = array(
+    			'user_id' => $user_id,
+    			'project_id' => $project_id,
+    			'user_data' => $user_data,
+    			'project_data' => $project_data
+    		);
+    	
+    		$this->mail->setEmailView('project-team-add', $view_data);
+    		$this->mail->setSubject($this->mail->translator->translate('email_subject_project_team_add', 'pm').': '.$project_data['name']);
+    		$this->mail->send($mail->transport);
+    	}    	
     }
 }

@@ -60,7 +60,8 @@ return array(
 	'email_subject_task_status_change' => 'Task status changed',
 	'email_subject_task_priority_change' => 'Task priority changed',
 	'email_subject_task_assigned' => 'Task assigned to you',
-	'email_subject_project_team_remove' => 'Removed from project team',	
+	'email_subject_project_team_remove' => 'Removed from project team',
+	'email_subject_project_team_add' => 'Added to project team',	
 		
 	'sent_by_moji' => 'Sent By: MojiTrac',
 	
