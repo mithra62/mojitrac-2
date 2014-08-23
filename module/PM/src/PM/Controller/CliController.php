@@ -14,6 +14,9 @@ namespace PM\Controller;
 
 use Application\Controller\AbstractController;
 
+use Zend\Console\Adapter\AdapterInterface as Console;
+use Zend\Console\Exception\RuntimeException;
+
 /**
  * PM - Command Line Controller
  *
@@ -24,7 +27,7 @@ use Application\Controller\AbstractController;
  * @filesource 	./module/PM/src/PM/Controller/CliController.php
  */
 class CliController extends AbstractController
-{
+{	
 	/**
 	 * Console command to archive tasks 
 	 * @return string
@@ -52,11 +55,20 @@ class CliController extends AbstractController
     	$member_id = $this->params()->fromRoute('member_id');
     	$email = $this->params()->fromRoute('email');
     	$verbose = $this->params()->fromRoute('verbose');
+    	$future_days = $this->params()->fromRoute('future_days', 30);
     	
-    	return $this->sendTaskReminder($member_id, $email, $verbose);
+    	return $this->sendTaskReminder($member_id, $email, $verbose, $future_days);
 	}
 	
-	public function sendTaskReminder($member_id = FALSE, $email = FALSE, $verbose = FALSE)
+	/**
+	 * Sends the Task Reminder email
+	 * @param string $member_id
+	 * @param string $email
+	 * @param string $verbose
+	 * @param number $future_days
+	 * @return string
+	 */
+	public function sendTaskReminder($member_id = FALSE, $email = FALSE, $verbose = FALSE, $future_days = 30)
 	{
 		$user = $this->getServiceLocator()->get('PM\Model\Users');
 		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
@@ -76,17 +88,40 @@ class CliController extends AbstractController
 			$user_data = $user->getAllUsers('d');
 		}
 
+		$this->console = $this->getServiceLocator()->get('Console');
+		if (!$this->console instanceof Console) {
+			throw new RuntimeException('Cannot obtain console adapter. Are we running in a console?');
+		}
+				
+		if($verbose)
+		{
+			$this->console->clear();
+			$this->console->writeLine('Sending Task Reminder Email to '.count($user_data).' users...');
+			$this->console->writeLine();
+		}
+				
 		foreach($user_data AS $member)
 		{
 			if($user->checkPreference($member['id'], 'noti_daily_task_reminder', '1') == '0')
 			{
+				if($verbose)
+				{
+					$this->console->writeLine('Skipping '.$member['email'].' for preference reasons...');
+				}
+				
 				continue;
 			}
 		
-			$user_tasks = $user->getAssignedTasks($member['id'], 30);
+			$user_tasks = $user->getAssignedTasks($member['id'], $future_days);
 			if( !$user_tasks )
 			{
+				$this->console->writeLine('Skipping '.$member['email'].' since there aren\'t any tasks to remind for...');
 				continue;
+			}
+			
+			if($verbose)
+			{
+				$this->console->writeLine('Sending to '.$member['email'].'...');
 			}
 			
 			$mail = $this->getServiceLocator()->get('Application\Model\Mail');
@@ -97,6 +132,12 @@ class CliController extends AbstractController
 			$mail->setEmailView('task-reminder', array('user_data' => $member, 'tasks' => $user_tasks));
 			$mail->setSubject('daily_task_reminder_email_subject');
 			$mail->send();
+			
+			if($verbose)
+			{
+				$this->console->writeLine('Sent to '.$member['email'].'!');
+				$this->console->writeLine('');
+			}
 		}
 		
 		return 'done';

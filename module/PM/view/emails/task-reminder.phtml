@@ -17,7 +17,7 @@ foreach($lang AS $type => $str)
 		{
 			foreach($tasks[$type] AS $task)
 			{
-				$lang[$type] .= "<a href='"."/pm/tasks/view/id/".$task['id']."'>".$task['name']."</a> (".$this->RelativeDate($task['end_date']).")<br>";
+				$lang[$type] .= "<a href='"."".$this->serverUrl($this->url('tasks/view', array('task_id' => $task['id'])))."'>".$task['name']."</a> (".$this->RelativeDate($task['end_date']).")<br>";
 			}
 			continue;
 		}
