@@ -1251,10 +1251,19 @@ return array(
             'routes' => array(
 	            'archive-tasks' => array(
             		'options' => array(
-						'route'    => 'archivetasks [--verbose|-v]:verbose [--days=] [--status=]',
+						'route'    => 'archive tasks [--verbose|-v]:verbose [--days=] [--status=]',
             			'defaults' => array(
             				'controller' => 'PM\Controller\Cli',
             				'action'     => 'archiveTasks'
+            			)
+            		)
+	            ),
+	            'task-reminder' => array(
+            		'options' => array(
+						'route'    => 'send task reminder [--verbose|-v]:verbose [--email=] [--member_id=]',
+            			'defaults' => array(
+            				'controller' => 'PM\Controller\Cli',
+            				'action'     => 'dailyTaskReminder'
             			)
             		)
 	            )            

@@ -82,11 +82,24 @@ class Module implements
 	{
 		return array(
 				// Describe available commands
-				'user resetpassword [--verbose|-v] EMAIL'    => 'Reset password for a user',
+				'archive tasks [--verbose|-v] [--days=] [--status=]',
+				array('Updates all tasks to --status that have been marked completed more than --days'),
 	
 				// Describe expected parameters
-				array( 'EMAIL',            'Email of the user for a password reset' ),
-				array( '--verbose|-v',     '(optional) turn on verbose mode'        ),
+				array( '--days',           'How many days you want tasks to be in since Complete status was given' ),
+				array( '--status',         'What status you want to set tasks that are Complete past --days' ),
+				array( '--verbose|-v',     '(optional) turn on verbose mode'),
+				'---------------------------------------',
+				'',
+				
+				'send task reminder [--verbose|-v] [--email=] [--member_id=]',
+				array('Sends the Daily Task Reminder email(s). If --email and --member_id are empty everyone gets the email. '),
+	
+				// Describe expected parameters
+				array( '--member_id',      'The member_id for the user you want to trigger' ),
+				array( '--email',          'The email address for the user you want to trigger' ),
+				array( '--verbose|-v',     '(optional) turn on verbose mode'),
+				'---------------------------------------'
 		);
 	}	
 	
