@@ -228,7 +228,7 @@ class Mail extends AbstractModel
 	}
 	
 	/**
-	 * Adds an emai address to send to
+	 * Appends (or creates) an emai address to a list to send to
 	 * @param string $email_address
 	 * @param string $name
 	 * @return \Application\Model\Mail
@@ -237,6 +237,18 @@ class Mail extends AbstractModel
 	{
 		$this->message->addTo($email_address, $name);
 		return $this;
+	}
+	
+	/**
+	 * Creates a new email collection to send to
+	 * @param unknown $email_address
+	 * @param string $name
+	 * @return \Application\Model\Mail
+	 */
+	public function setTo($email_address, $name = null)
+	{
+		$this->message->setTo($email_address, $name);
+		return $this;		
 	}
 	
 	/**
@@ -318,39 +330,5 @@ class Mail extends AbstractModel
 		}
 
 		return $this->smtp_transport;
-	}
-	
-	public function makeLink($body, $pk, $type = 'project')
-	{
-		$url = '';
-		switch($type)
-		{
-			case 'download':
-				$url = '/pm/files/download-revision/id/'.$pk;
-			break;
-			
-			case 'file':
-				$url = '/pm/files/view/id/'.$pk;
-			break;			
-						
-			case 'project':
-				$url = '/pm/projects/view/id/'.$pk;
-			break;
-			
-			case 'user':
-				$url = '/pm/users/view/id/'.$pk;
-			break;
-			
-			case 'company':
-				$url = '/pm/companies/view/id/'.$pk;
-			break;			
-			
-			case 'task':
-			default:
-				$url = '/pm/tasks/view/id/'.$pk;
-			break;
-		}
-		
-		return '<a href="'.$this->web_url.$url.'">'.$body.'</a>';
 	}
 }

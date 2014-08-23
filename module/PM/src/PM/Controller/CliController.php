@@ -90,25 +90,13 @@ class CliController extends AbstractController
 			}
 			
 			$mail = $this->getServiceLocator()->get('Application\Model\Mail');
-
-			/**
-			$subject = 'Daily Task Reminder';
-			$head = 'Hello '.$user_data['first_name'].', <br /><br />This is an automatic email to remind you of tasks that are assigned to you but not completed yet. Please login into the project management system and review your assigned tasks.<br />';
-			$msg_html = $this->prepareDailyTaskReminderEmailBody($tasks);
-			if(!$msg_html)
-			{
-				return FALSE;
-			}
-			*/
-			//$this->addTo($user['email'], $user['first_name'].' '.$user['last_name']);
-			//$this->sendMail($subject, $head.$msg_html, $msg_txt = FALSE);
 			$mail->setTranslationDomain('pm');
 			$this->email_view_path = $mail->getModulePath(__DIR__).'/view/emails';
-			$mail->addTo($member['email'], $member['first_name'].' '.$member['last_name']);
+			$mail->setTo($member['email'], $member['first_name'].' '.$member['last_name']);
 			$mail->setViewDir($this->email_view_path);
 			$mail->setEmailView('task-reminder', array('user_data' => $member, 'tasks' => $user_tasks));
 			$mail->setSubject('daily_task_reminder_email_subject');
-			$mail->send($mail->transport);			
+			$mail->send();
 		}
 		
 		return 'done';
