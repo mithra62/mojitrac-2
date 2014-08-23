@@ -1158,6 +1158,7 @@ return array(
             'PM\Controller\Admin' => 'PM\Controller\AdminController',
             'PM\Controller\Bookmarks' => 'PM\Controller\BookmarksController',
             'PM\Controller\Calendar' => 'PM\Controller\CalendarController',
+            'PM\Controller\Cli' => 'PM\Controller\CliController',
             'PM\Controller\Companies' => 'PM\Controller\CompaniesController',
             'PM\Controller\Contacts' => 'PM\Controller\ContactsController',
             'PM\Controller\Docs' => 'PM\Controller\DocsController',
@@ -1248,6 +1249,15 @@ return array(
     'console' => array(
         'router' => array(
             'routes' => array(
+	            'archive-tasks' => array(
+            		'options' => array(
+						'route'    => 'archivetasks [--verbose|-v]:verbose [--days=] [--status=]',
+            			'defaults' => array(
+            				'controller' => 'PM\Controller\Cli',
+            				'action'     => 'archiveTasks'
+            			)
+            		)
+	            )            
             ),
         ),
     ),

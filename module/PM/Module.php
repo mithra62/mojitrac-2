@@ -4,7 +4,7 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
- * @copyright	Copyright (c) 2013, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/Module.php
@@ -13,6 +13,9 @@
 namespace PM;
 
 use Zend\ModuleManager\ModuleManager;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Zend\Console\Adapter\AdapterInterface as Console;
+use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use DateTime;
 
 use PM\Model\Projects;
@@ -53,8 +56,14 @@ use PM\Event\NotificationEvent;
  * @author		Eric Lamb
  * @filesource 	./module/PM/Module.php
  */
-class Module
+class Module implements 
+    ConsoleUsageProviderInterface,  // <- our module implement this feature and provides console usage info
+    ConsoleBannerProviderInterface
 {
+	/**
+	 * Sets up the module settings
+	 * @param ModuleManager $moduleManager
+	 */
 	public function init(ModuleManager $moduleManager)
 	{
 		//sets the layout
@@ -63,8 +72,33 @@ class Module
 			$controller = $e->getTarget();
 			$controller->layout('layout/pm');
 		}, 100);	
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\ModuleManager\Feature\ConsoleUsageProviderInterface::getConsoleUsage()
+	 */
+	public function getConsoleUsage(Console $console)
+	{
+		return array(
+				// Describe available commands
+				'user resetpassword [--verbose|-v] EMAIL'    => 'Reset password for a user',
+	
+				// Describe expected parameters
+				array( 'EMAIL',            'Email of the user for a password reset' ),
+				array( '--verbose|-v',     '(optional) turn on verbose mode'        ),
+		);
 	}	
-		
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\ModuleManager\Feature\ConsoleBannerProviderInterface::getConsoleBanner()
+	 */
+	public function getConsoleBanner(Console $console)
+	{
+		return 'PM 2.X';
+	}	
+
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';

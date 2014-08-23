@@ -681,17 +681,20 @@ class Tasks extends AbstractModel
 		return 0;
 	}
 	
-	public function autoArchive()
+	public function autoArchive($days = 7, $status = 6)
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = array('status' => '6');
-		$date = mktime(0, 0, 0, date("m"), date("d")-7, date("Y"));
+		$sql = array('status' => $status);
+		$date = mktime(0, 0, 0, date("m"), date("d")-$days, date("Y"));
 		$date = date('Y-m-d H:i:s', $date);
 		
 		$where = array();
-		$where[] = $task->getAdapter()->quoteInto('status = ?', 5);
-		$where[] = $task->getAdapter()->quoteInto('last_modified < ?', $date);
-		return $task->update($sql, $where);
+		//$where[] = $task->getAdapter()->quoteInto('status = ?', 5);
+		//$where[] = $task->getAdapter()->quoteInto('last_modified < ?', $date);
+		
+		echo 'fail';
+		exit;
+		$where = array('status', );
+		return $this->update('tasks', $sql, $where);
 	}
 	
 	public function getByProjectIdTaskName($name, $project_id)
