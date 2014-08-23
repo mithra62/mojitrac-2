@@ -258,14 +258,14 @@ class Mail extends AbstractModel
 	 */
 	public function setBody($message)
 	{
-		$text = new MimePart('');
-		$text->type = "text/plain";
+		//$text = new MimePart(strip_tags($message));
+		//$text->type = "text/plain";
 		
 		$html = new MimePart($message);
 		$html->type = "text/html";
 		
 		$body_html = new MimeMessage();
-		$body_html->setParts(array($text, $html));
+		$body_html->setParts(array($html));
 				
 		$this->message->setBody($body_html);
 		return $this;
