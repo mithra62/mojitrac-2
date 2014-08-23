@@ -169,6 +169,11 @@ class Users extends MojiUsers
 		//$lambLib = new LambLib_Controller_Action_Helper_Utilities;
 
 		$open_tasks = $this->getOpenAssignedTasks($id);
+		if( !$open_tasks )
+		{
+			return $open_tasks;
+		}
+		
 		foreach($open_tasks As $task)
 		{
 			//$task_date = $lambLib->formatDate($task['end_date'], 'Y-m-d');

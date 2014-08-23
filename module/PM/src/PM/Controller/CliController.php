@@ -52,26 +52,65 @@ class CliController extends AbstractController
     	$member_id = $this->params()->fromRoute('member_id');
     	$email = $this->params()->fromRoute('email');
     	$verbose = $this->params()->fromRoute('verbose');
-		return $member_id;
-		exit;
-		
-		
-		$users = new PM_Model_Users(new PM_Model_DbTable_Users);
-		$user_data = $users->getAllUsers('d');
-		foreach($user_data AS $user)
+    	
+    	return $this->sendTaskReminder($member_id, $email, $verbose);
+	}
+	
+	public function sendTaskReminder($member_id = FALSE, $email = FALSE, $verbose = FALSE)
+	{
+		$user = $this->getServiceLocator()->get('PM\Model\Users');
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+		 
+		if($member_id || $email)
 		{
-			if($users->checkPreference($user['id'], 'noti_daily_task_reminder', '1') == '0')
+			$user_data = ($member_id ? $user->getUserById($member_id) : $user->getUserByEmail($email));
+			if(!$user_data)
+			{
+				return 'User not found';
+			}
+		
+			$user_data = array($user_data);
+		}
+		else
+		{
+			$user_data = $user->getAllUsers('d');
+		}
+
+		foreach($user_data AS $member)
+		{
+			if($user->checkPreference($member['id'], 'noti_daily_task_reminder', '1') == '0')
+			{
+				continue;
+			}
+		
+			$user_tasks = $user->getAssignedTasks($member['id'], 30);
+			if( !$user_tasks )
 			{
 				continue;
 			}
 			
-			$users_tasks = $users->getAssignedTasks($user['id'], 30);
-			if(count($users_tasks) >= 1)
-			{	
-				$noti = new PM_Model_Notifications;
-				$noti->sendDailyTaskReminder($user, $users_tasks);
+			$mail = $this->getServiceLocator()->get('Application\Model\Mail');
+
+			/**
+			$subject = 'Daily Task Reminder';
+			$head = 'Hello '.$user_data['first_name'].', <br /><br />This is an automatic email to remind you of tasks that are assigned to you but not completed yet. Please login into the project management system and review your assigned tasks.<br />';
+			$msg_html = $this->prepareDailyTaskReminderEmailBody($tasks);
+			if(!$msg_html)
+			{
+				return FALSE;
 			}
+			*/
+			//$this->addTo($user['email'], $user['first_name'].' '.$user['last_name']);
+			//$this->sendMail($subject, $head.$msg_html, $msg_txt = FALSE);
+			$mail->setTranslationDomain('pm');
+			$this->email_view_path = $mail->getModulePath(__DIR__).'/view/emails';
+			$mail->addTo($member['email'], $member['first_name'].' '.$member['last_name']);
+			$mail->setViewDir($this->email_view_path);
+			$mail->setEmailView('task-reminder', array('user_data' => $member, 'tasks' => $user_tasks));
+			$mail->setSubject('daily_task_reminder_email_subject');
+			$mail->send($mail->transport);			
 		}
-		exit;
+		
+		return 'done';
 	}
 }

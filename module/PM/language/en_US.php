@@ -62,6 +62,7 @@ return array(
 	'email_subject_task_assigned' => 'Task assigned to you',
 	'email_subject_project_team_remove' => 'Removed from project team',
 	'email_subject_project_team_add' => 'Added to project team',	
+	'daily_task_reminder_email_subject' => 'Daily Task Reminder',
 		
 	'sent_by_moji' => 'Sent By: MojiTrac',
 	

@@ -666,11 +666,16 @@ class Tasks extends AbstractModel
 		return $task->updateTask($sql, $id);		
 	}
 	
-	public function getProjectEstimatedTime($id)
+	/**
+	 * Calculates how long all the tasks a given project will take in hours
+	 * @param int $project_id
+	 * @return unknown|number
+	 */
+	public function getProjectEstimatedTime($project_id)
 	{
 		$sql = $this->db->select()
 					->from(array('t' => 'tasks'), array('estimate_time' => new \Zend\Db\Sql\Expression('SUM(duration)')))
-					->where(array('project_id' => $id))
+					->where(array('project_id' => $project_id))
 					->where(array('t.status' => 4));
 					
 		$data = $this->getRow($sql);
@@ -681,6 +686,12 @@ class Tasks extends AbstractModel
 		return 0;
 	}
 	
+	/**
+	 * Sets the given tasks to $status if they haven't been touched in $days or more
+	 * @param number $days
+	 * @param number $status
+	 * @return Ambigous <number, \Zend\EventManager\mixed, NULL, mixed>
+	 */
 	public function autoArchive($days = 7, $status = 6)
 	{
 		$sql = array('status' => $status);

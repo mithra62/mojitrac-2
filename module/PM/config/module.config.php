@@ -1260,7 +1260,7 @@ return array(
 	            ),
 	            'task-reminder' => array(
             		'options' => array(
-						'route'    => 'send task reminder [--verbose|-v]:verbose [--email=] [--member_id=]',
+						'route'    => 'send task reminder [--verbose|-v]:verbose [--email=] [--member_id=] [--future_days=]',
             			'defaults' => array(
             				'controller' => 'PM\Controller\Cli',
             				'action'     => 'dailyTaskReminder'

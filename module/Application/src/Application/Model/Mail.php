@@ -182,9 +182,25 @@ class Mail extends AbstractModel
 		return $this;
 	}
 	
+	/**
+	 * Sets the Translator object up
+	 * @param \Zend\Mvc\I18n\Translator $translator
+	 * @return \Application\Model\Mail
+	 */
 	public function setTranslator(\Zend\Mvc\I18n\Translator $translator)
 	{
 		$this->translator = $translator;
+		return $this;
+	}
+	
+	/**
+	 * Sets the translation (module) domain to use
+	 * @param string $domain
+	 * @return \Application\Model\Mail
+	 */
+	public function setTranslationDomain($domain = 'app')
+	{
+		$this->translation_domain = $domain;
 		return $this;
 	}
 	
