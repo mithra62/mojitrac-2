@@ -19,6 +19,7 @@ return array(
         'Clients',
         'ZendDeveloperTools',
     	'ZF\ApiProblem',
+    	'SwaggerModule',
         //'HostManager'
 	),
     'module_listener_options' => array(
