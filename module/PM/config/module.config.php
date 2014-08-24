@@ -514,46 +514,6 @@ return array(
         		)
         	), //end IP Routes
 
-
-
-        	'json' => array( //Json Routes
-        		'type' => 'segment',
-        		'options' => array(
-        			'route' => '/pm/json',
-        			'defaults' => array(
-        				'controller' => 'PM\Controller\Json',
-        				'action' => 'index'
-        			),
-        		),
-        		'may_terminate' => true,
-        		'child_routes' => array(
-        			'chain-projects' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => '/chain-projects/[:_value]',
-        					'constraints' => array(
-        						'_value' => '[0-9]+'
-        					),
-        					'defaults' => array( 
-        						'action' => 'chainProjects'
-        					)
-        				)
-        			),
-        			'chain-tasks' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => '/chain-tasks/[:_value]',
-        					'defaults' => array(
-        						'action' => 'chain-tasks'
-        					)
-        				)
-        			),
-        		)
-        	), //end Json Routes
-
-
-
-
         	'notes' => array( //Notes Routes
         		'type' => 'segment',
         		'options' => array(

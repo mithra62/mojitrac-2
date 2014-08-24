@@ -123,6 +123,9 @@ return array(
         		'type' => 'segment',
         		'options' => array(
         			'route' => '/api/companies[/:id]',
+        			'constraints' => array(
+        				'id' => '[0-9]+'
+        			),
         			'defaults' => array(
         				'controller' => 'Api\Controller\Companies',
         			),
