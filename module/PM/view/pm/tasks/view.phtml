@@ -146,7 +146,7 @@ $(document).ready(function() {
 		    $.ajax({ 
 		    	type: "POST",
 		    	data: "id=<?php echo $this->task['id']; ?>&progress="+ui.value,
-			    url: "/pm/tasks/update-progress", 
+			    url: "/api/task/update-progress/<?php echo $this->task['id']; ?>", 
 			    context: document.body, 
 			    success: function(){
 				    $("#task_updater").css("color","red");
