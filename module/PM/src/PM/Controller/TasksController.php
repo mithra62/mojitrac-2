@@ -219,40 +219,6 @@ class TasksController extends AbstractPmController
 		return $view;
 	}
 	
-	public function updateProgressAction()
-	{
-		if (!$this->getRequest()->isPost()) {
-			exit;
-		}
-				
-		$id = $this->_request->getParam('id', FALSE);
-		if (!$id) 
-		{
-			exit;
-		}
-		
-		$progress = $this->_request->getParam('progress', FALSE);
-		if (!$progress || $progress > 100 || $progress < 0) 
-		{
-			exit;
-		}		
-		
-		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
-		$task_data = $task->getTaskById($id);
-		if (!$task_data) 
-		{
-			exit;
-		}
-		
-		if($task_data['assigned_to'] != $this->identity)
-		{
-			exit;
-		}		
-
-		$task->updateProgress($id, $progress);
-		exit;
-	}
-	
 	/**
 	 * Task Add Page
 	 * @return void

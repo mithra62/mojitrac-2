@@ -646,24 +646,30 @@ class Tasks extends AbstractModel
 	 */
 	public function markCompleted($id, $identity)
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = array('progress' => '100', 'status' => '5', 'last_modified' => new Zend_Db_Expr('NOW()'));
-		return $task->updateTask($sql, $id);
+		$sql = array('progress' => '100', 'status' => '5', 'last_modified' => new \Zend\Db\Sql\Expression('NOW()'));
+		return $this->update('tasks', $sql, array('id' => $id));
 	}
 	
+	/**
+	 * Updates a task's progress ONLY 
+	 * @param int $id
+	 * @param int $progress
+	 * @return Ambigous <number, \Zend\EventManager\mixed, NULL, mixed>
+	 */
 	public function updateProgress($id, $progress)
 	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = array('progress' => $progress, 'last_modified' => new Zend_Db_Expr('NOW()'));
+		$sql = array('progress' => $progress, 'last_modified' => new \Zend\Db\Sql\Expression('NOW()'));
 		if($progress != 0)
 		{
 			$sql['status'] = '3';
 		}	
+		
 		if($progress == 100)
 		{
 			$sql['status'] = '5';
-		}				
-		return $task->updateTask($sql, $id);		
+		}
+		
+		return $this->update('tasks', $sql, array('id' => $id));		
 	}
 	
 	/**

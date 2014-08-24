@@ -158,6 +158,33 @@ return array(
         		'child_routes' => array( 
         		)
         	), //end Companies Options
+        	
+        	'api-task' => array( //Tasks Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/api/task',
+        			'defaults' => array(
+        				'controller' => 'Api\Controller\Task',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'update-progress' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/update-progress/:task_id',
+        					'defaults' => array(
+        						'action' => 'updateProgress'
+        					)
+        				)
+        			), 
+        		)
+        	), //end Tasks Routes
+        	
+        	
+        	
+        	
         			
 				
 				
@@ -177,6 +204,7 @@ return array(
 		'invokables' => array(
             'Api\Controller\Index' => 'Api\Controller\IndexController',
             'Api\Controller\Projects' => 'Api\Controller\ProjectsController',
+            'Api\Controller\Task' => 'Api\Controller\TaskController',
             'Api\Controller\Tasks' => 'Api\Controller\TasksController',
             'Api\Controller\Companies' => 'Api\Controller\CompaniesController',
             'Api\Controller\Users' => 'Api\Controller\UsersController',
