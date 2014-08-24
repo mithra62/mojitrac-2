@@ -7,7 +7,7 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./moji/application/controllers/LoginController.php
+ * @filesource 	./module/Application/src/Application/Controller/IndexController.php
  */
 
 namespace Application\Controller;
@@ -15,13 +15,13 @@ namespace Application\Controller;
 use Application\Controller\AbstractController;
 
 /**
- * Default - Login Class
+ * Application - Index Controller
  *
- * Handles login routing
+ * Just placeholder and redict
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/controllers/LoginController.php
+ * @filesource 	./module/Application/src/Application/Controller/IndexController.php
  */
 class IndexController extends AbstractController
 {
