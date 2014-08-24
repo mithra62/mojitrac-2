@@ -14,8 +14,21 @@ namespace ApplicationTest\Controller;
 
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
+/**
+ * Application - Index Test Controller
+ *
+ * Tests the IndexController functionality
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/Application/test/ApplicationTest/Controller/IndexControllerTest.php
+ */
 class IndexControllerTest extends AbstractHttpControllerTestCase
 {
+	/**
+	 * Should errors be traced for output
+	 * @var bool
+	 */
 	protected $traceError = true;
 	
     public function setUp()
@@ -26,6 +39,9 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
         parent::setUp();
     }
     
+    /**
+     * Verifies the index action behaves proper
+     */
     public function testIndexActionCanBeAccessed()
     {
     	$this->dispatch('/');
@@ -35,5 +51,6 @@ class IndexControllerTest extends AbstractHttpControllerTestCase
     	$this->assertControllerClass('IndexController');
     	$this->assertActionName('index');
     	$this->assertMatchedRouteName('home');
+    	$this->assertRedirectTo('/login');
     }   
 }
