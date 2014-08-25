@@ -58,14 +58,12 @@ class LoginTest extends TestCase
 		$this->assertEquals(-1, $result);
 	}
 	
-	/**
 	public function testProcLoginSuccess()
 	{
-		$email = '';
-		$password = '';
+		$email = $this->credentials['email'];
+		$password = $this->credentials['password'];
 		$adapter = $this->serviceManager->get('AuthService');
 		$result = $this->login->procLogin($email, $password, $adapter);
 		$this->assertEquals(1, $result);	
 	}
-	**/
 }

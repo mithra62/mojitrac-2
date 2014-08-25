@@ -86,7 +86,7 @@ return array(
         			'reset' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/reset/[:hash]',
+        					'route' => '/reset/:hash',
         					'defaults' => array(
         						'action' => 'reset'
         					)

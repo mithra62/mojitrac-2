@@ -13,6 +13,7 @@
 namespace ApplicationTest\Controller;
 
 use ApplicationTest\Base\TestCase;
+use Zend\Dom\Query;
 
 /**
  * Application - Login Test Controller
@@ -44,14 +45,42 @@ class LoginControllerTest extends TestCase
      */
     public function testLoginActionBadEmail()
     {
+    	$this->dispatch('/login');
+    	$body = $this->getResponse()->getBody();
+    	
     	$params = array(
     		'email' => 'test',
-    		'password' => 'fdsafdsa'
+    		'password' => 'fdsafdsa',
     	);
     	
     	$this->dispatch('/login', 'POST', $params);
     	$this->assertResponseStatusCode(200);
     	$this->assertNotRedirect();
+    	//$this->assertQueryContentContains('li.error[0]', 'not a valid');
+    }  
+    
+    /**
+     * @depends testLoginActionBadEmail
+     */
+    public function testLoginActionGoodCredentials()
+    {
+    	$this->dispatch('/login');
+    	$html = $this->getResponse()->getBody();
+    	$dom = new Query($html);
+    	$csrf = $dom->execute('input[name="_x"]')->current()->getAttribute('value');
+    	
+    	$params = array(
+    		'email' => $this->credentials['email'].'fff',
+    		'password' => $this->credentials['password'],
+    		'_x' => $csrf
+    	);
+    	
+    	$this->reset();
+    	$this->dispatch('/login', 'POST', $params);
+    	$this->assertResponseStatusCode(200);
+    	$this->assertNotRedirect();
+    	echo $html = $this->getResponse()->getBody();
+    	exit;
     	//$this->assertXpathQueryContentContains('ul.errors li', 'not a valid');
     }
 }

@@ -25,6 +25,12 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  */
 abstract class TestCase extends AbstractHttpControllerTestCase
 {
+	public $credentials = array(
+		'email' => 'phpunit@mojitrac.com', 
+		'password' => '12345', 
+		'identity' => '19'
+	);
+	
 	/**
 	 * Should errors be traced for output
 	 * @var bool
