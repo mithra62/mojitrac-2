@@ -79,8 +79,6 @@ class LoginControllerTest extends TestCase
     	$this->dispatch('/login', 'POST', $params);
     	$this->assertResponseStatusCode(200);
     	$this->assertNotRedirect();
-    	echo $html = $this->getResponse()->getBody();
-    	exit;
     	//$this->assertXpathQueryContentContains('ul.errors li', 'not a valid');
     }
 }
