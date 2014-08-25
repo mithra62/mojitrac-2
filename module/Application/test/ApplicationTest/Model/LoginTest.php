@@ -7,13 +7,22 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/Application/test/ApplicationTest/Controller/LoginControllerTest.php
+ * @filesource 	./module/Application/test/ApplicationTest/Model/LoginTest.php
  */
 
 namespace ApplicationTest\Model;
 
 use ApplicationTest\Base\TestCase;
 
+/**
+ * Application - Login Test Model
+ *
+ * Tests the Login Model methods
+ *
+ * @package 	mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/Application/test/ApplicationTest/Model/LoginTest.php
+ */
 class LoginTest extends TestCase
 {
 	public function setUp()
