@@ -12,7 +12,7 @@
 
 namespace ApplicationTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use ApplicationTest\Base\TestCase;
 
 /**
  * Application - Index Test Controller
@@ -23,22 +23,8 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  * @author		Eric Lamb
  * @filesource 	./module/Application/test/ApplicationTest/Controller/IndexControllerTest.php
  */
-class IndexControllerTest extends AbstractHttpControllerTestCase
-{
-	/**
-	 * Should errors be traced for output
-	 * @var bool
-	 */
-	protected $traceError = true;
-	
-    public function setUp()
-    {
-        $this->setApplicationConfig(
-            include 'D:\ProjectFiles\mithra62\moji2\config/application.config.php'
-        );
-        parent::setUp();
-    }
-    
+class IndexControllerTest extends TestCase
+{   
     /**
      * Verifies the index action behaves proper
      */

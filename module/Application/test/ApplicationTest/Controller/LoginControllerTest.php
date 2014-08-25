@@ -12,7 +12,7 @@
 
 namespace ApplicationTest\Controller;
 
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
+use ApplicationTest\Base\TestCase;
 
 /**
  * Application - Login Test Controller
@@ -23,22 +23,8 @@ use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
  * @author		Eric Lamb
  * @filesource 	./module/Application/test/ApplicationTest/Controller/LoginControllerTest.php
  */
-class LoginControllerTest extends AbstractHttpControllerTestCase
+class LoginControllerTest extends TestCase
 {
-	/**
-	 * Should errors be traced for output
-	 * @var bool
-	 */
-	protected $traceError = true;
-	
-    public function setUp()
-    {
-        $this->setApplicationConfig(
-            include 'D:\ProjectFiles\mithra62\moji2\config/application.config.php'
-        );
-        parent::setUp();
-    }
-    
     /**
      * Verifies the index action can be accessed
      */
@@ -67,20 +53,5 @@ class LoginControllerTest extends AbstractHttpControllerTestCase
     	$this->assertResponseStatusCode(200);
     	$this->assertNotRedirect();
     	//$this->assertXpathQueryContentContains('ul.errors li', 'not a valid');
-    }
-    
-    public function testLoginModelInstance()
-    {
-    	$serviceManager = $this->getApplicationServiceLocator();
-    	$login = $serviceManager->get('Application\Model\Login');
-    	$this->assertInstanceOf('Application\Model\Login', $login);
-    }
-    
-    public function testLoginModelInputFilterInstance()
-    {
-    	$serviceManager = $this->getApplicationServiceLocator();
-    	$login = $serviceManager->get('Application\Model\Login');
-    	$login->setAuthAdapter($serviceManager->get('Zend\Db\Adapter\Adapter'));
-    	$this->assertInstanceOf('Zend\InputFilter\Inputfilter', $login->getInputFilter());
     }
 }
