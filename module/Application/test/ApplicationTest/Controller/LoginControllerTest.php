@@ -75,10 +75,10 @@ class LoginControllerTest extends TestCase
     		'_x' => $csrf
     	);
     	
-    	$this->reset();
+    	$this->reset(true);
     	$this->dispatch('/login', 'POST', $params);
     	$this->assertResponseStatusCode(200);
     	$this->assertNotRedirect();
-    	//$this->assertXpathQueryContentContains('ul.errors li', 'not a valid');
+    	$this->assertXpathQueryContentContains('ul.errors li', 'not a valid');
     }
 }
