@@ -16,10 +16,9 @@ return array(
         'Application',
         'PM',
         'Api',
-        'Clients',
-        'ZendDeveloperTools',
     	'ZF\ApiProblem',
         //'HostManager'
+        'ZendDeveloperTools',
 	),
     'module_listener_options' => array(
         'module_paths' => array(

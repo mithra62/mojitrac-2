@@ -646,8 +646,10 @@ class Tasks extends AbstractModel
 	 */
 	public function markCompleted($id, $identity)
 	{
-		$sql = array('progress' => '100', 'status' => '5', 'last_modified' => new \Zend\Db\Sql\Expression('NOW()'));
-		return $this->update('tasks', $sql, array('id' => $id));
+		$sql = array('progress' => '100', 'status' => '5');
+		$task_data = $this->getTaskById($id);
+		$task_data = array_merge($task_data, $sql);
+		return $this->updateTask($task_data, $id);
 	}
 	
 	/**

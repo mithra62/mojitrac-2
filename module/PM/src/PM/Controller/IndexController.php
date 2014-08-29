@@ -55,11 +55,7 @@ class IndexController extends AbstractPmController
 	    					{    						
 	    						if($task->markCompleted($task_id, $this->identity))
 	    						{
-	    							$looped = TRUE;
-	    							//todo
-						            //$noti = new PM_Model_Notifications;
-						            //$noti->sendTaskStatusChange($t);	    							
-	    							//PM_Model_ActivityLog::logTaskUpdate($t, $task_id, $t['project_id'], $this->identity);	    							
+	    							$looped = TRUE;  							
 	    						}
 	    					}
 	    				}
@@ -68,8 +64,8 @@ class IndexController extends AbstractPmController
 	    		}
 	    		if($looped)
 	    		{
-			    	$this->_flashMessenger->addMessage('Task(s) updated!');
-					$this->_helper->redirector('index','index', 'pm'); 
+			    	$this->flashMessenger()->addMessage('Task(s) Updated!');
+					return $this->redirect()->toRoute('home');	
 					exit;	    			
 	    		}
     		}
