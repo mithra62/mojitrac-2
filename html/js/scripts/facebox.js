@@ -79,8 +79,8 @@
     settings: {
       opacity      : 0,
       overlay      : true,
-      loadingImage : 'http://static.mojitrac.com/images/loading.gif',
-      closeImage   : 'http://static.mojitrac.com/images/closelabel.gif',
+      loadingImage : '/images/loading.gif',
+      closeImage   : '/images/closelabel.gif',
       imageTypes   : [ 'png', 'jpg', 'jpeg', 'gif' ],
       faceboxHtml  : '\
     <div id="facebox" style="display:none;"> \

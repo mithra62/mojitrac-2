@@ -26,7 +26,7 @@
 		/* Default settings */
 		var settings = {
 			cls: 'jquery-checkbox',  /* checkbox  */
-			empty: 'http://static.mojitrac.com/images/empty.png'  /* checkbox  */
+			empty: '/images/empty.png'  /* checkbox  */
 		};
 		
 		/* Processing settings */
