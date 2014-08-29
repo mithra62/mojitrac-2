@@ -2,8 +2,7 @@
  /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -20,8 +19,8 @@ use Zend\Authentication\Result as AuthenticationResult;
  *
  * Handles login routing 
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	Login
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Application/src/Accplication/Controller/LoginController.php
  */
 class LoginController extends AbstractController
@@ -41,6 +40,10 @@ class LoginController extends AbstractController
 		return $response;
 	}
 		
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\Mvc\Controller\AbstractActionController::indexAction()
+	 */
     public function indexAction() 
     {   
     	$form = $this->getServiceLocator()->get('Application\Form\LoginForm');
@@ -88,9 +91,6 @@ class LoginController extends AbstractController
     	
     	$view = array();
     	$view['messages'] = $this->flashMessenger()->getMessages();
-		$view['title'] = "Login";
-		
-		//$this->view->headTitle('Login', 'PREPEND');
         $view['form'] = $form;
         return $view;
     }  

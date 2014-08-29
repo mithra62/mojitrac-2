@@ -15,7 +15,6 @@ namespace PM\Model;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
-
 use Application\Model\AbstractModel;
 
  /**
@@ -632,7 +631,7 @@ class Tasks extends AbstractModel
 	/**
 	 * Calculates how long all the tasks a given project will take in hours
 	 * @param int $project_id
-	 * @return unknown|number
+	 * @return number
 	 */
 	public function getProjectEstimatedTime($project_id)
 	{

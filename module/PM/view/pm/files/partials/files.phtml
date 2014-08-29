@@ -25,7 +25,7 @@
 		{			
 		?>		
 		<tr>
-			<td><a title="<?php echo $file['name']; ?>" href="<?php echo $this->url('files/view', array('module' => 'pm','controller'=>'files','action'=>'view', 'id'=> $file['id']), null, TRUE); ?>"><?php echo $file['name']; ?></a></td>
+			<td><a title="<?php echo $file['name']; ?>" href="<?php echo $this->url('files/view', array('file_id'=> $file['id'])); ?>"><?php echo $file['name']; ?></a></td>
 			
 			<?php if($this->enable_project): ?>
 			<td>
@@ -51,8 +51,8 @@
 			<td><?php echo $this->RelativeDate($file['last_modified']); ?></td>
 			<?php if($this->enable_actions && $this->CheckPermission('manage_files')):?>
 			<td>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'edit', 'id'=> $file['id']), null, TRUE); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit File');?></a>
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'remove', 'id'=> $file['id']), null, TRUE); ?>" title="Delete" rel="facebox"><?php echo $this->InteractIcon('cross', 'Remove File');?></a>
+				<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'edit', 'file_id'=> $file['id'])); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit File');?></a>
+				<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'remove', 'file_id'=> $file['id'])); ?>" title="Delete" rel="facebox"><?php echo $this->InteractIcon('cross', 'Remove File');?></a>
 			</td>
 			<?php endif; ?>
 		</tr>

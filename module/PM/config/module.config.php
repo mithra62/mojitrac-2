@@ -373,9 +373,9 @@ return array(
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/add/[:company_id]',
+        					'route' => '/add/:type/:id',
         					'constraints' => array(
-        						'company_id' => '[0-9]+'
+        						'id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'add'
@@ -385,7 +385,7 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/[:file_id]',
+        					'route' => '/edit/:file_id',
         					'constraints' => array(
         						'file_id' => '[0-9]+'
         					),
@@ -397,7 +397,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/[:file_id]',
+        					'route' => '/view/:file_id',
         					'constraints' => array(
         						'file_id' => '[0-9]+'
         					),
@@ -409,7 +409,7 @@ return array(
         			'download-revision' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/download-revision/[:file_id]',
+        					'route' => '/download-revision/:file_id',
         					'constraints' => array(
         						'file_id' => '[0-9]+'
         					),
@@ -421,7 +421,7 @@ return array(
         			'preview-revision' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/preview-revision/[:file_id]',
+        					'route' => '/preview-revision/:file_id',
         					'constraints' => array(
         						'file_id' => '[0-9]+'
         					),
@@ -433,7 +433,7 @@ return array(
         			'view-review' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view-review/[:file_id]',
+        					'route' => '/view-review/:file_id',
         					'constraints' => array(
         						'file_id' => '[0-9]+'
         					),
@@ -442,6 +442,18 @@ return array(
         					)
         				)
         			),
+        			'all' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/:type/:id',
+        					'constraints' => array(
+        						'id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'index'
+        					)
+        				)
+        			), 
         		)
         	), //end Files Routes
 

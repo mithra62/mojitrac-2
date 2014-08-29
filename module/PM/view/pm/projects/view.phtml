@@ -150,20 +150,20 @@ endif;
 	<div class="content_headers">
 		<div class="file_header">Files</div>
 		<div class="actions">
-			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'projects', 'page' => 'files'), null, TRUE); ?>" rel="facebox" title="Add Project">
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'projects', 'page' => 'files')); ?>" rel="facebox" title="Add Project">
 				<?php echo $this->InteractIcon('help', 'About Project Files');?>
 				<div class="action_text">Help</div>
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'files','action'=>'index', 'project' => $this->id), null, TRUE); ?>" title="View All">
+			<a href="<?php echo $this->url('files/all', array('type' => 'project', 'id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All');?>  
 				<div class="action_text">View All</div>
 			</a>
 		</div>		
 		<?php if($this->CheckPermission('manage_files')): ?>
 		<div class="actions">
-			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'files','action'=>'add', 'project' => $this->id), null, TRUE); ?>" rel="facebox" title="Add File">
+			<a href="<?php echo $this->url('files/add', array('type'=>'project', 'id' => $this->id), null, TRUE); ?>" rel="facebox" title="Add File">
 				<?php echo $this->InteractIcon('add', 'Add File');?> 
 				<div class="action_text">Add File</div>
 			</a>

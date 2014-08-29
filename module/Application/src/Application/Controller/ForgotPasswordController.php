@@ -2,12 +2,11 @@
  /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./moji/application/controllers/ForgotPasswordController.php
+ * @filesource 	./module/Application/src/Application/Controller/ForgotPasswordController.php
  */
 
 namespace Application\Controller;
@@ -15,21 +14,29 @@ namespace Application\Controller;
 use Application\Controller\AbstractController;
 
  /**
- * Default - Forgot Password Controller Class
+ * Application - Forgot Password Controller Class
  *
  * Handles login routing 
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
- * @filesource 	./moji/application/controllers/ForgotPasswordController.php
+ * @package 	Login\ForgotPassword
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/Application/src/Application/Controller/ForgotPasswordController.php
  */
 class ForgotPasswordController extends AbstractController
 {   
+	/**
+	 * (non-PHPdoc)
+	 * @see \Application\Controller\AbstractController::onDispatch()
+	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
 		return parent::onDispatch( $e );
 	}
 		
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\Mvc\Controller\AbstractActionController::indexAction()
+	 */
     public function indexAction()
     {
     	$fp = $this->getServiceLocator()->get('Application\Model\ForgotPassword');
@@ -55,16 +62,20 @@ class ForgotPasswordController extends AbstractController
     	
     	$view = array();
     	$view['messages'] = $this->flashMessenger()->getMessages();
-    	$view['title'] = "Forgot Password";
-    	
-    	//$this->view->headTitle('Login', 'PREPEND');
     	$view['form'] = $form;
     	return $view;    	
     }   
     
+    /**
+     * Action to reset a password
+     * 
+     * Takes the `hash` route parameter, verifies it, and if successful should allow a user to change their password
+     * 
+     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|Ambigous <object, multitype:, \Application\Form\PasswordForm>
+     */
     public function resetAction()
     {
-    	$hash = $company_id = $this->params()->fromRoute('hash');
+    	$hash = $this->params()->fromRoute('hash');
     	if(!$hash)
     	{
     		return $this->redirect()->toRoute('forgot-password');

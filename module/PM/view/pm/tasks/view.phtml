@@ -198,7 +198,7 @@ endif;
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'files','action'=>'index', 'task' => $this->id), null, TRUE); ?>" title="View All">
+			<a href="<?php echo $this->url('files/all', array('type'=>'task', 'id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All');?>
 				<div class="action_text">View All</div>
 			</a>
@@ -206,7 +206,7 @@ endif;
 		
 		<?php if($this->CheckPermission('manage_files')): ?>	
 		<div class="actions">
-			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'files','action'=>'add', 'task' => $this->id), null, TRUE); ?>" rel="facebox" title="Add File">
+			<a href="<?php echo $this->url('files/add', array('type'=>'task', 'id' => $this->id)); ?>" rel="facebox" title="Add File">
 				<?php echo $this->InteractIcon('add', 'Add');?> 
 				<div class="action_text">Add File</div>
 			</a>
@@ -219,7 +219,7 @@ endif;
 		echo $this->partial('pm/files/partials/files', $options); 
 	else: 
 	?>
-	<div class="information png_bg">There aren't any files uploaded yet. Want to <a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'files','action'=>'add', 'task' => $this->id), null, TRUE); ?>" rel="facebox">add</a> one?</div>
+	<div class="information png_bg">There aren't any files uploaded yet. Want to <a href="<?php echo $this->url('files/add', array('type'=>'task', 'id' => $this->id)); ?>" rel="facebox">add</a> one?</div>
 	<?php 
 	endif;
 endif;
@@ -299,7 +299,7 @@ endif;
 			</a>
 		</div>			
 		<div class="actions">
-			<a href="<?php echo $this->url('bookmarks/add', array('type' => 'task', 'id' => $this->id)); ?>" title="View All">
+			<a href="<?php echo $this->url('times/view', array('type' => 'task', 'id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All');?>
 				<div class="action_text">View All</div>
 			</a>

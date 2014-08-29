@@ -246,13 +246,13 @@ endif;
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php echo $this->url('files', array('module' => 'pm','controller'=>'files','action'=>'index', 'company' => $this->id), null, TRUE); ?>" title="View All">
+			<a href="<?php echo $this->url('files/all', array('type' => 'company', 'id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All Company Files');?> 
 				<div class="action_text">View All</div>
 			</a>
 		</div>		
 	<div class="actions">
-		<a href="<?php echo $this->url('files/add', array('module' => 'pm','controller'=>'files','action'=>'add', 'company' => $this->id), null, TRUE); ?>" rel="facebox" title="Add File">
+		<a href="<?php echo $this->url('files/add', array('type' => 'company', 'id' => $this->id)); ?>" rel="facebox" title="Add File">
 			<?php echo $this->InteractIcon('add', 'Add Company File');?>
 			<div class="action_text">Add File</div>
 		</a>
