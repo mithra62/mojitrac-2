@@ -54,7 +54,8 @@ class ForgotPasswordController extends AbstractController
 				$hash = $this->getServiceLocator()->get('Application\Model\Hash');
 				if($fp->sendEmail($mail, $hash, $formData['email']))
 				{
-					$this->flashMessenger()->addMessage('Please check your email');
+					$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+					$this->flashMessenger()->addMessage($translate('check_your_emmail', 'app'));
 					return $this->redirect()->toRoute('forgot-password');
 				}
 			}
@@ -102,7 +103,8 @@ class ForgotPasswordController extends AbstractController
     			$formData = $formData->toArray();
     			if($fp->users->changePassword($user_data['id'], $formData['new_password']))
     			{
-    				$this->flashMessenger()->addMessage('Your password hass been reset!');
+					$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+    				$this->flashMessenger()->addMessage($translate('password_has_reset', 'app'));
     				return $this->redirect()->toRoute('login');    				
     			}
     		}

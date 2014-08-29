@@ -32,11 +32,13 @@ return array(
 	//forgot password
     'forgot_password' => 'Forgot Password',
 	'forgot_password_email_subject' => 'MojiTrac Forgot Password',
+	'check_your_emmail' => 'Please check your email',
 		
 	//change password
 	'old_password' => 'Old Password',
 	'new_password' => 'New Password',
 	'confirm_password' => 'Confirm Password',
+	'password_has_reset' => 'Your password hass been reset!',
 	
 	//js validation messages
     'js_email_validation_message' => 'Please enter an email address',
