@@ -33,6 +33,7 @@ use PM\Model\ActivityLog;
 use PM\Model\Calendar;
 use PM\Model\Ips;
 use PM\Model\Users;
+use PM\Model\FusionCharts;
 
 use PM\Form\ProjectForm;
 use PM\Form\CompanyForm;
@@ -215,6 +216,11 @@ class Module implements
 					$role = $sm->get('Application\Model\Roles');
 					$ud = $sm->get('Application\Model\User\Data');
 					return new Users($adapter, $db, $role, $ud);
+				},
+				'PM\Model\FusionCharts' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new FusionCharts($adapter, $db);
 				},
 				
 				//forms

@@ -87,4 +87,16 @@ class BaseViewHelper extends ZFAbstract implements ServiceLocatorAwareInterface
 	{
 		return $this->serviceLocator;
 	}	
+	
+	/**
+	 * Takes a time stamp (string) and converts it to a different format using date() strings
+	 *
+	 * @param   string  $oldDate	Original date string
+	 * @param   string  $format		Converted date string
+	 * @return  string				The new time stamp string
+	 */
+	function formatDate($oldDate, $format) {
+		$newDate = date($format, strtotime($oldDate));
+		return $newDate;
+	}	
 }

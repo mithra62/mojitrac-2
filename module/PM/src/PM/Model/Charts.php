@@ -75,15 +75,17 @@ class Charts extends AbstractModel
 	public function getUserDateSumTimes($user, $range = 30)
 	{
 		$start_date = date('Y-m-d', mktime(0, 0, 0, date("m")  , (date("d")-$range), date("Y")));
-		$time = new PM_Model_DbTable_Times;
-		$sql = $time->select()->setIntegrityCheck(false)->from(
-				array('t'=>$time->getTableName()), 
-				array(new Zend_Db_Expr('date'), new Zend_Db_Expr('SUM(hours) AS total_hours'))
-		);
-		$sql->where('date >= ?', $start_date)->where('date <= ?', date('Y-m-d'))->where('creator = ?', $user);
+		$sql = $this->db->select()->from(array('t'=>'times'))
+				->columns(
+						array('date' => new \Zend\Db\Sql\Expression('date'), 'total_hours' => new \Zend\Db\Sql\Expression('SUM(hours)'))
+				);
+		$where = $sql->where->greaterThanOrEqualTo('date', $start_date);
+		$sql->where($where);
+		$where = $sql->where->lessThanOrEqualTo('date', date('Y-m-d'));
+		$sql->where($where)->where(array('creator ' => $user));
 		$sql->group('date');
-
-		return $time->getTimes($sql);		
+		
+		return $this->getRows($sql);		
 	}	
 	
 	public function getTaskStatus()

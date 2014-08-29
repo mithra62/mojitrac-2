@@ -23,18 +23,25 @@ use Base\View\Helper\BaseViewHelper;
  */
 class FusionCharts extends BaseViewHelper
 {
+	/**
+	 * Wrapper to generate the chart and return it
+	 * @param unknown $chart
+	 * @param string $chartType
+	 * @param string $width
+	 * @param string $height
+	 * @param string $chartID
+	 * @param string $isTransparent
+	 */
 	public function __invoke($chart, $chartType = 'column2d', $width="400", $height="300", $chartID="", $isTransparent="")
 	{
-		//now gonna port this just yet since the chart frontend will have to be redone by Imrie anyway
-		return;
 		$helperPluginManager = $this->getServiceLocator();
 		$serviceManager = $helperPluginManager->getServiceLocator();
 		
 		$this->data = $serviceManager->get('PM\Model\Charts');
+		$this->identity = $this->getIdentity();
 				
-		$this->chart = new LambLib_Views_Helpers_FusionCharts($chartType, $width, $height, $chartID, 'yes');
-		$this->utils = new LambLib_Controller_Action_Helper_Utilities;
-		$this->identity = Zend_Auth::getInstance()->getIdentity();
+		$this->chart = $serviceManager->get('PM\Model\FusionCharts');
+		$this->chart->setup($chartType, $width, $height, $chartID, 'yes');
 		
 		$this->chart->setSwfPath($this->view->StaticUrl()."/charts/");
 		$this->chart->setParamDelimiter(";");
@@ -143,7 +150,11 @@ class FusionCharts extends BaseViewHelper
 		for($i=0; $i<=$range;$i++)
 		{
 			$math = $range-$i;
-			$date = date('Y-m-d', mktime(0, 0, 0, date("m")  , date("d")-$math, date("Y"))); 
+			$month = date("n");
+			$day = date("j");
+			$year = date("Y");
+			$datestring = mktime(0, 0, 0, $month, $day-$math, $year);
+			$date = date('Y-m-d', $datestring); 
 			$found = false;
 			foreach($times AS $time)
 			{
@@ -151,14 +162,14 @@ class FusionCharts extends BaseViewHelper
 				{
 					$found = true;
 					$total_times = $total_times+$time['total_hours'];
-					$this->chart->addChartData($time['total_hours'],"name=".$this->utils->formatDate($time['date'], 'M, d')."; alpha=70; link=".$this->view->url(array('module' => 'pm','controller' => 'times','action'=>'view-day', 'date' => $time['date']), null, FALSE));
+					$this->chart->addChartData($time['total_hours'],"name=".$this->formatDate($time['date'], 'M, d')."; alpha=70; link=".$this->view->url('times/view-day', array('month' => date('n', $datestring), 'year' => date('Y', $datestring), 'day' => date('j', $datestring))));
 					break;
 				}
 			}
 			
 			if(!$found)
 			{
-				$this->chart->addChartData(0,"name=".$this->utils->formatDate($date, 'M, d')."; alpha=70; link=".$this->view->url(array('module' => 'pm','controller' => 'times','action'=>'view-day', 'date' => $date), null, FALSE));				
+				$this->chart->addChartData(0,"name=".$this->formatDate($date, 'M, d')."; alpha=70; link=".$this->view->url('times/view-day', array('month' => date('n', $datestring), 'year' => date('Y', $datestring), 'day' => date('j', $datestring))));
 			}
 		}
 		
