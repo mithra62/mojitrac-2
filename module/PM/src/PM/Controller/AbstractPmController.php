@@ -7,20 +7,19 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./moji/application/controllers/AbstractPmController.php
+* @filesource 	./module/PM/src/PM/Controller/AbstractPmController.php
  */
 
 namespace PM\Controller;
 
-
 use Application\Controller\AbstractController;
 
  /**
- * Default - AbstractPmController Controller
+ * PM - AbstractPmController Controller
  *
  * @package 	mithra62:Mojitrac
  * @author		Eric Lamb
- * @filesource 	./moji/application/controllers/AbstractPmController.php
+* @filesource 	./module/PM/src/PM/Controller/AbstractPmController.php
  */
 abstract class AbstractPmController extends AbstractController
 {	

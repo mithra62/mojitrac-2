@@ -7,7 +7,7 @@
 * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
-* @filesource 	./module/PM/src/PM/Controller/SettingsController.php
+* @filesource 	./module/PM/src/PM/Controller/AccountController.php
 */
 
 namespace PM\Controller;
@@ -15,13 +15,13 @@ namespace PM\Controller;
 use PM\Controller\AbstractPmController;
 
 /**
-* PM - Settings Controller
+* PM - Account Controller
 *
-* Routes the Home requests
+* Routes the user account requests
 *
 * @package 		mithra62:Mojitrac
 * @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Controller/SettingsController.php
+* @filesource 	./module/PM/src/PM/Controller/AccountController.php
 */
 class AccountController extends AbstractPmController
 {
@@ -60,15 +60,12 @@ class AccountController extends AbstractPmController
 		$hash = $this->getServiceLocator()->get('Application\Model\Hash');
 		$form = $form->confirmField();
 		$request = $this->getRequest();
-        if ($request->isPost()) 
-		{
+        if ($request->isPost()) {
 			$formData = $this->getRequest()->getPost();
 			$form->setInputFilter($user->getPasswordInputFilter($this->identity, $hash));
 			$form->setData($formData);
-			if ($form->isValid($formData)) 
-			{
-				if($user->changePassword($this->identity, $formData['new_password']))
-				{
+			if ($form->isValid($formData)) {
+				if($user->changePassword($this->identity, $formData['new_password'])){
 					$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 			    	$this->flashMessenger()->addMessage($translate('password_changed', 'pm'));
 					return $this->redirect()->toRoute('account/password');		
@@ -92,16 +89,13 @@ class AccountController extends AbstractPmController
 		
 		$request = $this->getRequest();
 		$form = $this->getServiceLocator()->get('Application\Form\PrefsForm'); 
-        if ($request->isPost()) 
-		{
+        if ($request->isPost()) {
 			$ud = $this->getServiceLocator()->get('Application\Model\User\Data');
 			$formData = $this->getRequest()->getPost();
 			$form->setInputFilter($ud->getInputFilter());
 			$form->setData($formData);
-			if ($form->isValid($formData)) 
-			{
-				if($ud->updateUserData($formData->toArray(), $this->identity))
-				{
+			if ($form->isValid($formData)) {
+				if($ud->updateUserData($formData->toArray(), $this->identity)) {
 					$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 			    	$this->flashMessenger()->addMessage($translate('prefs_updated', 'pm'));
 					return $this->redirect()->toRoute('account/prefs');			
