@@ -15,10 +15,12 @@
  * @var array Contains a key => value pairing for translating copy
  */
 return array(
-	//login page
+	//login
 	'login_instructions' => 'To log in please enter your credentials below.',
     'login_welcome_message' => 'Welcome to MojiTrac!',
-	
+	'invalid_credials_try_again' => 'Invalid Credentials! Please Try Again',
+	'login_successful' => 'Login Successful!',
+		
 	//global
 	'submit' => 'Submit',
     'email' => 'Email',
