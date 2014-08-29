@@ -14,7 +14,7 @@ namespace Application\Form;
 use Base\Form\BaseForm;
 
 /**
-* LoginForm Form
+* Forgot Password Form
 *
 * Generates the Forgot Password form
 *

@@ -113,7 +113,7 @@ class ForgotPassword extends AbstractModel
 		{
 			$change_url = $mail->web_url.$this->changePasswordUrl($guid);
 			$mail->addTo($email_address);
-			$mail->setViewDir($this->getModulePath(__DIR__));
+			$mail->setViewDir($this->getModulePath(__DIR__).'/view/emails');
 			$mail->setEmailView('forgot-password', array('change_url' => $change_url, 'user_data' => $user_data));
 			$mail->addTo($user_data['email'], $user_data['first_name'].' '.$user_data['last_name']);
 			$mail->setSubject('forgot_password_email_subject');
