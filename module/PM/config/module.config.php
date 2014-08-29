@@ -853,7 +853,7 @@ return array(
         			'all' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/[:project_id]',
+        					'route' => '/[project/:project_id]',
         					'constraints' => array(
         						'id' => '[0-9]+'
         					),
