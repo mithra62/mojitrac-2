@@ -92,7 +92,7 @@ class DashboardTimeline extends BaseViewHelper
 					{
 						return FALSE;
 					}
-					return 'facebox';
+					//return 'facebox';
 				break;
 				
 				case 'file_add':	
@@ -144,6 +144,7 @@ class DashboardTimeline extends BaseViewHelper
 					return 'Project Updated';
 				break;
 				case 'project_team_add':
+				case 'project_team_remove':
 					return 'Project Team Updated';
 				break;
 				
@@ -185,7 +186,7 @@ class DashboardTimeline extends BaseViewHelper
 				break;				
 				
 				default:
-					return 'home_32.png';
+					return $data['type'];
 				break;				
 			}	
 		}
@@ -219,8 +220,8 @@ class DashboardTimeline extends BaseViewHelper
 				case 'project_remove':			
 				case 'project_update':
 				case 'project_team_add':
-					if(isset($data['project_name']) && $data['project_name'] != '')
-					{
+				case 'project_team_remove':
+					if(isset($data['project_name']) && $data['project_name'] != '') {
 						return $this->view->url('projects/view', array('project_id' => $data['project_id']));
 					}
 				break;
@@ -229,9 +230,13 @@ class DashboardTimeline extends BaseViewHelper
 				case 'task_remove':				
 				case 'task_update':
 				case 'task_assigned':
-					if(isset($data['task_name']) && $data['task_name'] != '')
-					{
+					if(isset($data['task_name']) && $data['task_name'] != '') {
 						return $this->view->url('tasks/view', array('task_id' => $data['task_id']));
+					} else {
+						$stuff = \Zend\Json\Json::decode($data['stuff'], \Zend\Json\Json::TYPE_ARRAY);
+						if(!empty($stuff['name']) && !empty($stuff['id'])){
+							return $this->view->url('tasks/view', array('task_id' => $stuff['id']));
+						}
 					}
 				break;
 				
@@ -299,6 +304,7 @@ class DashboardTimeline extends BaseViewHelper
 				break;
 
 				case 'project_team_add':
+				case 'project_team_remove':
 					return 'users_business_32.png';
 				break;
 				
@@ -393,6 +399,7 @@ class DashboardTimeline extends BaseViewHelper
 					return 'Project Updated';
 				break;
 				case 'project_team_add':
+				case 'project_team_remove':
 					return 'Project Team Updated';
 				break;
 				
