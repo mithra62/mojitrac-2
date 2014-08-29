@@ -136,20 +136,6 @@ class Tasks extends AbstractModel
 		}
 	
 		return $this->inputFilter;
-	}	
-	
-	/**
-	 * Returns the $mbid for a given artist $name
-	 * @param $name
-	 * @return mixed
-	 */
-	public function getTaskIdByName($name)
-	{
-		$sql = $this->db->select()
-					  ->from($this->db->getTableName(), array('id'))
-					  ->where('name LIKE ?', $name);
-					  
-		return $this->db->getTask($sql);
 	}
 	
 	/**
@@ -178,37 +164,6 @@ class Tasks extends AbstractModel
 		$sql = $sql->join(array('c' => 'companies'), 'c.id = p.company_id', array('company_id' => 'id', 'company_name' => 'name'), 'left');
 		
 		return $this->getRow($sql);
-	}
-	
-	/**
-	 * Returns an array of all unique artist names
-	 * @return mixed
-	 */
-	public function getAllTaskNames()
-	{
-		$sql = $this->db->select()->from($this->db->getTableName(), array('name'))
-								->where('status = ?', 'active');
-		return $this->db->getTasks($sql);
-	}
-	
-	/**
-	 * Returns an array of all unique album names with artist names
-	 * @return mixed
-	 */
-	public function getAllTasks($view_type = FALSE)
-	{
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('t'=>$this->db->getTableName()));
-		
-		if(is_numeric($view_type))
-		{
-			$sql = $sql->where('p.status = ?', $view_type);
-		}
-		
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = t.project_id', array('name AS project_name', 'id AS project_id'));
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = t.assigned_to', array('first_name AS assigned_first_name', 'last_name AS assigned_last_name'));
-		$sql = $sql->joinLeft(array('u2' => 'users'), 'u2.id = t.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
-			
-		return $this->db->getTasks($sql);		
 	}
 	
 	/**
