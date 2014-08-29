@@ -122,7 +122,7 @@ return array(
         			'all' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/[:type][/:id]',
+        					'route' => '/:type/:id',
         					'constraints' => array(
         						'id' => '[0-9]+'
         					),
@@ -134,7 +134,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/[:bookmark_id]',
+        					'route' => '/remove/:bookmark_id',
         					'constraints' => array(
         						'bookmark_id' => '[0-9]+'
         					),
@@ -146,7 +146,7 @@ return array(
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/add[/:type][/:id]',
+        					'route' => '/add/:type/:id',
         					'constraints' => array(
         						'id' => '[0-9]+'
         					),
@@ -158,7 +158,7 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/[:bookmark_id]',
+        					'route' => '/edit/:bookmark_id',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
@@ -170,7 +170,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/[:bookmark_id]',
+        					'route' => '/view/:bookmark_id',
         					'constraints' => array(
         						'bookmark_id' => '[0-9]+'
         					),
@@ -208,7 +208,7 @@ return array(
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/add[/:company_id]',
+        					'route' => '/add',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
@@ -282,7 +282,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/[:contact_id]',
+        					'route' => '/remove/:contact_id',
         					'constraints' => array(
         						'contact_id' => '[0-9]+'
         					),
@@ -528,7 +528,7 @@ return array(
         			'all' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/[:type][/:id]',
+        					'route' => '/:type/:id',
         					'constraints' => array(
         						'id' => '[0-9]+'
         					),
@@ -540,7 +540,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/[:note_id]',
+        					'route' => '/remove/:note_id',
         					'constraints' => array(
         						'note_id' => '[0-9]+'
         					),
@@ -552,7 +552,7 @@ return array(
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/add[/:type][/:id]',
+        					'route' => '/add/:type/:id',
         					'constraints' => array(
         						'id' => '[0-9]+'
         					),
@@ -564,7 +564,7 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/[:note_id]',
+        					'route' => '/edit/:note_id',
         					'constraints' => array(
         						'note_id' => '[0-9]+'
         					),
@@ -576,7 +576,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/[:note_id]',
+        					'route' => '/view/:note_id',
         					'constraints' => array(
         						'note_id' => '[0-9]+'
         					),
@@ -666,7 +666,7 @@ return array(
         			'all' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/company/[:company_id]',
+        					'route' => '/company/:company_id',
         					'constraints' => array(
         						'id' => '[0-9]+'
         					),
@@ -690,7 +690,7 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/[:project_id]',
+        					'route' => '/edit/:project_id',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
@@ -702,7 +702,7 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/[:project_id]',
+        					'route' => '/remove/:project_id',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
@@ -714,7 +714,7 @@ return array(
         			'manage-team' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/manage-team/[:project_id]',
+        					'route' => '/manage-team/:project_id',
         					'constraints' => array(
         						'slug' => '[0-9]+'
         					),
