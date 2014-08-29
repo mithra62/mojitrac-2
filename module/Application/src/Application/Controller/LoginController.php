@@ -80,6 +80,10 @@ class LoginController extends AbstractController
 					break;
 				}
 			}
+			else
+			{
+				
+			}
     	}
     	
     	$view = array();

@@ -51,7 +51,7 @@ class Login extends AbstractModel
 		parent::__construct($adapter, $db);
 	}	
 	
-	public function setAuthAdapter($auth)
+	public function setAuthAdapter(\Zend\Db\Adapter\Adapter $auth)
 	{
 		$this->authAdapter = $auth;
 	}

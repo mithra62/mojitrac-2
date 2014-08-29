@@ -31,22 +31,42 @@ class LoginTest extends TestCase
 		$this->login = $this->serviceManager->get('Application\Model\Login');
 	}
 	
-	public function testAuthServiceInstance()
+	public function testAuthServiceInstanceZendAuthenticationService()
 	{
 		$serviceManager = $this->getApplicationServiceLocator();
 		$adapter = $serviceManager->get('AuthService');
 		$this->assertInstanceOf('Zend\Authentication\AuthenticationService', $adapter);
 	}
 	
-	public function testInstance()
+	public function testLoginModelInstanceOfApplicationModelLogin()
 	{
 		$this->assertInstanceOf('Application\Model\Login', $this->login);
 	}
 	
-	public function testInputFilterInstance()
+	public function testInputFilterInstanceOfZendInputFilter()
 	{
 		$this->login->setAuthAdapter($this->serviceManager->get('Zend\Db\Adapter\Adapter'));
 		$this->assertInstanceOf('Zend\InputFilter\Inputfilter', $this->login->getInputFilter());
+	}
+	
+	public function testInputFilterFailMissingData()
+	{
+		$data = array();
+		$adapter = $this->serviceManager->get('AuthService');
+		$this->login->setAuthAdapter($this->serviceManager->get('Zend\Db\Adapter\Adapter'));
+		$inputFilter = $this->login->getInputFilter();
+		$inputFilter->setData($data);
+		$this->assertFalse($inputFilter->isValid($data));
+	}
+	
+	public function testInputFilterSuccess()
+	{
+		$data = array('email' => $this->credentials['email'], 'password' => 'fdsa');
+		$adapter = $this->serviceManager->get('AuthService');
+		$this->login->setAuthAdapter($this->serviceManager->get('Zend\Db\Adapter\Adapter'));
+		$inputFilter = $this->login->getInputFilter();
+		$inputFilter->setData($data);
+		$this->assertTrue($inputFilter->isValid($data));
 	}
 	
 	public function testProcLoginFail()

@@ -43,6 +43,10 @@ abstract class BaseController extends AbstractActionController
 	 */
 	protected $db;
 	
+	protected $authservice;
+	
+	protected $storage;
+	
 	/**
 	 * Sets up the Controller defaults
 	 * @see \Zend\Mvc\Controller\AbstractActionController::onDispatch()
@@ -56,7 +60,7 @@ abstract class BaseController extends AbstractActionController
 	
 	public function getAuthService()
 	{
-		if (! $this->authservice) {
+		if (! $this->authservice ) {
 			$this->authservice = $this->getServiceLocator()->get('AuthService');
 		}
 	
