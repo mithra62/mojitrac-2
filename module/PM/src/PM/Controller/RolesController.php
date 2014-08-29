@@ -19,7 +19,7 @@ use PM\Controller\AbstractPmController;
 *
 * Routes the Roles requests
 *
-* @package 		mithra62:Mojitrac
+* @package 		mithra62\Mojitrac\PM
 * @author		Eric Lamb
 * @filesource 	./module/PM/src/PM/Controller/RolesController.php
 */

@@ -17,7 +17,7 @@ use Application\Controller\AbstractController;
  /**
  * PM - AbstractPmController Controller
  *
- * @package 	mithra62:Mojitrac
+ * @package 	mithra62\Mojitrac\PM
  * @author		Eric Lamb
 * @filesource 	./module/PM/src/PM/Controller/AbstractPmController.php
  */
