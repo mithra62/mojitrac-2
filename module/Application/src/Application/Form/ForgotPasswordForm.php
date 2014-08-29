@@ -19,7 +19,7 @@ use Base\Form\BaseForm;
 *
 * Generates the Forgot Password form
 *
-* @package 		mithra62:Mojitrac
+* @package 		Users\Login\ForgotPassword
 * @author		Eric Lamb
 * @filesource 	./moji/application/forms/ForgotPasswordForm.php
 */

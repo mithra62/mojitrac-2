@@ -1,13 +1,13 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
  * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./modules/Application/src/Application/Model/User/
+ * @filesource 	./modules/Application/src/Application/Model/User/UserData.php
  */
 
 namespace Application\Model\User;
@@ -17,11 +17,11 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 use Base\Model\KeyValue;
 
- /**
+/**
  * Application - User Data Model
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	User\UserData
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./modules/Application/src/Application/Model/User/UserData.php
  */
 class UserData extends KeyValue

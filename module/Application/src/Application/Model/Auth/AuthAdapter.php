@@ -1,25 +1,48 @@
 <?php
+/**
+ * mithra62 - MojiTrac
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./modules/Application/src/Application/Model/Auth/AuthAdapter.php
+ */
+
 namespace Application\Model\Auth;
 
 use Zend\Authentication\Adapter\AbstractAdapter;
 use Zend\Authentication\Result as AuthenticationResult;
 
-use Application\Model\Users;
-
+/**
+ * Application - Authentication Adapter
+ * 
+ * Runs the authentication logic and sets things up for storage
+ *
+ * @package 	User\Authentication
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./modules/Application/src/Application/Model/Auth/AuthAdapter.php
+ */
 class AuthAdapter extends AbstractAdapter
 {
+	/**
+	 * The email to authenticate with
+	 * @var string
+	 */
 	private $email;
 	
+	/**
+	 * The password to authenticate with
+	 * @var string
+	 */
 	private $password;
 	
-	private $type;
-	
-    /**
-     * Sets username and password for authentication
-     *
-     * @return void
-     */
-    public function __construct(Users $users)
+	/**
+	 * Sets up the object
+	 * @param \Application\Model\Users $users
+	 */
+    public function __construct(\Application\Model\Users $users)
     {
     	$this->users = $users;
     }
@@ -33,7 +56,6 @@ class AuthAdapter extends AbstractAdapter
      */
     public function authenticate()
     {
-        //return $authResult = new AuthenticationResult(AuthenticationResult::FAILURE_CREDENTIAL_INVALID, 1);
         $authMessages = array();
 		$data = $this->users->verifyCredentials($this->getIdentity(), $this->getCredential());
 		if(!$data)

@@ -19,7 +19,7 @@ use Base\Form\BaseForm;
 *
 * Generates the Change Password form
 *
-* @package 		mithra62:Mojitrac
+* @package 		Users
 * @author		Eric Lamb
 * @filesource 	./module/Application/src/Application/Form/PasswordForm.php
 */

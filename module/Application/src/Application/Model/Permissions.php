@@ -3,7 +3,7 @@
  * mithra62 - MojiTrac
  *
  * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -18,8 +18,8 @@ use Application\Model\AbstractModel;
  /**
  * PM - Permission Model
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	Users\Roles\Permissions
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./moji/Application/src/Application/Model/Permissions.php
  */
 class Permissions extends AbstractModel

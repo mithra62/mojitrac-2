@@ -19,7 +19,7 @@ use Base\Form\BaseForm;
 *
 * Generates the Login Form
 *
-* @package 		mithra62:Mojitrac
+* @package 		Users\Login
 * @author		Eric Lamb
 * @filesource 	./moji/application/forms/LoginForm.php
 */

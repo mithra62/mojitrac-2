@@ -19,7 +19,7 @@ use Zend\Authentication\Result as AuthenticationResult;
  *
  * Handles login routing 
  *
- * @package 	Login
+ * @package 	Users\Login
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Application/src/Accplication/Controller/LoginController.php
  */

@@ -3,7 +3,7 @@
  * mithra62 - MojiTrac
 *
 * @package		mithra62:Mojitrac
-* @author		Eric Lamb
+* @author		Eric Lamb <eric@mithra62.com>
 * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
@@ -15,8 +15,8 @@ namespace Application\Model;
 /**
 * Hash Model
 *
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
+* @package 		Hash
+* @author		Eric Lamb <eric@mithra62.com>
 * @filesource 	./moji/application/models/Hash.php
 */
 class Hash

@@ -21,7 +21,7 @@ use PM\Model\Options\Languages;
 *
 * Generates the Preferences form
 *
-* @package 		mithra62:Mojitrac
+* @package 		Users
 * @author		Eric Lamb
 * @filesource 	./module/Application/src/Application/Form/PrefsForm.php
 */

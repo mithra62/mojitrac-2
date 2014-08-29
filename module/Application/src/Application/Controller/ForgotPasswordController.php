@@ -16,9 +16,9 @@ use Application\Controller\AbstractController;
  /**
  * Application - Forgot Password Controller Class
  *
- * Handles login routing 
+ * Handles forgot password logic and routing 
  *
- * @package 	Login\ForgotPassword
+ * @package 	Users\Login\ForgotPassword
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Application/src/Application/Controller/ForgotPasswordController.php
  */

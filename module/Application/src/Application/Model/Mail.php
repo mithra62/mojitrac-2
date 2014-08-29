@@ -1,9 +1,9 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
  * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -20,12 +20,12 @@ use Zend\View\Renderer\PhpRenderer;
 use Zend\View\Resolver\TemplatePathStack;
 
 /**
-* Mail Model
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./moji/application/models/Mail.php
-*/
+ * Mail Model
+ *
+ * @package 	Mail
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/Application/src/Application/Model/Mail.php
+ */
 class Mail extends AbstractModel
 {
 	/**

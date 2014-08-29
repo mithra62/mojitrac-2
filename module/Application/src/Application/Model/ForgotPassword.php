@@ -1,14 +1,14 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		1.0
-* @filesource 	./moji/application/forms/ForgotPassword.php
-*/
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/Application/src/Application/Model/ForgotPassword.php
+ */
 
 namespace Application\Model;
 
@@ -17,16 +17,22 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
 /**
-* Forgot Password Model
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./moji/application/models/ForgotPassword.php
+ * Forgot Password Model
+ *
+ * @package 	Users\Login\ForgotPassword
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/Application/src/Application/Model/ForgotPassword.php
 */
 class ForgotPassword extends AbstractModel
 {
 	protected $inputFilter;
 	
+	/**
+	 * Sets everything up
+	 * @param \Zend\Db\Adapter\Adapter $db
+	 * @param \Zend\Db\Sql\Sql $sql
+	 * @param \Application\Model\Users $users
+	 */
 	public function __construct(\Zend\Db\Adapter\Adapter $db, \Zend\Db\Sql\Sql $sql, \Application\Model\Users $users = null)
 	{
 		parent::__construct($db, $sql);
@@ -45,6 +51,8 @@ class ForgotPassword extends AbstractModel
 	
 	/**
 	 * Returns the InputFilter to use for validating the Forgot Password data
+	 * @uses \Zend\InputFilter\Factory::createInput()
+	 * @uses \Zend\InputFilter\InputFilter::add()
 	 * @return \Zend\InputFilter\InputFilter
 	 */
 	public function getInputFilter()
@@ -86,7 +94,10 @@ class ForgotPassword extends AbstractModel
 	 * Sends the Forgot Password email
 	 * @param \Application\Model\Mail $mail
 	 * @param \Application\Model\Hash $hash
-	 * @param string $email_address
+	 * @param string $email_address'
+	 * @uses \Application\Model\Users::getUserByEmail()
+	 * @uses \Application\Model\Users::upatePasswordHash()
+	 * @uses \Application\Model\Mail
 	 * @return boolean
 	 */
 	public function sendEmail(\Application\Model\Mail $mail, \Application\Model\Hash $hash, $email_address)

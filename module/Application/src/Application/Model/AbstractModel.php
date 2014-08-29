@@ -1,9 +1,9 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
  * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -14,13 +14,13 @@ namespace Application\Model;
 
 use Base\Model\BaseModel;
 
- /**
+/**
  * Model Abstract
  *
  * Sets things up for abstracted functionality
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	Moji
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Application/src/Application/Model/AbstractModel.php
  */
 abstract class AbstractModel extends BaseModel

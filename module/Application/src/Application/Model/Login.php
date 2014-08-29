@@ -1,5 +1,5 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
  * @package		mithra62:Mojitrac
@@ -23,7 +23,7 @@ use Zend\Authentication\Result as AuthenticationResult;
  *
  * Handles login functionality
  *
- * @package 	mithra62:Mojitrac
+ * @package 	Users\Login
  * @author		Eric Lamb
  * @filesource 	./module/Application/src/Application/Model/Login.php
  */
@@ -62,6 +62,10 @@ class Login extends AbstractModel
 		throw new \Exception("Not used");
 	}
 	
+	/**
+	 * Sets up the inputFilter object
+	 * @return object
+	 */
 	public function getInputFilter()
 	{
 		if (!$this->inputFilter) {
