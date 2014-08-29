@@ -21,6 +21,9 @@ return array(
 	'invalid_credials_try_again' => 'Invalid Credentials! Please Try Again',
 	'login_successful' => 'Login Successful!',
 		
+	//logout
+	'youve_been_logged_out' => 'You\'ve been logged out',
+		
 	//global
 	'submit' => 'Submit',
     'email' => 'Email',
