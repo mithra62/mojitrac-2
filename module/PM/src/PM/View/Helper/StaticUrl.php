@@ -7,7 +7,7 @@ class Zend_View_Helper_StaticUrl
 		{
 			case 'production':
 			default:
-				return 'http://static.mojitrac.com';
+				return '';
 			break;
 			
 			case 'development':
