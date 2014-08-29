@@ -69,7 +69,8 @@ class AccountController extends AbstractPmController
 			{
 				if($user->changePassword($this->identity, $formData['new_password']))
 				{
-			    	$this->flashMessenger()->addMessage('Password changed!');
+					$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+			    	$this->flashMessenger()->addMessage($translate('password_changed', 'pm'));
 					return $this->redirect()->toRoute('account/password');		
 				}
 			}   
@@ -101,7 +102,8 @@ class AccountController extends AbstractPmController
 			{
 				if($ud->updateUserData($formData->toArray(), $this->identity))
 				{
-			    	$this->flashMessenger()->addMessage('Preferences updated!');
+					$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+			    	$this->flashMessenger()->addMessage($translate('prefs_updated', 'pm'));
 					return $this->redirect()->toRoute('account/prefs');			
 				}
 			}   

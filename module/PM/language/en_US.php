@@ -15,6 +15,10 @@ return array(
 	'please_fix_the_errors_below' => 'Please fix the errors below.',
 	'no' => 'No',
 	'yes' => 'Yes',
+		
+	//account
+	'prefs_updated' => 'Preferences updated!',
+	'password_changed' => 'Password Changed',
 	
 	
 	//users controller
