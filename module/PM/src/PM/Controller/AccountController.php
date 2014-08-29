@@ -23,7 +23,7 @@ use PM\Controller\AbstractPmController;
 * @author		Eric Lamb
 * @filesource 	./module/PM/src/PM/Controller/SettingsController.php
 */
-class SettingsController extends AbstractPmController
+class AccountController extends AbstractPmController
 {
 	/**
 	 * Class preDispatch
@@ -34,8 +34,8 @@ class SettingsController extends AbstractPmController
         //parent::check_permission('view_projects');
         //$this->layout()->setVariable('layout_style', 'single');
         $this->layout()->setVariable('sidebar', 'dashboard');
-        $this->layout()->setVariable('sub_menu', 'settings');
-        $this->layout()->setVariable('active_nav', 'settings');
+        $this->layout()->setVariable('sub_menu', 'account');
+        $this->layout()->setVariable('active_nav', 'account');
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
 		    
 		return $e;

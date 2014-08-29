@@ -12,7 +12,7 @@
             $return  = '<p>Welcome Back <a href="'.$this->url('users/view', array('user_id' => $this->identity), null, TRUE).'" class="highlight">'.$username.'</a> | ';
             $return .= ' <a href="'.$this->url('calendar').'" class="highlight">Calendar</a> | ';
             
-            $return .= ' <a href="'.$this->url('settings').'" class="highlight">Account</a>';
+            $return .= ' <a href="'.$this->url('account').'" class="highlight">Account</a>';
             $return .=' | <a href="'.$this->url('login/logout').'" class="highlight">Logout</a></p>';
         	echo $return;
         

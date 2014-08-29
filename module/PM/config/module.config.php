@@ -797,12 +797,12 @@ return array(
         		)
         	), //end Roles Routes
 
-        	'settings' => array( //Settings Routes
+        	'account' => array( //Settings Routes
         		'type' => 'segment',
         		'options' => array(
-        			'route' => '/pm/settings',
+        			'route' => '/pm/account',
         			'defaults' => array(
-        				'controller' => 'PM\Controller\Settings',
+        				'controller' => 'PM\Controller\Account',
         				'action' => 'index'
         			),
         		),
@@ -1114,6 +1114,7 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
+            'PM\Controller\Account' => 'PM\Controller\AccountController',
             'PM\Controller\Activity' => 'PM\Controller\ActivityController',
             'PM\Controller\Admin' => 'PM\Controller\AdminController',
             'PM\Controller\Bookmarks' => 'PM\Controller\BookmarksController',
