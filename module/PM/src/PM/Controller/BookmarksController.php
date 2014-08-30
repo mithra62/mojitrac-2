@@ -1,30 +1,33 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Controller/BookmarksController.php
-*/
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Controller/BookmarksController.php
+ */
 
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
 
 /**
-* PM - Bookmarks Controller
-*
-* Routes the bookmark requests
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Controller/BookmarksController.php
-*/
+ * PM - Bookmarks Controller
+ *
+ * Routes the bookmark requests
+ *
+ * @package 	Bookmarks
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Controller/BookmarksController.php
+ */
 class BookmarksController extends AbstractPmController
 {	
+	/**
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\AbstractPmController::onDispatch()
+	 */
 	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{
 		$e = parent::onDispatch( $e );

@@ -1,32 +1,32 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Controller/AccountController.php
-*/
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Controller/AccountController.php
+ */
 
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
 
 /**
-* PM - Account Controller
-*
-* Routes the user account requests
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Controller/AccountController.php
-*/
+ * PM - Account Controller
+ *
+ * Routes the user account requests
+ *
+ * @package 	Users
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Controller/AccountController.php
+ */
 class AccountController extends AbstractPmController
 {
 	/**
-	 * Class preDispatch
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\AbstractPmController::onDispatch()
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{

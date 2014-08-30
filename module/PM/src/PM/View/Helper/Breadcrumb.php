@@ -136,10 +136,8 @@ class Breadcrumb extends BaseViewHelper
     private function add_task()
     {
     	$helperPluginManager = $this->getServiceLocator();
-    	$serviceManager = $helperPluginManager->getServiceLocator();
-    	 
+    	$serviceManager = $helperPluginManager->getServiceLocator();    	 
     	$task = $serviceManager->get('PM/Model/Tasks');
-
     	$result = $task->getTaskById($this->pk);
     	if($result)
     	{
@@ -155,38 +153,34 @@ class Breadcrumb extends BaseViewHelper
     
     private function add_file()
     {
-    	$this->db = new PM_Model_DbTable_Files();
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('f'=>$this->db->getTableName()), array('f.project_id', 'f.task_id', 'f.company_id', 'f.id AS file_id', 'f.name AS file_name'));
-		$sql = $sql->where('f.id = ?', $this->pk);
-		
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = f.project_id', array('name AS project_name'));
-		$sql = $sql->joinLeft(array('t' => 'tasks'), 't.id = f.task_id', array('name AS task_name'));
-		$sql = $sql->joinLeft(array('c' => 'companies'), 'c.id = f.company_id', array('name AS company_name'));
+    	$helperPluginManager = $this->getServiceLocator();
+    	$serviceManager = $helperPluginManager->getServiceLocator();
     	
+    	$file = $serviceManager->get('PM/Model/Files');
     	
-    	$result = $this->db->getFile($sql);	
+    	$result = $file->getFileById($this->pk);
     	if($result)
     	{
     		if($result['company_name'] != '' && $result['company_id'] && $result['company_id'] > 0)
     		{
-    			$company_url = $this->view->url(array('module' => 'pm','controller' => 'companies','action'=>'view', 'id' => $result['company_id']), null, TRUE);
+    			$company_url = $this->view->url('companies/view', array('company_id' => $result['company_id']));
     			$this->add_breadcrumb($company_url, $result['company_name']);
     		}
     		
     		if($result['project_name'] != '' && $result['project_id'] && $result['project_id'] > 0)
     		{    		
-    			$project_url = $this->view->url(array('module' => 'pm','controller' => 'projects','action'=>'view', 'id' => $result['project_id']), null, TRUE);
+    			$project_url = $this->view->url('projects/view', array('project_id' => $result['project_id']));
     			$this->add_breadcrumb($project_url, $result['project_name']);
     		}
     		
     		if($result['task_name'] != '' && $result['task_id'] && $result['task_id'] > 0)
     		{
-    			$task_url = $this->view->url(array('module' => 'pm','controller' => 'tasks','action'=>'view', 'id' => $result['task_id']), null, TRUE);
+    			$task_url = $this->view->url('tasks/view', array('task_id' => $result['task_id']));
     			$this->add_breadcrumb($task_url, $result['task_name']);
     		}
     		
-    		$file_url = $this->view->url(array('module' => 'pm','controller' => 'files','action'=>'view', 'id' => $result['file_id']), null, TRUE);
-    		$this->add_breadcrumb($file_url, 'File: '.$result['file_name'], TRUE);    		
+    		$file_url = $this->view->url('pm', array('module' => 'pm','controller' => 'files','action'=>'view', 'id' => $result['file_id']), null, TRUE);
+    		$this->add_breadcrumb($file_url, 'File: '.$result['name'], TRUE);    		
     	}
     }     
 

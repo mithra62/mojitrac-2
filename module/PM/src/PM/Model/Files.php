@@ -2,9 +2,8 @@
  /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		1.0
  * @filesource 	./module/PM/src/PM/Model/Files.php
@@ -17,7 +16,7 @@ use Application\Model\AbstractModel;
  /**
  * PM - Files Model
  *
- * @package 	mithra62:Mojitrac
+ * @package 	Files
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/Model/Files.php
  */
@@ -25,7 +24,13 @@ class Files extends AbstractModel
 {
 	
 	/**
-	 * The Files model
+	 * The form validation filering
+	 * @var \Zend\InputFilter\InputFilter
+	 */
+	protected $inputFilter;
+	
+	/**
+	 * The Project Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $db
 	 */
@@ -125,16 +130,16 @@ class Files extends AbstractModel
 	
 	public function getFileById($id)
 	{
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('f'=>$this->db->getTableName()));
+		$sql = $this->db->select()->from(array('f'=>'files'));
 		
-		$sql = $sql->where('f.id = ?', $id);
+		$sql = $sql->where(array('f.id' => $id));
 		
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = f.project_id', array('name AS project_name'));
-		$sql = $sql->joinLeft(array('t' => 'tasks'), 't.id = f.task_id', array('name AS task_name'));
-		$sql = $sql->joinLeft(array('c' => 'companies'), 'c.id = f.company_id', array('name AS company_name'));
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = f.owner', array('first_name AS file_owner_first_name', 'last_name AS file_owner_last_name'));
+		$sql = $sql->join(array('p' => 'projects'), 'p.id = f.project_id', array('project_name' => 'name'), 'left');
+		$sql = $sql->join(array('t' => 'tasks'), 't.id = f.task_id', array('task_name' => 'name'), 'left');
+		$sql = $sql->join(array('c' => 'companies'), 'c.id = f.company_id', array('company_name' => 'name'), 'left');
+		$sql = $sql->join(array('u' => 'users'), 'u.id = f.owner', array('file_owner_first_name' => 'first_name','file_owner_last_name' => 'last_name'), 'left');
 		
-		return $this->db->getFile($sql);			
+		return $this->getRow($sql);			
 	}
 	
 	public function getFilesByCompanyId($id, array $where = null, array $not = null)
@@ -456,10 +461,9 @@ class Files extends AbstractModel
 	 */
 	public function getFileRevisions($file_id)
 	{
-		$rev = new PM_Model_DbTable_File_Revisions;
-		$sql = $rev->select()->setIntegrityCheck(false)->from(array('fr' => $rev->getTableName()))->where('file_id = ?', $file_id);
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = fr.uploaded_by', array('first_name AS uploader_first_name', 'last_name AS uploader_last_name'));
-		return $rev->getFileRevisions($sql);
+		$sql = $this->db->select()->from(array('fr' => 'file_revisions'))->where(array('file_id' => $file_id));
+		$sql = $sql->join(array('u' => 'users'), 'u.id = fr.uploaded_by', array('uploader_first_name' => 'first_name','uploader_last_name' => 'last_name'), 'left');
+		return $this->getRows($sql);
 	}
 	
 	/**

@@ -397,7 +397,7 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/:file_id',
+        					'route' => '/:file_id',
         					'constraints' => array(
         						'file_id' => '[0-9]+'
         					),
@@ -409,9 +409,10 @@ return array(
         			'download-revision' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/download-revision/:file_id',
+        					'route' => '/download-revision/:revision_id',
         					'constraints' => array(
-        						'file_id' => '[0-9]+'
+        						'file_id' => '[0-9]+',
+        						'revision_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'downloadRevision'
@@ -421,15 +422,39 @@ return array(
         			'preview-revision' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/preview-revision/:file_id',
+        					'route' => '/preview-revision/:revision_id',
         					'constraints' => array(
-        						'file_id' => '[0-9]+'
+        						'revision_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'previewRevision'
         					)
         				)
-        			),    			
+        			), 			
+        			'remove-revision' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove-revision/:revision_id',
+        					'constraints' => array(
+        						'revision_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'removeRevision'
+        					)
+        				)
+        			), 			
+        			'add-revision' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add-revision/:file_id',
+        					'constraints' => array(
+        						'file_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'addRevision'
+        					)
+        				)
+        			),
         			'view-review' => array(
         				'type' => 'segment',
         				'options' => array(

@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Controller/TasksController.php
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Controller/TasksController.php
 */
 
 namespace PM\Controller;
@@ -15,19 +14,19 @@ namespace PM\Controller;
 use PM\Controller\AbstractPmController;
 
 /**
-* PM - Tasks Controller
-*
-* Routes the Tasks requests
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Controller/TasksController.php
+ * PM - Tasks Controller
+ *
+ * Routes the Tasks requests
+ *
+ * @package 	Tasks
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Controller/TasksController.php
 */
 class TasksController extends AbstractPmController
 {
-
 	/**
-	 * Class preDispatch
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\AbstractPmController::onDispatch()
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{

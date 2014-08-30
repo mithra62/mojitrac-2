@@ -1,14 +1,13 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Forms/ProjectForm.php
-*/
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Forms/ProjectForm.php
+ */
 
 namespace PM\Form;
 
@@ -21,8 +20,8 @@ use Base\Form\BaseForm;
 *
 * Generates the Project form
 *
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
+* @package 		Projects 
+* @author		Eric Lamb <eric@mithra62.com>
 * @filesource 	./module/PM/src/PM/Forms/ProjectForm.php
 */
 class ProjectForm extends BaseForm

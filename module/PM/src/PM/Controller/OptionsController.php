@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Controller/OptionsController.php
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link			http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Controller/OptionsController.php
 */
 
 namespace PM\Controller;
@@ -15,18 +14,19 @@ namespace PM\Controller;
 use PM\Controller\AbstractPmController;
 
 /**
-* PM - Options Controller
-*
-* Routes the Options requests
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Controller/OptionsController.php
+ * PM - Options Controller
+ *
+ * Routes the Options requests
+ *
+ * @package 	Options
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Controller/OptionsController.php
 */
 class OptionsController extends AbstractPmController
 {
 	/**
-	 * Class onDispatch
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\AbstractPmController::onDispatch()
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{

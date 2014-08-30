@@ -25,8 +25,7 @@ class FileSize extends BaseViewHelper
 
     public function __invoke($size)
     {
-    	$util = new LambLib_Controller_Action_Helper_Utilities;
-    	return $util->filesize_format($size);
+    	return $this->filesizeFormat($size);
     }
     
 }

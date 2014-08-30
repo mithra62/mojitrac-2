@@ -1,32 +1,32 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Controller/IpsController.php
-*/
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Controller/IpsController.php
+ */
 
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
 
 /**
-* PM - Ips Controller
-*
-* Routes the IP Blocker requests
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Controller/IpsController.php
-*/
+ * PM - Ips Controller
+ *
+ * Routes the IP Blocker requests
+ *
+ * @package 	IpLocker
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Controller/IpsController.php
+ */
 class IpsController extends AbstractPmController
 {
 	/**
-	 * Class preDispatch
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\AbstractPmController::onDispatch()
 	 */
 	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{

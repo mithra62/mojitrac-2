@@ -1,47 +1,44 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Controller/FilesController.php
-*/
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Controller/FilesController.php
+ */
 
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
 
 /**
-* PM - Files Controller
-*
-* Routes the Files requests
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Controller/FilesController.php
-*/
+ * PM - Files Controller
+ *
+ * Routes the Files requests
+ *
+ * @package 	Files
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Controller/FilesController.php
+ */
 class FilesController extends AbstractPmController
 {
-	
 	/**
-	 * Class preDispatch
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\AbstractPmController::onDispatch()
 	 */
-	public function preDispatch()
+	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
-        parent::preDispatch();
+		$e = parent::onDispatch( $e );
         parent::check_permission('view_files');
-        $this->view->headTitle('Files', 'PREPEND');
-        $this->view->layout_style = 'single';
-        $this->view->sidebar = 'dashboard';
-        $this->view->sub_menu = 'files';
-        $this->view->active_nav = 'projects';
-        $this->view->sub_menu_options = PM_Model_Options_Companies::types();
-        $this->view->uri = $this->_request->getPathInfo();
-		$this->view->active_sub = 'None';
-		$this->view->title = FALSE;          
+        $this->layout()->setVariable('sidebar', 'dashboard');
+        $this->layout()->setVariable('active_nav', 'admin');
+        $this->layout()->setVariable('sub_menu', 'files');
+        $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
+        $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
+		$this->layout()->setVariable('active_sub', 'None');
+		return $e;
 	}
     
     /**
@@ -141,31 +138,29 @@ class FilesController extends AbstractPmController
 	}
 	
 	/**
-	 * Company View Page
-	 * @return void
+	 * File View Action
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
 	 */
 	public function viewAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->params()->fromRoute('file_id');
 		if (!$id) {
-			$this->_helper->redirector('index','files');
+			return $this->redirect()->toRoute('pm');
 		}
 
-		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
+		$file = $this->getServiceLocator()->get('PM\Model\Files');
 		$file_data = $file->getFileById($id);
 		if(!$file_data)
 		{
-			$this->_helper->redirector('index','files');
-			exit;
+			return $this->redirect()->toRoute('pm');
 		}
 		
 		if($file_data['project_id'])
 		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
 			if(!$project->isUserOnProjectTeam($this->identity, $file_data['project_id']) && !$this->perm->check($this->identity, 'manage_files'))
 			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
+	        	return $this->redirect()->toRoute('projects/view', array('project_id' => $file_data['project_id']));				
 			}			
 		}
 		
@@ -173,19 +168,18 @@ class FilesController extends AbstractPmController
 		{
 			if(!$this->perm->check($this->identity, 'view_companies'))
 			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
+	        	return $this->redirect()->toRoute('projects/view', array('project_id' => $file_data['project_id']));				
 			}			
 		}		
 		
 		$file_revisions = $file->getFileRevisions($id);
-		$file_reviews = $file->getFileReviews($id);
+		$file_reviews = array();//$file->getFileReviews($id);
 
-		$this->view->file = $file_data;
-		$this->view->revision_history = $file_revisions;
-		$this->view->file_reviews = $file_reviews;
-		$this->view->headTitle('Viewing File: '.$file_data['name'], 'PREPEND');
-		$this->view->id = $id;
+		$view['file'] = $file_data;
+		$view['revision_history'] = $file_revisions;
+		$view['file_reviews'] = $file_reviews;
+		$view['id'] = $id;
+		return $view;
 	}
 	
 	public function downloadRevisionAction()

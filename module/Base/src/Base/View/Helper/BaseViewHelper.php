@@ -16,7 +16,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use DateTime, IntlDateFormatter, DateInterval;
 
- /**
+/**
  * Base - View Helper
  * 
  * Contains all the global logic for ViewHelpers
@@ -46,6 +46,10 @@ class BaseViewHelper extends ZFAbstract implements ServiceLocatorAwareInterface
 	 */
 	public $userData;
 	
+	/**
+	 * Returns the user_id for the currenlty logged in user
+	 * @return int
+	 */
 	public function getIdentity()
 	{
 		if (!$this->identity) 
@@ -57,6 +61,10 @@ class BaseViewHelper extends ZFAbstract implements ServiceLocatorAwareInterface
 		return $this->identity;
 	}	
 	
+	/**
+	 * Grabs the users_data for the currently logged in user
+	 * @return multitype:
+	 */
 	public function getUserData()
 	{
 		if(!$this->userData)
@@ -97,8 +105,57 @@ class BaseViewHelper extends ZFAbstract implements ServiceLocatorAwareInterface
 	 * @param   string  $format		Converted date string
 	 * @return  string				The new time stamp string
 	 */
-	function formatDate($oldDate, $format) {
+	public function formatDate($oldDate, $format) {
 		$newDate = date($format, strtotime($oldDate));
 		return $newDate;
-	}	
+	}
+	
+	/**
+	 * Format a number of bytes into a human readable format.
+	 * Optionally choose the output format and/or force a particular unit
+	 *
+	 * @param   int     $bytes      The number of bytes to format. Must be positive
+	 * @param   string  $format     Optional. The output format for the string
+	 * @param   string  $force      Optional. Force a certain unit. B|KB|MB|GB|TB
+	 * @return  string              The formatted file size
+	 */
+	public function filesizeFormat($val, $digits = 3, $mode = "SI", $bB = "B") //$mode == "SI"|"IEC", $bB == "b"|"B"
+	{ 
+	
+		$si = array("", "k", "M", "G", "T", "P", "E", "Z", "Y");
+		$iec = array("", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi");
+		switch(strtoupper($mode)) {
+			case "SI" : 
+				$factor = 1000; 
+				$symbols = $si; 
+			break;
+			case "IEC" : 
+				$factor = 1024; 
+				$symbols = $iec; 
+			break;
+			default : 
+				$factor = 1000; 
+				$symbols = $si; 
+			break;
+		}
+		switch($bB) {
+			case "b" : 
+				$val *= 8; 
+			break;
+			default : 
+				$bB = "B"; 
+			break;
+		}
+		for($i=0;$i<count($symbols)-1 && $val>=$factor;$i++) {
+			$val /= $factor;
+		}
+		$p = strpos($val, ".");
+		if($p !== false && $p > $digits) {
+			$val = round($val);
+		} elseif($p !== false) { 
+			$val = round($val, $digits-$p);
+		}
+		
+		return round($val, $digits) . " " . $symbols[$i] . $bB;
+	}		
 }

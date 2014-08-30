@@ -1,9 +1,8 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -22,7 +21,7 @@ use Zend\Console\Exception\RuntimeException;
  *
  * Handles the PM module Console requests
  *
- * @package 	mithra62:Mojitrac
+ * @package 	Console
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/Controller/CliController.php
  */

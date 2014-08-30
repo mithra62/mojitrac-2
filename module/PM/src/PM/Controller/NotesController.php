@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Controller/NotesController.php
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link			http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Controller/NotesController.php
 */
 
 namespace PM\Controller;
@@ -15,18 +14,19 @@ namespace PM\Controller;
 use PM\Controller\AbstractPmController;
 
 /**
-* PM - Notes Controller
-*
-* Routes the Notes requests
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Controller/NotesController.php
+ * PM - Notes Controller
+ *
+ * Routes the Notes requests
+ *
+ * @package 	Notes
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Controller/NotesController.php
 */
 class NotesController extends AbstractPmController
 {
 	/**
-	 * Class preDispatch
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\AbstractPmController::onDispatch()
 	 */
 	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{

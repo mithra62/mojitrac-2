@@ -2,24 +2,23 @@
  /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
-* @filesource 	./module/PM/src/PM/Controller/AbstractPmController.php
+ * @filesource 	./module/PM/src/PM/Controller/AbstractPmController.php
  */
 
 namespace PM\Controller;
 
 use Application\Controller\AbstractController;
 
- /**
+/**
  * PM - AbstractPmController Controller
  *
- * @package 	mithra62\Mojitrac\PM
- * @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Controller/AbstractPmController.php
+ * @package 	MojiTrac
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Controller/AbstractPmController.php
  */
 abstract class AbstractPmController extends AbstractController
 {	
@@ -47,6 +46,10 @@ abstract class AbstractPmController extends AbstractController
 	 */
 	protected $prefs;
 		
+	/**
+	 * (non-PHPdoc)
+	 * @see \Application\Controller\AbstractController::onDispatch()
+	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
 		$this->identity = $this->getServiceLocator()->get('AuthService')->getIdentity();
@@ -75,6 +78,10 @@ abstract class AbstractPmController extends AbstractController
 		return parent::onDispatch( $e );
 	}
 
+	/**
+	 * Sets up the built-in PM Events
+	 * @return void
+	 */
 	private function _initEvents()
 	{
 		//setup the Activity Log

@@ -1,33 +1,32 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Controller/UsersController.php
-*/
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Controller/UsersController.php
+ */
 
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
 
 /**
-* PM - Users Controller
-*
-* Routes the Users requests
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Controller/UsersController.php
-*/
+ * PM - Users Controller
+ *
+ * Routes the Users requests
+ *
+ * @package 	Users
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Controller/UsersController.php
+ */
 class UsersController extends AbstractPmController
 {
-
 	/**
-	 * Class preDispatch
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\AbstractPmController::onDispatch()
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{

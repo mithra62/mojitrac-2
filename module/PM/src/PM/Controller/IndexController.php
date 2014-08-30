@@ -1,29 +1,32 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Controller/IndexController.php
-*/
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Controller/IndexController.php
+ */
 
 namespace PM\Controller;
 
 use PM\Controller\AbstractPmController;
 /**
-* PM - Index Controller
-*
-* Routes the Home requests
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Controller/IndexController.php
-*/
+ * PM - Index Controller
+ *
+ * Routes the Home requests
+ *
+ * @package 	Dashboard
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Controller/IndexController.php
+ */
 class IndexController extends AbstractPmController
 {
+	/**
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\AbstractPmController::onDispatch()
+	 */
 	public function onDispatch(\Zend\Mvc\MvcEvent $e)
 	{
 		$e = parent::onDispatch($e);
