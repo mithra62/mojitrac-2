@@ -17,7 +17,7 @@ use Base\View\Helper\BaseViewHelper, DateTime, IntlDateFormatter, DateInterval, 
 /**
  * PM - Calendar View Helper
  *
- * @package 	mithra62:Mojitrac
+ * @package 	ViewHelpers\HTML
  * @author		Eric Lamb
  * @filesource 	./module/PM/View/Helper/Calendar.php
  */

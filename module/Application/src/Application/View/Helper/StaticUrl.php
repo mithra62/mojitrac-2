@@ -16,7 +16,7 @@ use Base\View\Helper\BaseViewHelper;
  /**
  * View Helper - Static URL 
  *
- * @package 	ViewHelpers
+ * @package 	ViewHelpers\Routes
  * @author		Eric Lamb
  * @filesource 	./module/Application/src/Application/View/Helper/Staticurl.php
  */

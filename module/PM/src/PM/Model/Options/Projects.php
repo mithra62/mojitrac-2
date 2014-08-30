@@ -2,7 +2,6 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
@@ -15,7 +14,7 @@ namespace PM\Model\Options;
 /**
  * PM - Projects Options Model
  *
- * @package 	mithra62:Mojitrac
+ * @package 	Options\Projects
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/Model/Options/Projects.php
  */
@@ -46,6 +45,11 @@ class Projects extends AbstractOptions
 		return $types[$id];
 	}
 	
+	/**
+	 * thingy goes here...
+	 * @param int $id
+	 * @return string
+	 */
 	static public function translateStatusId($id)
 	{
 		$status = self::status();

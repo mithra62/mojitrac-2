@@ -14,7 +14,7 @@ namespace Application\Model;
 /**
  * Hash Model
  *
- * @package 	Security/Hash
+ * @package 	Security\Hash
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Application/src/Application/Model/Hash.php
 */

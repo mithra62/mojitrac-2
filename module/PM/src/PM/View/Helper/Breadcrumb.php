@@ -4,7 +4,7 @@
  *
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/View/Helper/Breadcrumb.php
@@ -17,7 +17,7 @@ use Base\View\Helper\BaseViewHelper;
 /**
  * PM - Breadcrumb View Helper
  *
- * @package 	mithra62:Mojitrac
+ * @package 	ViewHelpers\HTML
  * @author		Eric Lamb
  * @filesource 	./module/PM/View/Helper/Breadcrumb.php
  */

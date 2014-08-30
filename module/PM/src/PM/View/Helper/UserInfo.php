@@ -2,9 +2,8 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/src/PM/View/Helper/UserInfo.php
@@ -17,8 +16,8 @@ use Base\View\Helper\BaseViewHelper;
  /**
  * PM - User Info View Helper
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	ViewHelpers\Users
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/View/Helper/UserInfo.php
  */
 class UserInfo extends BaseViewHelper

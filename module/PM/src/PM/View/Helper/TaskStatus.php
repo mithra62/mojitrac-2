@@ -2,9 +2,8 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/src/PM/View/Helper/TaskStatus.php
@@ -18,8 +17,8 @@ use PM\Model\Options\Projects;
  /**
  * PM - Task Status View Helper
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	ViewHelpers\Tasks
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/View/Helper/TaskStatus.php
  */
 class TaskStatus extends BaseViewHelper

@@ -25,9 +25,10 @@ use Base\Form\BaseForm;
 class PasswordForm extends BaseForm
 {
 	/**
-	 * Returns the Password form
-	 * @param string $options
-	 */	
+	 * Creates the Password Change Form
+	 * @param string $name
+	 * @param string $confirm
+	 */
 	public function __construct($name = 'password', $confirm = TRUE) 
 	{
 		parent::__construct($name);		
@@ -51,6 +52,10 @@ class PasswordForm extends BaseForm
 		));	
 	}
 	
+	/**
+	 * Appends the old_password form field if called
+	 * @return \Application\Form\PasswordForm
+	 */
 	public function confirmField()
 	{
 		$this->add(array(

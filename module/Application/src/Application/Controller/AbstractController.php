@@ -14,7 +14,7 @@ namespace Application\Controller;
 use Base\Controller\BaseController;
 
 /**
- * Default - AbstractController Controller
+ * Application - AbstractController Controller
  *
  * @package 	Mojitrac
  * @author		Eric Lamb <eric@mithra62.com>

@@ -1,6 +1,8 @@
 <?php
 /**
- * mithra62 - MojiTrac
+ * Application - Language file
+ * 
+ * Contains all the variables for localization
  *
  * @package		Localization
  * @author		Eric Lamb
@@ -10,10 +12,6 @@
  * @filesource 	./module/Application/language/en_US.php
  */
 
-/**
- * The ZendFramework2 language array
- * @var array Contains a key => value pairing for translating copy
- */
 return array(
 	//login
 	'login_instructions' => 'To log in please enter your credentials below.',

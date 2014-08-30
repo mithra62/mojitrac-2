@@ -19,7 +19,7 @@ use Zend\Authentication\Result as AuthenticationResult;
  * 
  * Runs the authentication logic and sets things up for storage
  *
- * @package 	User\Authentication
+ * @package 	Users\Authentication
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./modules/Application/src/Application/Model/Auth/AuthAdapter.php
  */

@@ -2,9 +2,8 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/src/PM/View/Helper/NoteTopic.php
@@ -17,15 +16,22 @@ use PM\Model\Options\Notes;
 
 /**
  * PM - Note Topic View Helper
+ * 
+ * Translates a note topic_id into its human name
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	ViewHelpers\Notes
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/View/Helper/NoteTopic.php
  */
 class NoteTopic extends BaseViewHelper
 {
-	function __invoke($status)
+	/**
+	 * Invokes the actual Helper
+	 * @param int $topic_id
+	 * @return string
+	 */
+	public function __invoke($topic_id)
 	{
-		return Notes::translateTopicId($status); 
+		return Notes::translateTopicId($topic_id); 
 	}
 }

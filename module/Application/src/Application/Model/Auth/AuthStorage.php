@@ -18,7 +18,7 @@ use Zend\Authentication\Storage;
  * 
  * Customizes the storage object so we can do the remember me logic
  *
- * @package 	User\Authentication
+ * @package 	Users\Authentication
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./modules/Application/src/Application/Model/Auth/AuthStorage.php
  */

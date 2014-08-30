@@ -2,8 +2,7 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
 * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -17,13 +16,13 @@ use Base\View\Helper\BaseViewHelper;
 /**
  * PM - Confirm Page Unload View Helper
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	ViewHelpers\HTML
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/View/Helper/ConfirmPageUnload.php
  */
 class ConfirmPageUnload extends BaseViewHelper
 {
-	function __invoke($id)
+	public function __invoke($id)
 	{
 		$doc_id = 'document.'.str_replace('#', '', $id);
 		$data = <<<HTML

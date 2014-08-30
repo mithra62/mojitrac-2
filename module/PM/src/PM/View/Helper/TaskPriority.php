@@ -2,8 +2,7 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
 * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -18,8 +17,8 @@ use PM\Model\Options\Projects;
  /**
  * PM - Task Priority View Helper
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	ViewHelpers\Tasks
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/View/Helper/TaskPriority.php
  */
 class TaskPriority extends BaseViewHelper
