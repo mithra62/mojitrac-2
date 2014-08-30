@@ -2,7 +2,7 @@
 /**
  * mithra62 - MojiTrac
  *
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -17,7 +17,7 @@ use Base\View\Helper\BaseViewHelper, DateTime, IntlDateFormatter, DateInterval, 
  * PM - Calendar View Helper
  *
  * @package 	ViewHelpers\HTML
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/View/Helper/Calendar.php
  */
 class Calendar extends BaseViewHelper

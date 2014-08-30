@@ -2,8 +2,7 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -14,11 +13,11 @@ namespace PM\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 
- /**
+/**
  * PM - Back To Link View Helper
  *
  * @package 	ViewHelpers\HTML
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/View/Helper/BackToLink.php
  */
 class BackToLink extends AbstractHelper

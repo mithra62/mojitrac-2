@@ -2,7 +2,7 @@
 /**
  * mithra62 - MojiTrac
  *
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -17,7 +17,7 @@ use Base\View\Helper\BaseViewHelper;
  * PM - Task Status View Helper
  *
  * @package 	ViewHelpers\String
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/View/Helper/Truncate.php
  */
 class Truncate extends BaseViewHelper

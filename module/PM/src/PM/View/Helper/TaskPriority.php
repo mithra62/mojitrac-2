@@ -23,9 +23,8 @@ use PM\Model\Options\Projects;
  */
 class TaskPriority extends BaseViewHelper
 {   	
-	function __invoke($priority)
+	public function __invoke($priority)
 	{
-		return 'ttt;';
 		$return = Projects::translatePriorityId($priority); 
 		$return = '<img src="'.$this->view->StaticUrl().'/images/priorities/'.$priority.'.gif" alt="'.$return.'" title="'.$return.'" /> '.$return;
 		return $return;

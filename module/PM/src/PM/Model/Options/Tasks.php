@@ -45,13 +45,12 @@ class Tasks extends AbstractOptions
 	static public function translateTypeId($id, \PM\Model\Options $options)
 	{
 		$types = $options->getAllTaskTypes();
-		if(isset($types[$id]))
+		foreach($types AS $type)
 		{
-			return $types[$id];
-		}
-		else
-		{
-			return $types[0];
+			if($type['id'] == $id)
+			{
+				return $type['name'];
+			}
 		}
 	}
 	

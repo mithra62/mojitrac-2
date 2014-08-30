@@ -2,9 +2,8 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
  * @filesource 	./module/PM/View/Helper/FileTypeImage.php
@@ -12,21 +11,16 @@
 
 namespace PM\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-
-use Application\Model\Auth\AuthAdapter;
-use Application\View\Helper\AbstractViewHelper;
+use Base\View\Helper\BaseViewHelper;
 
 /**
  * PM - File Type Image View Helper
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	ViewHelpers\Files
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/View/Helper/FileTypeImage.php
  */
-class FileTypeImage extends AbstractViewHelper
+class FileTypeImage extends BaseViewHelper
 {
     
     public function __invoke($mime)

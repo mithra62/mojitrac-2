@@ -25,12 +25,11 @@ class TaskType extends BaseViewHelper
 {
 	public function __invoke($type)
 	{
-		
-		return 'vv';
 	    $helperPluginManager = $this->getServiceLocator();
 	    $serviceManager = $helperPluginManager->getServiceLocator();
 	    
 	    $options = $serviceManager->get('PM\Model\Options');
-		return Tasks::translateTypeId($type, $options); 
+	    $data = Tasks::translateTypeId($type, $options);
+		return $data; 
 	}
 }

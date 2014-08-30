@@ -2,7 +2,6 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
@@ -15,7 +14,7 @@ namespace PM\View\Helper;
 use Base\View\Helper\BaseViewHelper;
 use PM\Model\Options\Projects;
 
- /**
+/**
  * PM - Project Priority View Helper
  *
  * @package 	ViewHelpers\Projects
