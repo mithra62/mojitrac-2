@@ -1,32 +1,36 @@
-
-<form action="<?php echo $this->escape($this->form->getAction()); ?>" id="file_form"
-method="<?php echo $this->escape($this->form->getMethod()) ?>" enctype="<?php echo $this->escape($this->form->getEnctype()); ?>">
-
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'file_form');
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>
 <?php 
 if($this->id > 0)
 	echo '<input type="hidden" value="'.$this->id.'" name="id" />';
 ?>
-<?php if($this->form->file): ?>
+<?php if($this->file_field): ?>
 <p>
 	<label for="file">File</label>
-	<?php echo $this->form->file; ?>
+	<?php $name = $form->get('file'); echo $this->formRow($name); ?>
 </p>
 <?php endif; ?>
 
 <p>
 	<label for="name">Name</label>
-	<?php echo $this->form->name; ?>
+	<?php $name = $form->get('name'); echo $this->formRow($name); ?>
 </p>
 
 <p>
 	<label for="status">Status</label>
-	<?php echo $this->form->status; ?>
+	<?php $name = $form->get('status'); echo $this->formRow($name); ?>
 </p>
 
 <?php if($this->company): ?>
 <p>
 	<label for="company_id" id="companies">Company</label>
-	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'companies','action'=>'view', 'id' => $this->company['id']), null, TRUE); ?>"><?php echo $this->company['name']; ?></a>
+	<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'companies','action'=>'view', 'id' => $this->company['id']), null, TRUE); ?>"><?php echo $this->company['name']; ?></a>
 	<input type="hidden" name="company" value="<?php echo $this->company['id']; ?>" />
 </p>
 <?php endif; ?>
@@ -34,7 +38,7 @@ if($this->id > 0)
 <?php if($this->project): ?>
 <p>
 	<label for="project_id">Project</label>
-	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'projects','action'=>'view', 'id' => $this->project['id']), null, TRUE); ?>"><?php echo $this->project['name']; ?></a>
+	<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'projects','action'=>'view', 'id' => $this->project['id']), null, TRUE); ?>"><?php echo $this->project['name']; ?></a>
 	<input type="hidden" name="project" value="<?php echo $this->project['id']; ?>" />
 </p>
 <?php endif; ?>
@@ -42,20 +46,21 @@ if($this->id > 0)
 <?php if($this->task): ?>
 <p>
 	<label for="task_id">Task</label>
-	<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id' => $this->task['id']), null, TRUE); ?>"><?php echo $this->task['name']; ?></a>
+	<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id' => $this->task['id']), null, TRUE); ?>"><?php echo $this->task['name']; ?></a>
 	<input type="hidden" name="task" value="<?php echo $this->task['id']; ?>" />
 </p>
 <?php endif; ?>
 
 <p>
 	<label for="description">Description</label>
-	<?php echo $this->form->description; ?>
+	<?php $name = $form->get('description'); echo $this->formRow($name); ?>
 </p>
 
 <p>
 	<input type="submit" class="submit" value="Submit" />
 </p>
-</form>	
+<?php echo $this->ConfirmPageUnload('#file_form')?>
+<?php echo $this->form()->closeTag() ?>
 <script type="text/javascript">
 
 jQuery(document).ready(function($){

@@ -45,6 +45,7 @@ use PM\Form\ConfirmForm;
 use PM\Form\OptionForm;
 use PM\Form\TimeForm;
 use PM\Form\TimerForm;
+use PM\Form\FileForm;
 
 use PM\Event\ActivityLogEvent;
 use PM\Event\NotificationEvent;
@@ -278,6 +279,10 @@ class Module implements
 				},
 				'PM\Form\TimerForm' => function($sm) {
 					return new TimerForm('timer');
+				},
+				'PM\Form\FileForm' => function($sm) {
+					$file = $sm->get('PM\Model\Files');
+					return new FileForm('files', $file);
 				},
 				
 				//events

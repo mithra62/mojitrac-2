@@ -33,7 +33,7 @@ class FilesController extends AbstractPmController
 		$e = parent::onDispatch( $e );
         parent::check_permission('view_files');
         $this->layout()->setVariable('sidebar', 'dashboard');
-        $this->layout()->setVariable('active_nav', 'admin');
+        $this->layout()->setVariable('active_nav', 'projects');
         $this->layout()->setVariable('sub_menu', 'files');
         $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
@@ -42,8 +42,8 @@ class FilesController extends AbstractPmController
 	}
     
     /**
-     * Main Page
-     * @return void
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractActionController::indexAction()
      */
 	public function indexAction()
 	{
@@ -139,7 +139,7 @@ class FilesController extends AbstractPmController
 	
 	/**
 	 * File View Action
-	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 * @return \Zend\Http\Response
 	 */
 	public function viewAction()
 	{
@@ -406,54 +406,50 @@ class FilesController extends AbstractPmController
 	 */
 	public function addAction()
 	{
-		$company_id = $this->_request->getParam('company', FALSE);
-		if($company_id) 
+		$id = $this->params()->fromRoute('id');
+		$type = $this->params()->fromRoute('type');
+		$view = array();
+		if($type == 'company') 
 		{
-			$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
+			$company_id = $id;
+			$company = $this->getServiceLocator()->get('PM\Model\Companies');
 			$company_data = $company->getCompanyById($company_id);
 			if(!$company_data)
 			{
-				$this->_helper->redirector('index','companies');
-				exit;				
+				return $this->redirect()->toRoute('companies');
 			}
-			$this->view->company = $company_data;
+			
+			$view['company'] = $company_data;
 		}
 
-		$project_id = $this->_request->getParam('project', FALSE);
-		if($project_id) 
+		if($type == 'project') 
 		{
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+		    $project_id = $id;
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
 			$project_data = $project->getProjectById($project_id);
 			if(!$project_data)
 			{
-				$this->_helper->redirector('index','projects');
-				exit;				
+			    return $this->redirect()->toRoute('projects');
 			}
-			$this->view->project = $project_data;
+			$view['project'] = $project_data;
 		}
 
-		$task_id = $this->_request->getParam('task', FALSE);
-		if($task_id) 
+		if($type == 'task') 
 		{
-			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
+		    $task_id = $id;
+			$task = $this->getServiceLocator()->get('PM\Model\Tasks');
 			$task_data = $task->getTaskById($task_id);
 			if(!$task_data)
 			{
-				$this->_helper->redirector('index','tasks');
-				exit;				
+				return $this->residrect()->toRoute('tasks');
 			}
-			$this->view->task = $task_data;
-		}
+			
+			$view['task'] = $task_data;
+		}	
 				
-		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$form = $file->getFileForm(array(
-            'action' => '/pm/files/add',
-            'method' => 'post',
-        ));
-		
-		 if ($this->getRequest()->isPost()) 
-		 {
-    		
+		$file = $this->getServiceLocator()->get('PM\Model\Files');
+		$form = $this->getServiceLocator()->get('PM\Form\FileForm');
+		if ($this->getRequest()->isPost()) {
     		$formData = $this->getRequest()->getPost();
 			if ($form->isValid($formData) && $form->file->isUploaded()) 
 			{
@@ -502,13 +498,12 @@ class FilesController extends AbstractPmController
 				$this->view->errors = array('Please fix the errors below.');
 			}
 
-		 }
-		
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		
-		$this->view->headTitle('Add File', 'PREPEND');
+		}
 
-		$this->view->form = $form;
+		$this->layout()->setVariable('layout_style', 'left');
+		$form->addFileField();
+		$view['form'] = $form;
+		return $view;
 	}
 	
 	public function removeAction()
