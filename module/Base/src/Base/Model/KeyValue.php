@@ -2,8 +2,7 @@
  /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -16,9 +15,11 @@ namespace Base\Model;
  * Key Value Abstract
  *
  * Abstracts handling of key => value style database tables
+ * <br /><strong>This Model is only useful for data stores that use a key => value style storage mechanism.
+ * @see \PM\Model\Settings for an example</strong>
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	MojiTrac\Model
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Base/src/Base/Model/KeyValue.php
  */
 abstract class KeyValue extends BaseModel

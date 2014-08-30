@@ -1,9 +1,8 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -15,13 +14,15 @@ namespace Base\Model;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
 
- /**
- * Base Abstract
+/**
+ * Base - Model
  *
- * General Moji Model Methods
+ * General Moji Model Methods. The Base Model should be the parent of any Models within the system
+ * if database access and/or Event interactivity is required.
+ * <br /><strong>Note that if a key => value style interface is needed, use the KeyValue Model instead (it extends BaseModel).</strong>
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	MojiTrac\Model
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Base/src/Base/Model/BaseModel.php
  */
 abstract class BaseModel implements EventManagerInterfaceConstants

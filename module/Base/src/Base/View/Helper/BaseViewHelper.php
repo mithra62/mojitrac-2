@@ -2,8 +2,7 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -19,9 +18,12 @@ use DateTime, IntlDateFormatter, DateInterval;
 
  /**
  * Base - View Helper
+ * 
+ * Contains all the global logic for ViewHelpers
+ * <br /><strong>The Base View Helper should be the parent of any ViewHelpers within the system</strong>
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	MojiTrac\ViewHelper
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Base/src/Base/View//Helper/BaseViewHelper.php
  */
 class BaseViewHelper extends ZFAbstract implements ServiceLocatorAwareInterface 

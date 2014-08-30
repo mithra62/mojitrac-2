@@ -2,8 +2,7 @@
  /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -15,10 +14,13 @@ namespace Base\Event;
 use Zend\ServiceManager\AbstractPluginManager;
 
 /**
- * Base - Base Events
+ * Base - Event
+ * 
+ * Contains all the global logic for Events
+ * <br /><strong>The Base Event should be the parent of any Events within the system</strong>
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	MojiTrac\Events
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Base/src/Base/Event/BaseEvent.php
  */
 abstract class BaseEvent extends AbstractPluginManager 

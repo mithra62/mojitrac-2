@@ -2,8 +2,7 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -19,8 +18,8 @@ use Zend\Form\View\Helper\FormElementErrors as OriginalFormElementErrors;
  * 
  * Sets the styling to use for ZF form errors
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	MojiTrac\Form\ElementErrors
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Base/src/Base/Form/View/Helper/FormElementErrors.php
  */
 class FormElementErrors extends OriginalFormElementErrors

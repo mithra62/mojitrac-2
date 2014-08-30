@@ -1,9 +1,8 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -15,14 +14,15 @@ namespace Base\Form;
 use Zend\Form\Form;
 
 /**
-* Form Abstract
-*
-* Adds the constant form elements
-*
-* @abstract
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./moji/application/forms/Abstract.php
+ * Base - Form
+ *
+ * Adds the constant form elements
+ * <br /><strong>The Base Form should be the parent of any Form objects within the system</strong>
+ *
+ * @abstract
+ * @package 	MojiTrac\Form
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./moji/application/forms/Abstract.php
 */
 abstract class BaseForm extends Form
 {

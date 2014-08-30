@@ -1,9 +1,8 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -15,11 +14,14 @@ namespace Base\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
- /**
- * Default - AbstractController Controller
+/**
+ * Base - Controller
+ * 
+ * Contains all the global logic for Controllers
+ * <br /><strong>The Base Controller should be the parent of any Controllers within the system</strong>
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	MojiTrac\Controller
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Base/src/Base/Controller/BaseController.php
  */
 abstract class BaseController extends AbstractActionController

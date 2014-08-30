@@ -23,9 +23,9 @@ use Api\Model\Options;
 use Api\Model\Roles;
 
 /**
- * Api - Module Object
+ * Api - Module Loader
  *
- * @package 	REST
+ * @package 	MojiTrac
  * @author		Eric Lamb
  * @filesource 	./module/Api/Module.php
  */
