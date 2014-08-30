@@ -2,8 +2,7 @@
  /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -17,10 +16,10 @@ use Application\Controller\AbstractController;
 /**
  * Application - Index Controller
  *
- * Just placeholder and redict
+ * Just placeholder and redirect
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	Mojitrac
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Application/src/Application/Controller/IndexController.php
  */
 class IndexController extends AbstractController

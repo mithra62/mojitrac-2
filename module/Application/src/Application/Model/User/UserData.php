@@ -20,7 +20,7 @@ use Base\Model\KeyValue;
 /**
  * Application - User Data Model
  *
- * @package 	User\UserData
+ * @package 	Users\UserData
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./modules/Application/src/Application/Model/User/UserData.php
  */

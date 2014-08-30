@@ -1,12 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @author		Eric Lamb <eric@mithra62.com>
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/Application/src/Application/Form/ForgotPasswordForm.php
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/Application/src/Application/Form/ForgotPasswordForm.php
 */
 
 namespace Application\Form;
@@ -14,13 +14,13 @@ namespace Application\Form;
 use Base\Form\BaseForm;
 
 /**
-* Forgot Password Form
-*
-* Generates the Forgot Password form
-*
-* @package 		Users\Login\ForgotPassword
-* @author		Eric Lamb <eric@mithra62.com>
-* @filesource 	./module/Application/src/Application/Form/ForgotPasswordForm.php
+ * Forgot Password Form
+ *
+ * Generates the Forgot Password form
+ *
+ * @package 	Users\Login\ForgotPassword
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/Application/src/Application/Form/ForgotPasswordForm.php
 */
 class ForgotPasswordForm extends BaseForm
 {

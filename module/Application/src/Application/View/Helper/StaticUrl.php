@@ -2,7 +2,6 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
@@ -17,7 +16,7 @@ use Base\View\Helper\BaseViewHelper;
  /**
  * View Helper - Static URL 
  *
- * @package 	mithra62:Mojitrac
+ * @package 	ViewHelpers
  * @author		Eric Lamb
  * @filesource 	./module/Application/src/Application/View/Helper/Staticurl.php
  */

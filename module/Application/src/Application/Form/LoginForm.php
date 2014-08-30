@@ -4,9 +4,9 @@
  *
  * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
- * @link			http://mithra62.com/
+ * @link		http://mithra62.com/
  * @version		2.0
-* @filesource 	./module/Application/src/Application/Form/LoginForm.php
+ * @filesource 	./module/Application/src/Application/Form/LoginForm.php
 */
 
 namespace Application\Form;
@@ -20,7 +20,7 @@ use Base\Form\BaseForm;
  *
  * @package 	Users\Login
  * @author		Eric Lamb <eric@mithra62.com>
-* @filesource 	./module/Application/src/Application/Form/LoginForm.php
+ * @filesource 	./module/Application/src/Application/Form/LoginForm.php
 */
 class LoginForm extends BaseForm
 {

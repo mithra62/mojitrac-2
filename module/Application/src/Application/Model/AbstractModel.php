@@ -2,7 +2,6 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
@@ -19,7 +18,7 @@ use Base\Model\BaseModel;
  *
  * Sets things up for abstracted functionality
  *
- * @package 	Moji
+ * @package 	MojiTrac
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Application/src/Application/Model/AbstractModel.php
  */

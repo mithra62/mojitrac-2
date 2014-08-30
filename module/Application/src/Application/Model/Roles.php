@@ -1,5 +1,5 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
  * @package		mithra62:Mojitrac
@@ -19,7 +19,7 @@ use Zend\InputFilter\InputFilterInterface;
 
 use Application\Model\AbstractModel;
 
- /**
+/**
  * PM - User Roles Model
  *
  * @package 	Users\Roles

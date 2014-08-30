@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb <eric@mithra62.com>
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/Application/src/Application/Form/PrefsForm.php
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/Application/src/Application/Form/PrefsForm.php
 */
 
 namespace Application\Form;
@@ -17,13 +16,13 @@ use PM\Model\Options\Timezones;
 use PM\Model\Options\Languages;
 
 /**
-* PrefsForm Form
-*
-* Generates the Preferences form
-*
-* @package 		Users\Preferences
-* @author		Eric Lamb <eric@mithra62.com>
-* @filesource 	./module/Application/src/Application/Form/PrefsForm.php
+ * PrefsForm Form
+ *
+ * Generates the Preferences form
+ *
+ * @package 	Users\UserData
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/Application/src/Application/Form/PrefsForm.php
 */
 class PrefsForm extends BaseForm
 {

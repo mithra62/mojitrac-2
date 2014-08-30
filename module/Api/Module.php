@@ -2,7 +2,6 @@
  /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
@@ -26,7 +25,7 @@ use Api\Model\Roles;
 /**
  * Api - Module Object
  *
- * @package 	mithra62:Mojitrac
+ * @package 	REST
  * @author		Eric Lamb
  * @filesource 	./module/Api/Module.php
  */

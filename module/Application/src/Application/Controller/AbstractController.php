@@ -1,9 +1,8 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -14,16 +13,15 @@ namespace Application\Controller;
 
 use Base\Controller\BaseController;
 
- /**
+/**
  * Default - AbstractController Controller
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	Mojitrac
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Application/src/Application/Controllers/AbstractController.php
  */
 abstract class AbstractController extends BaseController
 {
-
 	/**
 	 * (non-PHPdoc)
 	 * @see \Base\Controller\BaseController::onDispatch()
@@ -33,6 +31,10 @@ abstract class AbstractController extends BaseController
 		return parent::onDispatch( $e );
 	}
 	
+	/**
+	 * Global Logout Action
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>
+	 */
 	public function logoutAction()
 	{
 		$login = $this->getServiceLocator()->get('Application\Model\Login');

@@ -1,8 +1,7 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
@@ -20,7 +19,7 @@ use Zend\InputFilter\InputFilterInterface;
 use Application\Model\AbstractModel;
 use Application\Model\Hash;
 
- /**
+/**
  * PM - User Model
  *
  * @package 	Users

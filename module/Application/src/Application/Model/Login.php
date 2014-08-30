@@ -2,8 +2,7 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -24,7 +23,7 @@ use Zend\Authentication\Result as AuthenticationResult;
  * Handles login functionality
  *
  * @package 	Users\Login
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Application/src/Application/Model/Login.php
  */
 class Login extends AbstractModel

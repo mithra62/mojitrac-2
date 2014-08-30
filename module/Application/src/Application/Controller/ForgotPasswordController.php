@@ -1,5 +1,5 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
  * @author		Eric Lamb <eric@mithra62.com>
@@ -13,7 +13,7 @@ namespace Application\Controller;
 
 use Application\Controller\AbstractController;
 
- /**
+/**
  * Application - Forgot Password Controller Class
  *
  * Handles forgot password logic and routing 
