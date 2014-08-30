@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/Application/src/Application/Form/UserForm.php
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/Application/src/Application/Form/UsersForm.php
 */
 
 namespace Application\Form;
@@ -15,13 +14,13 @@ namespace Application\Form;
 use Base\Form\BaseForm;
 
 /**
-* UserForm Form
-*
-* Generates the UsersForm form
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/Application/src/Application/Form/UserForm.php
+ * UserForm Form
+ *
+ * Generates the UsersForm form
+ *
+ * @package 	Users
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/Application/src/Application/Form/UsersForm.php
 */
 class UsersForm extends BaseForm
 {

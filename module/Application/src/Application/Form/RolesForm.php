@@ -2,8 +2,7 @@
 /**
  * mithra62 - MojiTrac
 *
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
+* @author		Eric Lamb <eric@mithra62.com>
 * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
@@ -19,8 +18,8 @@ use Base\Form\BaseForm;
 *
 * Generates the Roles form
 *
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
+* @package 		Users\Roles
+* @author		Eric Lamb <eric@mithra62.com>
 * @filesource 	./module/Application/src/Application/Form/RolesForm.php
 */
 class RolesForm extends BaseForm

@@ -44,6 +44,8 @@ return array(
 			
 			Please don\'t respond to this email; all emails are automatically deleted.			
 	',
+	'forgot_password_instructions' => 'Enter your email to reset your password.',
+	'back_to_login' => 'Back to Login',
 		
 	//change password
 	'old_password' => 'Old Password',
@@ -53,5 +55,6 @@ return array(
 	
 	//js validation messages
     'js_email_validation_message' => 'Please enter an email address',
-    'js_password_validation_message' => 'Please enter a password'
+    'js_password_validation_message' => 'Please enter a password',
+    'required' => 'Required',
 );

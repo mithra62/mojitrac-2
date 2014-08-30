@@ -1,4 +1,4 @@
-<h1>Forgot Password</h1>		
+<h1><?php echo $this->_('forgot_password', 'app'); ?></h1>		
 <?php 
 
 $form = $this->form;
@@ -13,7 +13,7 @@ if(is_array($this->messages) && count($this->messages) >= 1)
 	}
 } else {
 	
-	echo '<div class="information large png_bg">Welcome. To log in enter your credentials below.</div> ';
+	echo '<div class="information large png_bg">'.$this->_('forgot_password_instructions', 'app').'</div> ';
 }
 
 echo $this->form()->openTag($form); 
@@ -26,7 +26,7 @@ echo $this->form()->openTag($form);
 	  </p>
 	  
 	  <p><input type="submit" name="Submit" id="button" value="Submit"  class="button"/></p>
-		<a href="<?php echo $this->url('login');?>" class="blueLink">Back to Login</a>
+		<a href="<?php echo $this->url('login');?>" class="blueLink"><?php echo $this->_('back_to_login', 'app'); ?></a>
 <?php echo $this->form()->closeTag() ?>
 	
 <script type="text/javascript">
@@ -39,10 +39,10 @@ $().ready(function() {
 	$("#email").focus();
 	$("#sumbitForm").validate({
 		rules: {
-			email: "required"
+			email: "<?php echo $this->_('required', 'app'); ?>"
 		},
 		messages: {
-			email: "Please enter an email address"
+			email: "<?php echo $this->_('js_email_validation_message', 'app'); ?>"
 		}
 	});
 
