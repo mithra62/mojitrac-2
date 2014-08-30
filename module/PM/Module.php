@@ -2,7 +2,6 @@
  /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
@@ -53,7 +52,7 @@ use PM\Event\NotificationEvent;
 /**
  * PM - Module Object
  *
- * @package 	mithra62:Mojitrac
+ * @package 	MojiTrac
  * @author		Eric Lamb
  * @filesource 	./module/PM/Module.php
  */

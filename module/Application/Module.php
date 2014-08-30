@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/Application/Module.php
+ *
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link			http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/Application/Module.php
 */
 
 namespace Application;
@@ -40,7 +39,7 @@ use Application\Form\RolesForm;
 /**
  * Application - Module Loader
  *
- * @package 	mithra62:Mojitrac
+ * @package 	MojiTrac
  * @author		Eric Lamb
  * @filesource 	./module/Application/Module.php
  */

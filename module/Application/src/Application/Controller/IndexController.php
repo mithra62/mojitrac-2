@@ -18,20 +18,18 @@ use Application\Controller\AbstractController;
  *
  * Just placeholder and redirect
  *
- * @package 	Mojitrac
+ * @package 	MojiTrac
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Application/src/Application/Controller/IndexController.php
  */
 class IndexController extends AbstractController
 {
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\Mvc\Controller\AbstractActionController::indexAction()
+	 */
     public function indexAction()
     {
         return $this->redirect()->toRoute('login');
-    }
-    
-    public function phpInfoAction()
-    {
-    	phpinfo();
-    	exit;
-    }    
+    }   
 }

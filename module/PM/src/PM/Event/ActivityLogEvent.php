@@ -2,7 +2,6 @@
  /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
@@ -17,7 +16,7 @@ use Base\Event\BaseEvent;
  /**
  * PM - Event Activity Log
  *
- * @package 	mithra62:Mojitrac
+ * @package 	Events
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/Event/ActivityLogEvent.php
  */
