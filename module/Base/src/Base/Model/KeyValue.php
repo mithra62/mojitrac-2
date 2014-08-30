@@ -161,6 +161,9 @@ abstract class KeyValue extends BaseModel
 		if(!$this->items)
 		{
 			$sql = $this->db->select()->from($this->table)->columns( array('option_name', 'option_value'));
+			if($where) {
+				$sql->where($where);
+			}
 			$this->items = $this->translateItems($this->getRows($sql));
 		}
 		
