@@ -13,7 +13,6 @@ namespace PM\Model;
 
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\FileInput;
 use Zend\InputFilter\InputFilterInterface;
 
 use Application\Model\AbstractModel;
@@ -124,6 +123,7 @@ class Files extends AbstractModel
 				new \Zend\Validator\File\Size(array('max'=>$this->getMaxFileSize())),
 			);
 			$this->file_transfer_adapter->setValidators($validators, $file_name);
+			$this->file_transfer_adapter->setDestination($this->getStoragePath());
 		}
 		
 		return $this->file_transfer_adapter;		
@@ -339,7 +339,7 @@ class Files extends AbstractModel
 					   $data['task']
 		);		
 		
-		$file_info['extension'] = $this->get_file_extension($file_info['tmp_name']);
+		$file_info['extension'] = $this->getFileExtension($file_info['tmp_name']);
 		$file_info['stored_name'] = mktime().'.'.$file_info['extension'];
 		$new_name = $path.DS.$file_info['stored_name'];
 		if(!rename($file_info['tmp_name'],$new_name))
@@ -447,7 +447,7 @@ class Files extends AbstractModel
 		}		
 	}
 	
-	public function get_file_extension($filename)
+	public function getFileExtension($filename)
 	{
 	    $path_info = pathinfo($filename);
 	    return $path_info['extension'];
