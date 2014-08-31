@@ -409,6 +409,7 @@ class FilesController extends AbstractPmController
 		$id = $this->params()->fromRoute('id');
 		$type = $this->params()->fromRoute('type');
 		$view = array();
+		$view['file_errors'] = false;
 		if($type == 'company') 
 		{
 			$company_id = $id;
@@ -449,61 +450,76 @@ class FilesController extends AbstractPmController
 				
 		$file = $this->getServiceLocator()->get('PM\Model\Files');
 		$form = $this->getServiceLocator()->get('PM\Form\FileForm');
-		if ($this->getRequest()->isPost()) {
-    		$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData) && $form->file->isUploaded()) 
+		$request = $this->getRequest();
+		if ($request->isPost()) 
+		{
+
+			$formData = $this->getRequest()->getPost();
+			$form->setInputFilter($file->getInputFilter(true));
+			$formData = array_merge_recursive(
+				$request->getPost()->toArray(),
+				$request->getFiles()->toArray()
+			);	
+
+			$form->setData($formData);
+			if ($form->isValid()) 
 			{
-				if($form->file->receive()) //move the file to storage
+				$formData = $form->getData();
+				$adapter = $file->getFileTransferAdapter($formData['file_upload']['name']);			
+				if ($adapter->isValid())
 				{
-					if(isset($project_data))
+					echo 'Good';
+					exit;
+					if($form->file->receive()) //move the file to storage
 					{
-						$formData['company'] = $project_data['company_id'];
-					}
-					
-					if(isset($task_data))
-					{
-						$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-						$formData['project'] = $task_data['project_id'];
-						$temp = $project->getCompanyIdById($task_data['project_id']);
-						$formData['company'] = $temp['company_id'];
-					}
-									
-					$file_info = $form->file->getFileInfo();
-					$formData['creator'] = $this->identity;	
-					$formData['owner'] = $this->identity;
-					$formData['uploaded_by'] = $this->identity;					
-					
-					if($id = $file->addFile($formData, $file_info))
-					{
-						PM_Model_ActivityLog::logFileAdd($formData, $id, $this->identity);
+						if(isset($project_data))
+						{
+							$formData['company'] = $project_data['company_id'];
+						}
 						
-				    	$this->_flashMessenger->addMessage('File Added!');
-						$this->_helper->redirector('view','files', 'pm', array('id' => $id));					
-						exit;
-					}
-					else
-					{
-						$this->view->errors = array('Couldn\'t upload file :(');
-					}
-								
+						if(isset($task_data))
+						{
+							$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+							$formData['project'] = $task_data['project_id'];
+							$temp = $project->getCompanyIdById($task_data['project_id']);
+							$formData['company'] = $temp['company_id'];
+						}
+										
+						$file_info = $form->file->getFileInfo();
+						$formData['creator'] = $this->identity;	
+						$formData['owner'] = $this->identity;
+						$formData['uploaded_by'] = $this->identity;					
+						
+						if($id = $file->addFile($formData, $file_info))
+						{
+							PM_Model_ActivityLog::logFileAdd($formData, $id, $this->identity);
+							
+					    	$this->_flashMessenger->addMessage('File Added!');
+							$this->_helper->redirector('view','files', 'pm', array('id' => $id));					
+							exit;
+						}
+						else
+						{
+							$this->view->errors = array('Couldn\'t upload file :(');
+						}
+					}		
 				} 
 				else 
 				{
-					$this->view->errors = array('Couldn\'t move file :(');
+					$view['file_errors'] = $adapter->getMessages();
 				}
-				
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
+				$view['errors'] = array('Please fix the errors below.');
 			}
-
 		}
 
 		$this->layout()->setVariable('layout_style', 'left');
 		$form->addFileField();
+		$view['form_action'] = $this->getRequest()->getRequestUri();
 		$view['form'] = $form;
-		return $view;
+		return $this->ajaxOutput($view);
 	}
 	
 	public function removeAction()

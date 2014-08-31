@@ -5,6 +5,14 @@
 $options = array('company' => $this->company, 'project' => $this->project, 'task' => $this->task);
 echo $this->BackToLink($options); 
 
-$options = array('form' => $this->form, 'company' => $this->company, 'project' => $this->project, 'task' => $this->task, 'file_field' => TRUE);
+$options = array(
+	'form' => $this->form, 
+	'company' => $this->company, 
+	'project' => $this->project, 
+	'task' => $this->task, 
+	'file_field' => TRUE,
+	'form_action' => $form_action,
+	'file_errors' => $file_errors
+);
 echo $this->partial('pm/files/partials/form.phtml', $options); 
 ?>

@@ -11,6 +11,11 @@
 
 namespace PM\Model;
 
+use Zend\InputFilter\Factory as InputFactory;
+use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\FileInput;
+use Zend\InputFilter\InputFilterInterface;
+
 use Application\Model\AbstractModel;
 
  /**
@@ -27,7 +32,13 @@ class Files extends AbstractModel
 	 * The form validation filering
 	 * @var \Zend\InputFilter\InputFilter
 	 */
-	protected $inputFilter;
+	protected $input_filter;
+	
+	/**
+	 * The Transfer Adapter for validating and moving uploaded files
+	 * @var \Zend\File\Transfer\Adapter\Http
+	 */
+	protected $file_transfer_adapter;
 	
 	/**
 	 * The Project Model
@@ -37,6 +48,85 @@ class Files extends AbstractModel
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
 		parent::__construct($adapter, $db);
+	}
+	
+	/**
+	 * Sets the input filter
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
+	 */
+	public function setInputFilter(InputFilterInterface $inputFilter)
+	{
+		throw new \Exception("Not used");
+	}
+	
+	public function getInputFilter($file_field = false)
+	{
+		if (!$this->input_filter) {
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'name',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+			)));
+			
+			$inputFilter->add(
+				$factory->createInput(array(
+					'name'     => 'file_upload',
+					'required' => true,
+                            'messages' => array(
+                                \Zend\Validator\NotEmpty::IS_EMPTY => 'fdsafdsa'
+                            ),
+				))
+			);			
+			
+			/*
+			if($file_field)
+			{
+				$fileInput = new FileInput('file_upload');
+				$fileInput->setRequired(true);
+				$fileInput->getValidatorChain()->attach(new \Zend\Validator\File\UploadFile());
+				$fileInput->getFilterChain()->attachByName(
+					'filerenameupload',
+					array(
+						'target'    => './data/tmpuploads/avatar.png',
+						'randomize' => true,
+					)
+				);				
+				$inputFilter->add($fileInput);
+			}
+			*/
+			
+	
+			$this->input_filter = $inputFilter;
+		}
+	
+		return $this->input_filter;
+	}
+
+	/**
+	 * Sets up the Transfer Adapter and returns it
+	 * @param string $file_name	The name for the upload field we're validating
+	 * @return \Zend\File\Transfer\Adapter\Http
+	 */
+	public function getFileTransferAdapter($file_name)
+	{
+		if(!$this->file_transfer_adapter)
+		{
+			$this->file_transfer_adapter = new \Zend\File\Transfer\Adapter\Http();
+			$validators = array(
+				//new \Application\Validate\Upload(),
+				new \Zend\Validator\File\Size(array('max'=>$this->getMaxFileSize())),
+			);
+			$this->file_transfer_adapter->setValidators($validators, $file_name);
+		}
+		
+		return $this->file_transfer_adapter;		
 	}
 		
 	/**

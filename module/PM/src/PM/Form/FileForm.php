@@ -85,11 +85,11 @@ class FileForm extends BaseForm
 			->setAttrib('class', 'input large');	
 			**/
 		$this->add(array(
-			'name' => 'file',
+			'name' => 'file_upload',
 			'type' => 'File',
 			'attributes' => array(
 				'class' => 'input large',
-				'id' => 'name'
+				'id' => 'file_upload'
 			),
 		));	
 	}

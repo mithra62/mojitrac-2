@@ -1,9 +1,20 @@
 <?php 
 $form = $this->form;
 $form->setAttribute('id', 'file_form');
+$form->setAttribute('action', $this->form_action);
 $form->prepare();
 echo $this->form()->openTag($form);
 $csrf = $form->get('_x');
+
+if($file_errors)
+{
+	foreach($file_errors AS $key => $error)
+	{
+		$error = ($key == 'fileUploadErrorNoFile' ? 'A file is required' : $error);
+		echo '<div class="fail canhide png_bg">'.$error.'</div>';
+	}
+}
+
 echo $this->formRow($csrf);
 ?>
 <?php 
@@ -13,7 +24,7 @@ if($this->id > 0)
 <?php if($this->file_field): ?>
 <p>
 	<label for="file">File</label>
-	<?php $name = $form->get('file'); echo $this->formRow($name); ?>
+	<?php $name = $form->get('file_upload'); echo $this->formRow($name); echo $this->formElementErrors($name); ?>
 </p>
 <?php endif; ?>
 
