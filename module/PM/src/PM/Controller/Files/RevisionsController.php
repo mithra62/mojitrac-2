@@ -88,39 +88,41 @@ class RevisionsController extends AbstractPmController
 	
 	public function downloadAction()
 	{
-		$id = $this->_request->getParam('id', false);
+		$id = $this->params()->fromRoute('revision_id');
 		if (!$id) {
-			$this->_helper->redirector('index','index');
+			return $this->redirect()->toRoute('pm');
 		}
-		
-		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$rev_data = $file->getRevision($id);
+
+		$file = $this->getServiceLocator()->get('PM\Model\Files');
+		$rev_data = $file->revision->getRevision($id);
 		if (!$rev_data) {
-			$this->_helper->redirector('index','index');
+			return $this->redirect()->toRoute('pm');
 		}
 
 		$file_data = $file->getFileById($rev_data['file_id']);
 		if (!$file_data) {
-			$this->_helper->redirector('index','index');
-			exit;
+			return $this->redirect()->toRoute('pm');
 		}
 		
 		if($file_data['project_id'] != 0)
 		{
 			//check if the user is on the project's team.
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
 			if(!$project->isUserOnProjectTeam($this->identity, $file_data['project_id']) && !$this->perm->check($this->identity, 'manage_files'))
 			{
-				$this->_helper->redirector('index','index');
-				exit;
+				return $this->redirect()->toRoute('pm');
 			}		
 		}
 		
-		$download_path = $file->chmkdir($file->getStoragePath(), $file_data['company_id'], $file_data['project_id'], $file_data['task_id']);
+		$download_path = $file->checkMakeDirectory($file->getStoragePath(), $file_data['company_id'], $file_data['project_id'], $file_data['task_id']);
 		$download_path  = $download_path.DS.$rev_data['stored_name'];
+		if(file_exists($download_path) && is_readable($download_path))
+		{
+			return $this->downloadFile($download_path);
+		}
 		
-		LambLib_Controller_Action_Helper_Utilities::file_download($download_path, $rev_data['file_name']);
-		exit;
+		$this->flashMessenger()->addErrorMessage($this->translate('file_not_found', 'pm'));
+		return $this->redirect()->toRoute('files/view', array('file_id' => $rev_data['file_id']));  	  
 	}
 	
 	public function previewRevisionAction()

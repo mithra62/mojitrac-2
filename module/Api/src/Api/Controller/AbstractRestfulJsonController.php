@@ -2,7 +2,7 @@
 /**
  * mithra62 - MojiTrac
 *
-* @author		Eric Lamb
+* @author		Eric Lamb <eric@mithra62.com>
 * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
 * @version		2.0
@@ -25,8 +25,8 @@ use PM\Traits\Controller AS PMControllerTrait;
  *
  * Sets all the global functionality up for the REST API
  *
- * @package 	MojiTrac
- * @author		Eric Lamb
+ * @package 	MojiTrac\Controller
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Api/src/Api/Controller/AbstractRestfulJsonController.php
  */
 class AbstractRestfulJsonController extends AbstractRestfulController

@@ -172,7 +172,7 @@ class FilesController extends AbstractPmController
 			}			
 		}		
 		
-		$file_revisions = $file->getFileRevisions($id);
+		$file_revisions = $file->revision->getFileRevisions($id);
 		$file_reviews = array();//$file->getFileReviews($id);
 
 		$view['file'] = $file_data;

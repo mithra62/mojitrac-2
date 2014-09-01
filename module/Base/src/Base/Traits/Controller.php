@@ -6,11 +6,20 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/Base/src/Base/Controller/BaseController.php
+ * @filesource 	./module/Base/src/Base/Traits/Controller.php
  */
 
 namespace Base\Traits;
 
+/**
+ * Base - Controller Trait
+ *
+ * Contains the global goodies for the Base module and others
+ *
+ * @package 	MojiTrac\Traits
+ * @author		Eric Lamb
+ * @filesource 	./module/Base/src/Base/Traits/Controller.php
+ */
 trait Controller 
 {
 	/**
@@ -55,4 +64,28 @@ trait Controller
 		}
 		return $this->adapter;
 	}	
+	
+	public function translate($lang, $domain = 'app')
+	{
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
+		return $translate($lang, $domain);
+	}
+	
+	public function downloadFile($file)
+	{
+		
+		echo $file;
+		exit;
+		$response = new \Zend\Http\Response\Stream();
+		$response->setStream(fopen($file, 'r'));
+		$response->setStatusCode(200);
+		
+		$headers = new \Zend\Http\Headers();
+		$headers->addHeaderLine('Content-Type', 'whatever your content type is')
+		->addHeaderLine('Content-Disposition', 'attachment; filename="' . $fileName . '"')
+		->addHeaderLine('Content-Length', filesize($fileName));
+		
+		$response->setHeaders($headers);
+		return $response;		
+	}
 }

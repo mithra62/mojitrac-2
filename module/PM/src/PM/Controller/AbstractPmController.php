@@ -17,7 +17,7 @@ use PM\Traits\Controller AS PMController;
 /**
  * PM - AbstractPmController Controller
  *
- * @package 	MojiTrac
+ * @package 	MojiTrac\Controller
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Controller/AbstractPmController.php
  */

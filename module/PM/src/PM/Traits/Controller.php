@@ -6,11 +6,20 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/Base/src/Base/Controller/BaseController.php
+ * @filesource 	./module/PM/src/PM/Traits/Controller.php
  */
 
 namespace PM\Traits;
 
+/**
+ * PM - Controller Trait
+ *
+ * Contains the global goodies for the PM module
+ *
+ * @package 	MojiTrac\Traits
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Traits/Controller.php
+ */
 trait Controller 
 {
 	/**

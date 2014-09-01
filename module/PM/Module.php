@@ -22,6 +22,7 @@ use PM\Model\Companies;
 use PM\Model\Timers;
 use PM\Model\Charts;
 use PM\Model\Files;
+use PM\Model\Files\Revisions;
 use PM\Model\Tasks;
 use PM\Model\Times;
 use PM\Model\Bookmarks;
@@ -58,7 +59,7 @@ use PM\Event\NotificationEvent;
  * @filesource 	./module/PM/Module.php
  */
 class Module implements 
-    ConsoleUsageProviderInterface,  // <- our module implement this feature and provides console usage info
+    ConsoleUsageProviderInterface,
     ConsoleBannerProviderInterface
 {
 	/**
@@ -158,7 +159,13 @@ class Module implements
 				'PM\Model\Files' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Files($adapter, $db);
+					$rev = $sm->get('PM\Model\Files\Revisions');
+					return new Files($adapter, $db, $rev);
+				},
+				'PM\Model\Files\Revisions' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Revisions($adapter, $db);
 				},
 				'PM\Model\Tasks' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');

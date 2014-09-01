@@ -16,7 +16,7 @@ use Base\Controller\BaseController;
 /**
  * Application - AbstractController Controller
  *
- * @package 	MojiTrac
+ * @package 	MojiTrac\Controller
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Application/src/Application/Controllers/AbstractController.php
  */
