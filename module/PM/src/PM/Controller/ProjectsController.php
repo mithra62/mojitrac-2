@@ -317,7 +317,7 @@ class ProjectsController extends AbstractPmController
 		{
 			$formData = $this->getRequest()->getPost();
 			$form->setData($request->getPost());
-			if ($form->isValid($formData))
+			if ($form->isValid())
 			{
 				$formData = $formData->toArray();
 				if(!empty($formData['fail']))
@@ -372,13 +372,7 @@ class ProjectsController extends AbstractPmController
 				{
 					if(!in_array($key, $proj_team)) //user is not on the team yet; add them
 					{
-						if($project->addProjectTeamMember($key, $id))
-						{
-						    //todo
-							//PM_Model_ActivityLog::logProjectTeamAdd($formData['proj_member'], $id, $this->identity);
-							//$noti = new PM_Model_Notifications();
-							//$noti->addToProjectTeam($key, $project_data);							
-						}
+						$project->addProjectTeamMember($key, $id);
 					}
 				}
 			}
@@ -389,13 +383,7 @@ class ProjectsController extends AbstractPmController
 				{	
 					if(!array_key_exists($removed, $formData['proj_member']))
 					{	
-						if($project->removeProjectTeamMember($removed, $id))
-						{
-						    //todo
-							//PM_Model_ActivityLog::logProjectTeamRemove($proj_team, $id, $this->identity);
-// 							/$noti = new PM_Model_Notifications();
-// 							$noti->removeFromProjectTeam($removed, $project_data);							
-						}
+						$project->removeProjectTeamMember($removed, $id);
 					}
 				}
 			}

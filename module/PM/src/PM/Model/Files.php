@@ -515,15 +515,12 @@ class Files extends AbstractModel
 	 */
 	public function removeFile($id)
 	{
-		$delete = $this->db->deleteFile($id);
+		$delete = $this->remove('files', array('id' => $id));
 		if($delete)
 		{
-			$rev = new PM_Model_DbTable_File_Revisions;
-			$rev->deleteFileRevision($id, 'file_id');
-			
-			$reviews = new PM_Model_DbTable_File_Reviews;
-			$reviews->deleteFileReview($id, 'file_id');
+			$this->remove('file_revisions', array('file_id' => $id));
 		}
+		
 		return $delete;
 	}
 	

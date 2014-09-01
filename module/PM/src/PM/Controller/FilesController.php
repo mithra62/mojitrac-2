@@ -521,75 +521,74 @@ class FilesController extends AbstractPmController
 		return $this->ajaxOutput($view);
 	}
 	
+	/**
+	 * Removes a file
+	 */
 	public function removeAction()
-	{   		
-		echo 'fdsa';
-		exit;
-		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$id = $this->_request->getParam('id', false);
-		$confirm = $this->_getParam("confirm",false);
-		$fail = $this->_getParam("fail",false);
-		
-    	if(!$id)
-    	{
-    		$this->_helper->redirector('index','index');
-    		exit;
-    	}
+	{   
+		$file = $this->getServiceLocator()->get('PM\Model\Files');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+
+		$id = $this->params()->fromRoute('file_id');
+		if (!$id) {
+			return $this->redirect()->toRoute('pm');
+		}
     	
     	$file_data = $file->getFileById($id);
     	if(!$file_data)
     	{
-			$this->_helper->redirector('index','index');
-			exit;
+			return $this->redirect()->toRoute('pm');
     	}
 
-    	if($fail)
-    	{
-			$this->_helper->redirector('view','files', 'pm', array('id' => $id));
-			exit;   		
-    	}
-    	
-    	if($confirm)
-    	{
-    	   	if($file->removeFile($id))
-    		{	
-				$formData['task'] = $file_data['task_id'];
-				$formData['company'] = $file_data['company_id'];
-				$formData['project'] = $file_data['project_id'];
-				PM_Model_ActivityLog::logFileRemove($file_data, $id, $this->identity);
-				if($file_data['task_id'] > 0)
+    	$request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid())
+			{
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
 				{
-					$this->_helper->redirector('view','tasks', 'pm', array('id' => $file_data['task_id']));
-					exit;
+					return $this->redirect()->toRoute('files/view', array('file_id' => $id));
 				}
 				
-    			if($file_data['project_id'] > 0)
-				{
-					$this->_helper->redirector('view','projects', 'pm', array('id' => $file_data['project_id']));
-					exit;
-				}
-
-    			if($file_data['company_id'] > 0)
-				{
-					$this->_helper->redirector('view','companies', 'pm', array('id' => $file_data['company_id']));
-					exit;
-				}				
-				
-				$this->_flashMessenger->addMessage('File Removed');
-				$this->_helper->redirector('index','index');
-				exit;
-				
-    		} 
-    		else
-    		{
-    			$this->view->errors = array('Couldn\'t remove the file :(');
+	    	   	if($file->removeFile($id))
+	    		{	
+					$formData['task'] = $file_data['task_id'];
+					$formData['company'] = $file_data['company_id'];
+					$formData['project'] = $file_data['project_id'];
+					
+					$this->_flashMessenger->addMessage('File Removed');
+					if($file_data['task_id'] > 0)
+					{
+						return $this->redirect()->toRoute('tasks/view', array('task_id' => $file_data['task_id']));
+					}
+					
+	    			if($file_data['project_id'] > 0)
+					{
+						return $this->redirect()->toRoute('projects/view', array('project_id' => $file_data['project_id']));
+					}
+	
+	    			if($file_data['company_id'] > 0)
+					{
+						return $this->redirect()->toRoute('companies/view', array('company_id' => $file_data['company_id']));
+					}
+					
+					return $this->redirect()->toRoute('pm');
+	    		} 
+	    		else
+	    		{
+	    			$view['errors'] = array('Couldn\'t remove the file :(');
+	    		}
     		}
-    	}
     	
-    	$this->view->file = $file_data;
-    	
-		$this->view->headTitle('Delete File: '. $file_data['name'], 'PREPEND');
-		$this->view->id = $id;    	
+		}
+
+		$view['file_data'] = $file_data;
+		$view['id'] = $id;
+		$view['form'] = $form;
+		return $this->ajaxOutput($view);		
 	}
 	
 	public function addRevisionAction()
@@ -807,8 +806,9 @@ class FilesController extends AbstractPmController
 	}
 	
 	public function removeReviewAction()
-	{   		
-		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
+	{
+		$file = $this->getServiceLocator()->get('PM\Model\Files');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
 		$id = $this->_request->getParam('id', false);
 		$confirm = $this->_getParam("confirm",false);
 		$fail = $this->_getParam("fail",false);

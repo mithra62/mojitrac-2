@@ -470,7 +470,7 @@ return array(
         			'all' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/:type/:id',
+        					'route' => '/all/:type/:id',
         					'constraints' => array(
         						'id' => '[0-9]+'
         					),
