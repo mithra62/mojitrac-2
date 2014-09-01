@@ -26,7 +26,6 @@ use Application\Model\AbstractModel;
  */
 class Files extends AbstractModel
 {
-	
 	/**
 	 * The form validation filering
 	 * @var \Zend\InputFilter\InputFilter
@@ -48,6 +47,42 @@ class Files extends AbstractModel
 	{
 		parent::__construct($adapter, $db);
 	}
+    
+	/**
+	 * Returns an array for modifying $_name
+	 * @param $data
+	 * @return array
+	 */
+	public function getFileSQL($data){
+		return array(
+			'name' => $data['name'],
+			'description' => $data['description'],
+			'status' => $data['status'],
+			'creator' => $data['creator'],
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+	}
+	
+	/**
+	 * Returns an array for modifying $_name
+	 * @param $data
+	 * @return array
+	 */
+	public function getRevisionSQL($data){
+		return array(
+				'file_name' => $data['file_name'],
+				'stored_name' => $data['stored_name'],
+				'size' => $data['size'],
+				'extension' => $data['extension'],
+				'mime_type' => $data['mime_type'],
+				'description' => $data['description'],
+				'status' => $data['status'],
+				'approver' => $data['approver'],
+				'uploaded_by' => $data['uploaded_by'],
+				'approval_comment' => $data['approval_comment'],
+				'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		);
+	}	
 	
 	/**
 	 * Sets the input filter
@@ -169,7 +204,7 @@ class Files extends AbstractModel
 	 * Returns the File Form
 	 * @return object
 	 */
-	public function getFileForm($options = array(), $disable_file = FALSE)
+	public function getFileForm($options = array(), $disable_file = false)
 	{
         $form = new PM_Form_File($options, $disable_file);
         if(!$disable_file)
@@ -204,7 +239,7 @@ class Files extends AbstractModel
 	 * Returns an array of all unique album names with artist names
 	 * @return mixed
 	 */
-	public function getAllFiles($view_type = FALSE, array $where = null, array $not = null)
+	public function getAllFiles($view_type = false, array $where = null, array $not = null)
 	{
 		if($view_type)
 		{
@@ -321,47 +356,45 @@ class Files extends AbstractModel
 		
 	}	
 
-	
 	/**
-	 * Inserts or updates a File
-	 * @param $data
-	 * @param $file_info
-	 * @return mixed
+	 * Adds a file to the system
+	 * @param array $data
+	 * @param array $file_info
+	 * @param \PM\Model\Projects $project
+	 * @param \PM\Model\Tasks $task
+	 * @return boolean|unknown
 	 */
-	public function addFile($data, $file_info)
+	public function addFile($data, $file_info, \PM\Model\Projects $project = null, \PM\Model\Tasks $task = null)
 	{
-		$sql = $this->db->getSQL($data);
-		
-		$file_info = $file_info['file'];		
-		$path = $this->chmkdir($file_info['destination'], 
-					   $data['company'], 
-					   $data['project'], 
-					   $data['task']
+		$sql = $this->getFileSQL($data);
+		$path = $this->checkMakeDirectory($file_info['destination'], 
+					   $data['company_id'], 
+					   $data['project_id'], 
+					   $data['task_id']
 		);		
 		
 		$file_info['extension'] = $this->getFileExtension($file_info['tmp_name']);
-		$file_info['stored_name'] = mktime().'.'.$file_info['extension'];
+		$file_info['stored_name'] = time().'.'.$file_info['extension'];
 		$new_name = $path.DS.$file_info['stored_name'];
 		if(!rename($file_info['tmp_name'],$new_name))
 		{
-			return FALSE;
+			return false;
 		}
 		
-		$sql['company_id'] = (array_key_exists('company', $data) ? $data['company'] : 0);
-		$sql['project_id'] = (array_key_exists('project', $data) ? $data['project'] : 0);
-		$sql['task_id'] = (array_key_exists('task', $data) ? $data['task'] : 0);		
-		
-		if($data['file_id'] = $this->db->addFile($sql))
+		$sql['company_id'] = (array_key_exists('company_id', $data) ? $data['company_id'] : 0);
+		$sql['project_id'] = (array_key_exists('project_id', $data) ? $data['project_id'] : 0);
+		$sql['task_id'] = (array_key_exists('task_id', $data) ? $data['task_id'] : 0);
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
+		$data['file_id'] = $this->insert('files', $sql);
+		if($data['file_id'])
 		{
-			if(is_numeric($data['project_id']))
+			if(is_numeric($data['project_id']) && $project)
 			{
-				$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
 				$project->updateProjectFileCount($data['project_id'], 1, 'file_count');
 			}
 			
-			if(is_numeric($data['task_id']))
+			if(is_numeric($data['task_id']) && $task)
 			{
-				$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
 				$task->updateTaskFileCount($data['task_id'], 1, 'file_count');
 			}
 			
@@ -385,7 +418,7 @@ class Files extends AbstractModel
 	 * @param string $name
 	 * @param string $path
 	 */
-	public function processImage($name, $path, $image_data = FALSE)
+	public function processImage($name, $path, $image_data = false)
 	{
 		if(!$image_data)
 		{
@@ -398,17 +431,16 @@ class Files extends AbstractModel
 			$name = $imagick->convert_psd($path, $name, 'jpg');
 		}
 		
-		$imagick->resize_image($path.DS.$name, $path.DS.'mid_'.$name, 700, FALSE);
-		$imagick->resize_image($path.DS.$name, $path.DS.'tb_'.$name, 100, FALSE);
+		$imagick->resize_image($path.DS.$name, $path.DS.'mid_'.$name, 700, false);
+		$imagick->resize_image($path.DS.$name, $path.DS.'tb_'.$name, 100, false);
 	}
 	
 	public function addRevision($id, array $file_info)
 	{
-		$db = new PM_Model_DbTable_File_Revisions;
 		$file_info['file_name'] = $file_info['name'];
 		$data['size'] = $file_info['size'];
 		$file_info['mime_type'] = $file_info['type'];
-		$sql = $db->getSQL($file_info);
+		$sql = $this->getRevisionSQL($file_info);
 		$sql['file_id'] = $id;
 		
 		$image_check = getimagesize($file_info['stored_path'].DS.$file_info['stored_name']);
@@ -422,13 +454,7 @@ class Files extends AbstractModel
 			$this->processImage($file_info['stored_name'], $file_info['stored_path'], $image_check);
 		}
 		
-		$rev_id = $db->addFileRevision($sql);
-		if($rev_id)
-		{
-			$data = array('last_modified' => new Zend_Db_Expr('NOW()'));
-			$this->db->update($data, 'id = '. $id);
-			return $rev_id;
-		}
+		return $this->insert('file_revisions', $sql);
 	}
 	
 	public function addReview($data)
@@ -528,7 +554,7 @@ class Files extends AbstractModel
 	 * @param int $project_id
 	 * @param int $task_id
 	 */
-	public function chmkdir($start, $company_id, $project_id = FALSE, $task_id = FALSE)
+	public function checkMakeDirectory($start, $company_id, $project_id = false, $task_id = false)
 	{
 		$destination = $start.DS.$company_id;
 		if($project_id)
@@ -541,8 +567,7 @@ class Files extends AbstractModel
 			$destination = $destination.DS.$task_id;
 		}
 		
-		$utilities = new LambLib_Controller_Action_Helper_Utilities;
-		return $utilities->chkmkdir($destination);	
+		return $this->chkmkdir($destination);	
 	}
 
 	/**

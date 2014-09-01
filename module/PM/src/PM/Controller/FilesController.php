@@ -47,9 +47,9 @@ class FilesController extends AbstractPmController
      */
 	public function indexAction()
 	{
-		$company_id = $this->_request->getParam('company', FALSE);
-		$project_id = $this->_request->getParam('project', FALSE);
-		$task_id = $this->_request->getParam('task', FALSE);
+		$company_id = $this->_request->getParam('company', false);
+		$project_id = $this->_request->getParam('project', false);
+		$task_id = $this->_request->getParam('task', false);
 		$files = new PM_Model_Files(new PM_Model_DbTable_Files);
 		if($company_id)
 		{
@@ -62,7 +62,7 @@ class FilesController extends AbstractPmController
 			$company_data = $company->getCompanyById($company_id);
 			if(!$company_data)
 			{
-				$company_id = $company_data = FALSE;
+				$company_id = $company_data = false;
 				$this->view->files = $files->getAllFiles($view);
 			}			
 			
@@ -84,7 +84,7 @@ class FilesController extends AbstractPmController
 			$project_data = $project->getProjectById($project_id);
 			if(!$project_data)
 			{
-				$company_id = $company_data = FALSE;
+				$company_id = $company_data = false;
 				$this->view->files = $files->getAllFiles($view);
 			}
 			
@@ -113,7 +113,7 @@ class FilesController extends AbstractPmController
 			$task_data = $task->getTaskById($task_id);
 			if(!$task_data)
 			{
-				$company_id = $company_data = FALSE;
+				$company_id = $company_data = false;
 				$this->view->files = $files->getAllFiles($view);
 			}
 			
@@ -131,7 +131,7 @@ class FilesController extends AbstractPmController
 		}		
 		else
 		{	
-			$view = $this->_getParam("view",FALSE);
+			$view = $this->_getParam("view",false);
 			$this->view->active_sub = $view;
 		    $this->view->files = $files->getAllFiles($view);
 		}
@@ -184,7 +184,7 @@ class FilesController extends AbstractPmController
 	
 	public function downloadRevisionAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->_request->getParam('id', false);
 		if (!$id) {
 			$this->_helper->redirector('index','index');
 		}
@@ -221,9 +221,9 @@ class FilesController extends AbstractPmController
 	
 	public function previewRevisionAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
-		$view_type = $this->_request->getParam('view-type', FALSE);
-		$view_size = $this->_request->getParam('view-size', FALSE);
+		$id = $this->_request->getParam('id', false);
+		$view_type = $this->_request->getParam('view-type', false);
+		$view_size = $this->_request->getParam('view-size', false);
 		if (!$id) {
 			$this->_helper->redirector('index','index');
 			exit;
@@ -255,7 +255,7 @@ class FilesController extends AbstractPmController
 			}		
 		}
 		
-		$this->view->preview_exists = TRUE;
+		$this->view->preview_exists = true;
 		$root_path = $file->chmkdir($file->getStoragePath(), $file_data['company_id'], $file_data['project_id'], $file_data['task_id']);
 		if(file_exists($root_path.DS.$rev_data['stored_name']))
 		{
@@ -285,18 +285,18 @@ class FilesController extends AbstractPmController
 					}
 					else
 					{
-						$this->view->preview_exists = FALSE;
+						$this->view->preview_exists = false;
 					}
 				}
 			}
 			else
 			{
-				$this->view->preview_exists = FALSE;
+				$this->view->preview_exists = false;
 			}
 		}
 		else
 		{
-			$this->view->preview_exists = FALSE;
+			$this->view->preview_exists = false;
 		}
 		
 		if($view_type == 'html')
@@ -316,7 +316,7 @@ class FilesController extends AbstractPmController
 	public function viewReviewAction()
 	{
 		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->_request->getParam('id', false);
 		
 	    if(!$id)
     	{
@@ -345,7 +345,7 @@ class FilesController extends AbstractPmController
 	 */
 	public function editAction()
 	{
-		$id = $this->_request->getParam('id', FALSE);
+		$id = $this->_request->getParam('id', false);
 	    if(!$id)
         {
 			$this->_helper->redirector('index','index');
@@ -363,7 +363,7 @@ class FilesController extends AbstractPmController
 		$form = $file->getFileForm(array(
             'action' => '/pm/files/edit',
             'method' => 'post',
-        ), TRUE);
+        ), true);
         
         $form->populate($file_data);
 		
@@ -420,7 +420,7 @@ class FilesController extends AbstractPmController
 				return $this->redirect()->toRoute('companies');
 			}
 			
-			$view['company'] = $company_data;
+			$view['company_data'] = $company_data;
 		}
 
 		if($type == 'project') 
@@ -432,7 +432,7 @@ class FilesController extends AbstractPmController
 			{
 			    return $this->redirect()->toRoute('projects');
 			}
-			$view['project'] = $project_data;
+			$view['project_data'] = $project_data;
 		}
 
 		if($type == 'task') 
@@ -445,12 +445,13 @@ class FilesController extends AbstractPmController
 				return $this->residrect()->toRoute('tasks');
 			}
 			
-			$view['task'] = $task_data;
+			$view['task_data'] = $task_data;
 		}	
 				
 		$file = $this->getServiceLocator()->get('PM\Model\Files');
 		$form = $this->getServiceLocator()->get('PM\Form\FileForm');
 		$request = $this->getRequest();
+		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		if ($request->isPost()) 
 		{
 
@@ -468,39 +469,37 @@ class FilesController extends AbstractPmController
 				$adapter = $file->getFileTransferAdapter($formData['file_upload']['name']);			
 				if ($adapter->isValid())
 				{
-					echo 'Good';
-					exit;
-					if($form->file->receive()) //move the file to storage
+					if ($adapter->receive($formData['file_upload']['name']))
 					{
 						if(isset($project_data))
 						{
-							$formData['company'] = $project_data['company_id'];
+							$formData['company_id'] = $project_data['company_id'];
 						}
 						
 						if(isset($task_data))
 						{
-							$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-							$formData['project'] = $task_data['project_id'];
+							$project = $this->getServiceLocator()->get('PM\Model\Projects');
+							$formData['project_id'] = $task_data['project_id'];
+							$formData['task_id'] = $task_data['id'];
 							$temp = $project->getCompanyIdById($task_data['project_id']);
-							$formData['company'] = $temp['company_id'];
+							$formData['company_id'] = $temp['company_id'];
 						}
 										
-						$file_info = $form->file->getFileInfo();
+						$file_info = $adapter->getFileInfo('file_upload');
 						$formData['creator'] = $this->identity;	
 						$formData['owner'] = $this->identity;
 						$formData['uploaded_by'] = $this->identity;					
-						
-						if($id = $file->addFile($formData, $file_info))
+						$file_id = $file->addFile($formData, $file_info['file_upload']);
+						if($file_id)
 						{
-							PM_Model_ActivityLog::logFileAdd($formData, $id, $this->identity);
-							
-					    	$this->_flashMessenger->addMessage('File Added!');
-							$this->_helper->redirector('view','files', 'pm', array('id' => $id));					
-							exit;
+							//PM_Model_ActivityLog::logFileAdd($formData, $id, $this->identity);
+
+							$this->flashMessenger()->addMessage($translate('file_added', 'pm'));
+							return $this->redirect()->toRoute('files/view', array('file_id' => $file_id));
 						}
 						else
 						{
-							$this->view->errors = array('Couldn\'t upload file :(');
+							$view['file_errors'] = array('Couldn\'t upload file :(');
 						}
 					}		
 				} 
@@ -527,9 +526,9 @@ class FilesController extends AbstractPmController
 		echo 'fdsa';
 		exit;
 		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
+		$id = $this->_request->getParam('id', false);
+		$confirm = $this->_getParam("confirm",false);
+		$fail = $this->_getParam("fail",false);
 		
     	if(!$id)
     	{
@@ -595,7 +594,7 @@ class FilesController extends AbstractPmController
 	
 	public function addRevisionAction()
 	{
-		$file_id = $this->_getParam("file",FALSE);
+		$file_id = $this->_getParam("file",false);
 	    if(!$file_id)
     	{
 			$this->_helper->redirector('index','index');
@@ -644,7 +643,7 @@ class FilesController extends AbstractPmController
 					$new_name = $path.DS.$formData['stored_name'];
 					if(!rename($file_info['tmp_name'],$new_name))
 					{
-						return FALSE;
+						return false;
 					}	
 
 					$formData['stored_path'] = $path;	
@@ -695,7 +694,7 @@ class FilesController extends AbstractPmController
 	public function addReviewAction()
 	{
 		
-		$file_id = $this->_getParam("file",FALSE);
+		$file_id = $this->_getParam("file",false);
 	    if(!$file_id)
     	{
 			$this->_helper->redirector('index','index');
@@ -751,9 +750,9 @@ class FilesController extends AbstractPmController
 	public function removeRevisionAction()
 	{   		
 		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
+		$id = $this->_request->getParam('id', false);
+		$confirm = $this->_getParam("confirm",false);
+		$fail = $this->_getParam("fail",false);
 		
     	if(!$id)
     	{
@@ -810,9 +809,9 @@ class FilesController extends AbstractPmController
 	public function removeReviewAction()
 	{   		
 		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$id = $this->_request->getParam('id', FALSE);
-		$confirm = $this->_getParam("confirm",FALSE);
-		$fail = $this->_getParam("fail",FALSE);
+		$id = $this->_request->getParam('id', false);
+		$confirm = $this->_getParam("confirm",false);
+		$fail = $this->_getParam("fail",false);
 		
     	if(!$id)
     	{

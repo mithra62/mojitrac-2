@@ -45,6 +45,9 @@ return array(
 	//projects
 	'projects' => 'Projects',
 	'project_team_modified' => 'Project Team Modified',
+		
+	//files
+	'file_added' => 'File Added!',
 	
 	//input validation messages
 	'required' => 'Required',

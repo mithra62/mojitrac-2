@@ -477,4 +477,19 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	{
 		return realpath($path.'/../../../');
 	}
+	
+	/**
+	 * Creates all directories; works with arrays
+	 *
+	 * @param   mixed	$path	string and/or array
+	 * @return  mixed			FALSE on failure or string on success
+	 */
+	public function chkmkdir($path) 
+	{
+		if(!is_dir($path))
+		{
+			mkdir($path, 0755, TRUE);
+		}
+		return $path;
+	}	
 }

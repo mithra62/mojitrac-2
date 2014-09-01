@@ -38,27 +38,27 @@ if($this->id > 0)
 	<?php $name = $form->get('status'); echo $this->formRow($name); ?>
 </p>
 
-<?php if($this->company): ?>
+<?php if($this->company_data): ?>
 <p>
 	<label for="company_id" id="companies">Company</label>
 	<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'companies','action'=>'view', 'id' => $this->company['id']), null, TRUE); ?>"><?php echo $this->company['name']; ?></a>
-	<input type="hidden" name="company" value="<?php echo $this->company['id']; ?>" />
+	<input type="hidden" name="company_id" value="<?php echo $this->company_data['id']; ?>" />
 </p>
 <?php endif; ?>
 
-<?php if($this->project): ?>
+<?php if($this->project_data): _id?>
 <p>
 	<label for="project_id">Project</label>
 	<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'projects','action'=>'view', 'id' => $this->project['id']), null, TRUE); ?>"><?php echo $this->project['name']; ?></a>
-	<input type="hidden" name="project" value="<?php echo $this->project['id']; ?>" />
+	<input type="hidden" name="project_id" value="<?php echo $this->project_data['id']; ?>" />
 </p>
 <?php endif; ?>
 
-<?php if($this->task): ?>
+<?php if($this->task_data): ?>
 <p>
 	<label for="task_id">Task</label>
-	<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'tasks','action'=>'view', 'id' => $this->task['id']), null, TRUE); ?>"><?php echo $this->task['name']; ?></a>
-	<input type="hidden" name="task" value="<?php echo $this->task['id']; ?>" />
+	<a href="<?php echo $this->url('tasks/view', array('task_id' => $this->task_data['id'])); ?>"><?php echo $this->task_data['name']; ?></a>
+	<input type="hidden" name="task_id" value="<?php echo $this->task_data['id']; ?>" />
 </p>
 <?php endif; ?>
 
