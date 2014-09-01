@@ -95,6 +95,7 @@ class RevisionsController extends AbstractPmController
 
 		$file = $this->getServiceLocator()->get('PM\Model\Files');
 		$rev_data = $file->revision->getRevision($id);
+		
 		if (!$rev_data) {
 			return $this->redirect()->toRoute('pm');
 		}
@@ -118,7 +119,7 @@ class RevisionsController extends AbstractPmController
 		$download_path  = $download_path.DS.$rev_data['stored_name'];
 		if(file_exists($download_path) && is_readable($download_path))
 		{
-			return $this->downloadFile($download_path);
+			return $this->downloadFile($download_path, $rev_data['file_name']);
 		}
 		
 		$this->flashMessenger()->addErrorMessage($this->translate('file_not_found', 'pm'));

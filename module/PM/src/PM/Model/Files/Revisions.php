@@ -117,7 +117,7 @@ class Revisions extends AbstractModel
 		$file_info['file_name'] = $file_info['name'];
 		$data['size'] = $file_info['size'];
 		$file_info['mime_type'] = $file_info['type'];
-		$sql = $this->getRevisionSQL($file_info);
+		$sql = $this->getSQL($file_info);
 		$sql['file_id'] = $id;
 		
 		$image_check = getimagesize($file_info['stored_path'].DS.$file_info['stored_name']);

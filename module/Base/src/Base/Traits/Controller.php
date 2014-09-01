@@ -71,19 +71,16 @@ trait Controller
 		return $translate($lang, $domain);
 	}
 	
-	public function downloadFile($file)
+	public function downloadFile($file, $filename = null)
 	{
-		
-		echo $file;
-		exit;
 		$response = new \Zend\Http\Response\Stream();
 		$response->setStream(fopen($file, 'r'));
 		$response->setStatusCode(200);
 		
 		$headers = new \Zend\Http\Headers();
-		$headers->addHeaderLine('Content-Type', 'whatever your content type is')
-		->addHeaderLine('Content-Disposition', 'attachment; filename="' . $fileName . '"')
-		->addHeaderLine('Content-Length', filesize($fileName));
+		$headers->addHeaderLine('Content-Type', 'application/octet-stream')
+		->addHeaderLine('Content-Disposition', 'attachment; filename="' . $filename . '"')
+		->addHeaderLine('Content-Length', filesize($file));
 		
 		$response->setHeaders($headers);
 		return $response;		

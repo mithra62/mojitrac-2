@@ -304,7 +304,7 @@ class Files extends AbstractModel
 		$ext = $this->trigger(self::EventFileAddPre, $this, compact('data', 'file_info'), $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 		
-		$sql = $this->getFileSQL($data);
+		$sql = $this->getSQL($data);
 		$path = $this->checkMakeDirectory($file_info['destination'], 
 					   $data['company_id'], 
 					   $data['project_id'], 
