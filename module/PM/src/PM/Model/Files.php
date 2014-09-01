@@ -362,10 +362,13 @@ class Files extends AbstractModel
 	 * @param array $file_info
 	 * @param \PM\Model\Projects $project
 	 * @param \PM\Model\Tasks $task
-	 * @return boolean|unknown
+	 * @return boolean|int
 	 */
 	public function addFile($data, $file_info, \PM\Model\Projects $project = null, \PM\Model\Tasks $task = null)
 	{
+		$ext = $this->trigger(self::EventFileAddPre, $this, compact('data', 'file_info'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+		
 		$sql = $this->getFileSQL($data);
 		$path = $this->checkMakeDirectory($file_info['destination'], 
 					   $data['company_id'], 
@@ -385,6 +388,7 @@ class Files extends AbstractModel
 		$sql['project_id'] = (array_key_exists('project_id', $data) ? $data['project_id'] : 0);
 		$sql['task_id'] = (array_key_exists('task_id', $data) ? $data['task_id'] : 0);
 		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
+		
 		$data['file_id'] = $this->insert('files', $sql);
 		if($data['file_id'])
 		{
@@ -402,13 +406,11 @@ class Files extends AbstractModel
 			$file_info['status'] = $data['status'];
 			$file_info['uploaded_by'] = $data['uploaded_by'];
 			$file_info['stored_path'] = $path;
-			$file_info['revision_id'] = $this->addRevision($data['file_id'], $file_info);
-			if($file_info['revision_id'] && isset($data['project']))
-			{
-				$noti = new PM_Model_Notifications;
-				$noti->sendFileAdd($data, $file_info);					
-			}			
+			$file_info['revision_id'] = $this->addRevision($data['file_id'], $file_info);		
 		}
+		
+		$ext = $this->trigger(self::EventFileAddPost, $this, compact('file_id', 'data', 'file_info'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data['file_id'] = $ext->last();
 				
 		return $data['file_id'];
 	}
@@ -497,7 +499,7 @@ class Files extends AbstractModel
 	
 	
 	/**
-	 * Updates a company
+	 * Updates a file
 	 * @param array $data
 	 * @param int	 $id
 	 * @return bool
@@ -509,23 +511,29 @@ class Files extends AbstractModel
 	}
 	
 	/**
-	 * Handles everything for a campaign to stop tracking a Last.fm Album Profile.
+	 * Removes a file from the system
 	 * @param $id
 	 * @return bool
 	 */
-	public function removeFile($id)
+	public function removeFile($file_id)
 	{
-		$delete = $this->remove('files', array('id' => $id));
+		$ext = $this->trigger(self::EventFileRemovePre, $this, compact('file_id'), $this->setXhooks(array()));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $file_id = $ext->last();
+		
+		$delete = $this->remove('files', array('id' => $file_id));
 		if($delete)
 		{
-			$this->remove('file_revisions', array('file_id' => $id));
+			$this->remove('file_revisions', array('file_id' => $file_id));
 		}
+
+		$ext = $this->trigger(self::EventFileRemovePost, $this, compact('file_id'), $this->setXhooks(array()));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $delete = $ext->last();
 		
 		return $delete;
 	}
 	
 	/**
-	 * Removes all the tasks for the given $company_id
+	 * Removes all the files for the given $company_id
 	 * @param int $company_id
 	 * @return bool
 	 */
