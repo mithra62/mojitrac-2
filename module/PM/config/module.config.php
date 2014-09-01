@@ -409,13 +409,14 @@ return array(
         			'download-revision' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/download-revision/:revision_id',
+        					'route' => '/revision/download/:revision_id',
         					'constraints' => array(
         						'file_id' => '[0-9]+',
         						'revision_id' => '[0-9]+'
         					),
         					'defaults' => array(
-        						'action' => 'downloadRevision'
+        						'controller' => 'PM\Controller\FileRevisions',
+        						'action' => 'download'
         					)
         				)
         			),    			
@@ -446,11 +447,12 @@ return array(
         			'add-revision' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/add-revision/:file_id',
+        					'route' => '/revision/add/:file_id',
         					'constraints' => array(
         						'file_id' => '[0-9]+'
         					),
         					'defaults' => array(
+        						'controller' => 'PM\Controller\FileRevisions',
         						'action' => 'addRevision'
         					)
         				)
@@ -1161,6 +1163,7 @@ return array(
             'PM\Controller\Contacts' => 'PM\Controller\ContactsController',
             'PM\Controller\Docs' => 'PM\Controller\DocsController',
             'PM\Controller\Files' => 'PM\Controller\FilesController',
+            'PM\Controller\FileRevisions' => 'PM\Controller\Files\RevisionsController',
             'PM\Controller\Import' => 'PM\Controller\ImportController',
             'PM\Controller\Index' => 'PM\Controller\IndexController',
             'PM\Controller\Ips' => 'PM\Controller\IpsController',

@@ -2,7 +2,6 @@
 /**
  * mithra62 - MojiTrac
 *
-* @package		mithra62:Mojitrac
 * @author		Eric Lamb
 * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
 * @link			http://mithra62.com/
@@ -18,18 +17,25 @@ use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 use Hal\Resource;
 use Hal\Link;
+use Base\Traits\Controller AS BaseControllerTrait;
+use PM\Traits\Controller AS PMControllerTrait;
 
 /**
  * Api - Abstract Controller
  *
  * Sets all the global functionality up for the REST API
  *
- * @package 	mithra62:Mojitrac
+ * @package 	MojiTrac
  * @author		Eric Lamb
  * @filesource 	./module/Api/src/Api/Controller/AbstractRestfulJsonController.php
  */
 class AbstractRestfulJsonController extends AbstractRestfulController
 {
+	/**
+	 * Setup the Traits we're using
+	 */
+	use BaseControllerTrait, PMControllerTrait;
+	
 	/**
 	 * Session
 	 * @var object
@@ -115,23 +121,6 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 	}
 	
 	/**
-	 * Setup the Events we're gonna piggyback on
-	 * 
-	 * Note, we have to implement the other module events since we can't extend the Base\Controller
-	 * 
-	 * @todo Abstract the registering of events
-	 */
-	private function _initEvents()
-	{
-		//setup the Activity Log
-		$al = $this->getServiceLocator()->get('PM\Event\ActivityLogEvent');
-		$al->register($this->getEventManager()->getSharedManager());
-	
-		$al = $this->getServiceLocator()->get('PM\Event\NotificationEvent');
-		$al->register($this->getEventManager()->getSharedManager());
-	}
-	
-	/**
 	 * (non-PHPdoc)
 	 * @see \Zend\Mvc\Controller\AbstractController::setEventManager()
 	 */
@@ -179,53 +168,6 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 
 		return TRUE;
 	}
-	
-	/**
-	 * Start up the preferences and settings overrides
-	 */
-	protected function _initPrefs()
-	{
-		$ud = $this->getServiceLocator()->get('Application\Model\User\Data');
-		$this->prefs = $ud->getUsersData($this->identity);
-		foreach($this->settings AS $key => $value)
-		{
-			if(isset($this->prefs[$key]) && $this->prefs[$key] != '')
-			{
-				$this->settings[$key] = $this->prefs[$key];
-			}
-			else
-			{
-				$this->prefs[$key] = $this->settings[$key];
-			}
-		}
-	}
-	
-	public function getAuthService()
-	{
-		if (! $this->authservice) {
-			$this->authservice = $this->getServiceLocator()->get('AuthService');
-		}
-	
-		return $this->authservice;
-	}
-	
-	public function getSessionStorage()
-	{
-		if (! $this->storage) {
-			$this->storage = $this->getServiceLocator()->get('Application\Model\Auth\AuthStorage');
-		}
-	
-		return $this->storage;
-	}
-	
-	public function getAdapter()
-	{
-		if (!$this->adapter) {
-			$sm = $this->getServiceLocator();
-			$this->adapter = $sm->get('Zend\Db\Adapter\Adapter');
-		}
-		return $this->adapter;
-	}	
 	
 	/**
 	 * Creates the HAL Collection object for output

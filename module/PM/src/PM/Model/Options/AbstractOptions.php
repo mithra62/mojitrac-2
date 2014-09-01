@@ -1,8 +1,7 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
@@ -15,7 +14,7 @@ namespace PM\Model\Options;
 /**
  * PM - Abstract Options Object
  *
- * @package 	mithra62:Mojitrac
+ * @package 	Options
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/Model/Options/AbstractOptions.php
  */

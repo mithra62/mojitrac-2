@@ -12,6 +12,7 @@
 namespace PM\Controller;
 
 use Application\Controller\AbstractController;
+use PM\Traits\Controller AS PMController;
 
 /**
  * PM - AbstractPmController Controller
@@ -22,6 +23,7 @@ use Application\Controller\AbstractController;
  */
 abstract class AbstractPmController extends AbstractController
 {	
+	use PMController;
 	/**
 	 * Session
 	 * @var object
@@ -77,20 +79,6 @@ abstract class AbstractPmController extends AbstractController
 		
 		return parent::onDispatch( $e );
 	}
-
-	/**
-	 * Sets up the built-in PM Events
-	 * @return void
-	 */
-	private function _initEvents()
-	{
-		//setup the Activity Log
-		$al = $this->getServiceLocator()->get('PM\Event\ActivityLogEvent');
-		$al->register($this->getEventManager()->getSharedManager());
-		
-		$al = $this->getServiceLocator()->get('PM\Event\NotificationEvent');
-		$al->register($this->getEventManager()->getSharedManager());				
-	}
 	
 	/**
 	 * Provides oversight on permission dependant requsts
@@ -113,39 +101,4 @@ abstract class AbstractPmController extends AbstractController
 			}
 		}
 	}
-	
-	/**
-	 * Start up the IP Blocker
-	 */
-	protected function _initIpBlocker()
-	{
-		if(!empty($this->settings['enable_ip']) && $this->settings['enable_ip'] == '1')
-		{
-			$ip = $this->getServiceLocator()->get('PM\Model\Ips');
-			if(!$ip->isAllowed($_SERVER['REMOTE_ADDR']))
-			{
-				exit;
-			}
-		}
-	}
-	
-	/**
-	 * Start up the preferences and settings overrides
-	 */
-	protected function _initPrefs()
-	{
-		$ud = $this->getServiceLocator()->get('Application\Model\User\Data');
-		$this->prefs = $ud->getUsersData($this->identity);
-		foreach($this->settings AS $key => $value)
-		{
-			if(isset($this->prefs[$key]) && $this->prefs[$key] != '')
-			{
-				$this->settings[$key] = $this->prefs[$key];
-			}
-			else
-			{
-				$this->prefs[$key] = $this->settings[$key];
-			}
-		}
-	}	
 }

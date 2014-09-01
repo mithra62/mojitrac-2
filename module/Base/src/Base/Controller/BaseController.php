@@ -13,6 +13,7 @@ namespace Base\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Base\Traits\Controller AS ControllerTrait;
 
 /**
  * Base - Controller
@@ -27,27 +28,16 @@ use Zend\View\Model\ViewModel;
 abstract class BaseController extends AbstractActionController
 {
 	/**
+	 * Grab the global trait goodness...
+	 */
+	use ControllerTrait;
+	
+	/**
 	 * ZF Config
 	 * Contains the entire compiled configuration 
 	 * @var Array
 	 */
 	public $config = array();
-	
-	/**
-	 * The database adapter connection
-	 * @var \Zend\Db\Adapter\Adapter
-	 */
-	protected $adapter;
-	
-	/**
-	 * The actual SQL object for making queries with 
-	 * @var object
-	 */
-	protected $db;
-	
-	protected $authservice;
-	
-	protected $storage;
 	
 	/**
 	 * Sets up the Controller defaults
@@ -58,33 +48,6 @@ abstract class BaseController extends AbstractActionController
 		$this->config = $this->getServiceLocator()->get('Config');	
 		$this->identity = $this->getServiceLocator()->get('AuthService')->getIdentity();
 		return parent::onDispatch( $e );
-	}
-	
-	public function getAuthService()
-	{
-		if (! $this->authservice ) {
-			$this->authservice = $this->getServiceLocator()->get('AuthService');
-		}
-	
-		return $this->authservice;
-	}
-	
-	public function getSessionStorage()
-	{
-		if (! $this->storage) {
-			$this->storage = $this->getServiceLocator()->get('Application\Model\Auth\AuthStorage');
-		}
-	
-		return $this->storage;
-	}	
-	
-	public function getAdapter()
-	{
-		if (!$this->adapter) {
-			$sm = $this->getServiceLocator();
-			$this->adapter = $sm->get('Zend\Db\Adapter\Adapter');
-		}
-		return $this->adapter;
 	}
 	
 	/**

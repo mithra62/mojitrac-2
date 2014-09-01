@@ -2,9 +2,9 @@
 	<div class="file_header">Edit File</div>		
 </div>
 <?php 
-$options = array('id' => $this->id, 'controller' => 'files', 'name' => $this->file_data['name'], 'action' => 'view');
+$options = array('id' => $this->id, 'file' => $this->file_data, 'name' => $this->file_data['name'], 'action' => 'view');
 echo $this->BackToLink($options); 
 
-$options = array('form' => $this->form, 'id' => $this->id);
-echo $this->partial('files/partials/form.phtml', $options); 
+$options = array('form' => $this->form, 'id' => $this->id, 'form_action' => $this->form_action);
+echo $this->partial('pm/files/partials/form.phtml', $options); 
 ?>

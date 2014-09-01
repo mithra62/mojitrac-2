@@ -14,7 +14,7 @@ namespace PM\Model\Options;
 /**
  * PM - Projects Options Model
  *
- * @package 	Options\Projects
+ * @package 	Projects\Options
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/Model/Options/Projects.php
  */

@@ -108,33 +108,17 @@ class Files extends AbstractModel
 					array('name' => 'StringTrim'),
 				),
 			)));
-			
-			$inputFilter->add(
-				$factory->createInput(array(
-					'name'     => 'file_upload',
-					'required' => true,
-                            'messages' => array(
-                                \Zend\Validator\NotEmpty::IS_EMPTY => 'fdsafdsa'
-                            ),
-				))
-			);			
-			
-			/*
+
 			if($file_field)
 			{
-				$fileInput = new FileInput('file_upload');
-				$fileInput->setRequired(true);
-				$fileInput->getValidatorChain()->attach(new \Zend\Validator\File\UploadFile());
-				$fileInput->getFilterChain()->attachByName(
-					'filerenameupload',
-					array(
-						'target'    => './data/tmpuploads/avatar.png',
-						'randomize' => true,
-					)
-				);				
-				$inputFilter->add($fileInput);
-			}
-			*/
+				$inputFilter->add($factory->createInput(array(
+					'name'     => 'file_upload',
+					'required' => true,
+					'messages' => array(
+	                	\Zend\Validator\NotEmpty::IS_EMPTY => 'fdsafdsa'
+					),
+				)));	
+			}	
 			
 	
 			$this->input_filter = $inputFilter;
@@ -506,8 +490,8 @@ class Files extends AbstractModel
 	 */
 	public function updateFile($data, $id)
 	{
-		$sql = $this->db->getSQL($data);
-		return $this->db->update($sql, "id = '$id'");
+		$sql = $this->getFileSQL($data);
+		return $this->update('files', $sql, array('id' => $id));
 	}
 	
 	/**

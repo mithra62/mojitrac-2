@@ -17,13 +17,20 @@ use PM\Model\Options\AbstractOptions;
 /**
  * PM - Project Team Options Model
  *
- * @package 	mithra62:Mojitrac
+ * @package 	Projects\Options
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/Model/Options/Project/Team.php
  */
 class Team extends AbstractOptions
 {	
-	static public function team($project, $project_id, $blank = FALSE)
+	/**
+	 * Creates an array of a Project team
+	 * @param \PM\Model\Projects $project
+	 * @param int $project_id
+	 * @param string $blank
+	 * @return multitype:string
+	 */
+	static public function team(\PM\Model\Projects $project, $project_id, $blank = FALSE)
 	{
 		$arr = $project->getProjectTeamMembers($project_id);
 		$_new = array();

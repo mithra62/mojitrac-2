@@ -48,6 +48,8 @@ return array(
 		
 	//files
 	'file_added' => 'File Added!',
+	'file_removed' => 'File Removed!',
+	'file_updated' => 'File Updated!',
 	
 	//input validation messages
 	'required' => 'Required',
