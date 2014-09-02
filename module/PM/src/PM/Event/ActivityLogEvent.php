@@ -61,6 +61,7 @@ class ActivityLogEvent extends BaseEvent
     	'bookmark.remove.pre' => 'logBookmarkRemove',
     	'file.add.post' => 'logFileAdd',
     	'file.update.post' => 'logFileUpdate',
+    	'file.remove.pre' => 'logFileRemove'
     );
     
     /**
@@ -326,15 +327,15 @@ class ActivityLogEvent extends BaseEvent
 	
 	/**
 	 * Wrapper to log a file removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * @param \Zend\EventManager\Event $event
 	 */
-	public function logFileRemove(array $data, $id, $performed_by)
+	public function logFileRemove(\Zend\EventManager\Event $event)
 	{
-		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'file_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $id);
+		$file_id = $event->getParam('file_id');
+		$file = $event->getTarget();
+		$file_data = $file->getFileById($file_id);
+		$data = array('stuff' => $file_data, 'file_id' => $file_id, 'project_id' => $file_data['project_id'], 'company_id' => $file_data['company_id'], 'task_id' => $file_data['task_id'], 'type' => 'file_remove', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);
 	}
 	
 	/**
