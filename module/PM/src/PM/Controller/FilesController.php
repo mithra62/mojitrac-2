@@ -229,10 +229,13 @@ class FilesController extends AbstractPmController
 		$type = $this->params()->fromRoute('type');
 		$view = array();
 		$view['file_errors'] = false;
+		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+		$company = $this->getServiceLocator()->get('PM\Model\Companies');
+		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+		
 		if($type == 'company') 
 		{
 			$company_id = $id;
-			$company = $this->getServiceLocator()->get('PM\Model\Companies');
 			$company_data = $company->getCompanyById($company_id);
 			if(!$company_data)
 			{
@@ -245,7 +248,6 @@ class FilesController extends AbstractPmController
 		if($type == 'project') 
 		{
 		    $project_id = $id;
-			$project = $this->getServiceLocator()->get('PM\Model\Projects');
 			$project_data = $project->getProjectById($project_id);
 			if(!$project_data)
 			{
@@ -257,7 +259,6 @@ class FilesController extends AbstractPmController
 		if($type == 'task') 
 		{
 		    $task_id = $id;
-			$task = $this->getServiceLocator()->get('PM\Model\Tasks');
 			$task_data = $task->getTaskById($task_id);
 			if(!$task_data)
 			{
@@ -306,7 +307,7 @@ class FilesController extends AbstractPmController
 						$formData['creator'] = $this->identity;	
 						$formData['owner'] = $this->identity;
 						$formData['uploaded_by'] = $this->identity;					
-						$file_id = $file->addFile($formData, $file_info['file_upload']);
+						$file_id = $file->addFile($formData, $file_info['file_upload'], $project, $task);
 						if($file_id)
 						{
 							$this->flashMessenger()->addMessage($translate('file_added', 'pm'));

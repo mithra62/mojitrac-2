@@ -128,7 +128,7 @@ class Revisions extends AbstractModel
 				$sql['mime_type'] = $image_check['mime'];
 			}
 			
-			$this->processImage($file_info['stored_name'], $file_info['stored_path'], $image_check);
+			//$this->processImage($file_info['stored_name'], $file_info['stored_path'], $image_check);
 		}
 		
 		return $this->insert('file_revisions', $sql);

@@ -329,7 +329,7 @@ class Files extends AbstractModel
 		$sql['task_id'] = (array_key_exists('task_id', $data) ? $data['task_id'] : 0);
 		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 		
-		$data['file_id'] = $this->insert('files', $sql);
+		$data['file_id'] = $file_id = $this->insert('files', $sql);
 		if($data['file_id'])
 		{
 			if(is_numeric($data['project_id']) && $project)

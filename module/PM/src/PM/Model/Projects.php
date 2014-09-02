@@ -385,7 +385,7 @@ class Projects extends AbstractModel
 	public function updateProjectFileCount($id, $count = 1, $col = 'task_count')
 	{
 		$sql = array($col => new \Zend\Db\Sql\Expression($col.'+'.$count));
-		return $this->db->updateProject($sql, $id);
+		return $this->update('projects', $sql, array('id' => $id));
 	}	
 	
 	/**

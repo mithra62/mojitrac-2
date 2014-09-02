@@ -244,7 +244,7 @@ class DashboardTimeline extends BaseViewHelper
 				case 'file_update':
 					if(isset($data['file_name']) && $data['file_name'] != '')
 					{
-						return $this->view->url('pm', array('module'=> 'pm', 'controller'=>'files','action'=>'view', 'id' => $data['file_id']), null, TRUE);
+						return $this->view->url('files/view', array('file_id' => $data['file_id']));
 					} 
 					$data['stuff'] = \Zend\Json\Json::decode($data['stuff'], \Zend\Json\Json::TYPE_ARRAY);
 

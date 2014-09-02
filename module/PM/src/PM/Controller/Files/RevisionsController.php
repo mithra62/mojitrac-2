@@ -219,32 +219,6 @@ class RevisionsController extends AbstractPmController
 		$this->view->rev_data = $rev_data;
 		$this->view->file_reviews = $file->getReviewsByRevisionId($id);
 	}
-
-	public function viewReviewAction()
-	{
-		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$id = $this->_request->getParam('id', false);
-		
-	    if(!$id)
-    	{
-    		$this->_helper->redirector('index','index');
-    		exit;
-    	}
-    	
-    	$review_data = $file->getReviewById($id);
-    	if(!$review_data)
-    	{
-			$this->_helper->redirector('index','index');
-			exit;
-    	}
-    	
-    	$revision_data = $file->getRevision($review_data['revision_id']);
-    	$file_data = $file->getFileById($review_data['file_id']);
-    	
-    	$this->view->file_data = $file_data;
-    	$this->view->review_data = $review_data;
-    	$this->view->revision_data = $revision_data;
-	}
 	
 	/**
 	 * File Edit Page
@@ -588,62 +562,6 @@ class RevisionsController extends AbstractPmController
 		$this->view->form = $form;		
 	}
 	
-	public function addReviewAction()
-	{
-		
-		$file_id = $this->_getParam("file",false);
-	    if(!$file_id)
-    	{
-			$this->_helper->redirector('index','index');
-			exit;
-    	}		
-		
-    	$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$file_data = $file->getFileById($file_id);		
-		if(!$file_data)
-    	{
-			$this->_helper->redirector('index','index');
-			exit;
-    	}
-    	
-    	$file_revisions = $file->getFileRevisions($file_id);
-    	
-		$form = $file->getFileReviewForm(array(
-            'action' => '/pm/files/add-review/file/'.$file_id,
-            'method' => 'post',
-        ));
-        
-        if ($this->getRequest()->isPost()) 
-		{	
-    		$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData)) 
-			{
-				$formData['file_id'] = $file_id;
-				$formData['reviewer_id'] = $this->identity;
-				if($id = $file->addReview($formData))
-				{
-	    			$file_data = $file->getFileById($formData['file_id']);
-					$formData['task'] = $file_data['task_id'];
-					$formData['company'] = $file_data['company_id'];
-					$formData['project'] = $file_data['project_id'];
-					$formData['revision_id'] = $formData['review_revision'];
-					PM_Model_ActivityLog::logFileReviewAdd($formData, $id, $this->identity);
-					
-					$this->_flashMessenger->addMessage('Review Added');
-					$this->_helper->redirector('view','files', 'pm', array('id' => $file_id));
-					exit;
-				}
-			}
-		}        
-        
-        $this->view->file = $file_data;
-        $this->view->file_revisions = $file_revisions;
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		
-		$this->view->headTitle('Add File Review', 'PREPEND');
-		$this->view->form = $form;			
-	}
-	
 	public function removeRevisionAction()
 	{   		
 		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
@@ -702,57 +620,4 @@ class RevisionsController extends AbstractPmController
 		$this->view->headTitle('Delete File Revision: '. $rev_data['file_name'], 'PREPEND');
 		$this->view->id = $id;    	
 	}
-	
-	public function removeReviewAction()
-	{
-		$file = $this->getServiceLocator()->get('PM\Model\Files');
-		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
-		$id = $this->_request->getParam('id', false);
-		$confirm = $this->_getParam("confirm",false);
-		$fail = $this->_getParam("fail",false);
-		
-    	if(!$id)
-    	{
-    		$this->_helper->redirector('index','index');
-    		exit;
-    	}
-    	
-    	$review_data = $file->getReviewById($id);
-    	if(!$review_data)
-    	{
-			$this->_helper->redirector('index','index');
-			exit;
-    	}
-    	
-    	if ($this->getRequest()->isPost()) 
-		{    	
-	    	if($fail)
-	    	{
-				$this->_helper->redirector('view','files', 'pm', array('id' => $review_data['file_id']));
-				exit;   		
-	    	}
-				    	
-	    	if($confirm)
-	    	{   		
-	    	   	if($file->removeReview($id))
-	    		{	
-					
-	    			$file_data = $file->getFileById($review_data['file_id']);
-					$review_data['task'] = $file_data['task_id'];
-					$review_data['company'] = $file_data['company_id'];
-					$review_data['project'] = $file_data['project_id'];
-					PM_Model_ActivityLog::logFileReviewRemove($review_data, $id, $this->identity);
-	    			
-					$this->_flashMessenger->addMessage('Review Removed');
-					$this->_helper->redirector('view','files', 'pm', array('id' => $review_data['file_id']));
-					exit;
-					
-	    		} 
-	    	}
-		}
-    	    	
-    	$this->view->file = $review_data;
-		$this->view->headTitle('Delete File Review: '. $review_data['file_name'], 'PREPEND');
-		$this->view->id = $id;    	
-	}	
 }
