@@ -406,10 +406,18 @@ class Files extends AbstractModel
 	 * @param int	 $id
 	 * @return bool
 	 */
-	public function updateFile($data, $id)
+	public function updateFile($data, $file_id)
 	{
-		$sql = $this->getFileSQL($data);
-		return $this->update('files', $sql, array('id' => $id));
+		$ext = $this->trigger(self::EventFileUpdatePre, $this, compact('file_id', 'data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+				
+		$sql = $this->getSQL($data);
+		$update = $this->update('files', $sql, array('id' => $file_id));
+
+		$ext = $this->trigger(self::EventFileUpdatePost, $this, compact('file_id', 'data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $update = $ext->last();
+		
+		return $update;
 	}
 	
 	/**

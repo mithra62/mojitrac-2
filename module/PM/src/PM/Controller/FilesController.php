@@ -196,6 +196,7 @@ class FilesController extends AbstractPmController
 			$form->setData($formData);
 			if ($form->isValid()) 
 			{	
+				$formData = $formData->toArray();
 				$formData['creator'] = $this->identity;
 			    if($file->updateFile($formData, $id))
 	            {
@@ -204,7 +205,7 @@ class FilesController extends AbstractPmController
             	} 
             	else 
             	{
-            		$this->view->errors = array('Couldn\'t update file...');
+            		$view['errors'] = array('Couldn\'t update file...');
             	}
 			}
 		}

@@ -60,6 +60,7 @@ class ActivityLogEvent extends BaseEvent
     	'bookmark.update.post' => 'logBookmarkUpdate',
     	'bookmark.remove.pre' => 'logBookmarkRemove',
     	'file.add.post' => 'logFileAdd',
+    	'file.update.post' => 'logFileUpdate',
     );
     
     /**
@@ -312,15 +313,15 @@ class ActivityLogEvent extends BaseEvent
 	
 	/**
 	 * Wrapper to log a file update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * @param \Zend\EventManager\Event $event
 	 */
-	public function logFileUpdate(array $data, $id, $performed_by)
+	public function logFileUpdate(\Zend\EventManager\Event $event)
 	{
-		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'file_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $id);
+		$file_id = $event->getParam('file_id');
+		$file = $event->getTarget();
+		$file_data = $file->getFileById($file_id);
+		$data = array('stuff' => $file_data, 'file_id' => $file_id, 'project_id' => $file_data['project_id'], 'company_id' => $file_data['company_id'], 'task_id' => $file_data['task_id'], 'type' => 'file_update', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);
 	}
 	
 	/**
