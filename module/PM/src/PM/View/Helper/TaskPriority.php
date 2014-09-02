@@ -17,7 +17,7 @@ use PM\Model\Options\Projects;
  /**
  * PM - Task Priority View Helper
  *
- * @package 	ViewHelpers\Tasks
+ * @package 	Tasks\ViewHelpers
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/View/Helper/TaskPriority.php
  */

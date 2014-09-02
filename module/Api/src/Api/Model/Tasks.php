@@ -1,9 +1,8 @@
 <?php
  /**
  * mithra62 - MojiTrac
- *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * 
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014 mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -17,8 +16,8 @@ use PM\Model\Tasks as PmTasks;
 /**
  * Api - Tasks Model
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	Tasks\Rest
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Api/src/Api/Model/Tasks.php
  */
 class Tasks extends PmTasks

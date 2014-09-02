@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Form/TaskForm.php
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Form/TaskForm.php
 */
 
 namespace PM\Form;
@@ -22,8 +21,8 @@ use PM\Model\Options\Project\Team;
 *
 * Generates the Note form
 *
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
+* @package 		Tasks
+* @author		Eric Lamb <eric@mithra62.com>
 * @filesource 	./module/PM/src/PM/Form/TaskForm.php
 */
 class TaskForm extends BaseForm

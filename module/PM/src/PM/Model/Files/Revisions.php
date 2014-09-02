@@ -2,11 +2,11 @@
  /**
  * mithra62 - MojiTrac
  *
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/src/PM/Model/Files.php
+ * @filesource 	./module/PM/src/PM/Model/Files/Revisions.php
  */
 
 namespace PM\Model\Files;
@@ -20,9 +20,9 @@ use Application\Model\AbstractModel;
  /**
  * PM - Files Model
  *
- * @package 	Files
- * @author		Eric Lamb
- * @filesource 	./module/PM/src/PM/Model/Files.php
+ * @package 	Files\Revisions
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Model/Files/Revisions.php
  */
 class Revisions extends AbstractModel
 {

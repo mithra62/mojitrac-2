@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/Api/src/Api/Controller/IndexController.php
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link			http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/Api/src/Api/Controller/IndexController.php
 */
 
 namespace Api\Controller;
@@ -21,7 +20,7 @@ use Zend\View\Model\JsonModel;
  * General API Interaction Controller
  *
  * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Api/src/Api/Controller/IndexController.php
  */
 class IndexController extends AbstractRestfulJsonController

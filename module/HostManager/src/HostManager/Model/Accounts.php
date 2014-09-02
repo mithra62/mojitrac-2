@@ -1,9 +1,8 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -20,8 +19,8 @@ use Application\Model\AbstractModel;
  /**
  * HostManager - Accounts Model
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	HostManager
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/HostManager/src/HostManager/Model/Accounts.php
  */
 class Accounts extends AbstractModel

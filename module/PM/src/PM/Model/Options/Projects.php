@@ -2,7 +2,7 @@
 /**
  * mithra62 - MojiTrac
  *
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -15,7 +15,7 @@ namespace PM\Model\Options;
  * PM - Projects Options Model
  *
  * @package 	Projects\Options
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Model/Options/Projects.php
  */
 class Projects extends AbstractOptions

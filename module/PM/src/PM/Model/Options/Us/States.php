@@ -2,8 +2,7 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -13,10 +12,10 @@
 namespace PM\Model\Options\Us;
 
 /**
- * PM - Companies Options Model
+ * PM - US States Options Model
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	Options\UsStates
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Model/Options/Us/States.php
  */
 class States

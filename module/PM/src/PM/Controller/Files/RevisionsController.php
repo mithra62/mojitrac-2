@@ -126,7 +126,7 @@ class RevisionsController extends AbstractPmController
 		return $this->redirect()->toRoute('files/view', array('file_id' => $rev_data['file_id']));  	  
 	}
 	
-	public function previewRevisionAction()
+	public function previewAction()
 	{
 		$id = $this->_request->getParam('id', false);
 		$view_type = $this->_request->getParam('view-type', false);
@@ -273,212 +273,19 @@ class RevisionsController extends AbstractPmController
 		return $this->ajaxOutput($view);
 	}
 	
-	/**
-	 * File Add Page
-	 * @return void
-	 */
 	public function addAction()
 	{
-		$id = $this->params()->fromRoute('id');
-		$type = $this->params()->fromRoute('type');
-		$view = array();
-		$view['file_errors'] = false;
-		if($type == 'company') 
-		{
-			$company_id = $id;
-			$company = $this->getServiceLocator()->get('PM\Model\Companies');
-			$company_data = $company->getCompanyById($company_id);
-			if(!$company_data)
-			{
-				return $this->redirect()->toRoute('companies');
-			}
-			
-			$view['company_data'] = $company_data;
-		}
-
-		if($type == 'project') 
-		{
-		    $project_id = $id;
-			$project = $this->getServiceLocator()->get('PM\Model\Projects');
-			$project_data = $project->getProjectById($project_id);
-			if(!$project_data)
-			{
-			    return $this->redirect()->toRoute('projects');
-			}
-			$view['project_data'] = $project_data;
-		}
-
-		if($type == 'task') 
-		{
-		    $task_id = $id;
-			$task = $this->getServiceLocator()->get('PM\Model\Tasks');
-			$task_data = $task->getTaskById($task_id);
-			if(!$task_data)
-			{
-				return $this->residrect()->toRoute('tasks');
-			}
-			
-			$view['task_data'] = $task_data;
-		}	
-				
-		$file = $this->getServiceLocator()->get('PM\Model\Files');
-		$form = $this->getServiceLocator()->get('PM\Form\FileForm');
-		$request = $this->getRequest();
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-		if ($request->isPost()) 
-		{
-			$formData = $this->getRequest()->getPost();
-			$form->setInputFilter($file->getInputFilter(true));
-			$formData = array_merge_recursive(
-				$request->getPost()->toArray(),
-				$request->getFiles()->toArray()
-			);	
-			$form->setData($formData);
-			if ($form->isValid()) 
-			{
-				$formData = $form->getData();
-				$adapter = $file->getFileTransferAdapter($formData['file_upload']['name']);			
-				if ($adapter->isValid())
-				{
-					if ($adapter->receive($formData['file_upload']['name']))
-					{
-						if(isset($project_data))
-						{
-							$formData['company_id'] = $project_data['company_id'];
-						}
-						
-						if(isset($task_data))
-						{
-							$project = $this->getServiceLocator()->get('PM\Model\Projects');
-							$formData['project_id'] = $task_data['project_id'];
-							$formData['task_id'] = $task_data['id'];
-							$temp = $project->getCompanyIdById($task_data['project_id']);
-							$formData['company_id'] = $temp['company_id'];
-						}
-										
-						$file_info = $adapter->getFileInfo('file_upload');
-						$formData['creator'] = $this->identity;	
-						$formData['owner'] = $this->identity;
-						$formData['uploaded_by'] = $this->identity;					
-						$file_id = $file->addFile($formData, $file_info['file_upload']);
-						if($file_id)
-						{
-							$this->flashMessenger()->addMessage($translate('file_added', 'pm'));
-							return $this->redirect()->toRoute('files/view', array('file_id' => $file_id));
-						}
-						else
-						{
-							$view['file_errors'] = array('Couldn\'t upload file :(');
-						}
-					}		
-				} 
-				else 
-				{
-					$view['file_errors'] = $adapter->getMessages();
-				}
-			} 
-			else 
-			{
-				$view['errors'] = array('Please fix the errors below.');
-			}
-		}
-
-		$this->layout()->setVariable('layout_style', 'left');
-		$form->addFileField();
-		$view['form_action'] = $this->getRequest()->getRequestUri();
-		$view['form'] = $form;
-		return $this->ajaxOutput($view);
-	}
-	
-	/**
-	 * Removes a file
-	 */
-	public function removeAction()
-	{   
-		$file = $this->getServiceLocator()->get('PM\Model\Files');
-		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-
 		$id = $this->params()->fromRoute('file_id');
 		if (!$id) {
 			return $this->redirect()->toRoute('pm');
 		}
-    	
-    	$file_data = $file->getFileById($id);
-    	if(!$file_data)
-    	{
-			return $this->redirect()->toRoute('pm');
-    	}
 
-    	$request = $this->getRequest();
-		if ($request->isPost())
-		{
-			$formData = $this->getRequest()->getPost();
-			$form->setData($request->getPost());
-			if ($form->isValid())
-			{
-				$formData = $formData->toArray();
-				if(!empty($formData['fail']))
-				{
-					return $this->redirect()->toRoute('files/view', array('file_id' => $id));
-				}
-				
-	    	   	if($file->removeFile($id))
-	    		{	
-					$formData['task'] = $file_data['task_id'];
-					$formData['company'] = $file_data['company_id'];
-					$formData['project'] = $file_data['project_id'];
-					
-					$this->flashMessenger()->addMessage($translate('file_removed', 'pm'));
-					if($file_data['task_id'] > 0)
-					{
-						return $this->redirect()->toRoute('tasks/view', array('task_id' => $file_data['task_id']));
-					}
-					
-	    			if($file_data['project_id'] > 0)
-					{
-						return $this->redirect()->toRoute('projects/view', array('project_id' => $file_data['project_id']));
-					}
-	
-	    			if($file_data['company_id'] > 0)
-					{
-						return $this->redirect()->toRoute('companies/view', array('company_id' => $file_data['company_id']));
-					}
-					
-					return $this->redirect()->toRoute('pm');
-	    		} 
-	    		else
-	    		{
-	    			$view['errors'] = array('Couldn\'t remove the file :(');
-	    		}
-    		}
-    	
-		}
-
-		$view['file_data'] = $file_data;
-		$view['id'] = $id;
-		$view['form'] = $form;
-		return $this->ajaxOutput($view);		
-	}
-	
-	public function addRevisionAction()
-	{
-		echo 'fdsa';
-		exit;
-		$file_id = $this->_getParam("file",false);
-	    if(!$file_id)
-    	{
-			$this->_helper->redirector('index','index');
-			exit;
-    	}		
-		
-    	$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$file_data = $file->getFileById($file_id);		
+		$file = $this->getServiceLocator()->get('PM\Model\Files');
+		$file_data = $file->getFileById($id);
 		if(!$file_data)
-    	{
-			$this->_helper->redirector('index','index');
-			exit;
-    	}
+		{
+			return $this->redirect()->toRoute('pm');
+		}
     	
 		$form = $file->getFileRevisionForm(array(
             'action' => '/pm/files/add-revision/file/'.$file_id,
@@ -562,7 +369,7 @@ class RevisionsController extends AbstractPmController
 		$this->view->form = $form;		
 	}
 	
-	public function removeRevisionAction()
+	public function removeAction()
 	{   		
 		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
 		$id = $this->_request->getParam('id', false);

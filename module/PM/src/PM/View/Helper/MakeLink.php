@@ -22,6 +22,12 @@ use Base\View\Helper\BaseViewHelper;
  */
 class MakeLink extends BaseViewHelper
 {
+	/**
+	 * Creates a link to a route wrapped in an href tag
+	 * @param string $type
+	 * @param array $info
+	 * @return string
+	 */
 	public function __invoke($type, array $info)
 	{
 		switch($type)
@@ -63,16 +69,29 @@ class MakeLink extends BaseViewHelper
 		}
 	}
 	
+	/**
+	 * Creates a URL to a Users route
+	 * @param array $info
+	 */
 	private function makeUserLink(array $info)
 	{
 		return $this->view->url('users/view', array('user_id' => $info['id']));
 	}
 
+	/**
+	 * Creates a URL to a Roles route
+	 * @param array $info
+	 */
 	private function makeRoleLink(array $info)
 	{
 		return $this->view->url('roles/view',array('role_id' => $info['id']));
 	}	
 	
+	/**
+	 * Personalizes the link output 
+	 * @param array $info
+	 * @return string
+	 */
 	private function makeUserLinkBody(array $info)
 	{
 		if($info['id'] == $this->identity)
@@ -83,6 +102,12 @@ class MakeLink extends BaseViewHelper
 		return $info['first_name'].' '.$info['last_name'];
 	}
 	
+	/**
+	 * Creates the actual link and returns it
+	 * @param string $url
+	 * @param string $body_part
+	 * @return string
+	 */
 	private function createLink($url, $body_part)
 	{
 		return '<a title="'.$body_part.'" href="'.$url.'">'.$body_part.'</a>';	

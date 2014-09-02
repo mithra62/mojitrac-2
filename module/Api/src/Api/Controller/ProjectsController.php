@@ -20,7 +20,7 @@ use Zend_Exception;
  *
  * Projects REST API Controller
  *
- * @package 	Projects\RestApi
+ * @package 	Projects\Rest
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Api/src/Api/Controller/ProjectsController.php
  */

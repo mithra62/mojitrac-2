@@ -18,7 +18,7 @@ use PM\Controller\AbstractPmController;
  *
  * Routes the Timers requests
  *
- * @package 	TimeTracker/Timers
+ * @package 	TimeTracker\Timers
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Controller/TimersController.php
 */

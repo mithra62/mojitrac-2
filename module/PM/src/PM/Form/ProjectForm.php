@@ -16,13 +16,13 @@ use PM\Model\Options\Companies;
 use Base\Form\BaseForm;
 
 /**
-* Project Form
-*
-* Generates the Project form
-*
-* @package 		Projects 
-* @author		Eric Lamb <eric@mithra62.com>
-* @filesource 	./module/PM/src/PM/Forms/ProjectForm.php
+ * PM - Project Form
+ *
+ * Generates the Project form
+ *
+ * @package 	Projects 
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Forms/ProjectForm.php
 */
 class ProjectForm extends BaseForm
 {

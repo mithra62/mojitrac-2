@@ -435,24 +435,26 @@ return array(
         			'preview-revision' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/preview-revision/:revision_id',
+        					'route' => '/revision/preview/:revision_id',
         					'constraints' => array(
         						'revision_id' => '[0-9]+'
         					),
         					'defaults' => array(
-        						'action' => 'previewRevision'
+        						'controller' => 'PM\Controller\FileRevisions',
+        						'action' => 'preview'
         					)
         				)
         			), 			
         			'remove-revision' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove-revision/:revision_id',
+        					'route' => '/revision/remove/:revision_id',
         					'constraints' => array(
         						'revision_id' => '[0-9]+'
         					),
         					'defaults' => array(
-        						'action' => 'removeRevision'
+        						'controller' => 'PM\Controller\FileRevisions',
+        						'action' => 'remove'
         					)
         				)
         			), 			
@@ -465,19 +467,7 @@ return array(
         					),
         					'defaults' => array(
         						'controller' => 'PM\Controller\FileRevisions',
-        						'action' => 'addRevision'
-        					)
-        				)
-        			),
-        			'view-review' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => '/view-review/:file_id',
-        					'constraints' => array(
-        						'file_id' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'viewReview'
+        						'action' => 'add'
         					)
         				)
         			),

@@ -2,9 +2,8 @@
  /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @subpackage	HostManager
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -22,9 +21,8 @@ use Zend\ModuleManager\ModuleManager;
 /**
  * HostManager - Module Object
  *
- * @package 	mithra62:Mojitrac
- * @subpackage	HostManager
- * @author		Eric Lamb
+ * @package 	MojiTrac
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/HostManager/Module.php
  */
 class Module

@@ -14,9 +14,9 @@ namespace Api\Model;
 use PM\Model\Projects as PmProjects;
 
 /**
- * Api - Tasks Model
+ * Api - Projects Model
  *
- * @package 	Projects\RestApi
+ * @package 	Projects\Rest
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Api/src/Api/Model/Projects.php
  */

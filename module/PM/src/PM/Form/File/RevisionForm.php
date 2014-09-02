@@ -6,34 +6,33 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/src/PM/Forms/FileForm.php
+ * @filesource 	./module/PM/src/PM/Forms/RevisionForm.php
 */
 
 namespace PM\Form;
 
-use Base\Form\BaseForm;
+use PM\Form\FileForm;
 use PM\Model\Options\Files;
 
 /**
- * PM - File Form
+ * PM - File Revision Form
  *
- * Returns the form for the File system
+ * Returns the form for revising files
  *
- * @package 	Files
+ * @package 	Files\Revisions
  * @author		Eric Lamb <eric@mithra62.com>
- * @filesource 	./module/PM/src/PM/Forms/FileForm.php
+ * @filesource 	./module/PM/src/PM/Forms/RevisionForm.php
 */
-class FileForm extends BaseForm
+class RevisionForm extends FileForm
 {
 	/**
-	 * Returns the File form
+	 * Returns the form for revising files
 	 * @param string $options
-	 */	
-	public function __construct($name = null, \PM\Model\Files $file) 
+	 */
+	public function __construct($name = null) 
 	{
-
 		parent::__construct($name);
-		
+
 		$this->add(array(
 			'name' => 'name',
 			'type' => 'Text',
@@ -63,17 +62,5 @@ class FileForm extends BaseForm
                 'cols' => '40',
             ),
         ));	
-	}
-	
-	public function addFileField()
-	{
-		$this->add(array(
-			'name' => 'file_upload',
-			'type' => 'File',
-			'attributes' => array(
-				'class' => 'input large',
-				'id' => 'file_upload'
-			),
-		));	
 	}
 }
