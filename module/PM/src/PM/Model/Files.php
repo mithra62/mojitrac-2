@@ -80,6 +80,11 @@ class Files extends AbstractModel
 		throw new \Exception("Not used");
 	}
 	
+	/**
+	 * Returns an instace of the InputFilter, creating it if it doens't exist yet
+	 * @param string $file_field Determines if a file field should be validated
+	 * @return \Zend\InputFilter\InputFilter
+	 */
 	public function getInputFilter($file_field = false)
 	{
 		if (!$this->input_filter) {
@@ -135,7 +140,7 @@ class Files extends AbstractModel
 	}
 		
 	/**
-	 * Returns the path to store files
+	 * Returns the path to store files at on the filesystem
 	 * @return string
 	 */
 	public function getStoragePath()

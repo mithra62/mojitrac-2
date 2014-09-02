@@ -51,8 +51,8 @@
 			<td><?php echo $this->RelativeDate($file['last_modified']); ?></td>
 			<?php if($this->enable_actions && $this->CheckPermission('manage_files')):?>
 			<td>
-				<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'edit', 'file_id'=> $file['id'])); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit File');?></a>
-				<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'remove', 'file_id'=> $file['id'])); ?>" title="Delete" rel="facebox"><?php echo $this->InteractIcon('cross', 'Remove File');?></a>
+				<a href="<?php echo $this->url('files/edit', array('file_id'=> $file['id'])); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit File');?></a>
+				<a href="<?php echo $this->url('files/remove', array('file_id'=> $file['id'])); ?>" title="Delete" rel="facebox"><?php echo $this->InteractIcon('cross', 'Remove File');?></a>
 			</td>
 			<?php endif; ?>
 		</tr>

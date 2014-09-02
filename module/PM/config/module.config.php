@@ -357,6 +357,18 @@ return array(
         		),
         		'may_terminate' => true,
         		'child_routes' => array(
+        			'all' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/:type/:id',
+        					'constraints' => array(
+        						'id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'index'
+        					)
+        				)
+        			), 
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
@@ -469,18 +481,6 @@ return array(
         					)
         				)
         			),
-        			'all' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => '/all/:type/:id',
-        					'constraints' => array(
-        						'id' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'index'
-        					)
-        				)
-        			), 
         		)
         	), //end Files Routes
 

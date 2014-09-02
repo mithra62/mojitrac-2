@@ -14,7 +14,7 @@
 	
 		<?php if($this->company_data['id']):?>	
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'add'), null, FALSE); ?>" title="Add">
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'files','action'=>'add'), null, FALSE); ?>" title="Add">
 				<?php echo $this->InteractIcon('add', 'Add File');?>
 				<div class="action_text">Add File</div>
 			</a> 
@@ -25,12 +25,12 @@
 $options = array('company' => $this->company_data, 'project' => $this->project_data, 'task' => $this->task_data);
 echo $this->BackToLink($options); 
 
-if($this->files): 
+if($this->file_data): 
 
-	$options = array('files' => $this->files, 'enable_actions' => 'yes');
-	echo $this->partial('files/partials/files.phtml', $options);
+	$options = array('files' => $this->file_data, 'enable_actions' => 'yes');
+	echo $this->partial('pm/files/partials/files.phtml', $options);
 
 else: ?>
-<div class="information png_bg">There aren't any files uploaded yet. Want to <a href="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'add'), null, FALSE); ?>">add</a> one?.</div>
+<div class="information png_bg">There aren't any files uploaded yet. Want to <a href="<?php echo $this->url('files/add', array('type' => $type, 'id' => $id)); ?>">add</a> one?.</div>
 
 <?php endif; ?>

@@ -47,94 +47,78 @@ class FilesController extends AbstractPmController
      */
 	public function indexAction()
 	{
-		$company_id = $this->_request->getParam('company', false);
-		$project_id = $this->_request->getParam('project', false);
-		$task_id = $this->_request->getParam('task', false);
-		$files = new PM_Model_Files(new PM_Model_DbTable_Files);
-		if($company_id)
+
+		$id = $this->params()->fromRoute('id');
+		$type = $this->params()->fromRoute('type');
+		$view = array();
+		$file = $this->getServiceLocator()->get('PM\Model\Files');
+		if($type == 'company')
 		{
 			if(!$this->perm->check($this->identity, 'view_companies'))
-	        {
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;
-	        }			
-			$company = new PM_Model_Companies(new PM_Model_DbTable_Companies);
+			{
+				return $this->redirect()->toRoute('pm');
+			}
+						
+			$company_id = $id;
+			$company = $this->getServiceLocator()->get('PM\Model\Companies');
 			$company_data = $company->getCompanyById($company_id);
 			if(!$company_data)
 			{
-				$company_id = $company_data = false;
-				$this->view->files = $files->getAllFiles($view);
-			}			
-			
-       		$this->view->sub_menu = 'company';
-       		$this->view->active_sub = 'projects';
-        	$this->view->active_nav = 'companies';			
-			$this->view->files = $files->getFilesByCompanyId($company_id);
-			$this->view->company_data = $company_data;
+				return $this->redirect()->toRoute('companies');
+			}
+				
+			$view['company_data'] = $company_data;
+			$view['file_data'] = $file->getFilesByCompanyId($company_id);
+			$this->layout()->setVariable('sub_menu', 'projects');
+        	$this->layout()->setVariable('active_nav', 'projects');
+        	$this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
 		}
-		elseif($project_id)
+		
+		if($type == 'project')
 		{
-			if(!$this->perm->check($this->identity, 'view_projects'))
-	        {
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;
-	        }
-	        
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+			$project_id = $id;
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
 			$project_data = $project->getProjectById($project_id);
 			if(!$project_data)
 			{
-				$company_id = $company_data = false;
-				$this->view->files = $files->getAllFiles($view);
+				return $this->redirect()->toRoute('projects');
 			}
 			
+			$view['project_data'] = $project_data;
 			if(!$project->isUserOnProjectTeam($this->identity, $project_id))
 			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
+	        	return $this->redirect()->toRoute('pm');			
 			}
 			
-       		$this->view->sub_menu = 'company';
-       		$this->view->active_sub = 'projects';
-        	$this->view->active_nav = 'projects';			
-			$this->view->files = $files->getFilesByProjectId($project_id);
-			$this->view->project_data = $project_data;			
+			$view['file_data'] = $file->getFilesByProjectId($project_id);
+			$this->layout()->setVariable('sub_menu', 'projects');
+        	$this->layout()->setVariable('active_nav', 'projects');
+        	$this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
 		}
-		elseif($task_id)
+		
+		if($type == 'task')
 		{
-			if(!$this->perm->check($this->identity, 'view_projects'))
-	        {
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;
-	        }
-	        
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
-			$task = new PM_Model_Tasks(new PM_Model_DbTable_Tasks);
+			$task_id = $id;
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
+			$task = $this->getServiceLocator()->get('PM\Model\Tasks');
 			$task_data = $task->getTaskById($task_id);
 			if(!$task_data)
 			{
-				$company_id = $company_data = false;
-				$this->view->files = $files->getAllFiles($view);
+				return $this->residrect()->toRoute('pm');
 			}
 			
 			if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']))
 			{
-	        	$this->_helper->redirector('index', 'index', 'pm');
-	        	exit;				
-			}			
-			
-       		$this->view->sub_menu = 'company';
-       		$this->view->active_sub = 'projects';
-        	$this->view->active_nav = 'projects';			
-			$this->view->files = $files->getFilesByProjectId($project_id);
-			$this->view->task_data = $task_data;			
-		}		
-		else
-		{	
-			$view = $this->_getParam("view",false);
-			$this->view->active_sub = $view;
-		    $this->view->files = $files->getAllFiles($view);
+	        	return $this->residrect()->toRoute('pm');				
+			}
+				
+			$view['file_data'] = $file->getFilesByTaskId($task_id);
+			$view['task_data'] = $task_data;
 		}
+
+		$view['id'] = $id;
+		$view['type'] = $type;
+		return $view;
 	}
 	
 	/**
