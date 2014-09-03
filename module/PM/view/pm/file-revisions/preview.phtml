@@ -11,17 +11,3 @@ return;
 endif;
 ?>
 <img src="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'preview-revision', 'id' => $this->rev_data['id'], 'view-type' => 'html'), null, TRUE); ?>" />
-
-<div class="content_headers">
-	<div class="file_peer_reviews_header">Peer Reviews</div>
-</div>
-<?php 
-if($this->file_reviews):
-	$options = array('reviews' => $this->file_reviews);
-	echo $this->partial('files/partials/reviews.phtml', $options); 
-else: 
-?>
-<div class="information png_bg">There aren't any reviews yet. </div>
-<?php 
-endif;
-?>

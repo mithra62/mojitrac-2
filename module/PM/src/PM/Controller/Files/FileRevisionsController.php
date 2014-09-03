@@ -42,50 +42,9 @@ class FileRevisionsController extends AbstractPmController
 	}
 	
 	/**
-	 * File View Action
-	 * @return \Zend\Http\Response
+	 * Forces a download of a given file revision
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|\Zend\Http\Response\Stream
 	 */
-	public function viewAction()
-	{
-		$id = $this->params()->fromRoute('file_id');
-		if (!$id) {
-			return $this->redirect()->toRoute('pm');
-		}
-
-		$file = $this->getServiceLocator()->get('PM\Model\Files');
-		$file_data = $file->getFileById($id);
-		if(!$file_data)
-		{
-			return $this->redirect()->toRoute('pm');
-		}
-		
-		if($file_data['project_id'])
-		{
-			$project = $this->getServiceLocator()->get('PM\Model\Projects');
-			if(!$project->isUserOnProjectTeam($this->identity, $file_data['project_id']) && !$this->perm->check($this->identity, 'manage_files'))
-			{
-	        	return $this->redirect()->toRoute('projects/view', array('project_id' => $file_data['project_id']));				
-			}			
-		}
-		
-		if($file_data['company_id'] && $file_data['project_id'] == '0')
-		{
-			if(!$this->perm->check($this->identity, 'view_companies'))
-			{
-	        	return $this->redirect()->toRoute('projects/view', array('project_id' => $file_data['project_id']));				
-			}			
-		}		
-		
-		$file_revisions = $file->getFileRevisions($id);
-		$file_reviews = array();//$file->getFileReviews($id);
-
-		$view['file'] = $file_data;
-		$view['revision_history'] = $file_revisions;
-		$view['file_reviews'] = $file_reviews;
-		$view['id'] = $id;
-		return $view;
-	}
-	
 	public function downloadAction()
 	{
 		$id = $this->params()->fromRoute('revision_id');
@@ -128,42 +87,38 @@ class FileRevisionsController extends AbstractPmController
 	
 	public function previewAction()
 	{
-		$id = $this->_request->getParam('id', false);
-		$view_type = $this->_request->getParam('view-type', false);
-		$view_size = $this->_request->getParam('view-size', false);
+		$id = $this->params()->fromRoute('revision_id');
+		//$view_type = $this->_request->getParam('view-type', false);
+		//$view_size = $this->_request->getParam('view-size', false);
 		if (!$id) {
-			$this->_helper->redirector('index','index');
-			exit;
+			return $this->redirect()->toRoute('pm');
 		}
 		
-		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$rev_data = $file->getRevision($id);
+		$file = $this->getServiceLocator()->get('PM\Model\Files');
+		$rev_data = $file->revision->getRevision($id);
 		if (!$rev_data) 
 		{
-			$this->_helper->redirector('index','index');
-			exit;
+			return $this->redirect()->toRoute('pm');
 		}
 
 		$file_data = $file->getFileById($rev_data['file_id']);
 		if (!$file_data) 
 		{
-			$this->_helper->redirector('index','index');
-			exit;
+			return $this->redirect()->toRoute('pm');
 		}
 		
 		if($file_data['project_id'] != 0)
 		{
 			//check if the user is on the project's team.
-			$project = new PM_Model_Projects(new PM_Model_DbTable_Projects);
+			$project = $this->getServiceLocator()->get('PM\Model\Projects');
 			if(!$project->isUserOnProjectTeam($this->identity, $file_data['project_id']) && !$this->perm->check($this->identity, 'manage_files'))
 			{
-				$this->_helper->redirector('index','index');
-				exit;
+				return $this->redirect()->toRoute('pm');
 			}		
 		}
 		
-		$this->view->preview_exists = true;
-		$root_path = $file->chmkdir($file->getStoragePath(), $file_data['company_id'], $file_data['project_id'], $file_data['task_id']);
+		$view['preview_exists'] = true;
+		$root_path = $file->checkMakeDirectory($file->getStoragePath(), $file_data['company_id'], $file_data['project_id'], $file_data['task_id']);
 		if(file_exists($root_path.DS.$rev_data['stored_name']))
 		{
 			//check if we're dealing with an image:
@@ -192,18 +147,18 @@ class FileRevisionsController extends AbstractPmController
 					}
 					else
 					{
-						$this->view->preview_exists = false;
+						$view['preview_exists'] = false;
 					}
 				}
 			}
 			else
 			{
-				$this->view->preview_exists = false;
+				$view['preview_exists'] = false;
 			}
 		}
 		else
 		{
-			$this->view->preview_exists = false;
+			$view['preview_exists'] = false;
 		}
 		
 		if($view_type == 'html')
@@ -216,61 +171,14 @@ class FileRevisionsController extends AbstractPmController
 			exit;
 		}
 		
-		$this->view->rev_data = $rev_data;
-		$this->view->file_reviews = $file->getReviewsByRevisionId($id);
-	}
-	
-	/**
-	 * File Edit Page
-	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>
-	 */
-	public function editAction()
-	{
-		$id = $this->params()->fromRoute('file_id');
-		if (!$id) {
-			return $this->redirect()->toRoute('pm');
-		}
-
-		$file = $this->getServiceLocator()->get('PM\Model\Files');
-		$file_data = $file->getFileById($id);
-		if(!$file_data)
-		{
-			return $this->redirect()->toRoute('pm');
-		}
-
-		$form = $this->getServiceLocator()->get('PM\Form\FileForm');
-        $form->setData($file_data);
-		$request = $this->getRequest();
-		if ($this->getRequest()->isPost()) 
-		{
-			$formData = $this->getRequest()->getPost();
-			$form->setInputFilter($file->getInputFilter());
-			$form->setData($formData);
-			if ($form->isValid()) 
-			{	
-				$formData['creator'] = $this->identity;
-			    if($file->updateFile($formData, $id))
-	            {
-					$this->flashMessenger()->addMessage($this->translate('file_updated', 'pm'));
-					return $this->redirect()->toRoute('files/view', array('file_id' => $id));  	        		
-            	} 
-            	else 
-            	{
-            		$this->view->errors = array('Couldn\'t update file...');
-            	}
-			}
-		}
-		
-		$view = array();
-		$view['id'] = $id;
-		$view['file_data'] = $file_data;
-		$view['form'] = $form;
-		
-		$this->layout()->setVariable('layout_style', 'left');
-		$view['form_action'] = $this->getRequest()->getRequestUri();
+		$view['rev_data'] = $rev_data;
 		return $this->ajaxOutput($view);
 	}
 	
+	/**
+	 * Add a file revision action
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|Ambigous <\Zend\View\Model\ViewModel, boolean, array>
+	 */
 	public function addAction()
 	{
 		$file_id = $this->params()->fromRoute('file_id');
@@ -356,6 +264,10 @@ class FileRevisionsController extends AbstractPmController
 		return $this->ajaxOutput($view);
 	}
 	
+	/**
+	 * Remove a file revision action
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|Ambigous <\Zend\View\Model\ViewModel, boolean, array>
+	 */
 	public function removeAction()
 	{
 		$file = $this->getServiceLocator()->get('PM\Model\Files');

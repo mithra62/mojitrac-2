@@ -42,7 +42,8 @@ class AccountController extends AbstractPmController
 	}
 
     /**
-     * The default section page
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractActionController::indexAction()
      */
     public function indexAction()
     {
@@ -52,6 +53,7 @@ class AccountController extends AbstractPmController
     
     /**
      * Handles modifying a password
+     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|Ambigous <\Zend\View\Model\ViewModel, boolean, array>
      */
     public function passwordAction()
     {	
@@ -79,8 +81,13 @@ class AccountController extends AbstractPmController
 		return $view;
     }
     
+    /**
+     * Manage user preferences action
+     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|Ambigous <\Zend\View\Model\ViewModel, boolean, array>
+     */
     public function prefsAction()
     {
+    	$view = array();
     	$view['sub_menu'] = 'settings';
     	$view['active_sub'] = 'prefs'; 
 		$view['layout_style'] = 'right';

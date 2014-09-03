@@ -115,11 +115,15 @@ class Revisions extends AbstractModel
 	 * Adds a file revision to the system
 	 * @param int $file_id
 	 * @param array $file_info
-	 * @param bool $process_file
+	 * @param bool $process_file Determines if a given upload needs to be moved within the file system
 	 * @return boolean|Ambigous <\Base\Model\Ambigous, \Zend\Db\Adapter\Driver\mixed, NULL, \Zend\EventManager\mixed, mixed>
 	 */
 	public function addRevision($file_id, array $data, $process_file = false)
 	{
+
+		$ext = $this->trigger(self::EventFileRevisionAddPre, $this, compact('file_id', 'data', 'process_file'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+		
 		if($process_file) {
 			
 			$path = $this->checkMakeDirectory($data['upload_file_data']['destination'],
@@ -140,7 +144,6 @@ class Revisions extends AbstractModel
 			}
 			
 			$data['stored_path'] = $path;
-					
 			$data['file_name'] = $data['upload_file_data']['name'];
 			$data['mime_type'] = $data['upload_file_data']['type'];
 		}		
@@ -148,7 +151,12 @@ class Revisions extends AbstractModel
 		$sql = $this->getSQL($data);
 		$sql['file_id'] = $file_id;
 		
-		return $this->insert('file_revisions', $sql);
+		$revision_id = $this->insert('file_revisions', $sql);
+
+		$ext = $this->trigger(self::EventFileRevisionAddPost, $this, compact('revision_id', 'data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $revision_id = $ext->last();
+		
+		return $revision_id;
 	}
 
 	/**
@@ -174,12 +182,19 @@ class Revisions extends AbstractModel
 	}
 	
 	/**
-	 * Deletes a revision entry based on the pk
+	 * Deletes a revision entry based on $revision_id
 	 * @param int $revision_id
 	 */
 	public function removeRevision($revision_id)
 	{
+		$ext = $this->trigger(self::EventFileRevisionRemovePre, $this, compact('revision_id'), $this->setXhooks(array()));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $revision_id = $ext->last();
+		
 		$delete = $this->remove('file_revisions', array('id' => $revision_id));
+
+		$ext = $this->trigger(self::EventFileRevisionRemovePost, $this, compact('revision_id'), $this->setXhooks(array()));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $revision_id = $ext->last();
+		
 		return $delete;
 	}
 	

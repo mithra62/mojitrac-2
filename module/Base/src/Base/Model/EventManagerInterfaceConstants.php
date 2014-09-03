@@ -70,6 +70,10 @@ interface EventManagerInterfaceConstants extends EventManagerAwareInterface
 	const EventFileAddPost = 'file.add.post';
 	const EventFileRemovePre = 'file.remove.pre';
 	const EventFileRemovePost = 'file.remove.post';	
+	const EventFileRevisionAddPre = 'file.revision.add.pre';
+	const EventFileRevisionAddPost = 'file.revision.add.post';
+	const EventFileRevisionRemovePre = 'file.revision.remove.pre';
+	const EventFileRevisionRemovePost = 'file.revision.remove.post';
 	
 	const EventNoteUpdatePre = 'note.update.pre';
 	const EventNoteUpdatePost = 'note.update.post';

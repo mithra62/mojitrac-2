@@ -61,7 +61,8 @@ class ActivityLogEvent extends BaseEvent
     	'bookmark.remove.pre' => 'logBookmarkRemove',
     	'file.add.post' => 'logFileAdd',
     	'file.update.post' => 'logFileUpdate',
-    	'file.remove.pre' => 'logFileRemove'
+    	'file.remove.pre' => 'logFileRemove',
+    	'file.revision.add.post' => 'logFileRevisionAdd',
     );
     
     /**
@@ -340,15 +341,21 @@ class ActivityLogEvent extends BaseEvent
 	
 	/**
 	 * Wrapper to log a file revision entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * @param \Zend\EventManager\Event $event
 	 */
-	public function logFileRevisionAdd(array $data, $id, $performed_by)
+	public function logFileRevisionAdd(\Zend\EventManager\Event $event)
 	{
-		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'file_revision_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'],0, 0, 0, $data['file_id'], $id);
+		$revision_id = $event->getParam('revision_id');
+		$data = $event->getParam('data');
+		$revision = $event->getTarget();
+		
+		//we don't want to log the first entry since we're already logging the master file being added
+		$total_revisions = $revision->getTotalFileRevisions($data['file_data']['id']);
+		if($total_revisions > 1)
+		{
+			$data = array('stuff' => $data, 'file_rev_id' => $revision_id, 'file_id' => $data['file_data']['id'], 'project_id' => $data['file_data']['project_id'], 'company_id' => $data['file_data']['company_id'], 'task_id' => $data['file_data']['task_id'], 'type' => 'file_revision_add', 'performed_by' => $this->identity);
+			$this->al->logActivity($data);
+		}
 	}
 	
 	/**
@@ -375,45 +382,6 @@ class ActivityLogEvent extends BaseEvent
 	{
 		$data = $this->filterForKeys($data);
 		$this->al->logActivity(self::setDate(), 'file_revision_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $id);
-	}
-
-	/**
-	 * Wrapper to log a file revision entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	public function logFileReviewAdd(array $data, $id, $performed_by)
-	{
-		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'file_review_add', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'],0, 0, 0, $data['file_id'], $data['revision_id'], $id);
-	}
-	
-	/**
-	 * Wrapper to log a file revision update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	public function logFileReviewUpdate(array $data, $id, $performed_by)
-	{
-		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'file_review_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $data['revision_id'], $id);
-	}
-	
-	/**
-	 * Wrapper to log a file revision removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	public function logFileReviewRemove(array $data, $id, $performed_by)
-	{
-		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'file_review_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $data['revision_id'], $id);
 	}	
 	
 	/**

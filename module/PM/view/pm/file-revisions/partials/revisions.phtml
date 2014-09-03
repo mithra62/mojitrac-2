@@ -32,7 +32,7 @@
 			<td>
 			<a href="<?php echo $this->url('files/remove-revision', array('revision_id' => $revision['id'])); ?>" title="Delete" rel="facebox"><?php echo $this->InteractIcon('cross', 'Delete');?></a>
 			<a href="<?php echo $this->url('files/download-revision', array('revision_id' => $revision['id'])); ?>" title="Download"><?php echo $this->InteractIcon('save_disk', 'Download');?></a>
-			<a href="<?php echo $this->url('files/remove-revision', array('revision_id' => $revision['id'])); ?>" title="Preview" rel="facebox"><?php echo $this->InteractIcon('preview', 'Preview');?></a>
+			<a href="<?php echo $this->url('files/preview-revision', array('revision_id' => $revision['id'])); ?>" title="Preview" rel="facebox"><?php echo $this->InteractIcon('preview', 'Preview');?></a>
 			</td>
 		</tr>
 		<?php 

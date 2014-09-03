@@ -40,12 +40,12 @@ class BookmarksController extends AbstractPmController
 		$this->layout()->setVariable('active_sub', 'None');
 	
 		return $e;
-	}	
-    
-    /**
-     * Main Page
-     * @return void
-     */
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\Mvc\Controller\AbstractActionController::indexAction()
+	 */
 	public function indexAction()
 	{	
 	    $bookmarks = $this->getServiceLocator()->get('PM\Model\Bookmarks');
@@ -109,6 +109,11 @@ class BookmarksController extends AbstractPmController
 	/**
 	 * Bookmark View Page
 	 * @return void
+	 */
+	
+	/**
+	 * View a Bookmark Action
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|Ambigous <\Zend\View\Model\ViewModel, boolean, array>
 	 */
 	public function viewAction()
 	{
