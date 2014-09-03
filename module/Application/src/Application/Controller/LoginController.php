@@ -62,7 +62,6 @@ class LoginController extends AbstractController
 				$email = $request->getPost('email');
 				$password = $request->getPost('password');
 				$result = $login->procLogin($email, $password, $this->getAuthService());
-				$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 				switch ($result)
 				{
 					case AuthenticationResult::SUCCESS:
@@ -70,7 +69,7 @@ class LoginController extends AbstractController
 						$user->upateLoginTime($this->getServiceLocator()->get('AuthService')->getIdentity());
 						$this->getSessionStorage()->setRememberMe(1);
 						$this->getAuthService()->setStorage($this->getSessionStorage());	
-						$this->flashMessenger()->addMessage($translate('login_successful', 'app'));
+						$this->flashMessenger()->addMessage($this->translate('login_successful', 'app'));
 						
 						return $this->redirect()->toRoute('pm');
 																
@@ -79,7 +78,7 @@ class LoginController extends AbstractController
 					case AuthenticationResult::FAILURE_IDENTITY_NOT_FOUND:
 					case AuthenticationResult::FAILURE_CREDENTIAL_INVALID:
 					default:
-						$this->flashMessenger()->addMessage($translate('invalid_credials_try_again', 'app'));
+						$this->flashMessenger()->addMessage($this->translate('invalid_credials_try_again', 'app'));
 						return $this->redirect()->toRoute('login');						
 					break;
 				}

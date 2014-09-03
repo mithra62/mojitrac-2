@@ -101,8 +101,6 @@ class RolesController extends AbstractPmController
 		$role_data = $role->getRoleById($id);
 		$role_perms = $role->getRolePermissions($id, 'assoc');
 		$role_data = array_merge($role_data, $role_perms);
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-		
 		$view['permissions'] = $role->getAllPermissions();
 		$view['id'] = $id;
 		$form->setData($role_data);
@@ -117,20 +115,20 @@ class RolesController extends AbstractPmController
 				$formData = $formData->toArray();
 				if($role->updateRole($formData, $formData['id']))
 				{
-					$this->flashMessenger()->addMessage($translate('role_updated', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('role_updated', 'pm'));
 					return $this->redirect()->toRoute('roles/view', array('role_id' => $id));
 					 
 				} 
 				else 
 				{
-					$view['errors'] = array($translate('update_role_fail', 'pm'));
+					$view['errors'] = array($this->translate('update_role_fail', 'pm'));
 					$form->setData($formData);
 				}
 
 			} 
 			else 
 			{
-				$view['errors'] = array($translate('please_fix_the_errors_below', 'pm'));
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 				$form->setData($formData);
 			}
 		}
@@ -150,7 +148,6 @@ class RolesController extends AbstractPmController
 	{
 		$role = $this->getServiceLocator()->get('Application\Model\Roles');
 		$form = $this->getServiceLocator()->get('Application\Form\RolesForm');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
 		$view['permissions'] = $role->getAllPermissions();
 		$request = $this->getRequest();
@@ -165,18 +162,18 @@ class RolesController extends AbstractPmController
 				$role_id = $id = $role->addRole($formData);
 				if($role_id)
 				{
-					$this->flashMessenger()->addMessage($translate('role_added', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('role_added', 'pm'));
 					return $this->redirect()->toRoute('roles/view', array('role_id' => $role_id));					
 				} 
 				else 
 				{
-					$view['errors'] = array($translate('something_went_wrong', 'pm'));
+					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
 				}
 
 			} 
 			else 
 			{
-				$view['errors'] = array($translate('please_fix_the_errors_below', 'pm'));
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 			}
 		}
 
@@ -192,7 +189,6 @@ class RolesController extends AbstractPmController
 	{
 		$role = $this->getServiceLocator()->get('Application\Model\Roles');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		$id = $this->params()->fromRoute('role_id');
 		if(!$id)
 		{
@@ -228,7 +224,7 @@ class RolesController extends AbstractPmController
 			
 				if($role->removeRole($id))
 				{
-					$this->flashMessenger()->addMessage($translate('role_removed', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('role_removed', 'pm'));
 					return $this->redirect()->toRoute('roles');
 				} 
 			}

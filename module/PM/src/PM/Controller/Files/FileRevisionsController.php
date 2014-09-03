@@ -241,8 +241,6 @@ class FileRevisionsController extends AbstractPmController
 		$form = $this->getServiceLocator()->get('PM\Form\FileForm');
         $form->setData($file_data);
 		$request = $this->getRequest();
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-		
 		if ($this->getRequest()->isPost()) 
 		{
 			$formData = $this->getRequest()->getPost();
@@ -253,7 +251,7 @@ class FileRevisionsController extends AbstractPmController
 				$formData['creator'] = $this->identity;
 			    if($file->updateFile($formData, $id))
 	            {
-					$this->flashMessenger()->addMessage($translate('file_updated', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('file_updated', 'pm'));
 					return $this->redirect()->toRoute('files/view', array('file_id' => $id));  	        		
             	} 
             	else 

@@ -116,8 +116,7 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 	 */
 	public function setError($code, $detail, $type = null, $title = null, array $additional = array())
 	{
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-		return new ApiProblemResponse(new ApiProblem($code, $translate($detail, 'api'), $type, $title, $additional));
+		return new ApiProblemResponse(new ApiProblem($code, $this->translate($detail, 'api'), $type, $title, $additional));
 	}
 	
 	/**

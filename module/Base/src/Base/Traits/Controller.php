@@ -28,12 +28,6 @@ trait Controller
 	 */
 	protected $adapter;
 	
-	/**
-	 * The actual SQL object for making queries with
-	 * @var object
-	 */
-	protected $db;
-	
 	protected $authservice;
 	
 	protected $storage;
@@ -65,6 +59,12 @@ trait Controller
 		return $this->adapter;
 	}	
 	
+	/**
+	 * Helper method for translating items in a Controller 
+	 * @param string $lang
+	 * @param string $domain
+	 * @return string
+	 */
 	public function translate($lang, $domain = 'app')
 	{
 		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');

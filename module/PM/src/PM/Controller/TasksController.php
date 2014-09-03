@@ -298,8 +298,6 @@ class TasksController extends AbstractPmController
 		
 		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-		
 		$id = $this->params()->fromRoute('task_id');
     	if(!$id)
     	{

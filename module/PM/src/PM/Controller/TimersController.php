@@ -113,8 +113,7 @@ class TimersController extends AbstractPmController
     {
     	$timer = $this->getServiceLocator()->get('PM\Model\Timers');
 		$timer->clearTimerData($this->identity);
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-        $this->flashMessenger()->addMessage($translate('timer_removed', 'pm'));
+        $this->flashMessenger()->addMessage($this->translate('timer_removed', 'pm'));
         return $this->redirect()->toRoute('pm');    	
     }
     
@@ -144,8 +143,7 @@ class TimersController extends AbstractPmController
         	
         	if($timer_data)
         	{
-        		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-        		$this->flashMessenger()->addMessage($translate('timer_started', 'pm'));
+        		$this->flashMessenger()->addMessage($this->translate('timer_started', 'pm'));
         		return $this->redirect()->toRoute($return['route'], $return['options']);        	
         	}
         	else
@@ -165,7 +163,6 @@ class TimersController extends AbstractPmController
     	$task_id = $project_id = $company_id = 0;
     	$timer = $this->getServiceLocator()->get('PM\Model\Timers');
     	$timer_data = $timer->decodeTimerData($this->prefs['timer_data']);
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 
     	$view = array();
     	if(!empty($timer_data['company_id']))
@@ -244,7 +241,7 @@ class TimersController extends AbstractPmController
 				if($time->addTime($timer_data))
 				{
 					$timer->clearTimerData($this->identity);
-					$this->flashMessenger()->addMessage($translate('timer_stopped', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('timer_stopped', 'pm'));
 					
 					$date = strtotime($timer_data['date']);
 					$options = array(

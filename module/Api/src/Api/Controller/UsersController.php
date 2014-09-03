@@ -122,17 +122,16 @@ class UsersController extends AbstractRestfulJsonController
 		}
 		
 		//ZF2 doesn't really have a validator for array style inputs so we have manually verify those here
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		if(empty($data) || !is_array($data['user_roles']) || count($data['user_roles']) == 0)
 		{
-			return $this->setError(422, 'missing_input_data', null, null, array('errors' => array('user_roles' => array('isEmpty' => $translate('isEmpty', 'api')))));
+			return $this->setError(422, 'missing_input_data', null, null, array('errors' => array('user_roles' => array('isEmpty' => $this->translate('isEmpty', 'api')))));
 		}
 		
 		//and now make sure we're dealing with a valid group_id set
 		$data['user_roles'] = $user->filterUserRoles($data['user_roles']);
 		if(count($data['user_roles']) == 0)
 		{
-			return $this->setError(422, 'missing_input_data', null, null, array('errors' => array('user_roles' => array('invalidValue' => $translate('invalidValue', 'api')))));
+			return $this->setError(422, 'missing_input_data', null, null, array('errors' => array('user_roles' => array('invalidValue' => $this->translate('invalidValue', 'api')))));
 		}
 		
 		//ok; now let's add this bitch

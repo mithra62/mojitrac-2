@@ -86,8 +86,7 @@ class TimesController extends AbstractPmController
 				$time_id = $times->addTime($formData);
 				if($time_id)
 				{
-					$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-					$this->flashMessenger()->addMessage($translate('time_added', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('time_added', 'pm'));
 					return $this->redirect()->toRoute('times/view-day', array('month' => $month, 'year' => $year, 'day' => $day));
 					
 				} 
@@ -126,7 +125,6 @@ class TimesController extends AbstractPmController
     {
     	$time = $this->getServiceLocator()->get('PM\Model\Times');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
     	$id = $this->params()->fromRoute('time_id');
     	if(!$id)
@@ -160,7 +158,7 @@ class TimesController extends AbstractPmController
     			$task = $this->getServiceLocator()->get('PM\Model\Tasks');
 	    		if($time->removeTime($id, $time_data, $project, $task))
 	    		{	
-					$this->flashMessenger()->addMessage($translate('time_removed', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('time_removed', 'pm'));
 					return $this->redirect()->toRoute('times/view-day', array('month' => $view['time_data']['month'], 'day' => $view['time_data']['day'], 'year' => $view['time_data']['year']));
 	    		}
 			}

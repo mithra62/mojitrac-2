@@ -297,8 +297,6 @@ class ProjectsController extends AbstractPmController
 	{
 		$project = $this->getServiceLocator()->get('PM\Model\Projects');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-		
 		$id = $this->params()->fromRoute('project_id');
     	if(!$id)
     	{
@@ -390,8 +388,7 @@ class ProjectsController extends AbstractPmController
 			
 			if(!$errors)
 			{
-				$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-		        $this->flashMessenger()->addMessage($translate('project_team_modified', 'pm'));
+		        $this->flashMessenger()->addMessage($this->translate('project_team_modified', 'pm'));
 		        return $this->redirect()->toRoute('projects/view', array('project_id' => $id));
 			}
 		}

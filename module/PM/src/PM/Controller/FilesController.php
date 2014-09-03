@@ -187,8 +187,6 @@ class FilesController extends AbstractPmController
 		$form = $this->getServiceLocator()->get('PM\Form\FileForm');
         $form->setData($file_data);
 		$request = $this->getRequest();
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-		
 		if ($this->getRequest()->isPost()) 
 		{
 			$formData = $this->getRequest()->getPost();
@@ -200,7 +198,7 @@ class FilesController extends AbstractPmController
 				$formData['creator'] = $this->identity;
 			    if($file->updateFile($formData, $id))
 	            {
-					$this->flashMessenger()->addMessage($translate('file_updated', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('file_updated', 'pm'));
 					return $this->redirect()->toRoute('files/view', array('file_id' => $id));  	        		
             	} 
             	else 
@@ -272,7 +270,6 @@ class FilesController extends AbstractPmController
 		$file = $this->getServiceLocator()->get('PM\Model\Files');
 		$form = $this->getServiceLocator()->get('PM\Form\FileForm');
 		$request = $this->getRequest();
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		if ($request->isPost()) 
 		{
 			$formData = $this->getRequest()->getPost();
@@ -311,7 +308,7 @@ class FilesController extends AbstractPmController
 						$file_id = $file->addFile($formData, $file_info['file_upload'], $project, $task);
 						if($file_id)
 						{
-							$this->flashMessenger()->addMessage($translate('file_added', 'pm'));
+							$this->flashMessenger()->addMessage($this->translate('file_added', 'pm'));
 							return $this->redirect()->toRoute('files/view', array('file_id' => $file_id));
 						}
 						else
@@ -345,7 +342,6 @@ class FilesController extends AbstractPmController
 	{   
 		$file = $this->getServiceLocator()->get('PM\Model\Files');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 
 		$id = $this->params()->fromRoute('file_id');
 		if (!$id) {
@@ -377,7 +373,7 @@ class FilesController extends AbstractPmController
 					$formData['company'] = $file_data['company_id'];
 					$formData['project'] = $file_data['project_id'];
 					
-					$this->flashMessenger()->addMessage($translate('file_removed', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('file_removed', 'pm'));
 					if($file_data['task_id'] > 0)
 					{
 						return $this->redirect()->toRoute('tasks/view', array('task_id' => $file_data['task_id']));

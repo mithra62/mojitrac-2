@@ -165,7 +165,6 @@ class OptionsController extends AbstractPmController
 	{
 		$options = $this->getServiceLocator()->get('PM\Model\Options');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
 		$id = $this->params()->fromRoute('option_id');
 		if (!$id) 
@@ -195,7 +194,7 @@ class OptionsController extends AbstractPmController
 				
 				if($options->removeOption($id))
 				{
-					$this->flashMessenger()->addMessage($translate('option_removed', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('option_removed', 'pm'));
 					return $this->redirect()->toRoute('options');
 				} 
 			}

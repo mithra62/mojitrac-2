@@ -131,7 +131,6 @@ class UsersController extends AbstractPmController
 		$user = $this->getServiceLocator()->get('Application\Model\Users');
 		$user_form = $this->getServiceLocator()->get('Application\Form\UsersForm');
 		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 
 		$view['id'] = $id;
 		$view['add_groups'] = $this->perm->check($this->identity, 'manage_users');
@@ -155,19 +154,19 @@ class UsersController extends AbstractPmController
 				$formData = $formData->toArray();
 				if($user->updateUser($formData, $formData['id']))
 				{	
-					$this->flashMessenger()->addMessage($translate('user_updated', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('user_updated', 'pm'));
 					return $this->redirect()->toRoute('users/view', array('user_id' => $id));					
 				} 
 				else 
 				{
-					$this->view->errors = array($translate('something_went_wrong', 'pm'));
+					$this->view->errors = array($this->translate('something_went_wrong', 'pm'));
 					$user_form->setData($formData);
 				}
 
 			} 
 			else 
 			{
-				$view['errors'] = array($translate('please_fix_the_errors_below', 'pm'));
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 				$user_form->setData($formData);
 			}
 
@@ -193,7 +192,6 @@ class UsersController extends AbstractPmController
 		$user_form = $this->getServiceLocator()->get('Application\Form\UsersForm');
 		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
 		$hash = $this->getServiceLocator()->get('Application\Model\Hash');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
 		$view['form'] = $user_form->registrationForm()->rolesFields($roles);
 		$view['addPassword'] = TRUE;
@@ -212,18 +210,18 @@ class UsersController extends AbstractPmController
 				$user_id = $id = $user->addUser($formData->toArray(), $hash, $roles);
 				if($user_id)
 				{	
-					$this->flashMessenger()->addMessage($translate('user_added', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('user_added', 'pm'));
 					return $this->redirect()->toRoute('users/view', array('user_id' => $id));  
 				} 
 				else 
 				{
-					$view['errors'] = array($translate('something_went_wrong', 'pm'));
+					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
 				}
 
 			} 
 			else 
 			{
-				$view['errors'] = array($translate('please_fix_the_errors_below', 'pm'));
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 				$user_form->setData($formData);
 			}
 		}
@@ -245,8 +243,6 @@ class UsersController extends AbstractPmController
         $view = array();
 		$user = $this->getServiceLocator()->get('Application\Model\Users');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-		
 		$id = $this->params()->fromRoute('user_id');
 		if(!$id)
 		{
@@ -255,7 +251,7 @@ class UsersController extends AbstractPmController
 		
 		if($this->identity == $id)
 		{
-			$this->flashMessenger()->addMessage($translate('user_cant_remove_self', 'pm'));
+			$this->flashMessenger()->addMessage($this->translate('user_cant_remove_self', 'pm'));
 			return $this->redirect()->toRoute('users/view', array('user_id' => $id));  
 		}
 		 
@@ -280,7 +276,7 @@ class UsersController extends AbstractPmController
 
 				if($user->removeUser($id))
 				{
-					$this->flashMessenger()->addMessage($translate('user_removed', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('user_removed', 'pm'));
 					return $this->redirect()->toRoute('users');
 					exit;
 	

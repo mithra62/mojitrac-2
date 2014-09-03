@@ -340,8 +340,6 @@ class NotesController extends AbstractPmController
 	{   		
 		$notes = $this->getServiceLocator()->get('PM\Model\Notes');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
-		
 		$id = $this->params()->fromRoute('note_id');
     	if(!$id)
     	{

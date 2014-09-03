@@ -42,7 +42,6 @@ class IpsController extends AbstractPmController
     {
     	$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
 		$ip = $this->getServiceLocator()->get('PM\Model\Ips');
-    	$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
     	$request = $this->getRequest();
     	if ($request->isPost())
     	{
@@ -196,7 +195,6 @@ class IpsController extends AbstractPmController
 	{
 		$ips = $this->getServiceLocator()->get('PM\Model\Ips');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
 		$id = $this->params()->fromRoute('ip_id');
 		if(!$id)
@@ -215,7 +213,7 @@ class IpsController extends AbstractPmController
 		$request = $this->getRequest();
 		if($this->settings['enable_ip'] && $ip['ip_raw'] == $request->getServer()->get('REMOTE_ADDR'))
 		{
-			$this->flashMessenger()->addErrorMessage($translate('cant_remove_own_ip'));
+			$this->flashMessenger()->addErrorMessage($this->translate('cant_remove_own_ip'));
 			return $this->redirect()->toRoute('ips/view', array('ip_id' => $id));
 		}
 		
@@ -233,7 +231,7 @@ class IpsController extends AbstractPmController
 				
 				if($ips->removeIp($id))
 				{
-					$this->flashMessenger()->addErrorMessage($translate('ip_removed'));
+					$this->flashMessenger()->addErrorMessage($this->translate('ip_removed'));
 					return $this->redirect()->toRoute('ips');
 				}				
 			}	

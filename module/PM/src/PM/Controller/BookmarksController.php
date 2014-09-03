@@ -299,7 +299,6 @@ class BookmarksController extends AbstractPmController
 	{   		
 		$bookmark = $this->getServiceLocator()->get('PM\Model\Bookmarks');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
-		$translate = $this->getServiceLocator()->get('viewhelpermanager')->get('_');
 		
 		$id = $this->params()->fromRoute('bookmark_id');
     	if(!$id)
