@@ -175,19 +175,23 @@ class Revisions extends AbstractModel
 	
 	/**
 	 * Deletes a revision entry based on the pk
-	 * @param int $id
+	 * @param int $revision_id
 	 */
-	public function removeRevision($id)
+	public function removeRevision($revision_id)
 	{
-		$rev = new PM_Model_DbTable_File_Revisions;
-		return $rev->deleteFileRevision($id);
+		$delete = $this->remove('file_revisions', array('id' => $revision_id));
+		return $delete;
 	}
 	
-	public function getTotalFileRevisions($id)
+	/**
+	 * Returns the number of revisions a given $file_id has
+	 * @param int $file_id
+	 * @return int
+	 */
+	public function getTotalFileRevisions($file_id)
 	{
-		$rev = new PM_Model_DbTable_File_Revisions;
-		$sql = $rev->select()->from(array('fr' => $rev->getTableName()), array(new Zend_Db_Expr('COUNT(id) AS Count')))->where('fr.file_id = ?', $id);
-		$total = $rev->getFileRevision($sql);
+		$sql = $this->db->select()->columns(array('Count' => new \Zend\Db\Sql\Expression('COUNT(id)')))->from(array('fr' => 'file_revisions'))->where(array('fr.file_id' => $file_id));
+		$total = $this->getRow($sql);
 		if($total)
 		{
 			return $total['Count'];

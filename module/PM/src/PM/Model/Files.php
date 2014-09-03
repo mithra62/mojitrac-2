@@ -59,7 +59,7 @@ class Files extends AbstractModel
 	}
     
 	/**
-	 * Returns an array for modifying $_name
+	 * Returns an array for modifying the `files` table
 	 * @param $data
 	 * @return array
 	 */
@@ -304,20 +304,6 @@ class Files extends AbstractModel
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
 		
 		$sql = $this->getSQL($data);
-		$path = $this->checkMakeDirectory($file_info['destination'], 
-					   $data['company_id'], 
-					   $data['project_id'], 
-					   $data['task_id']
-		);		
-		
-		$file_info['extension'] = $this->getFileExtension($file_info['tmp_name']);
-		$file_info['stored_name'] = time().'.'.$file_info['extension'];
-		$new_name = $path.DS.$file_info['stored_name'];
-		if(!rename($file_info['tmp_name'],$new_name))
-		{
-			return false;
-		}
-		
 		$sql['company_id'] = (array_key_exists('company_id', $data) ? $data['company_id'] : 0);
 		$sql['project_id'] = (array_key_exists('project_id', $data) ? $data['project_id'] : 0);
 		$sql['task_id'] = (array_key_exists('task_id', $data) ? $data['task_id'] : 0);
@@ -336,11 +322,9 @@ class Files extends AbstractModel
 				$task->updateTaskFileCount($data['task_id'], 1, 'file_count');
 			}
 			
-			$file_info['description'] = 'First Import';
-			$file_info['status'] = $data['status'];
-			$file_info['uploaded_by'] = $data['uploaded_by'];
-			$file_info['stored_path'] = $path;
-			$file_info['revision_id'] = $this->revision->addRevision($data['file_id'], $file_info, false);		
+			$data['upload_file_data'] = $file_info;
+			$data['file_data'] = $this->getFileById($data['file_id']);
+			$file_info['revision_id'] = $this->revision->addRevision($data['file_id'], $data, true);		
 		}
 		
 		$ext = $this->trigger(self::EventFileAddPost, $this, compact('file_id', 'data', 'file_info'), $this->setXhooks($data));

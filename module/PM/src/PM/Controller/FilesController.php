@@ -290,6 +290,7 @@ class FilesController extends AbstractPmController
 						if(isset($project_data))
 						{
 							$formData['company_id'] = $project_data['company_id'];
+							$formData['project_id'] = $project_data['id'];
 						}
 						
 						if(isset($task_data))

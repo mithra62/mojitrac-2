@@ -357,61 +357,59 @@ class FileRevisionsController extends AbstractPmController
 	}
 	
 	public function removeAction()
-	{   		
-		$file = new PM_Model_Files(new PM_Model_DbTable_Files);
-		$id = $this->_request->getParam('id', false);
-		$confirm = $this->_getParam("confirm",false);
-		$fail = $this->_getParam("fail",false);
-		
-    	if(!$id)
-    	{
-    		$this->_helper->redirector('index','index');
-    		exit;
-    	}
+	{
+		$file = $this->getServiceLocator()->get('PM\Model\Files');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+		$id = $this->params()->fromRoute('revision_id');
+		if (!$id) {
+			return $this->redirect()->toRoute('pm');
+		}
     	
-    	$rev_data = $file->getRevision($id);
+    	$rev_data = $file->revision->getRevision($id);
     	if(!$rev_data)
     	{
-			$this->_helper->redirector('index','index');
-			exit;
+			return $this->redirect()->toRoute('pm');
     	}
     	
     	$file_data = $file->getFileById($rev_data['file_id']);
 	    if(!$file_data)
     	{
-			$this->_helper->redirector('index','index');
-			exit;   		
+			return $this->redirect()->toRoute('pm');  		
     	}
 
-    	$total_revisions = $file->getTotalFileRevisions($rev_data['file_id']);
-    	$this->view->total_file_revisions = $total_revisions;
+    	$total_revisions = $file->revision->getTotalFileRevisions($rev_data['file_id']);
+    	$view['total_file_revisions'] = $total_revisions;
     	
-    	if($fail)
-    	{
-			$this->_helper->redirector('view','files', 'pm', array('id' => $rev_data['file_id']));
-			exit;   		
-    	}
-				    	
-    	if($confirm)
-    	{
-    	   	if($file->removeRevision($id))
-    		{	
-				$formData['task'] = $file_data['task_id'];
-				$formData['company'] = $file_data['company_id'];
-				$formData['project'] = $file_data['project_id'];
-				$formData['file_id'] = $rev_data['file_id'];
-				PM_Model_ActivityLog::logFileRevisionRemove($rev_data, $id, $this->identity);
-				  			
-				$this->_flashMessenger->addMessage('Revision Removed');
-				$this->_helper->redirector('view','files', 'pm', array('id' => $rev_data['file_id']));
-				exit;
+	    $request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid())
+			{
 				
-    		} 
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('files/view', array('file_id' => $rev_data['file_id']));
+				}
+				
+	    	   	if($file->revision->removeRevision($id))
+	    		{	
+					//PM_Model_ActivityLog::logFileRevisionRemove($rev_data, $id, $this->identity);
+					  			
+					$this->flashMessenger()->addMessage($this->translate('file_revision_removed', 'pm'));
+					return $this->redirect()->toRoute('files/view', array('file_id' => $rev_data['file_id']));
+					
+	    		} 
+	    		
+			}
     	}
-    	    	
-    	$this->view->file = $rev_data;
-    	$this->view->file_data = $file_data;
-		$this->view->headTitle('Delete File Revision: '. $rev_data['file_name'], 'PREPEND');
-		$this->view->id = $id;    	
+    	
+    	$view['form'] = $form;
+    	$view['revision_data'] = $rev_data;
+    	$view['file_data'] = $file_data;
+		$view['id'] = $id;   
+		return $this->ajaxOutput($view);
 	}
 }

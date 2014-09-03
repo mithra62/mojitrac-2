@@ -54,6 +54,7 @@ return array(
 		
 	//file revisions
 	'file_revision_added' => 'File Revision Added!',
+	'file_revision_removed' => 'File Revision Removed!',
 	
 	//input validation messages
 	'required' => 'Required',
