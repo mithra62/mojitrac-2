@@ -16,6 +16,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
 use Application\Model\AbstractModel;
+use PM\Traits\File;
 
  /**
  * PM - Files Model
@@ -26,6 +27,8 @@ use Application\Model\AbstractModel;
  */
 class Files extends AbstractModel
 {
+	use File;
+	
 	/**
 	 * The Revisions Model 
 	 * @var \PM\Model\Files\Revisions
@@ -137,15 +140,6 @@ class Files extends AbstractModel
 		}
 		
 		return $this->file_transfer_adapter;		
-	}
-		
-	/**
-	 * Returns the path to store files at on the filesystem
-	 * @return string
-	 */
-	public function getStoragePath()
-	{
-		return realpath($_SERVER['DOCUMENT_ROOT'].DS.'..'.DS.'media'.DS);
 	}
 	
 	/**
@@ -346,7 +340,7 @@ class Files extends AbstractModel
 			$file_info['status'] = $data['status'];
 			$file_info['uploaded_by'] = $data['uploaded_by'];
 			$file_info['stored_path'] = $path;
-			$file_info['revision_id'] = $this->revision->addRevision($data['file_id'], $file_info);		
+			$file_info['revision_id'] = $this->revision->addRevision($data['file_id'], $file_info, false);		
 		}
 		
 		$ext = $this->trigger(self::EventFileAddPost, $this, compact('file_id', 'data', 'file_info'), $this->setXhooks($data));
@@ -375,12 +369,6 @@ class Files extends AbstractModel
 		
 		$imagick->resize_image($path.DS.$name, $path.DS.'mid_'.$name, 700, false);
 		$imagick->resize_image($path.DS.$name, $path.DS.'tb_'.$name, 100, false);
-	}
-	
-	public function getFileExtension($filename)
-	{
-	    $path_info = pathinfo($filename);
-	    return $path_info['extension'];
 	}
 	
 	public function getPreviewSize($view_size)
@@ -460,29 +448,5 @@ class Files extends AbstractModel
 	public function removeFilesByProject($project_id)
 	{
 		return $this->db->deleteFile($project_id, 'project_id');		
-	}	
-	
-	/**
-	 * Returns the path to the media storage directory making sure the path exists, and creating it if not, along the way.
-	 * @param string $start
-	 * @param int $company_id
-	 * @param int $project_id
-	 * @param int $task_id
-	 */
-	public function checkMakeDirectory($start, $company_id, $project_id = false, $task_id = false)
-	{
-		$destination = $start.DS.$company_id;
-		if($project_id)
-		{
-			$destination = $destination.DS.$project_id;
-		}
-		
-		if($project_id && $task_id)
-		{
-			$destination = $destination.DS.$task_id;
-		}
-		
-		return $this->chkmkdir($destination);	
 	}
-	
 }

@@ -47,6 +47,7 @@ use PM\Form\OptionForm;
 use PM\Form\TimeForm;
 use PM\Form\TimerForm;
 use PM\Form\FileForm;
+use PM\Form\File\RevisionForm;
 
 use PM\Event\ActivityLogEvent;
 use PM\Event\NotificationEvent;
@@ -291,6 +292,10 @@ class Module implements
 					$file = $sm->get('PM\Model\Files');
 					return new FileForm('files', $file);
 				},
+				'PM\Form\File\RevisionForm' => function($sm) {
+					$file = $sm->get('PM\Model\Files'); 
+					return new RevisionForm('file_revisions', $file);
+				},				
 				
 				//events
 				'PM\Event\ActivityLogEvent' => function($sm) {

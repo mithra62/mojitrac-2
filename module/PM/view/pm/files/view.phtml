@@ -64,30 +64,10 @@
 <?php 
 if($this->revision_history):
 	$options = array('revisions' => $this->revision_history);
-	echo $this->partial('pm/files/partials/revisions.phtml', $options); 
+	echo $this->partial('pm/file-revisions/partials/revisions.phtml', $options); 
 else: 
 ?>
 <div class="information png_bg">There aren't any revisions yet. </div>
-<?php 
-endif;
-?>
-
-<div class="content_headers">
-	<div class="file_peer_reviews_header">Peer Reviews</div>	
-	<div class="actions">
-		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'files','action'=>'add-review', 'file' => $this->id), null, TRUE); ?>" rel="facebox" title="Add File Review">
-			<?php echo $this->InteractIcon('add', 'Add Review');?>
-			<div class="action_text">Add Review</div>
-		</a>
-	</div>
-</div>
-<?php 
-if($this->file_reviews):
-	$options = array('reviews' => $this->file_reviews);
-	echo $this->partial('files/partials/reviews.phtml', $options); 
-else: 
-?>
-<div class="information png_bg">There aren't any reviews yet. </div>
 <?php 
 endif;
 ?>

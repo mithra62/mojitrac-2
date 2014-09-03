@@ -1,8 +1,8 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -26,11 +26,15 @@ use Api\Model\Roles;
  * Api - Module Loader
  *
  * @package 	MojiTrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Api/Module.php
  */
 class Module implements Feature\BootstrapListenerInterface
 {
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\ModuleManager\Feature\BootstrapListenerInterface::onBootstrap()
+	 */
 	public function onBootstrap(EventInterface $e)
 	{	
 		//we have to work some magic to only use the Json ViewStrategy on the API module
@@ -48,6 +52,10 @@ class Module implements Feature\BootstrapListenerInterface
 		});		
 	}   
 	
+	/**
+	 * Sets up the Module config and DI'd objects
+	 * @return multitype:multitype:NULL  |\Api\Model\Projects|\Api\Model\Tasks|\Api\Model\Users|\Api\Model\Companies|\Api\Model\Options|\Api\Model\Roles
+	 */
 	public function getServiceConfig()
     {
     	return array(
@@ -88,9 +96,7 @@ class Module implements Feature\BootstrapListenerInterface
 			),
     	);
     } 
-	
-	
-	
+    
 	public function onDispatchError($e)
 	{
 		return $this->getJsonModelError($e);

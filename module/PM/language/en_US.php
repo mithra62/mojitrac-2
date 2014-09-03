@@ -51,6 +51,9 @@ return array(
 	'file_removed' => 'File Removed!',
 	'file_updated' => 'File Updated!',
 	'file_not_found' => 'File Not Found',
+		
+	//file revisions
+	'file_revision_added' => 'File Revision Added!',
 	
 	//input validation messages
 	'required' => 'Required',

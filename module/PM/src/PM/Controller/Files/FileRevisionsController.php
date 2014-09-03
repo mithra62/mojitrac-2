@@ -22,7 +22,7 @@ use PM\Controller\AbstractPmController;
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Controller/FilesController.php
  */
-class RevisionsController extends AbstractPmController
+class FileRevisionsController extends AbstractPmController
 {
 	/**
 	 * (non-PHPdoc)
@@ -275,98 +275,87 @@ class RevisionsController extends AbstractPmController
 	
 	public function addAction()
 	{
-		$id = $this->params()->fromRoute('file_id');
-		if (!$id) {
+		$file_id = $this->params()->fromRoute('file_id');
+		if (!$file_id) {
 			return $this->redirect()->toRoute('pm');
 		}
 
 		$file = $this->getServiceLocator()->get('PM\Model\Files');
-		$file_data = $file->getFileById($id);
+		$file_data = $file->getFileById($file_id);
 		if(!$file_data)
 		{
 			return $this->redirect()->toRoute('pm');
 		}
     	
-		$form = $file->getFileRevisionForm(array(
-            'action' => '/pm/files/add-revision/file/'.$file_id,
-            'method' => 'post',
-        ));
-		
-		 if ($this->getRequest()->isPost()) 
+		$form = $this->getServiceLocator()->get('PM\Form\File\RevisionForm');		
+		$request = $this->getRequest();
+		if ($request->isPost()) 
 		 {
-    		
-    		$formData = $this->getRequest()->getPost();
-			if ($form->isValid($formData) && $form->file->isUploaded()) 
+			$formData = $this->getRequest()->getPost();
+			$form->setInputFilter($file->revision->getInputFilter(true));
+			$formData = array_merge_recursive(
+				$request->getPost()->toArray(),
+				$request->getFiles()->toArray()
+			);	
+			
+			$form->setData($formData);
+			if ($form->isValid($formData)) 
 			{
-				if($form->file->receive()) //move the file to storage
+				$formData = $form->getData();
+				$adapter = $file->getFileTransferAdapter($formData['file_upload']['name']);	
+				if ($adapter->isValid())
 				{
-		
-					$file_info = $form->file->getFileInfo();
-					$formData['creator'] = $this->identity;	
-					$formData['owner'] = $this->identity;
-					$formData['uploaded_by'] = $this->identity;
-					
-					$file_info = $file_info['file'];		
-					$path = $file->chmkdir($file_info['destination'], 
-								   $file_data['company_id'], 
-								   $file_data['project_id'], 
-								   $file_data['task_id']
-					);		
-					
-					$formData['extension'] = $file->get_file_extension($file_info['tmp_name']);
-					$formData['size'] = filesize($file_info['tmp_name']);
-					$formData['name'] = $file_info['name'];
-					$formData['type'] = $file_info['type'];
-					$formData['stored_name'] = mktime().'.'.$formData['extension'];
-					$new_name = $path.DS.$formData['stored_name'];
-					if(!rename($file_info['tmp_name'],$new_name))
+					if ($adapter->receive($formData['file_upload']['name']))
 					{
-						return false;
-					}	
-
-					$formData['stored_path'] = $path;	
-					$formData['file_id'] = $file_id;
-					$formData['task'] = $file_data['task_id'];
-					$formData['company'] = $file_data['company_id'];
-					$formData['project'] = $file_data['project_id'];					
-					
-					if($id = $file->addRevision($file_id, $formData))
-					{
-						if(isset($file_data['project_id']) && $file_data['project_id'] >= 1)
+						$file_info = $adapter->getFileInfo('file_upload');
+						
+						$formData['creator'] = $this->identity;	
+						$formData['owner'] = $this->identity;
+						$formData['uploaded_by'] = $this->identity;
+						$formData['upload_file_data'] = $file_info['file_upload'];
+						$formData['file_data'] = $file_data;
+						
+						$revision_id = $file->revision->addRevision($file_id, $formData, true);
+						if($revision_id)
 						{
-							$noti = new PM_Model_Notifications;
-							$noti->sendRevisionAdd($id);
+							if(isset($file_data['project_id']) && $file_data['project_id'] >= 1)
+							{
+								//$noti = new PM_Model_Notifications;
+								//$noti->sendRevisionAdd($id);
+							}
+	
+							//PM_Model_ActivityLog::logFileRevisionAdd($formData, $id, $this->identity);
+					    	//$this->_flashMessenger->addMessage('File Revision Added!');
+							$this->flashMessenger()->addMessage($this->translate('file_revision_added', 'pm'));
+							return $this->redirect()->toRoute('files/view', array('file_id' => $file_id));
 						}
-
-						PM_Model_ActivityLog::logFileRevisionAdd($formData, $id, $this->identity);
-				    	$this->_flashMessenger->addMessage('File Revision Added!');
-						$this->_helper->redirector('view','files', 'pm', array('id' => $file_id));					
-						exit;
-					}
-					else
-					{
-						$this->view->errors = array('Couldn\'t upload file :(');
+						else
+						{
+							$view['file_errors'] = array('Couldn\'t upload file :(');
+						}
+					
 					}
 								
 				} 
 				else 
 				{
-					$this->view->errors = array('Couldn\'t move file :(');
+					$view['file_errors'] = $adapter->getMessages();
 				}
 				
 			} 
 			else 
 			{
-				$this->view->errors = array('Please fix the errors below.');
+				$view['errors'] = array('Please fix the errors below.');
 			}
 
 		}
-				
-		$this->view->file = $file_data;
-        $this->view->layout_style = 'right';
-        $this->view->sidebar = 'dashboard';		
-		$this->view->headTitle('Add File Revision', 'PREPEND');
-		$this->view->form = $form;		
+
+		$this->layout()->setVariable('layout_style', 'left');
+		$form->addFileField();
+		$view['form_action'] = $this->getRequest()->getRequestUri();
+		$view['file_data'] = $file_data;
+		$view['form'] = $form;
+		return $this->ajaxOutput($view);
 	}
 	
 	public function removeAction()

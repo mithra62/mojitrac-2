@@ -1153,7 +1153,7 @@ return array(
             'PM\Controller\Contacts' => 'PM\Controller\ContactsController',
             'PM\Controller\Docs' => 'PM\Controller\DocsController',
             'PM\Controller\Files' => 'PM\Controller\FilesController',
-            'PM\Controller\FileRevisions' => 'PM\Controller\Files\RevisionsController',
+            'PM\Controller\FileRevisions' => 'PM\Controller\Files\FileRevisionsController',
             'PM\Controller\Import' => 'PM\Controller\ImportController',
             'PM\Controller\Index' => 'PM\Controller\IndexController',
             'PM\Controller\Ips' => 'PM\Controller\IpsController',

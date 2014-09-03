@@ -1,5 +1,5 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
  * @author		Eric Lamb <eric@mithra62.com>
@@ -16,8 +16,9 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
 use Application\Model\AbstractModel;
+use PM\Traits\File;
 
- /**
+/**
  * PM - Files Model
  *
  * @package 	Files\Revisions
@@ -26,6 +27,8 @@ use Application\Model\AbstractModel;
  */
 class Revisions extends AbstractModel
 {
+	use File;
+	
 	/**
 	 * The form validation filering
 	 * @var \Zend\InputFilter\InputFilter
@@ -53,7 +56,7 @@ class Revisions extends AbstractModel
 	 * @param $data
 	 * @return array
 	 */
-	public function getSQL($data){
+	public function getSQL(array $data){
 		return array(
 			'file_name' => $data['file_name'],
 			'stored_name' => $data['stored_name'],
@@ -79,20 +82,16 @@ class Revisions extends AbstractModel
 		throw new \Exception("Not used");
 	}
 	
+	/**
+	 * Returns an instance of the File Revisions InputFilter
+	 * @param string $file_field Whether to return validation requirements on the file upload field
+	 * @return \Zend\InputFilter\InputFilter
+	 */
 	public function getInputFilter($file_field = false)
 	{
 		if (!$this->input_filter) {
 			$inputFilter = new InputFilter();
 			$factory = new InputFactory();
-	
-			$inputFilter->add($factory->createInput(array(
-				'name'     => 'name',
-				'required' => true,
-				'filters'  => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
 
 			if($file_field)
 			{
@@ -112,24 +111,42 @@ class Revisions extends AbstractModel
 		return $this->input_filter;
 	}
 	
-	public function addRevision($id, array $file_info)
+	/**
+	 * Adds a file revision to the system
+	 * @param int $file_id
+	 * @param array $file_info
+	 * @param bool $process_file
+	 * @return boolean|Ambigous <\Base\Model\Ambigous, \Zend\Db\Adapter\Driver\mixed, NULL, \Zend\EventManager\mixed, mixed>
+	 */
+	public function addRevision($file_id, array $data, $process_file = false)
 	{
-		$file_info['file_name'] = $file_info['name'];
-		$data['size'] = $file_info['size'];
-		$file_info['mime_type'] = $file_info['type'];
-		$sql = $this->getSQL($file_info);
-		$sql['file_id'] = $id;
-		
-		$image_check = getimagesize($file_info['stored_path'].DS.$file_info['stored_name']);
-		if($image_check)
-		{
-			if($sql['mime_type'] != $image_check['mime'])
+		if($process_file) {
+			
+			$path = $this->checkMakeDirectory($data['upload_file_data']['destination'],
+					$data['file_data']['company_id'],
+					$data['file_data']['project_id'],
+					$data['file_data']['task_id']
+			);
+			
+			$data['extension'] = $this->getFileExtension($data['upload_file_data']['tmp_name']);
+			$data['size'] = filesize($data['upload_file_data']['tmp_name']);
+			$data['name'] = $data['upload_file_data']['name'];
+			$data['type'] = $data['upload_file_data']['type'];
+			$data['stored_name'] = time().'.'.$data['extension'];
+			$new_name = $path.DS.$data['stored_name'];
+			if(!rename($data['upload_file_data']['tmp_name'],$new_name))
 			{
-				$sql['mime_type'] = $image_check['mime'];
+				return false;
 			}
 			
-			//$this->processImage($file_info['stored_name'], $file_info['stored_path'], $image_check);
-		}
+			$data['stored_path'] = $path;
+					
+			$data['file_name'] = $data['upload_file_data']['name'];
+			$data['mime_type'] = $data['upload_file_data']['type'];
+		}		
+
+		$sql = $this->getSQL($data);
+		$sql['file_id'] = $file_id;
 		
 		return $this->insert('file_revisions', $sql);
 	}

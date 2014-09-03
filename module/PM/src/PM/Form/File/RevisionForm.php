@@ -9,7 +9,7 @@
  * @filesource 	./module/PM/src/PM/Forms/RevisionForm.php
 */
 
-namespace PM\Form;
+namespace PM\Form\File;
 
 use PM\Form\FileForm;
 use PM\Model\Options\Files;
@@ -29,9 +29,9 @@ class RevisionForm extends FileForm
 	 * Returns the form for revising files
 	 * @param string $options
 	 */
-	public function __construct($name = null) 
+	public function __construct($name = null, \PM\Model\Files $file) 
 	{
-		parent::__construct($name);
+		parent::__construct($name, $file);
 
 		$this->add(array(
 			'name' => 'name',
