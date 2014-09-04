@@ -63,6 +63,7 @@ class ActivityLogEvent extends BaseEvent
     	'file.update.post' => 'logFileUpdate',
     	'file.remove.pre' => 'logFileRemove',
     	'file.revision.add.post' => 'logFileRevisionAdd',
+    	'file.revision.remove.pre' => 'logFileRevisionRemove',
     );
     
     /**
@@ -359,27 +360,21 @@ class ActivityLogEvent extends BaseEvent
 	}
 	
 	/**
-	 * Wrapper to log a file revision update entry
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
-	 */
-	public function logFileRevisionUpdate(array $data, $id, $performed_by)
-	{
-		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'file_revision_update', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $id);
-	}
-	
-	/**
 	 * Wrapper to log a file revision removal
-	 * @param array $data
-	 * @param int $id
-	 * @param int $performed_by
-	 * @return void
+	 * @param \Zend\EventManager\Event $event
 	 */
-	public function logFileRevisionRemove(array $data, $id, $performed_by)
+	public function logFileRevisionRemove(\Zend\EventManager\Event $event)
 	{
+		$revision_id = $event->getParam('revision_id');
+		$revision = $event->getTarget();
+		$revision_data = $revision->getRevision($revision_id);
+		
+		$sql = $revision->db->select()->from('files')->where(array('file_id' => $revision_data['file_id']));
+		$file_data = $revision->getRow($sql);
+		
+		print_r($file_data);
+		exit;
+		
 		$data = $this->filterForKeys($data);
 		$this->al->logActivity(self::setDate(), 'file_revision_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $id);
 	}	

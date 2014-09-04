@@ -1,5 +1,5 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
  * @author		Eric Lamb <eric@mithra62.com>
@@ -99,7 +99,7 @@ interface EventManagerInterfaceConstants extends EventManagerAwareInterface
 	const EventUserLogoutPost = 'user.logout.post';	
 	const EventUserLoginPre = 'user.login.pre';
 	const EventUserLoginPost = 'user.login.post';
-		
+
 	const EventUserRoleAddPre = 'user.role.add.pre';
 	const EventUserRoleAddPost = 'user.role.add.post';
 	const EventUserRoleUpdatePre = 'user.role.update.pre';
@@ -109,6 +109,8 @@ interface EventManagerInterfaceConstants extends EventManagerAwareInterface
 	
 	const EventSettingsUpdatePre = 'settings.update.pre';
 	const EventSettingsUpdatePost = 'settings.update.post';
+	const EventSettingsGetPre = 'settings.get.pre';
+	const EventSettingsGetPost = 'settings.get.post';
 	
 	const EventActivityLogAddPre = 'activitylog.add.pre';
 	const EventActivityLogAddPost = 'activitylog.add.post';
