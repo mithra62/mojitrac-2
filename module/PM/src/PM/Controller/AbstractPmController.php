@@ -24,6 +24,7 @@ use PM\Traits\Controller AS PMController;
 abstract class AbstractPmController extends AbstractController
 {	
 	use PMController;
+	
 	/**
 	 * Session
 	 * @var object
@@ -75,7 +76,6 @@ abstract class AbstractPmController extends AbstractController
 		$this->layout()->setVariable('sidebar', 'dashboard');
 		$this->layout()->setVariable('identity', $this->identity);
 		$this->_initIpBlocker();
-		$this->_initEvents();
 		
 		return parent::onDispatch( $e );
 	}

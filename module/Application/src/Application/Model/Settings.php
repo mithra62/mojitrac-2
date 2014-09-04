@@ -75,7 +75,12 @@ class Settings extends KeyValue
 	{
 		parent::__construct($adapter, $sql);
 		$this->setTable($this->table);
-		$this->setDefaults($this->defaults);
+		
+		$defaults = $this->defaults;
+		$ext = $this->trigger(self::EventProjectRemoveTeamPre, $this, compact('defaults'));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $defaults = $ext->last();
+				
+		$this->setDefaults($defaults);
 	}	
 	
 	/**

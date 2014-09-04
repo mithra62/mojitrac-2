@@ -96,8 +96,6 @@ class AbstractRestfulJsonController extends AbstractRestfulController
 		{
 			return $this->setError(401, 'Unallowed IP Address!');
 		}
-		
-		$this->_initEvents();
 	
 		return parent::onDispatch( $e );
 	}

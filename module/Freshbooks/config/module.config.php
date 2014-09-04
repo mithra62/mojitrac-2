@@ -13,7 +13,7 @@
 return array(
     'router' => array(
         'routes' => array(
-        	'freshbooks' => array( //Login Routes
+        	'freshbooks' => array( //Index Routes
         		'type' => 'segment',
         		'options' => array(
         			'route' => '/freshbooks',
@@ -27,36 +27,15 @@ return array(
         		),
         		'may_terminate' => true,
         		'child_routes' => array(
-        			'process' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => '/process',
-        					'defaults' => array(
-        						'action' => 'process'
-        					)
-        				)
-        			),
-        			'logout' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => '/logout',
-        					'defaults' => array(
-        						'action' => 'logout'
-        					)
-        				)
-        			),
         		)
-        	), //end Login Routes
+        	), //end Index Routes
 
-        	'forgot-password' => array( //Forgot Password Routes
+        	'freshbooks-settings' => array( //Settings Routes
         		'type' => 'segment',
         		'options' => array(
-        			'route' => '/forgot-password',
-        			'constraints' => array(
-        				'id' => '[0-9]+'
-        			),
+        			'route' => '/freshbooks/settings',
         			'defaults' => array(
-        				'controller' => 'Application\Controller\ForgotPassword',
+        				'controller' => 'Freshbooks\Controller\Settings',
         				'action' => 'index'
         			),
         		),
@@ -65,9 +44,9 @@ return array(
         			'reset' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/reset/:hash',
+        					'route' => '/link-account',
         					'defaults' => array(
-        						'action' => 'reset'
+        						'action' => 'linkAccount'
         					)
         				)
         			),
@@ -77,7 +56,8 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Freshbooks\Controller\Index' => 'Freshbooks\Controller\IndexController'
+            'Freshbooks\Controller\Index' => 'Freshbooks\Controller\IndexController',
+            'Freshbooks\Controller\Settings' => 'Freshbooks\Controller\SettingsController'
         ),
     ),
     'view_manager' => array(

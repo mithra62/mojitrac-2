@@ -56,21 +56,4 @@ trait Controller
 			}
 		}
 	}
-
-	/**
-	 * Setup the Events we're gonna piggyback on
-	 * 
-	 * Note, we have to implement the other module events since we can't extend the Base\Controller
-	 * 
-	 * @todo Abstract the registering of events
-	 */
-	private function _initEvents()
-	{
-		//setup the Activity Log
-		$al = $this->getServiceLocator()->get('PM\Event\ActivityLogEvent');
-		$al->register($this->getEventManager()->getSharedManager());
-		
-		$al = $this->getServiceLocator()->get('PM\Event\NotificationEvent');
-		$al->register($this->getEventManager()->getSharedManager());				
-	}
 }

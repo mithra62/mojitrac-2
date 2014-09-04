@@ -1,5 +1,5 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
  * @author		Eric Lamb
@@ -64,17 +64,35 @@ class Module implements
     ConsoleBannerProviderInterface
 {
 	/**
-	 * Sets up the module settings
+	 * Sets up the module layout
 	 * @param ModuleManager $moduleManager
 	 */
 	public function init(ModuleManager $moduleManager)
 	{
 		//sets the layout
-		$sharedEvents = $moduleManager->getEventManager()->getSharedManager();
-		$sharedEvents->attach(__NAMESPACE__, 'dispatch', function($e) {
+		$this->sharedEvents = $moduleManager->getEventManager()->getSharedManager();
+		$this->sharedEvents->attach(__NAMESPACE__, 'dispatch', function($e) {
 			$controller = $e->getTarget();
 			$controller->layout('layout/pm');
-		}, 100);	
+		}, 100);
+			
+	}
+
+	/**
+	 * Setup the Events we're gonna piggyback on
+	 *
+	 * Note, we have to implement the other module events since we can't extend the Base\Controller
+	 *
+	 * @param \Zend\Mvc\MvcEvent $e
+	 * @todo Abstract the registering of events
+	 */	
+	public function onBootstrap(\Zend\Mvc\MvcEvent $e)
+	{
+		$event = $e->getApplication()->getServiceManager()->get('PM\Event\NotificationEvent');
+		$event->register($this->sharedEvents);
+
+		$event = $e->getApplication()->getServiceManager()->get('PM\Event\ActivityLogEvent');
+		$event->register($this->sharedEvents);
 	}
 
 	/**
@@ -115,11 +133,18 @@ class Module implements
 		return 'PM 2.X';
 	}	
 
+	/**
+	 * @ignore
+	 */
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
     }
 
+    /**
+     * @ignore
+     * @return multitype:multitype:multitype:string
+     */
     public function getAutoloaderConfig()
     {
         return array(
@@ -131,6 +156,9 @@ class Module implements
         );
     }
     
+    /**
+     * @ignore
+     */
     public function getServiceConfig()
     {
     	return array(
