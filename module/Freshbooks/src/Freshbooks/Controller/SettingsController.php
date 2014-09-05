@@ -60,15 +60,18 @@ class SettingsController extends AbstractPmController
 		$request = $this->getRequest();
 		if ($this->getRequest()->isPost())
 		{
-			$formData = $this->getRequest()->getPost();
+			$data = $this->getRequest()->getPost();
 			$form->setInputFilter($credentials->getInputFilter());
-			$form->setData($request->getPost());
-			if ($form->isValid($formData))
+			$form->setData($data);
+			if ($form->isValid())
 			{
+    			$setting = $this->getServiceLocator()->get('Application\Model\Settings');
 				$data = $form->getData();
-				print_r($data);
-				echo 'Good';
-				exit;
+				if($setting->updateSettings($data))
+				{
+			    	$this->flashMessenger()->addMessage('Freshbooks credentials updated!');
+					return $this->redirect()->toRoute('freshbooks');	
+				}
 			}	
 
 		}

@@ -23,12 +23,12 @@ if($this->id > 0)
 ?>
 	
 		<p>
-			<label for="freshbooks_domain">Domain</label>
-			<?php $field = $form->get('freshbooks_domain'); echo $this->formRow($field); ?>
+			<label for="freshbooks_account_url">Domain</label>
+			<?php $field = $form->get('freshbooks_account_url'); echo $this->formRow($field); ?>
 		</p>
 		<p>
-			<label for="freshbooks_token">Token</label>
-			<?php $field = $form->get('freshbooks_token'); echo $this->formRow($field); ?>
+			<label for="freshbooks_auth_token">Token</label>
+			<?php $field = $form->get('freshbooks_auth_token'); echo $this->formRow($field); ?>
 		</p>
 		
 		<p>
@@ -37,3 +37,26 @@ if($this->id > 0)
 
 <?php echo $this->ConfirmPageUnload('#freshbooks_credentials_form')?>
 <?php echo $this->form()->closeTag() ?>
+
+<script type="text/javascript">
+$.validator.setDefaults({
+	//submitHandler: function() { alert("submitted!"); }
+});
+
+$().ready(function() {
+
+	$("#freshbooks_account_url").focus();
+	$("#freshbooks_credentials_form").validate({
+		rules: {
+			freshbooks_account_url: "required",
+			freshbooks_auth_token: "required"
+		},
+		messages: {
+			freshbooks_account_url: "<?php echo $this->_('js_freshbooks_account_url_validation_message', 'freshbooks'); ?>",
+			freshbooks_auth_token: "<?php echo $this->_('js_freshbooks_auth_token_validation_message', 'freshbooks'); ?>"
+		}
+	});
+
+});
+
+</script>	

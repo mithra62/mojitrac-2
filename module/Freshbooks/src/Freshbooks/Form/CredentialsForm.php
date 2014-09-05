@@ -35,18 +35,20 @@ class CredentialsForm extends BaseForm
 		parent::__construct($name);
 		$this->setAttribute('method', 'post');
 		$this->add(array(
-				'name' => 'freshbooks_domain',
+				'name' => 'freshbooks_account_url',
 				'type' => 'Text',
 				'attributes' => array(
 					'class' => 'input large',
+					'id' => 'freshbooks_account_url',
 				),
 		));
 		
 		$this->add(array(
-				'name' => 'freshbooks_token',
+				'name' => 'freshbooks_auth_token',
 				'type' => 'Password',
 				'attributes' => array(
 					'class' => 'input large',
+					'id' => 'freshbooks_auth_token',
 				),
 		));
 	
@@ -54,8 +56,8 @@ class CredentialsForm extends BaseForm
 				'name' => 'submit',
 				'type' => 'Submit',
 				'attributes' => array(
-						'value' => 'Go',
-						'id' => 'submitbutton',
+					'value' => 'Go',
+					'id' => 'submitbutton',
 				),
 		));
     }

@@ -30,7 +30,7 @@ class SettingsEvent extends BaseEvent
 	 * @var array
 	 */	
 	private $default_settings = array(
-		'freshbooks_api_url' => '',
+		'freshbooks_account_url' => '',
 		'freshbooks_auth_token' => ''
 	);
 	

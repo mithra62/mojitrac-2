@@ -13,4 +13,6 @@
  */
 
 return array(
+	'js_freshbooks_account_url_validation_message' => 'Required',
+	'js_freshbooks_auth_token_validation_message' => 'Required',
 );

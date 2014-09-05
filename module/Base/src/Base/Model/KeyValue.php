@@ -91,7 +91,7 @@ abstract class KeyValue extends BaseModel
 				$this->addItem($item);
 			}
 				
-			return TRUE;
+			return true;
 		}
 	}
 	
@@ -131,7 +131,7 @@ abstract class KeyValue extends BaseModel
 	{
 		if(!$this->checkItem($key, $where))
 		{
-			return FALSE;
+			return false;
 		}
 	
 		$where['option_name'] = $key;

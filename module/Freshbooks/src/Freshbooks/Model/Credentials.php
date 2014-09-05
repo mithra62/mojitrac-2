@@ -51,7 +51,7 @@ class Credentials extends AbstractModel
     		$factory = new InputFactory();
     
     		$inputFilter->add($factory->createInput(array(
-				'name'     => 'freshbooks_domain',
+				'name'     => 'freshbooks_auth_token',
 				'required' => true,
 				'filters'  => array(
 					array('name' => 'StripTags'),
@@ -59,10 +59,7 @@ class Credentials extends AbstractModel
 				),
 				'validators' => array(
 					array(
-						'name' => '\Zend\Validator\Hostname',
-						'options' => array(
-							'allow' => \Zend\Validator\Hostname::ALLOW_IP
-						)
+						'name' => '\Freshbooks\Validate\Credentials'
 					),
 				),
     		)));
