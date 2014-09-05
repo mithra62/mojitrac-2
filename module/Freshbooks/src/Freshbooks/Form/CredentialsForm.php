@@ -35,14 +35,15 @@ class CredentialsForm extends BaseForm
 		parent::__construct($name);
 		$this->setAttribute('method', 'post');
 		$this->add(array(
-				'name' => 'email',
+				'name' => 'freshbooks_domain',
 				'type' => 'Text',
 				'attributes' => array(
 					'class' => 'input large',
 				),
 		));
+		
 		$this->add(array(
-				'name' => 'password',
+				'name' => 'freshbooks_token',
 				'type' => 'Password',
 				'attributes' => array(
 					'class' => 'input large',

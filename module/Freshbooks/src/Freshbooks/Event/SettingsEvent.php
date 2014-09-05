@@ -24,14 +24,22 @@ use Base\Event\BaseEvent;
  * @filesource 	./module/Freshbooks/src/Freshbooks/Event/SettingsEvent.php
  */
 class SettingsEvent extends BaseEvent
-{		
+{	
+	/**
+	 * The default settings to append to the Moji settings array
+	 * @var array
+	 */	
+	private $default_settings = array(
+		'freshbooks_api_url' => '',
+		'freshbooks_auth_token' => ''
+	);
+	
     /**
      * The hooks used for the Event
      * @var array
      */
     private $hooks = array(
-        'user.add.post' => 'modSettingsDefaults',
-    	'task.update.pre' => 'modSettingsFinal',
+        'settings.defaults.set.pre' => 'modSettingsDefaults'
     );
     
     public function __construct( )
@@ -51,38 +59,17 @@ class SettingsEvent extends BaseEvent
     	}
     }
     
-	public function modSettingsDefaults($obj)
+    /**
+     * Merges our settings array into the MojiTrac Settings array 
+     * @param \Zend\EventManager\Event $event
+     * @return array
+     */
+	public function modSettingsDefaults(\Zend\EventManager\Event $event)
 	{
-		/*
-		 * You can grab the passed parameters using the getParam method like the below
-		 */
-		$task_data = $obj->getParam('data');
-		
-		/*
-		 * If you want to modify the parameters you have to use the setParam method after modifying the parameter
-		 * This is to ensure that *other* events that execute after yours can access those changes. If you don't use setParam, the next time
-		 * getParam is called it will be the original copy with no changes. 
-		 * 
-		 * Below, I'm just appending 'fdsa' to the task name. Easy.
-		 */
-		$task_data['name'] = $task_data['name'].' fdsa';
-		$obj->setParam('data', $task_data);
-		
-		/*
-		 * In addition to modifying parameters for all other Events, you can also override the expected return value for a given event.
-		 * In those cases, in addition to the above use of setParam for other Events, simple return back the paramater the model expects.
-		 * 
-		 * Note that since you never know what Events *could* happen after yours it's best practice to always return the main data object.
-		 */
-		return $task_data;
-		
-		/*
-		 * If you want to ensure that nothing else happens after your Event, including the calling Method 
-		 * set the stopPropagation method with a value of true. Note that this will require a return value consistant with 
-		 * calling method's signature for returns.
-		 */
-		//$obj->stopPropagation(true);
-		//return $task_data;
+		$defaults = $event->getParam('defaults');
+		$defaults = array_merge($defaults, $this->default_settings);
+		$event->setParam('defaults', $defaults);
+		return $defaults;
 		
 	}
 }

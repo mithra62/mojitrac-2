@@ -1,0 +1,39 @@
+<div class="content_headers" style="padding-top:0px;">
+	<div class="admin_header">Link Account</div>				
+</div>
+<?php if(!$this->ajax_mode): ?>
+<div class="back_link_content">
+	<a href="<?php echo $this->url('ips', array('module' => 'pm','controller'=>'ips','action'=>'index'), null, TRUE); ?>" title="Back to Ips">
+		Back to Freshbooks
+	</a><div><?php echo $this->InteractIcon('left-arrow', 'Back to Freshbooks');?></div>
+</div>	
+<br clear="all" />
+<?php endif; ?>
+<?php 
+$form = $this->form;
+$form->setAttribute('action', $this->form_action);
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+?>
+<?php 
+if($this->id > 0)
+	echo '<input type="hidden" value="'.$this->id.'" name="id" />';
+?>
+	
+		<p>
+			<label for="freshbooks_domain">Domain</label>
+			<?php $field = $form->get('freshbooks_domain'); echo $this->formRow($field); ?>
+		</p>
+		<p>
+			<label for="freshbooks_token">Token</label>
+			<?php $field = $form->get('freshbooks_token'); echo $this->formRow($field); ?>
+		</p>
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>			
+
+<?php echo $this->ConfirmPageUnload('#freshbooks_credentials_form')?>
+<?php echo $this->form()->closeTag() ?>

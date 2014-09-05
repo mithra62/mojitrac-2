@@ -7,7 +7,7 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/Application/config/module.config.php
+ * @filesource 	./module/Freshbooks/config/module.config.php
 */
 
 return array(
@@ -41,7 +41,7 @@ return array(
         		),
         		'may_terminate' => true,
         		'child_routes' => array(
-        			'reset' => array(
+        			'link-account' => array(
         				'type' => 'segment',
         				'options' => array(
         					'route' => '/link-account',

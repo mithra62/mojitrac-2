@@ -16,6 +16,7 @@ use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 
+use Freshbooks\Model\Credentials;
 use Freshbooks\Form\CredentialsForm;
 use Freshbooks\Event\SettingsEvent;
 
@@ -55,13 +56,8 @@ class Module implements
 	 */	
 	public function onBootstrap(\Zend\Mvc\MvcEvent $e)
 	{
-		/**
-		$event = $e->getApplication()->getServiceManager()->get('PM\Event\NotificationEvent');
+		$event = $e->getApplication()->getServiceManager()->get('Freshbooks\Event\SettingsEvent');
 		$event->register($this->sharedEvents);
-
-		$event = $e->getApplication()->getServiceManager()->get('PM\Event\ActivityLogEvent');
-		$event->register($this->sharedEvents);
-		**/
 	}
 
 	/**
@@ -119,12 +115,12 @@ class Module implements
 				'Freshbooks\Model\Credentials' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Credentials();
+					return new Credentials($adapter, $db);
 				},
 				
 				//forms
 				'Freshbooks\Form\CredentialsForm' => function($sm) {
-					return new CredentialsForm('freshbooks_credentials');
+					return new CredentialsForm('freshbooks_credentials_form');
 				},				
 				
 				//events

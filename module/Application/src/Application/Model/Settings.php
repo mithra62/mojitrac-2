@@ -77,10 +77,13 @@ class Settings extends KeyValue
 		$this->setTable($this->table);
 		
 		$defaults = $this->defaults;
-		$ext = $this->trigger(self::EventProjectRemoveTeamPre, $this, compact('defaults'));
+		$ext = $this->trigger(self::EventSettingsDefaultsSetPre, $this, compact('defaults'));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $defaults = $ext->last();
-				
+
 		$this->setDefaults($defaults);
+
+		$defaults = $this->defaults;
+		$ext = $this->trigger(self::EventSettingsDefaultsSetPost, $this, compact('defaults'));
 	}	
 	
 	/**

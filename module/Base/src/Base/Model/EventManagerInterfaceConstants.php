@@ -109,8 +109,10 @@ interface EventManagerInterfaceConstants extends EventManagerAwareInterface
 	
 	const EventSettingsUpdatePre = 'settings.update.pre';
 	const EventSettingsUpdatePost = 'settings.update.post';
-	const EventSettingsGetPre = 'settings.get.pre';
-	const EventSettingsGetPost = 'settings.get.post';
+	const EventSettingsDefaultsSetPre = 'settings.defaults.set.pre';
+	const EventSettingsDefaultsSetPost = 'settings.defaults.set.post'; //Nothing to exit or return or override!!
+	const EventSettingsCompiledGetPre = 'settings.compiled.get.pre';
+	const EventSettingsCompiledGetPost = 'settings.compiled.get.post';
 	
 	const EventActivityLogAddPre = 'activitylog.add.pre';
 	const EventActivityLogAddPost = 'activitylog.add.post';

@@ -30,7 +30,7 @@ class Ips extends AbstractModel
     protected $inputFilter;
     
     /**
-     * The Companies Model
+     * The IP Locker Model
      * @param \Zend\Db\Adapter\Adapter $adapter
      * @param \Zend\Db\Sql\Sql $db
      */

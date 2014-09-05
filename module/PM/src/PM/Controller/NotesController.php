@@ -426,6 +426,7 @@ class NotesController extends AbstractPmController
 		//$this->view->headTitle('Delete Note: '. $this->view->note['subject'], 'PREPEND');
 		$view['id'] = $id;
 		$view['form'] = $form;
+		$view['form_action'] = $this->getRequest()->getRequestUri();
 		return $this->ajaxOutput($view);
 	}	
 }

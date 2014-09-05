@@ -43,20 +43,40 @@ class SettingsController extends AbstractPmController
 		return array();
     }
     
+    /**
+     * Controller action for linking MojiTrac up to a Freshbooks account
+     */
     public function linkAccountAction()
     {
-    	print_r($this->settings);
-    	exit;
+		$credentials = $this->getServiceLocator()->get('Freshbooks\Model\Credentials');
 		$form = $this->getServiceLocator()->get('Freshbooks\Form\CredentialsForm');
 		$form->setData(
 			array(
-				'status' => $this->settings['default_project_status'],
-				'type' => $this->settings['default_project_type'],
-				'priority' => $this->settings['default_project_priority'],
+				'freshbooks_api_url' => $this->settings['freshbooks_api_url'],
+				'freshbooks_auth_token' => $this->settings['freshbooks_auth_token']
 			)
 		);
-    	echo 'fdsfdsafdsaa';
-    	exit;
-    	exit;
+		
+		$request = $this->getRequest();
+		if ($this->getRequest()->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setInputFilter($credentials->getInputFilter());
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
+			{
+				$data = $form->getData();
+				print_r($data);
+				echo 'Good';
+				exit;
+			}	
+
+		}
+
+		$this->layout()->setVariable('layout_style', 'left');
+		$view = array();
+		$view['form'] = $form;
+		$view['form_action'] = $this->getRequest()->getRequestUri();
+		return $this->ajaxOutput($view);
     }
 }
