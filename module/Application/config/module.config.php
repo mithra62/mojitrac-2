@@ -132,6 +132,7 @@ return array(
     'view_helpers' => array(
 	    'invokables' => array(
 	    	'StaticUrl' => 'Application\View\Helper\StaticUrl',
+	    	'DispatchRouteEvents' => 'Application\View\Helper\DispatchRouteEvents',
 	    ),
     ),      
     'translator' => array(
