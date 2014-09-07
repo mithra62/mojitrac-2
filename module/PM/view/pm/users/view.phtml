@@ -34,7 +34,7 @@
 		<?php endif; ?>		
 </div>
 
-<div class="item_details">
+<div class="item_details" style="width:100%">
     <div class="items">
     	<p>
     		<span class="bold"><?php echo $this->_('email', 'pm')?>:</span> <a href="mailto:<?php echo $this->user['email']; ?>"><?php echo $this->Truncate($this->user['email'], '25'); ?></a><br />
@@ -72,6 +72,18 @@
 		?>
     </div>
     <?php endif; ?>
+    
+    <div class="items" style="float:right">
+    	<?php 
+    	$gravatar_settings = array(
+    			'img_size'    => 100,
+    			'default_img' => \Zend\View\Helper\Gravatar::DEFAULT_MM,
+    			'rating'      => \Zend\View\Helper\Gravatar::RATING_G,
+    			'secure'      => null,
+    	);
+    	echo $this->gravatar($this->user['email'], $gravatar_settings)->getImgTag(); 
+    	?>
+    </div>
 </div>
 
 <br clear="all" />
