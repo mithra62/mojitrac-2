@@ -1,3 +1,11 @@
+<?php 
+$partials = array(
+		'pm/admin/index/users',
+		'pm/admin/index/reports',
+		'pm/admin/index/configure',
+);
+$partials = $this->DispatchRouteEvents($partials, array());
+?>
 <div class="content_headers" style="padding-top:0px;">
 
 	<div class="project_header">Viewing Project: <?php echo $this->project['name']; ?></div>
@@ -73,9 +81,7 @@
 
 <?php if($this->project['description'] != ''): ?>
 <h2>Description:</h2>
-<p>
-<?php echo $this->FormatHtml($this->project['description']); ?>     	
-</p>
+<?php echo $this->FormatHtml($this->project['description']); ?>
 <?php endif; ?>
 
 <div class="content_headers">

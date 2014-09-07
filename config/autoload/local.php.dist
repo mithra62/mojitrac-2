@@ -27,7 +27,11 @@ return array(
 	 * Email
 	 */
 	'email' => array(
+		'type' => '', //choose between `php` and `smtp`
 		'smtp_options' => array( //if `smtp` chosen above, this must be completed and accurate
+			'host' => '',
+            'connection_class' => 'login',
+            'port' => '',
 			'connection_config' => array(
 				'username' => '',
 				'password' => ''

@@ -27,6 +27,7 @@ use Application\Model\ForgotPassword;
 use Application\Model\Settings;
 use Application\Model\Hash;
 use Application\Model\Mail;
+use Application\Model\ViewEvents;
 
 use Application\Form\ForgotPasswordForm;
 use Application\Form\SettingsForm;
@@ -202,6 +203,11 @@ class Module
 				},
 				'Application\Model\Hash' => function($sm) {
 					return new Hash();
+				},
+				'Application\Model\ViewEvents' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new ViewEvents($adapter, $db);
 				},
 				
 				//forms

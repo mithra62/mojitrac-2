@@ -34,7 +34,7 @@ echo $this->formRow($csrf);
 	
 	<?php foreach($this->permissions AS $perm): ?>
 		<p>
-			<label for="<?php echo $perm['name']; ?>"><?php $field = $form->get($perm['name']); echo $this->formRow($field); ?> <?php echo $perm['description']; ?></label>
+			<label for="<?php echo $perm['name']; ?>"><?php $field = $form->get($perm['name']); echo $this->formRow($field); ?> <?php echo $this->_('permission_'.$perm['name'], 'pm'); ?></label>
 			
 		</p>
 	<?php endforeach; ?>

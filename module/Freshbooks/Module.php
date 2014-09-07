@@ -18,7 +18,9 @@ use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 
 use Freshbooks\Model\Credentials;
 use Freshbooks\Form\CredentialsForm;
+
 use Freshbooks\Event\SettingsEvent;
+use Freshbooks\Event\ViewEvent;
 
 /**
  * Freshbooks - Module Object
@@ -57,6 +59,9 @@ class Module implements
 	public function onBootstrap(\Zend\Mvc\MvcEvent $e)
 	{
 		$event = $e->getApplication()->getServiceManager()->get('Freshbooks\Event\SettingsEvent');
+		$event->register($this->sharedEvents);
+
+		$event = $e->getApplication()->getServiceManager()->get('Freshbooks\Event\ViewEvent');
 		$event->register($this->sharedEvents);
 	}
 
@@ -126,6 +131,9 @@ class Module implements
 				//events
 				'Freshbooks\Event\SettingsEvent' => function($sm) {
 					return new SettingsEvent();
+				},
+				'Freshbooks\Event\ViewEvent' => function($sm) {
+					return new ViewEvent();
 				},								
 			),
     	);

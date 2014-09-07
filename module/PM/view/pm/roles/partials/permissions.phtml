@@ -13,7 +13,7 @@
 		{
 		?>
 		<tr>
-			<td><?php echo ($perm['description'] != '' ? $perm['description'] : 'N/A'); ?></td>
+			<td><?php echo $this->_('permission_'.$perm['name'], 'pm'); ?></td>
 			<td><?php echo ucfirst($perm['site_area']); ?></td>
 			<td>
 			<?php 

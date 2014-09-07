@@ -20,7 +20,6 @@ return array(
 	'prefs_updated' => 'Preferences updated!',
 	'password_changed' => 'Password Changed',
 	
-	
 	//users controller
 	'user_added' => 'User Added!',
 	'user_updated' => 'User Updated!',
@@ -32,6 +31,29 @@ return array(
 	'work_phone' => 'Work Phone',
 	'fax' => 'Fax',
 	'mobile_phone' => 'Mobile Phone',
+		
+	//user role permissions 
+	'permission_admin_access' => 'Can the user access the admin area? Required for all admin modules.',
+	'permission_manage_companies' => 'Can the user manage the companies?',
+	'permission_manage_company_contacts' => 'Can the user manage the company contacts?',
+	'permission_manage_files' => 'Can the user manage files?',
+	'permission_manage_invoices' => 'Can the user manage invoices?',
+	'permission_manage_ips' => 'Can the user manage allowable IP addresses?',
+	'permission_manage_options' => 'Can the user manage the available type options?',
+	'permission_manage_projects' => 'Can the user manage projects? This includes the management of the "project team".',
+	'permission_manage_roles' => 'Can the user manage user roles and permissions?',
+	'permission_manage_tasks' => 'Can the user manage tasks?',
+	'permission_manage_time' => 'Can the user manage the time of others?',
+	'permission_manage_users' => 'Can the user manage other users?',
+	'permission_track_time' => 'Can the user track their time?',
+	'permission_view_companies' => 'Can the user view companies? Required for pretty much everything.',
+	'permission_view_company_contacts' => 'Can the user view the company contacts?',
+	'permission_view_files' => 'Can the user view files?',
+	'permission_view_invoices' => 'Can the user view invoices?',
+	'permission_view_projects' => 'Can the user view projects?',
+	'permission_view_tasks' => 'Can the user view tasks?',
+	'permission_view_time' => 'Can the user view time tracker data?',
+	'permission_view_users_data' => 'Can the user view other users data?',
 		
 	//roles controller
 	'user_roles' => 'User Roles',
@@ -58,7 +80,6 @@ return array(
 	
 	//input validation messages
 	'required' => 'Required',
-		
 
 	//options
 	'option_added' => 'Option Added!',

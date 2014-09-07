@@ -6,7 +6,7 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/Freshbooks/src/Freshbooks/Event/SettingsEvent.php
+ * @filesource 	./module/Freshbooks/src/Freshbooks/Event/ViewEvent.php
  */
 
 namespace Freshbooks\Event;
@@ -14,31 +14,22 @@ namespace Freshbooks\Event;
 use Base\Event\BaseEvent;
 
 /**
- * Freshbooks - Settings event
+ * Freshbooks - View Event
  * 
  * Injects the needed Freshbooks settings into the MojiTrac settings system
  *
- * @package 	Freshbooks\Settings
+ * @package 	Freshbooks\View
  * @author		Eric Lamb
- * @filesource 	./module/Freshbooks/src/Freshbooks/Event/SettingsEvent.php
+ * @filesource 	./module/Freshbooks/src/Freshbooks/Event/ViewEvent.php
  */
-class SettingsEvent extends BaseEvent
+class ViewEvent extends BaseEvent
 {	
-	/**
-	 * The default settings to append to the Moji settings array
-	 * @var array
-	 */	
-	private $default_settings = array(
-		'freshbooks_account_url' => '',
-		'freshbooks_auth_token' => ''
-	);
-	
     /**
      * The hooks used for the Event
      * @var array
      */
     private $hooks = array(
-        'settings.defaults.set.pre' => 'modSettingsDefaults'
+        'view.render.admin' => 'modAdminView'
     );
 
     /**
@@ -58,12 +49,12 @@ class SettingsEvent extends BaseEvent
      * @param \Zend\EventManager\Event $event
      * @return array
      */
-	public function modSettingsDefaults(\Zend\EventManager\Event $event)
+	public function modAdminView(\Zend\EventManager\Event $event)
 	{
-		$defaults = $event->getParam('defaults');
-		$defaults = array_merge($defaults, $this->default_settings);
-		$event->setParam('defaults', $defaults);
-		return $defaults;
+		$partials = $event->getParam('partials');
+		$partials[] = 'freshbooks/admin/admin-options';
+		$event->setParam('partials', $partials);
+		return $partials;
 		
 	}
 }
