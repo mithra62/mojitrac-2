@@ -13,7 +13,7 @@ return array(
         'Api',
         'ZF\\ApiProblem',
         'Freshbooks',
-        'ZendDeveloperTools'
+        //'ZendDeveloperTools'
     ),
     'module_listener_options' => array(
         'module_paths' => array(

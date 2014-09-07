@@ -64,6 +64,13 @@ interface EventManagerInterfaceConstants extends EventManagerAwareInterface
 	const EventContactRemovePre = 'company.contact.remove.pre';
 	const EventContactRemovePost = 'company.contact.remove.post';
 	
+	const EventInvoiceAddPre = 'company.invoice.add.pre';
+	const EventInvoiceAddPost = 'company.invoice.add.post';
+	const EventInvoiceUpdatePre = 'company.invoice.update.pre';
+	const EventInvoiceUpdatePost = 'company.invoice.update.post';
+	const EventInvoicesRemovePre = 'company.invoice.remove.pre';
+	const EventInvoicesRemovePost = 'company.invoice.remove.post';
+	
 	const EventFileUpdatePre = 'file.update.pre';
 	const EventFileUpdatePost = 'file.update.post';
 	const EventFileAddPre = 'file.add.pre';

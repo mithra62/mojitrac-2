@@ -18,7 +18,7 @@ use PM\Controller\AbstractPmController;
  *
  * Routes the Times requests
  *
- * @package 		TimeTracker
+ * @package 	TimeTracker
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Controller/TimesController.php
  */

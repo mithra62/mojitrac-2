@@ -1,0 +1,56 @@
+<div class="content_headers" style="padding-top:0px;">
+
+	<div class="invoice_header">#<?php echo $this->invoice['invoice_number']; ?> (<?php echo $this->invoice['status']; ?>)</div>
+		
+		<?php if($this->CheckPermission('manage_invoices')):?>
+		<div class="actions">
+			<a href="<?php echo $this->url('invoices/remove', array('invoice_id' => $this->id)); ?>" title="Delete" rel="facebox">
+				<?php echo $this->InteractIcon('cross', 'Delete');?>
+				<div class="action_text">Delete</div>
+			</a>
+		</div>		
+		<div class="actions">
+			<a href="<?php echo $this->url('invoices/edit', array('invoice_id' => $this->id)); ?>" title="Edit">
+				<?php echo $this->InteractIcon('pencil', 'Edit');?>
+				<div class="action_text">Edit</div>
+			</a> 
+		</div>
+		<?php endif; ?>		
+</div>
+
+<div class="item_details">
+    <div class="items" style="padding-left:10px;">
+    	<p>
+			<span class="bold">Company:</span> <a href="<?php echo $this->url('companies/view', array('company_id' => $this->invoice['company_id'])); ?>"><?php echo $this->invoice['company_name']; ?></a><br />   
+			<span class="bold">Last Modified:</span> <?php echo $this->RelativeDate($this->invoice['last_modified']); ?><br />
+			<span class="bold">Created Date:</span> <?php echo $this->RelativeDate($this->invoice['created_date']); ?> 				
+    	</p>
+    </div> 
+
+    <div class="items" style="padding-left:10px;">
+    	<p>
+    		<?php //if(!empty($this->invoice['amount'])):?>
+				<span class="bold">Amount:</span> <?php echo $this->currencyFormat($this->invoice['amount'], "USD", "en_US"); ?><br />
+			<?php //endif; ?> 
+			<?php if($this->invoice['po_number']):?>
+				<span class="bold">PO Number:</span> <?php echo $this->invoice['po_number']; ?><br />
+			<?php endif; ?> 
+			<?php if($this->invoice['discount']):?>
+				<span class="bold">Discount:</span> <?php echo $this->invoice['discount']; ?><br />
+			<?php endif; ?> 
+    	</p>
+    </div>
+     
+</div>
+
+<br clear="all" />
+
+<?php if($this->invoice['description']): ?>
+	<h2>Description:</h2>
+	<p><?php echo $this->FormatHtml($this->invoice['description']); ?></p>
+<?php endif; ?>
+
+<?php if($this->invoice['note']): ?>
+	<h2>Note:</h2>
+	<p><?php echo $this->FormatHtml($this->invoice['note']); ?></p>
+<?php endif; ?>

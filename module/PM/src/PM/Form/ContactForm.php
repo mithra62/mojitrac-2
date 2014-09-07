@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Forms/ContactForm.php
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Forms/ContactForm.php
 */
 
 namespace PM\Form;
@@ -17,20 +16,22 @@ use PM\Model\Options\Companies;
 use Base\Form\BaseForm;
 
 /**
-* Compnany Form
-*
-* Generates the Company form
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Forms/ContactForm.php
+ * Company Contact Form
+ *
+ * Generates the Company Contact form
+ *
+ * @package 	Companies\Contacts
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Forms/ContactForm.php
 */
 class ContactForm extends BaseForm
 {
 	/**
 	 * Returns the Contact form
-	 * @param string $options
-	 */	
+	 * @param string $name
+	 * @param \PM\Model\Companies $companies
+	 * @param \PM\Model\Options $options
+	 */
 	public function __construct($name, \PM\Model\Companies $companies, \PM\Model\Options $options) 
 	{
 

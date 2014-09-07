@@ -166,7 +166,13 @@ $(document).ready(function() {
 		"bJQueryUI": true,
 		"sPaginationType": "full_numbers",
 		"bStateSave": false
-	});     
+	});   
+    
+    $('#moji_invoices').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"bStateSave": false
+	});   
     
     
     

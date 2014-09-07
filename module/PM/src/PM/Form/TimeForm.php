@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Forms/TimeForm.php
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Forms/TimeForm.php
 */
 
 namespace PM\Form;
@@ -15,21 +14,22 @@ namespace PM\Form;
 use Base\Form\BaseForm;
 
 /**
-* PM - Time Tracker Form
-*
-* Returns the Time Tracker form 
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Forms/TimeForm.php
+ * PM - Time Tracker Form
+ *
+ * Returns the Time Tracker form 
+ *
+ * @package 	TimeTracker
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Forms/TimeForm.php
 */
 class TimeForm extends BaseForm
 {
 	/**
 	 * Returns the Time Tracker form
-	 * @param string $options
+	 * @param string $name The name for the generated form
+	 * @param array $company_options The drop down options to use for selecting a company
 	 */
-	public function __construct($name = null, array $company_options = array(), array $project_options = array(), array $task_options = array()) 
+	public function __construct($name = null, array $company_options = array()) 
 	{
 		parent::__construct($name);
 		$this->add(array(

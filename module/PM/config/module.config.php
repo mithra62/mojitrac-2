@@ -1145,7 +1145,7 @@ return array(
         		'options' => array(
         			'route' => '/pm/invoices',
         			'defaults' => array(
-        				'controller' => 'PM\Controller\Companies',
+        				'controller' => 'PM\Controller\Invoices',
         				'action' => 'index'
         			),
         		),
@@ -1154,9 +1154,9 @@ return array(
         			'remove' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/remove/:company_id',
+        					'route' => '/remove/:invoice_id',
         					'constraints' => array(
-        						'slug' => '[0-9]+'
+        						'invoice_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'remove'
@@ -1166,9 +1166,9 @@ return array(
         			'add' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/add',
+        					'route' => '/add/:company_id',
         					'constraints' => array(
-        						'slug' => '[0-9]+'
+        						'company_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'add'
@@ -1178,9 +1178,9 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/:company_id',
+        					'route' => '/edit/:invoice_id',
         					'constraints' => array(
-        						'slug' => '[0-9]+'
+        						'invoice_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'edit'
@@ -1190,24 +1190,12 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/:company_id',
+        					'route' => '/:invoice_id',
         					'constraints' => array(
-        						'company_id' => '[0-9]+'
+        						'invoice_id' => '[0-9]+'
         					),
         					'defaults' => array(
         						'action' => 'view'
-        					)
-        				)
-        			),           			
-        			'map' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => '/map/:company_id',
-        					'constraints' => array(
-        						'company_id' => '[0-9]+'
-        					),
-        					'defaults' => array(
-        						'action' => 'map'
         					)
         				)
         			),
@@ -1244,6 +1232,7 @@ return array(
             'PM\Controller\Timers' => 'PM\Controller\TimersController',
             'PM\Controller\Times' => 'PM\Controller\TimesController',
             'PM\Controller\Users' => 'PM\Controller\UsersController',
+            'PM\Controller\Invoices' => 'PM\Controller\InvoicesController',
         ),
     ),
     'view_manager' => array(

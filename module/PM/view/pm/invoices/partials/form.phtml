@@ -1,0 +1,77 @@
+<?php 
+$form = $this->form;
+$form->setAttribute('id', 'invoices_form');
+$form->setAttribute('action', $form_action);
+$form->prepare();
+echo $this->form()->openTag($form);
+$csrf = $form->get('_x');
+echo $this->formRow($csrf);
+
+	if($this->id > 0)
+		echo '<input type="hidden" value="'.$this->id.'" name="id" />';
+?>
+<p>
+	<label for="invoice_number">Invoice Number</label>
+	<?php $name = $form->get('invoice_number'); echo $this->formRow($name); ?>
+</p>
+<p>
+	<label for="status">Status</label>
+	<?php $name = $form->get('status'); echo $this->formRow($name); ?>
+</p>
+<p>
+	<label for="invoice_type">Line Item Type</label>
+	<?php $name = $form->get('invoice_type'); echo $this->formRow($name); ?>
+</p>
+
+<p>
+	<label for="date">Date of Issue</label>
+	<?php $name = $form->get('date'); echo $this->formRow($name); ?>
+</p>
+<p>
+	<label for="po_number">PO Number</label>
+	<?php $name = $form->get('po_number'); echo $this->formRow($name); ?>
+</p>
+
+<p>
+	<label for="discount">Discount</label>
+	<?php $name = $form->get('discount'); echo $this->formRow($name); ?>
+</p>
+
+<p>
+	<label for="notes">Note</label>
+	<?php $name = $form->get('notes'); echo $this->formRow($name); ?>
+</p>
+
+<p>
+	<label for="description">Description</label>
+	<?php $name = $form->get('terms_conditions'); echo $this->formRow($name); ?>
+</p>		
+
+<p>
+	<input type="submit" class="submit" value="Submit" />
+</p>
+<?php echo $this->ConfirmPageUnload('#invoice_form')?>
+<?php echo $this->form()->closeTag() ?>
+
+
+<script type="text/javascript">
+$.validator.setDefaults({
+	//submitHandler: function() { alert("submitted!"); }
+});
+
+$().ready(function() {
+
+	$("#invoices_form").validate({
+		rules: {
+			invoice_number: "required",
+			date: "required"
+		},
+		messages: {
+			invoice_number: "Please enter an invoice number",
+			date: "Please select a date"
+		}
+	});
+
+});
+
+</script>

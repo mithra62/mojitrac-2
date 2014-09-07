@@ -34,7 +34,7 @@ echo $this->formRow($csrf);
 			<?php 
 			if($this->addAction)
 			{
-				echo '<a href="/pm/companies/view/id/'.$this->company_data['id'].'" title="'.$this->company_data['name'].'">'.$this->company_data['name'].'</a>';
+				echo '<a href="'.$this->url('companies/view', array('company_id' => $this->company_data['id'])).'" title="'.$this->company_data['name'].'">'.$this->company_data['name'].'</a>';
 				echo '<input type="hidden" name="company_id" value="'.$this->company_data['id'].'" />';
 			} else {
 				$name = $form->get('company_id'); 

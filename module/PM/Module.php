@@ -34,6 +34,7 @@ use PM\Model\Calendar;
 use PM\Model\Ips;
 use PM\Model\Users;
 use PM\Model\FusionCharts;
+use PM\Model\Invoices;
 
 use PM\Form\ProjectForm;
 use PM\Form\CompanyForm;
@@ -48,6 +49,7 @@ use PM\Form\TimeForm;
 use PM\Form\TimerForm;
 use PM\Form\FileForm;
 use PM\Form\File\RevisionForm;
+use PM\Form\InvoiceForm;
 
 use PM\Event\ActivityLogEvent;
 use PM\Event\NotificationEvent;
@@ -259,6 +261,11 @@ class Module implements
 					$db = $sm->get('SqlObject');
 					return new FusionCharts($adapter, $db);
 				},
+				'PM\Model\Invoices' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new Invoices($adapter, $db);
+				},
 				
 				//forms
 				'PM\Form\ProjectForm' => function($sm) {
@@ -339,7 +346,10 @@ class Module implements
 				    $task = $sm->get('PM\Model\Tasks');
 				    $project = $sm->get('PM\Model\Projects');
 					return new NotificationEvent($mail, $user, $project, $task, $auth->getIdentity());
-				},										
+				},	
+				'PM\Form\InvoiceForm' => function($sm) {
+					return new InvoiceForm('invoice_form');
+				},									
 			),
     	);
     }    

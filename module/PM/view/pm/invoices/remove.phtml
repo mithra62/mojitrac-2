@@ -1,0 +1,23 @@
+<div class="attention png_bg">
+Are you sure you want to remove "<?php echo $this->contact['first_name']?> <?php echo $this->contact['last_name']?>"? This can not be undone...
+</div>
+
+<p>
+<form action="<?php echo $this->url('contacts/remove', array('contact_id' => $this->id), null, TRUE); ?>" method="POST">
+	<input type="submit" class="submit" value="Yes" name="confirm" /> <input type="submit" class="submit" value="No" name="fail"/>
+</form>
+</p>
+
+<h2>Contact Details</h2>
+<p>
+<a href="<?php echo $this->url('contacts/view', array('contact_id'=>$this->contact['id'])); ?>"><?php echo $this->contact['first_name']?> <?php echo $this->contact['last_name']?></a> is attached to:
+<br />
+<?php if($this->file_count || $this->project_count || $this->task_count): ?>
+	<?php echo $this->project_count; ?> Projects<br />
+	<?php echo $this->task_count; ?> Tasks<br />
+	<?php echo $this->file_count; ?> Files
+	
+<?php else: ?>
+Nothing :)	
+<?php endif; ?>
+</p>

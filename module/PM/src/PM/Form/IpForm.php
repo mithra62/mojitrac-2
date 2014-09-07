@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Forms/IpForm.php
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Forms/IpForm.php
 */
 
 namespace PM\Form;
@@ -15,13 +14,13 @@ namespace PM\Form;
 use Base\Form\BaseForm;
 
 /**
-* Ip Locker Form
-*
-* Generates the Ip Locker form
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Forms/IpForm.php
+ * Ip Locker Form
+ *
+ * Generates the Ip Locker form
+ *
+ * @package 	IpLocker
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Forms/IpForm.php
 */
 class IpForm extends BaseForm
 {

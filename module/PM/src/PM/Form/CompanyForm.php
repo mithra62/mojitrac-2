@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Forms/CompanyForm.php
+ *
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link			http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Forms/CompanyForm.php
 */
 
 namespace PM\Form;
@@ -17,19 +16,19 @@ use PM\Model\Options\Companies;
 use Base\Form\BaseForm;
 
 /**
-* Compnany Form
-*
-* Generates the Company form
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Forms/CompanyForm.php
+ * Compnany Form
+ *
+ * Generates the Company form
+ *
+ * @package 		Companies
+ * @author		Eric Lamb
+ * @filesource 	./module/PM/src/PM/Forms/CompanyForm.php
 */
 class CompanyForm extends BaseForm
 {
 	/**
 	 * Returns the Company form
-	 * @param string $options
+	 * @param string $name
 	 */	
 	public function __construct($name) 
 	{

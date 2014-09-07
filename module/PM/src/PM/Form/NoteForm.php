@@ -1,13 +1,12 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Forms/NoteForm.php
+ *
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/PM/src/PM/Forms/NoteForm.php
 */
 
 namespace PM\Form;
@@ -16,13 +15,13 @@ use Base\Form\BaseForm;
 use PM\Model\Options\Notes;
 
 /**
-* Note Form
-*
-* Generates the Note form
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Forms/NoteForm.php
+ * Note Form
+ *
+ * Generates the Note form
+ *
+ * @package 	Notes
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/PM/src/PM/Forms/NoteForm.php
 */
 class NoteForm extends BaseForm
 {

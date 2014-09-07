@@ -118,6 +118,12 @@ class CompaniesController extends AbstractPmController
 			$view['times'] = $times->getTimesByCompanyId($id, null, $not);
 			$view['hours'] = $times->getTotalTimesByCompanyId($id);
 		}
+		
+		if($this->perm->check($this->identity, 'view_invoices'))
+		{		
+			$invoices = $this->getServiceLocator()->get('PM\Model\Invoices');
+			$view['invoices'] = $invoices->getInvoicesByCompanyId($id);
+		}
 
 		$bookmarks = $this->getServiceLocator()->get('PM\Model\Bookmarks');
 		$view['bookmarks'] = $bookmarks->getBookmarksByCompanyId($id);

@@ -68,25 +68,23 @@ class InvoicesController extends AbstractPmController
 	}
 	
 	/**
-	 * Contact View Page
+	 * Invoice View Page
 	 * @return void
 	 */
 	public function viewAction()
 	{
-		$id = $this->params()->fromRoute('contact_id');
+		$id = $this->params()->fromRoute('invoice_id');
 		if (!$id) {
 			return $this->redirect()->toRoute('companies');
 		}
 		
-		$contact = $this->getServiceLocator()->get('PM\Model\Contacts');
-		$view['contact'] = $contact->getContactById($id);
-		if(!$view['contact'])
+		$invoice = $this->getServiceLocator()->get('PM\Model\Invoices');
+		$view['invoice'] = $invoice->getInvoiceById($id);
+		if(!$view['invoice'])
 		{
-			return $this->redirect()->toRoute('contacts');
+			return $this->redirect()->toRoute('companies');
 		}
-			
-		//$this->view->title = FALSE;
-		//$this->view->headTitle('Viewing Contact: '. $this->view->contact['first_name'].' '.$this->view->contact['last_name'], 'PREPEND');
+
 		$view['id'] = $id;
 		
 		return $this->ajaxOutput($view);
@@ -98,41 +96,41 @@ class InvoicesController extends AbstractPmController
 	 */
 	public function editAction()
 	{
-	    if(!$this->perm->check($this->identity, 'manage_company_contacts')) {
-        	return $this->redirect()->toRoute('contacts');
+	    if(!$this->perm->check($this->identity, 'manage_invoices')) {
+        	return $this->redirect()->toRoute('companies');
         }
         		
-		$id = $this->params()->fromRoute('contact_id');
+		$id = $this->params()->fromRoute('invoice_id');
 		if (!$id) {
-			return $this->redirect()->toRoute('contacts');
+			return $this->redirect()->toRoute('companies');
 		}
 		
-		$contact = $this->getServiceLocator()->get('PM\Model\Contacts');
-		$contact_data = $contact->getContactById($id);
-		if(!$contact_data)
+		$invoice = $this->getServiceLocator()->get('PM\Model\Invoices');
+		$invoice_data = $invoice->getInvoiceById($id);
+		if(!$invoice_data)
 		{
-			return $this->redirect()->toRoute('contacts');
+			return $this->redirect()->toRoute('companies');
 		}
 
-		$form = $this->getServiceLocator()->get('PM\Form\ContactForm');
-        $form->setData($contact->getContactById($id));	
+		$form = $this->getServiceLocator()->get('PM\Form\InvoiceForm');
+        $form->setData($invoice->getInvoiceById($id));	
         $request = $this->getRequest();
         if ($this->getRequest()->isPost()) 
         {
             $formData = $this->getRequest()->getPost();
-            $form->setInputFilter($contact->getInputFilter());  
+            $form->setInputFilter($invoice->getInputFilter());  
             $form->setData($request->getPost());
             if ($form->isValid($formData)) 
             {
-            	if($contact->updateContact($formData->toArray(), $id))
+            	if($invoice->updateInvoice($formData->toArray(), $id))
 	            {	
-			    	$this->flashMessenger()->addMessage('Contact updated!');
-					return $this->redirect()->toRoute('contacts/view', array('contact_id' => $id));
+			    	$this->flashMessenger()->addMessage('Invoice updated!');
+					return $this->redirect()->toRoute('invoices/view', array('invoices_id' => $id));
 					        		
             	} 
             	else 
             	{
-            		$view['errors'] = array('Couldn\'t update contact...');
+            		$view['errors'] = array('Couldn\'t update invoice...');
             		$form->setData($formData);
             	}
                 
@@ -148,23 +146,20 @@ class InvoicesController extends AbstractPmController
 	    $view['id'] = $id;
 	    $view['form'] = $form;	    
 	    
-	    $view['contact_data'] = $contact_data;
-		$this->layout()->setVariable('layout_style', 'right');     
-		//$this->view->headTitle('Edit Contact', 'PREPEND');     	
-		
+	    $view['invoice_data'] = $invoice_data;
+		$this->layout()->setVariable('layout_style', 'right'); 
 		return $this->ajaxOutput($view);
 	}
 	
 	/**
-	 * Contact Add Page
-	 * @return void
+	 * Invoice Add Page
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|Ambigous <\Zend\View\Model\ViewModel, boolean, array>
 	 */
 	public function addAction()
 	{
-
-		if(!$this->perm->check($this->identity, 'manage_company_contacts'))
+		if(!$this->perm->check($this->identity, 'manage_invoices'))
         {
-        	return $this->redirect()->toRoute('contacts');
+        	return $this->redirect()->toRoute('invoices');
         }
         		
 		$company_id = $this->params()->fromRoute('company_id');
@@ -180,23 +175,23 @@ class InvoicesController extends AbstractPmController
 			return $this->redirect()->toRoute('companies');
 		}
 		
-		$contact = $this->getServiceLocator()->get('PM\Model\Contacts');
-		
-		$form = $this->getServiceLocator()->get('PM\Form\ContactForm');
+		$invoice = $this->getServiceLocator()->get('PM\Model\Invoices');
+		$form = $this->getServiceLocator()->get('PM\Form\InvoiceForm');
+		$form->setData(array('date' => date('Y-m-d')));
         $request = $this->getRequest();
 		if ($this->getRequest()->isPost()) {
     		
     		$formData = $this->getRequest()->getPost();
     		$formData = $this->getRequest()->getPost();
-    		$form->setInputFilter($contact->getInputFilter());
+    		$form->setInputFilter($invoice->getInputFilter());
     		$form->setData($request->getPost());
     		    		
 			if ($form->isValid($formData)) {
 				$formData['creator'] = $this->identity;
-				$contact_id = $contact->addContact($formData->toArray());
-				if($contact_id){
-			    	$this->flashMessenger()->addMessage('Contact Added!');
-					return $this->redirect()->toRoute('contacts/view', array('contact_id' => $contact_id));
+				$invoice_id = $invoice->addInvoice($company_id, $formData->toArray());
+				if($invoice_id){
+			    	$this->flashMessenger()->addMessage('Invoice Added!');
+					return $this->redirect()->toRoute('invoices/view', array('invoice_id' => $invoice_id));
 				} else {	
 					$view['errors'] = array('Something went wrong...');
 				}
@@ -213,6 +208,7 @@ class InvoicesController extends AbstractPmController
 		$this->layout()->setVariable('layout_style', 'left');
 		$view['form'] = $form;
 		$view['id'] = $company_id;
+		$view['form_action'] = $this->getRequest()->getRequestUri();
 		return $this->ajaxOutput($view);
 	}
 	
