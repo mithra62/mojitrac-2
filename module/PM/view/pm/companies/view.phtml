@@ -159,20 +159,20 @@
 	<div class="content_headers">
 		<div class="invoice_header">Invoices</div>
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller' => 'docs','action'=>'invoices', 'page' => 'contacts'), null, TRUE); ?>" rel="facebox" title="About Company Invoice">
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'invoices', 'page' => 'contacts'), null, TRUE); ?>" rel="facebox" title="About Company Invoice">
 				<?php echo $this->InteractIcon('help', 'About Company Invoices');?>
 				<div class="action_text">Help</div>
 			</a>
 		</div>			
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'invoices','action'=>'index', 'company' => $this->id), null, TRUE); ?>" title="View All">
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'invoices','action'=>'index', 'company' => $this->id), null, TRUE); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All Company Invoices');?> 
 				<div class="action_text">View All</div>
 			</a>
 		</div>			
-		<?php if($this->CheckPermission('manage_company_contacts')): ?>	
+		<?php if($this->CheckPermission('manage_invoices')): ?>	
 		<div class="actions">
-			<a href="<?php echo $this->url(array('module' => 'pm','controller'=>'invoices','action'=>'add', 'company' => $this->id), null, TRUE); ?>" title="Add Invoice">
+			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'invoices','action'=>'add', 'company' => $this->id), null, TRUE); ?>" title="Add Invoice">
 				<?php echo $this->InteractIcon('add', 'Add Company Invoice');?>
 				<div class="action_text">Add Invoice</div>
 			</a>
@@ -180,15 +180,15 @@
 		<?php endif; ?>
 	</div>
 	<?php 
-	if($this->contacts):
-		$options = array('contacts' => $this->contacts, 'facebox' => 'yes');
-		echo $this->partial('pm/contacts/partials/contacts', $options); 
+	if($this->invoices):
+		$options = array('invoices' => $this->invoices, 'facebox' => 'yes');
+		echo $this->partial('pm/invoices/partials/invoices', $options); 
 	else: 
 	?>
 	<div class="information png_bg">
-		There aren't any contacts added yet. 
-		<?php if($this->CheckPermission('manage_company_contacts')): ?>
-			Want to <a href="<?php echo $this->url(array('module' => 'pm','controller'=>'contacts','action'=>'add', 'company' => $this->id), null, TRUE); ?>">add</a> one?
+		There aren't any invoices added yet. 
+		<?php if($this->CheckPermission('manage_invoices')): ?>
+			Want to <a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'contacts','action'=>'add', 'company' => $this->id), null, TRUE); ?>">add</a> one?
 		<?php endif; ?>
 	</div>
 	<?php 
@@ -196,7 +196,7 @@
 endif; ?>
 
 <?php 
-if($this->CheckPermission('view_company_contacts')):?>
+if($this->CheckPermission('view_company_contacts') || $this->CheckPermission('manage_company_contacts')):?>
 	<div class="content_headers">
 		<div class="contact_header">Contacts</div>
 		<div class="actions">
@@ -235,7 +235,7 @@ if($this->CheckPermission('view_company_contacts')):?>
 	<?php 
 	endif;
 endif;
-	?>
+?>
 
 <div class="content_headers">
 	<div class="file_header">Files</div>

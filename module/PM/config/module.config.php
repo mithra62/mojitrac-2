@@ -1138,7 +1138,82 @@ return array(
         				)
         			)
         		)
-        	), //End User Routes
+        	), //End User Routes 
+        	
+        	'invoices' => array( //Invoices Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/invoices',
+        			'defaults' => array(
+        				'controller' => 'PM\Controller\Companies',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/:company_id',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),        			
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit/:company_id',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			),      			
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/:company_id',
+        					'constraints' => array(
+        						'company_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
+        			),           			
+        			'map' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/map/:company_id',
+        					'constraints' => array(
+        						'company_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'map'
+        					)
+        				)
+        			),
+        		)
+        	), //end Invoices Routes
+        		
         ),
     ),
     'controllers' => array(
