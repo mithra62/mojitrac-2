@@ -223,6 +223,7 @@ class CompaniesController extends AbstractPmController
         		
 		$company = $this->getServiceLocator()->get('PM\Model\Companies');
 		$form = $this->getServiceLocator()->get('PM\Form\CompanyForm');
+		$form->setData(array('currency_code' => 'USD'));
 		$request = $this->getRequest();
 		if ($request->isPost()) 
 		{

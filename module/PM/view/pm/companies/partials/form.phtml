@@ -34,6 +34,16 @@ echo $this->formRow($csrf);
 			<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'type'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Company Type');?></a> 
 		</p>
 		
+		<p style="display: none" id="client_language_block">
+			<label for="client_language">Language</label>
+			<?php $name = $form->get('client_language'); echo $this->formRow($name); ?>
+		</p>
+		
+		<p style="display: none" id="currency_code_block">
+			<label for="currency_code">Billing Currency</label>
+			<?php $name = $form->get('currency_code'); echo $this->formRow($name); ?>
+		</p>		
+		
 		<p>
 			<label for="description">Description</label>
 			<?php $name = $form->get('description'); echo $this->formRow($name); ?>
@@ -113,6 +123,29 @@ $().ready(function() {
 		},
 		messages: {
 			name: "Please enter a company name"
+		}
+	});
+
+	var type = $("#type").val();
+	if(type == 1)
+	{
+		$("#currency_code_block").show();
+		$("#client_language_block").show();
+	}
+
+	$("#type").change(function(){
+		//$("#assignment_comment").show();
+		var def_type = '<?php echo ($this->company['type'] ? $this->company['type'] : 0); ?>';
+		var new_type = $("#type").val();
+		if(new_type == def_type || new_type == 1)
+		{
+			$("#currency_code_block").show();
+			$("#client_language_block").show();
+		}
+		else
+		{
+			$("#currency_code_block").hide();
+			$("#client_language_block").hide();
 		}
 	});
 

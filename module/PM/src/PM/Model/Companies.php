@@ -84,6 +84,8 @@ class Companies extends AbstractModel
 			'description' => $data['description'],
 			'type' => $data['type'],
 			'custom' => $data['custom'],
+			'client_language' => ($data['client_language'] ? $data['client_language'] : 'en_US'),
+			'currency_code' => ($data['currency_code'] ? $data['currency_code'] : 'USD'),
 			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
 		);
 	}	
