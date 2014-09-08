@@ -3,6 +3,9 @@
 		<tr>
 			<?php if($this->enable_checkbox):?>
 			<th></th>
+			<?php endif; ?>	
+			<?php if($this->enable_hour_rate_field):?>
+			<th>Rate</th>
 			<?php endif; ?>		
 			<?php if($this->enable_date):?>
 			<th>Date</th>
@@ -18,7 +21,9 @@
 			<th>Task</th>
 			<?php endif; ?>
 			<th>Who</th>
+			<?php if(!$this->hide_desc): ?>
 			<th>Description</th>
+			<?php endif; ?>
 			<?php if($this->enable_actions && $this->CheckPermission('manage_time')):?>
 			<th></th>
 			<?php endif; ?>
@@ -33,10 +38,13 @@
 		?>
 		<tr>
 			<?php if($this->enable_checkbox):?>
-			<td><input type="checkbox" name="time_update[<?php echo $time['id']; ?>]" /></td>
+			<td><input type="checkbox" name="<?php echo ($this->field_name ? $this->field_name : 'time_update'); ?>[<?php echo $time['id']; ?>]" /></td>
+			<?php endif; ?>	
+			<?php if($this->enable_hour_rate_field):?>
+			<td><input type="text" name="<?php echo ($this->hour_rate_field_name ? $this->hour_rate_field_name : 'hour_rate_field'); ?>[<?php echo $time['id']; ?>]" value="" size="2" /></td>
 			<?php endif; ?>		
 			<?php if($this->enable_date):?>
-			<td nowrap><?php echo $this->RelativeDate($time['date']); ?></td>
+			<td nowrap><!-- <?php echo strtotime($time['date']); ?> --><?php echo $this->RelativeDate($time['date']); ?></td>
 			<?php endif; ?>
 			
 			<td><?php echo $time['hours']; ?></td>
@@ -74,7 +82,9 @@
 			echo $this->MakeLink('user', $user_data); 
 			?>
 			</td>
+			<?php if(!$this->hide_desc): ?>
 			<td><?php echo $time['description']; ?></td>
+			<?php endif; ?>
 			<?php if($this->enable_actions && $this->CheckPermission('manage_time')):?>
 			<td nowrap>
 			<a href="<?php echo $this->url('times/remove', array('time_id'=>$time['id'])); ?>" title="Delete" rel="facebox"><?php echo $this->InteractIcon('cross', 'Remove Time');?></a>

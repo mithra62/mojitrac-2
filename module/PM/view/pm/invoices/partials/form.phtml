@@ -59,6 +59,20 @@ echo $this->formRow($csrf);
 	</div>
 	<div id="times">
 	
+		<?php 
+		$options = array(
+			'times' => $this->time_data, 
+			'enable_checkbox' => true, 
+			'enable_date' => true, 
+			'enable_project' => true, 
+			'field_name' => 'invoice_time',
+			'tableid' => 'moji_invoice_times',
+			'hide_desc' => true,
+			'enable_hour_rate_field' => true
+		);
+		echo $this->partial('pm/times/partials/times', $options);
+		?>
+	
 	</div>
 	<div id="line_items">
 	

@@ -176,6 +176,7 @@ class InvoicesController extends AbstractPmController
 		}
 		
 		$invoice = $this->getServiceLocator()->get('PM\Model\Invoices');
+		$time = $this->getServiceLocator()->get('PM\Model\Times');
 		$form = $this->getServiceLocator()->get('PM\Form\InvoiceForm');
 		
 		$defaults = array(
@@ -187,7 +188,9 @@ class InvoicesController extends AbstractPmController
 		if ($this->getRequest()->isPost()) {
     		
     		$formData = $this->getRequest()->getPost();
-    		$formData = $this->getRequest()->getPost();
+    		
+    		print_r($formData);
+    		exit;
     		$form->setInputFilter($invoice->getInputFilter());
     		$form->setData($request->getPost());
     		    		
@@ -214,6 +217,9 @@ class InvoicesController extends AbstractPmController
 		$view['form'] = $form;
 		$view['id'] = $company_id;
 		$view['form_action'] = $this->getRequest()->getRequestUri();
+		
+		$where = array('bill_status' => '', 'billable' => '1');
+		$view['time_data']  = $time->getTimesByCompanyId($company_id, $where);
 		return $this->ajaxOutput($view);
 	}
 	

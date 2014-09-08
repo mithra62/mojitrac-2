@@ -22,7 +22,8 @@ $(document).ready(function() {
 	*/
 	
 	$("#tasks_due_tomorrow").dragCheck('td');
-	$("#moji_times").dragCheck('td');	
+	$("#moji_times").dragCheck('td');
+	$("#moji_invoice_times").dragCheck('td');
     
     $('#tasks_overdue').dataTable({
 		"bJQueryUI": true,
@@ -174,7 +175,14 @@ $(document).ready(function() {
 		"bStateSave": false
 	});   
     
-    
+
+    $('#moji_invoice_times').dataTable({
+		"bJQueryUI": true,
+		"bStateSave": false,
+        "bLengthChange": false,
+        "bPaginate": false,
+		"aaSorting": [[ 0, "desc" ]]
+	}); 
     
     
 // Closing jQuery
