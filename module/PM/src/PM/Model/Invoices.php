@@ -110,6 +110,30 @@ class Invoices extends AbstractModel
 		return $this->inputFilter;
 	}
 	
+	/**
+	 * Generates an invoice number using the last invoice number as a baseline
+	 * @return string
+	 */
+	public function getNextInvoiceNumber()
+	{
+		$sql = $this->db->select()->columns(array('invoice_number' => new \Zend\Db\Sql\Expression('MAX(invoice_number)')))->from('invoices');
+		$result = $this->setOrder('id')->setLimit(1)->setOrderDir('DESC')->getRow($sql);
+		if(!$result) {
+			$value = 1;
+		}
+		else {
+			$value = $result['invoice_number'];
+		}
+		
+		$value++;
+		return str_pad($value, 7, "0", STR_PAD_LEFT);
+	}
+	
+	/**
+	 * Returns a specific Invoice by its PK
+	 * @param int $id
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 */
 	public function getInvoiceById($id)
 	{
 		$sql = $this->db->select()->from(array('i'=> 'invoices'));

@@ -108,6 +108,7 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 	 */
 	public function getRow(\Zend\Db\Sql\Select $sql)
 	{
+		$sql = $this->prepSql($sql);
 		$ext = $this->trigger(self::EventDbSelectPre, $this, compact('sql'), array());
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $sql = $ext->last();
 				

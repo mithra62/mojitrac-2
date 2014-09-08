@@ -177,7 +177,12 @@ class InvoicesController extends AbstractPmController
 		
 		$invoice = $this->getServiceLocator()->get('PM\Model\Invoices');
 		$form = $this->getServiceLocator()->get('PM\Form\InvoiceForm');
-		$form->setData(array('date' => date('Y-m-d')));
+		
+		$defaults = array(
+			'date' => date('Y-m-d'),
+			'invoice_number' => $invoice->getNextInvoiceNumber()
+		);
+		$form->setData($defaults);
         $request = $this->getRequest();
 		if ($this->getRequest()->isPost()) {
     		
