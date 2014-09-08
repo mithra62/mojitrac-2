@@ -172,7 +172,7 @@
 		</div>			
 		<?php if($this->CheckPermission('manage_invoices')): ?>	
 		<div class="actions">
-			<a href="<?php echo $this->url('invoices/add', array('company_id' => $this->id)); ?>" title="Add Invoice" rel="facebox">
+			<a href="<?php echo $this->url('invoices/add', array('company_id' => $this->id)); ?>" title="Add Invoice">
 				<?php echo $this->InteractIcon('add', 'Add Company Invoice');?>
 				<div class="action_text">Add Invoice</div>
 			</a>
@@ -188,7 +188,7 @@
 	<div class="information png_bg">
 		There aren't any invoices added yet. 
 		<?php if($this->CheckPermission('manage_invoices')): ?>
-			Want to <a href="<?php echo $this->url('invoices/add', array('company_id' => $this->id)); ?>" rel="facebox">add</a> one?
+			Want to <a href="<?php echo $this->url('invoices/add', array('company_id' => $this->id)); ?>">add</a> one?
 		<?php endif; ?>
 	</div>
 	<?php 

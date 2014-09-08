@@ -1069,9 +1069,9 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/view/:type/:id[/:status]',
+        					'route' => '/view/:type/:id[/:status][/export/:export]',
 		        			'constraints' => array(
-		        				'time_id' => '[0-9]+'
+		        				'id' => '[0-9]+'
 		        			),
         					'defaults' => array(
         						'action' => 'view'

@@ -52,18 +52,7 @@ class InvoiceForm extends BaseForm
 			'options' => array(
 				'value_options' => Invoices::status(),
 			)
-		));
-
-		$this->add(array(
-			'name' => 'invoice_type',
-			'type' => 'Select',
-			'attributes' => array(
-				'class' => 'select input',
-			),
-			'options' => array(
-				'value_options' => Invoices::types(),
-			)
-		));		
+		));	
 
 		$this->add(array(
 			'name' => 'date',

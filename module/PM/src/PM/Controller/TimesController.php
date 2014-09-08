@@ -30,15 +30,16 @@ class TimesController extends AbstractPmController
 	 */
 	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{
-		$e = parent::onDispatch( $e );  ;
+		$e = parent::onDispatch( $e );
         $this->layout()->setVariable('active_nav', 'time');
-        $this->layout()->setVariable('sub_menu', 'times');
-        $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
-		$this->layout()->setVariable('active_sub', '');
 		return $e;       
 	}
     
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\Mvc\Controller\AbstractActionController::indexAction()
+	 */
     public function indexAction()
     {
     	$times = $this->getServiceLocator()->get('PM\Model\Times');
@@ -61,6 +62,10 @@ class TimesController extends AbstractPmController
     	return $view;
     }
     
+    /**
+     * Timer Tracker View Calendar Day View
+     * @return unknown
+     */
     public function viewDayAction()
     {
     	$times = $this->getServiceLocator()->get('PM\Model\Times');
@@ -121,6 +126,9 @@ class TimesController extends AbstractPmController
 	    return $view;    
     }
 
+    /**
+     * Remove Time Action
+     */
     public function removeAction()
     {
     	$time = $this->getServiceLocator()->get('PM\Model\Times');
@@ -131,7 +139,11 @@ class TimesController extends AbstractPmController
     	{
     		return $this->redirect()->toRoute('times');
     	}
-    	
+
+    	if(!$this->perm->check($this->identity, 'manage_time'))
+    	{
+    		return $this->redirect()->toRoute('times');
+    	}
     	
         $time_data = $time->getTimeById($id);
         $view = array();
@@ -168,4 +180,141 @@ class TimesController extends AbstractPmController
     	$view['id'] = $id;
 		return $this->ajaxOutput($view);
     }
+    
+    public function viewAction()
+    {
+    	$time = $this->getServiceLocator()->get('PM\Model\Times');
+	    $id = $this->params()->fromRoute('id');
+	    $type = $this->params()->fromRoute('type');
+	    $bill_status = $this->params()->fromRoute('status');
+	    $type = $this->params()->fromRoute('type');
+	    $export = $this->params()->fromRoute('export');
+	    $company_id = $project_id = $task_id = $user_id = false;
+    	 
+    	//we're downloading the timesheets so kill layout
+    	if($export)
+    	{
+    		$this->view->layout()->disableLayout();
+    	}
+    	 
+    	$view['sub_menu'] = 'time_status';
+    	$view['active_sub'] = $bill_status;
+		$this->layout()->setVariable('active_sub', $bill_status);
+        $this->layout()->setVariable('sub_menu', 'time_status');
+        $this->layout()->setVariable('id', $id);
+        $this->layout()->setVariable('type', $type);
+		
+    	$where = array();
+    	
+    	if($bill_status)
+    	{
+    		if(!$this->perm->check($this->identity, 'manage_time'))
+    		{
+    			return $this->redirect()->toRoute('times');
+    		}
+    			
+    		$status_types = array('sent', 'unsent', 'paid', '');
+    		if(in_array($bill_status, $status_types))
+    		{
+    			$view['bill_status'] = $bill_status;
+    			if($bill_status == 'unsent')
+    			{
+    				$bill_status = '';
+    			}
+    
+    			$where = array('bill_status' => $bill_status, 'billable' => '1');
+    		}
+    		elseif($bill_status == 'unbillable')
+    		{
+    			$where = array('billable' => '0');
+    		}
+    	}
+    
+    	if($type == 'company')
+    	{
+			$company_id = $id;
+    		if(!$this->perm->check($this->identity, 'view_companies'))
+    		{
+    			return $this->redirect()->toRoute('times');
+    		}
+    		
+    		$company = $this->getServiceLocator()->get('PM\Model\Companies');
+    		$company_data = $company->getCompanyById($company_id);
+    		if(!$company_data)
+    		{
+    			return $this->redirect()->toRoute('companies');
+    		}
+    		
+    		$view['company_data'] = $company_data;
+    		$view['times']  = $time->getTimesByCompanyId($company_id, $where);
+    		$view['type'] = 'company';
+    		$view['id'] = $company_id;
+    	}
+    	elseif($type == 'project')
+    	{
+			$project_id = $id;
+    		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+    		$project_data = $project->getProjectById($project_id);
+    		if(!$project_data)
+    		{
+    			return $this->redirect()->toRoute('projects');
+    		}
+    			
+    		if(!$project->isUserOnProjectTeam($this->identity, $project_id) && !$this->perm->check($this->identity, 'manage_time'))
+    		{
+    			return $this->redirect()->toRoute('projects');
+    		}
+    
+    		$view['project_data'] = $project_data;
+    		$view['times'] = $time->getTimesByProjectId($project_id, $where);
+    		$view['type'] = 'project';
+    		$view['id'] = $project_id;
+    	}
+    	elseif($type == 'task')
+    	{
+			$task_id = $id;
+    		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
+    		$project = $this->getServiceLocator()->get('PM\Model\Projects');
+    		$task_data = $task->getTaskById($task_id);
+    		if(!$task_data)
+    		{
+    			return $this->redirect()->toRoute('projects');
+    		}
+    			
+    		if(!$project->isUserOnProjectTeam($this->identity, $task_data['project_id']) && !$this->perm->check($this->identity, 'manage_time'))
+    		{
+    			return $this->redirect()->toRoute('projects');
+    		}
+    
+    		$view['task_data'] = $task_data;
+    		$view['times'] = $time->getTimesByTaskId($task_id, $where);
+    		$view['type'] = 'task';
+    		$view['id'] = $task_id;
+    	}
+    	elseif($type == 'user')
+    	{
+			$user_id = $id;
+    		$user = $this->getServiceLocator()->get('PM\Model\Users');
+    		$user_data = $user->getUserById($user_id);
+    		if(!$user_data)
+    		{
+    			return $this->redirect()->toRoute('users');
+    		}
+    
+    		$view['user_data'] = $user_data;
+    		$view['times'] = $time->getTimesByUserId($user_id, $where);
+    		$view['type'] = 'user';
+    		$view['id'] = $user_id;
+    	}
+    	else
+    	{
+    		return $this->redirect()->toRoute('pm');
+    	}
+    
+    	if($export)
+    	{
+    		LambLib_Controller_Action_Helper_Utilities::downloadArray($this->view->times, TRUE, $this->view->bill_status.'_times.xls');
+    	}
+    	return $view;
+    }    
 }

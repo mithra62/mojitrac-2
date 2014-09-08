@@ -64,9 +64,8 @@ class BackToLink extends AbstractHelper
 		elseif($this->options['user'])
 		{
 			$return['name'] = $this->options['user']['first_name'].' '.$this->options['user']['last_name'];
-			$return['id'] = $this->options['user']['id'];
-			$return['controller'] = 'users';
-			$return['action'] = 'view';
+			$return['options'] = array('user_id' => $this->options['user']['id']);
+			$return['route'] = 'users/view';
 		}	
 		elseif($this->options['file'])
 		{

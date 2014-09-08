@@ -529,9 +529,8 @@ class Times extends AbstractModel
 	 * @param integer The time as a decimal value.
 	 * @return string $time The converted time value.
 	 */
-	function decimal_to_time($decimal) 
+	public function decimal_to_time($decimal) 
 	{
-		echo $decimal;
 	    $hours = floor($decimal);
 	    $minutes = round(($decimal % 24));
 	    $seconds = $decimal - (int)$decimal;
@@ -544,7 +543,7 @@ class Times extends AbstractModel
 	 * @param string $time The time to convert
 	 * @return integer The time as a decimal value.
 	 */
-	function time_to_decimal($time) 
+	public function time_to_decimal($time) 
 	{
 	    $timeArr = explode(':', $time);
 	    if(!isset($timeArr['2']))

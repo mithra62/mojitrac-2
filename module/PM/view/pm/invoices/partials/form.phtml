@@ -10,46 +10,61 @@ echo $this->formRow($csrf);
 	if($this->id > 0)
 		echo '<input type="hidden" value="'.$this->id.'" name="id" />';
 ?>
-<p>
-	<label for="invoice_number">Invoice Number</label>
-	<?php $name = $form->get('invoice_number'); echo $this->formRow($name); ?>
-</p>
-<p>
-	<label for="status">Status</label>
-	<?php $name = $form->get('status'); echo $this->formRow($name); ?>
-</p>
-<p>
-	<label for="invoice_type">Line Item Type</label>
-	<?php $name = $form->get('invoice_type'); echo $this->formRow($name); ?>
-</p>
+<div id="form_tabs">
+	<ul>
 
-<p>
-	<label for="date">Date of Issue</label>
-	<?php $name = $form->get('date'); echo $this->formRow($name); ?>
-</p>
-<p>
-	<label for="po_number">PO Number</label>
-	<?php $name = $form->get('po_number'); echo $this->formRow($name); ?>
-</p>
+		<li><a href="#general">General</a></li>
+		<li><a href="#times">Times</a></li>
+		<li><a href="#line_items">Line Items</a></li>
+	</ul>
+	<div id="general">
 
-<p>
-	<label for="discount">Discount</label>
-	<?php $name = $form->get('discount'); echo $this->formRow($name); ?>
-</p>
-
-<p>
-	<label for="notes">Note</label>
-	<?php $name = $form->get('notes'); echo $this->formRow($name); ?>
-</p>
-
-<p>
-	<label for="description">Description</label>
-	<?php $name = $form->get('terms_conditions'); echo $this->formRow($name); ?>
-</p>		
-
-<p>
-	<input type="submit" class="submit" value="Submit" />
-</p>
+		<p>
+			<label for="invoice_number">Invoice Number</label>
+			<?php $name = $form->get('invoice_number'); echo $this->formRow($name); ?>
+		</p>
+		<p>
+			<label for="status">Status</label>
+			<?php $name = $form->get('status'); echo $this->formRow($name); ?>
+		</p>
+		
+		<p>
+			<label for="date">Date of Issue</label>
+			<?php $name = $form->get('date'); echo $this->formRow($name); ?>
+		</p>
+		<p>
+			<label for="po_number">PO Number</label>
+			<?php $name = $form->get('po_number'); echo $this->formRow($name); ?>
+		</p>
+		
+		<p>
+			<label for="discount">Discount</label>
+			<?php $name = $form->get('discount'); echo $this->formRow($name); ?>
+		</p>
+		
+		<p>
+			<label for="notes">Note</label>
+			<?php $name = $form->get('notes'); echo $this->formRow($name); ?>
+		</p>
+		
+		<p>
+			<label for="description">Description</label>
+			<?php $name = $form->get('terms_conditions'); echo $this->formRow($name); ?>
+		</p>		
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>
+		
+	</div>
+	<div id="times">
+	
+	</div>
+	<div id="line_items">
+	
+	</div>
+	
+</div>			
 <?php echo $this->ConfirmPageUnload('#invoice_form')?>
 <?php echo $this->form()->closeTag() ?>
 
