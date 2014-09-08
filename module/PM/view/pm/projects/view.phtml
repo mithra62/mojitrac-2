@@ -266,7 +266,7 @@ endif;
 			</a>
 		</div>		
 		<div class="actions">
-			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'times','action'=>'view', 'project' => $this->id), null, TRUE); ?>" title="View All">
+			<a href="<?php echo $this->url('times/view', array('type' => 'project','id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All');?> 
 				<div class="action_text">View All</div>
 			</a>
@@ -278,7 +278,7 @@ endif;
 		echo $this->partial('pm/times/partials/times', $options); 
 	else: 
 	?>
-	<div class="information png_bg">There aren't any times added yet.</div>
+	<div class="information png_bg">There aren't any pending times added yet.</div>
 	<?php 
 	endif;
 endif;
