@@ -43,6 +43,11 @@ echo $this->formRow($csrf);
 		</p>
 		
 		<p>
+			<label for="override_total">Override Total* </label>
+			<?php $name = $form->get('override_total'); echo $this->formRow($name); ?>
+		</p>
+		
+		<p>
 			<label for="notes">Note</label>
 			<?php $name = $form->get('notes'); echo $this->formRow($name); ?>
 		</p>
@@ -56,6 +61,8 @@ echo $this->formRow($csrf);
 			<input type="submit" class="submit" value="Submit" />
 		</p>
 		
+		<p><small>*(if set, total from lined items and times are ignored)</small></p>
+		
 	</div>
 	<div id="times">
 	
@@ -68,10 +75,16 @@ echo $this->formRow($csrf);
 			'field_name' => 'invoice_time',
 			'tableid' => 'moji_invoice_times',
 			'hide_desc' => true,
-			'enable_hour_rate_field' => true
+			'enable_hour_rate_field' => true,
+			'hour_rate_field_value' => $this->company_data['default_hourly_rate'],
+			'company_data' => $this->company_data
 		);
 		echo $this->partial('pm/times/partials/times', $options);
-		?>
+		?>	
+		
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>
 	
 	</div>
 	<div id="line_items">

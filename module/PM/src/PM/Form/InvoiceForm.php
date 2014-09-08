@@ -100,6 +100,15 @@ class InvoiceForm extends BaseForm
 		));
 		
 		$this->add(array(
+			'name' => 'override_total',
+			'type' => 'Text',
+			'attributes' => array(
+				'class' => 'input large',
+				'id' => 'override_total'
+			),
+		));
+		
+		$this->add(array(
 			'name' => 'terms_conditions',
 			'type' => 'Textarea',
 			'attributes' => array(

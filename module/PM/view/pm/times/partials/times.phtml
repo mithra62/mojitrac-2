@@ -5,7 +5,7 @@
 			<th></th>
 			<?php endif; ?>	
 			<?php if($this->enable_hour_rate_field):?>
-			<th>Rate</th>
+			<th>Rate/Hr</th>
 			<?php endif; ?>		
 			<?php if($this->enable_date):?>
 			<th>Date</th>
@@ -41,7 +41,7 @@
 			<td><input type="checkbox" name="<?php echo ($this->field_name ? $this->field_name : 'time_update'); ?>[<?php echo $time['id']; ?>]" /></td>
 			<?php endif; ?>	
 			<?php if($this->enable_hour_rate_field):?>
-			<td><input type="text" name="<?php echo ($this->hour_rate_field_name ? $this->hour_rate_field_name : 'hour_rate_field'); ?>[<?php echo $time['id']; ?>]" value="" size="2" /></td>
+			<td nowrap>$<input type="text" title="<?php echo $this->escapehtml($time['description']); ?>" name="<?php echo ($this->hour_rate_field_name ? $this->hour_rate_field_name : 'hour_rate_field'); ?>[<?php echo $time['id']; ?>]" value="<?php echo (!empty($this->hour_rate_field_value) ? $this->hour_rate_field_value : '0'); ?>" size="4" /></td>
 			<?php endif; ?>		
 			<?php if($this->enable_date):?>
 			<td nowrap><!-- <?php echo strtotime($time['date']); ?> --><?php echo $this->RelativeDate($time['date']); ?></td>

@@ -30,7 +30,7 @@
     <div class="items" style="padding-left:10px;">
     	<p>
     		<?php //if(!empty($this->invoice['amount'])):?>
-				<span class="bold">Amount:</span> <?php echo $this->currencyFormat($this->invoice['amount'], "USD", "en_US"); ?><br />
+				<span class="bold">Amount:</span> <?php echo $this->currencyFormat($this->invoice['amount'], $this->company_data['currency_code'], $this->company_data['client_language']); ?><br />
 			<?php //endif; ?> 
 			<?php if($this->invoice['po_number']):?>
 				<span class="bold">PO Number:</span> <?php echo $this->invoice['po_number']; ?><br />

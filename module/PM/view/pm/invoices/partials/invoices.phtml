@@ -22,7 +22,7 @@
 			<td><a title="<?php echo $invoice['invoice_number']; ?>" href="<?php echo $this->url('invoices/view', array('invoice_id' => $invoice['id'])); ?>"><?php echo $invoice['invoice_number']; ?></a></td>
 			<td><?php echo $this->RelativeDate($invoice['date']); ?></td>
 			<td><?php echo $invoice['status']; ?></td>
-			<td><?php echo $invoice['amount']; ?></td>
+			<td><?php echo $this->currencyFormat($invoice['amount'], $this->company_data['currency_code'], $this->company_data['client_language']) ?></td>
 			<td><?php echo $this->RelativeDate($invoice['last_modified']); ?></td>
 			<?php if($this->enable_actions):?>
 			<td>

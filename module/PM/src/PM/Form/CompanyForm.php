@@ -164,9 +164,16 @@ class CompanyForm extends BaseForm
 				'value_options' => Languages::langs(),
 			)
 		));
-		
-		
 
+		$this->add(array(
+			'name' => 'default_hourly_rate',
+			'type' => 'Text',
+			'attributes' => array(
+				'class' => 'input large',
+				'id' => 'default_hourly_rate'
+			),
+		));
+		
         $this->add(array(
             'type' => 'Zend\Form\Element\Textarea',
             'name' => 'description',

@@ -155,7 +155,7 @@
 <?php endif; ?>
 
 
-<?php if($this->CheckPermission('view_invoices') && ($this->company['type'] == '1' || $this->company['type'] == '6')): ?>
+<?php if($this->CheckPermission('view_invoices') && ($this->company['type'] == '1')): ?>
 	<div class="content_headers">
 		<div class="invoice_header">Invoices</div>
 		<div class="actions">
@@ -181,7 +181,7 @@
 	</div>
 	<?php 
 	if($this->invoices):
-		$options = array('invoices' => $this->invoices, 'facebox' => 'yes');
+		$options = array('invoices' => $this->invoices, 'facebox' => 'yes', 'company_data' => $this->company);
 		echo $this->partial('pm/invoices/partials/invoices', $options); 
 	else: 
 	?>

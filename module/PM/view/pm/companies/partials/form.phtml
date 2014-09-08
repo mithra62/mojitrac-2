@@ -42,6 +42,11 @@ echo $this->formRow($csrf);
 		<p style="display: none" id="currency_code_block">
 			<label for="currency_code">Billing Currency</label>
 			<?php $name = $form->get('currency_code'); echo $this->formRow($name); ?>
+		</p>
+		
+		<p style="display: none" id="default_hourly_rate_block">
+			<label for="default_hourly_rate">Default Hourly Rate</label>
+			<?php $name = $form->get('default_hourly_rate'); echo $this->formRow($name); ?>
 		</p>		
 		
 		<p>
@@ -131,6 +136,7 @@ $().ready(function() {
 	{
 		$("#currency_code_block").show();
 		$("#client_language_block").show();
+		$("#default_hourly_rate_block").show();
 	}
 
 	$("#type").change(function(){
@@ -141,11 +147,13 @@ $().ready(function() {
 		{
 			$("#currency_code_block").show();
 			$("#client_language_block").show();
+			$("#default_hourly_rate_block").show();
 		}
 		else
 		{
 			$("#currency_code_block").hide();
 			$("#client_language_block").hide();
+			$("#default_hourly_rate_block").hide();
 		}
 	});
 

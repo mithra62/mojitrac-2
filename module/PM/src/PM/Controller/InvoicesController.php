@@ -79,15 +79,16 @@ class InvoicesController extends AbstractPmController
 		}
 		
 		$invoice = $this->getServiceLocator()->get('PM\Model\Invoices');
+		$company = $this->getServiceLocator()->get('PM\Model\Companies');
 		$view['invoice'] = $invoice->getInvoiceById($id);
+		$view['company_data'] = $company->getCompanyById($view['invoice']['company_id']);
 		if(!$view['invoice'])
 		{
 			return $this->redirect()->toRoute('companies');
 		}
 
 		$view['id'] = $id;
-		
-		return $this->ajaxOutput($view);
+		return $view;
 	}
 	
 	/**
