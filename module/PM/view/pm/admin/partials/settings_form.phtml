@@ -9,8 +9,47 @@ echo $this->formRow($csrf);
 <div id="form_tabs">
 	<ul>
 		<li><a href="#general">General</a></li>
+		<li><a href="#companies">Companies</a></li>
+		<li><a href="#projects">Projects</a></li>
+		<li><a href="#tasks">Tasks</a></li>
 	</ul>
 	<div id="general">
+		<p>
+			<label for="master_company">Master Company</label>
+			<?php $field = $form->get('master_company'); echo $this->formRow($field); ?>
+		</p>
+		<p>
+			<label for="enable_ip"><?php $field = $form->get('enable_ip'); echo $this->formRow($field); ?> Enable Ip Locker</label>
+		</p>
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>
+	</div>	
+	<div id="companies">
+		<p>
+			<label for="master_company">Master Company</label>
+			<?php $field = $form->get('master_company'); echo $this->formRow($field); ?>
+		</p>
+		<p>
+			<label for="enable_ip"><?php $field = $form->get('enable_ip'); echo $this->formRow($field); ?> Enable Ip Locker</label>
+		</p>
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>
+	</div>	
+	<div id="projects">
+		<p>
+			<label for="master_company">Master Company</label>
+			<?php $field = $form->get('master_company'); echo $this->formRow($field); ?>
+		</p>
+		<p>
+			<label for="enable_ip"><?php $field = $form->get('enable_ip'); echo $this->formRow($field); ?> Enable Ip Locker</label>
+		</p>
+		<p>
+			<input type="submit" class="submit" value="Submit" />
+		</p>
+	</div>	
+	<div id="tasks">
 		<p>
 			<label for="master_company">Master Company</label>
 			<?php $field = $form->get('master_company'); echo $this->formRow($field); ?>

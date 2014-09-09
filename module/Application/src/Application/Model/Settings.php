@@ -49,8 +49,13 @@ class Settings extends KeyValue
 		'date_format' => 'F j, Y',
 		'date_format_custom' => '',  
 		'time_format' => 'g:i A',  
-		'time_format_custom' => '',  
+		'time_format_custom' => '', 
+			 
 		'default_company_type' => '1',  
+		'default_company_client_language' => 'en_US',
+		'default_company_currency_code' => 'USD',
+		'default_company_default_hourly_rate' => '',
+			
 		'default_project_type' => '3',  
 		'default_project_priority' => '3',  
 		'default_project_status' => '3',

@@ -223,7 +223,14 @@ class CompaniesController extends AbstractPmController
         		
 		$company = $this->getServiceLocator()->get('PM\Model\Companies');
 		$form = $this->getServiceLocator()->get('PM\Form\CompanyForm');
-		$form->setData(array('currency_code' => 'USD'));
+		$defaults = array(
+				'currency_code' => 'USD',
+				'type' => $this->settings['default_company_type'],
+				'client_language' => $this->settings['default_company_client_language'],
+				'currency_code' => $this->settings['default_company_currency_code'],
+				'default_hourly_rate' => $this->settings['default_company_default_hourly_rate']
+		);
+		$form->setData($defaults);
 		$request = $this->getRequest();
 		if ($request->isPost()) 
 		{
