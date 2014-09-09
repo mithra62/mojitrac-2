@@ -35,6 +35,7 @@ use PM\Model\Ips;
 use PM\Model\Users;
 use PM\Model\FusionCharts;
 use PM\Model\Invoices;
+use PM\Model\Invoices\LineItems;
 
 use PM\Form\ProjectForm;
 use PM\Form\CompanyForm;
@@ -264,7 +265,13 @@ class Module implements
 				'PM\Model\Invoices' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Invoices($adapter, $db);
+					$li = $sm->get('PM\Model\Invoices\LineItems');
+					return new Invoices($adapter, $db, $li);
+				},
+				'PM\Model\Invoices\LineItems' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					return new LineItems($adapter, $db);
 				},
 				
 				//forms

@@ -26,21 +26,27 @@ use Application\Model\AbstractModel;
  */
 class Invoices extends AbstractModel
 {
-	
 	/**
 	 * The form validation filering
 	 * @var \Zend\InputFilter\InputFilter
 	 */
 	protected $inputFilter;
+	
+	/**
+	 * An instance of the LineItem object
+	 * @var \PM\Model\Invoices\LineItems
+	 */
+	public $lineItem = null;
 
 	/**
 	 * The Project Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $db
 	 */
-	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db, \PM\Model\Invoices\LineItems $li)
 	{
 		parent::__construct($adapter, $db);
+		$this->lineItem = $li;
 	}
 	
 	/**
@@ -87,6 +93,16 @@ class Invoices extends AbstractModel
 				'filters'  => array(
 					array('name' => 'StripTags'),
 					array('name' => 'StringTrim'),
+				),
+				'validators' => array(
+					array(
+						'name' => 'Db\NoRecordExists',
+						'options' => array(
+							'table' => 'invoices',
+						    'field' => 'invoice_number',
+							'adapter' => $this->adapter
+						)
+					),
 				),
 			)));
 	
@@ -141,7 +157,9 @@ class Invoices extends AbstractModel
 		$sql = $sql->join(array('u' => 'users'), 'u.id = i.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), 'left');
 		$sql = $sql->join(array('o' => 'companies'), 'o.id = i.company_id', array('company_name' => 'name'), 'left');
 		
-		return $this->getRow($sql);
+		$data = $this->getRow($sql);
+		$data['line_items'] = $this->lineItem->getLineItemByInvoiceId($id);
+		return $data;
 	}
 	
 	/**
@@ -181,22 +199,36 @@ class Invoices extends AbstractModel
 	 * @param array $data
 	 * @return Ambigous <\Zend\EventManager\mixed, NULL, mixed>|Ambigous <\Base\Model\Ambigous, \Zend\Db\Adapter\Driver\mixed, NULL, \Zend\EventManager\mixed, mixed>
 	 */
-	public function addInvoice($company_id, array $data)
+	public function addInvoice($company_id, array $data, array $line_items = array())
 	{
 	    $ext = $this->trigger(self::EventInvoiceAddPre, $this, compact('data'), $this->setXhooks($data));
 	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
-	    	    
+	    
 		$sql = $this->getSQL($data);
 		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 		$sql['creator'] = $data['creator'];
 		$sql['company_id'] = $company_id;
 		
-		$contact_id = $this->insert('invoices', $sql);
+		$invoice_id = $this->insert('invoices', $sql);
+		if($line_items)
+		{
+			$total = 0;
+			foreach($line_items As $item)
+			{
+				$this->lineItem->addLineItem($invoice_id, $item);
+				$total = $total+$item['total_cost'];
+			}
+		}
 		
-		$ext = $this->trigger(self::EventInvoiceAddPost, $this, compact('data', 'contact_id'), $this->setXhooks($data));
-		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $contact_id = $ext->last();	
+		if($total > 0)
+		{
+			$this->update('invoices', array('amount' => $total), array('id' => $invoice_id));
+		}
 		
-		return $contact_id;
+		$ext = $this->trigger(self::EventInvoiceAddPost, $this, compact('data', 'invoice_id'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $invoice_id = $ext->last();	
+		
+		return $invoice_id;
 	}
 	
 	/**

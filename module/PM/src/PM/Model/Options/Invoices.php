@@ -23,11 +23,11 @@ class Invoices
 	static public function status()
 	{
 		$types = array();
-		$types[0] = 'Draft';
-		$types[1] = 'Sent';		
-		$types[2] = 'Paid';
-		$types[3] = 'Cancelled';
-		$types[4] = 'Refunded';
+		$types['draft'] = 'Draft';
+		$types['sent'] = 'Sent';		
+		$types['paid'] = 'Paid';
+		$types['cancelled'] = 'Cancelled';
+		$types['refunded'] = 'Refunded';
 		
 		return $types;
 	}

@@ -89,6 +89,22 @@ echo $this->formRow($csrf);
 	</div>
 	<div id="line_items">
 	
+		<?php 
+		$options = array(
+			'times' => $this->time_data, 
+			'enable_checkbox' => true, 
+			'enable_date' => true, 
+			'enable_project' => true, 
+			'field_name' => 'invoice_time',
+			'tableid' => 'moji_invoice_line_items',
+			'hide_desc' => true,
+			'enable_hour_rate_field' => true,
+			'hour_rate_field_value' => $this->company_data['default_hourly_rate'],
+			'company_data' => $this->company_data
+		);
+		echo $this->partial('pm/invoices/partials/line-items', $options);
+		?>	
+	
 	</div>
 	
 </div>			

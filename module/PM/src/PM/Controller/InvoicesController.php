@@ -80,19 +80,18 @@ class InvoicesController extends AbstractPmController
 		
 		$invoice = $this->getServiceLocator()->get('PM\Model\Invoices');
 		$company = $this->getServiceLocator()->get('PM\Model\Companies');
-		$view['invoice'] = $invoice->getInvoiceById($id);
-		$view['company_data'] = $company->getCompanyById($view['invoice']['company_id']);
-		if(!$view['invoice'])
-		{
+		$view['invoice_data'] = $invoice->getInvoiceById($id);
+		$view['company_data'] = $company->getCompanyById($view['invoice_data']['company_id']);
+		if(!$view['invoice_data'] || !$view['company_data']) {
 			return $this->redirect()->toRoute('companies');
 		}
-
+		
 		$view['id'] = $id;
 		return $view;
 	}
 	
 	/**
-	 * Contact Edit Page
+	 * Invoice Edit Page
 	 * @return void
 	 */
 	public function editAction()
@@ -189,15 +188,13 @@ class InvoicesController extends AbstractPmController
 		if ($this->getRequest()->isPost()) {
     		
     		$formData = $this->getRequest()->getPost();
-    		
-    		print_r($formData);
-    		exit;
     		$form->setInputFilter($invoice->getInputFilter());
     		$form->setData($request->getPost());
-    		    		
 			if ($form->isValid($formData)) {
 				$formData['creator'] = $this->identity;
-				$invoice_id = $invoice->addInvoice($company_id, $formData->toArray());
+				$data = $formData->toArray();
+				$line_items = $invoice->lineItem->parseItems($data);
+				$invoice_id = $invoice->addInvoice($company_id, $data, $line_items);
 				if($invoice_id){
 			    	$this->flashMessenger()->addMessage('Invoice Added!');
 					return $this->redirect()->toRoute('invoices/view', array('invoice_id' => $invoice_id));

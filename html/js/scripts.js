@@ -182,8 +182,7 @@ $(document).ready(function() {
         "bLengthChange": false,
         "bPaginate": false,
 		"aaSorting": [[ 0, "desc" ]]
-	}); 
-    
+	});     
     
 // Closing jQuery
 });
