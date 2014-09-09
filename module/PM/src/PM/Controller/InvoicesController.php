@@ -38,8 +38,8 @@ class InvoicesController extends AbstractPmController
 	}
     
     /**
-     * Main Page
-     * @return void
+     * (non-PHPdoc)
+     * @see \Zend\Mvc\Controller\AbstractActionController::indexAction()
      */
 	public function indexAction()
 	{
@@ -223,44 +223,45 @@ class InvoicesController extends AbstractPmController
 	
 	public function removeAction()
 	{
-		if(!$this->perm->check($this->identity, 'manage_company_contacts'))
+		if(!$this->perm->check($this->identity, 'manage_invoices'))
         {
-        	return $this->redirect()->toRoute('contacts');
+        	return $this->redirect()->toRoute('companies');
         }
         		
-		$contacts = $this->getServiceLocator()->get('PM\Model\Contacts');
-		$id = $this->params()->fromRoute('contact_id');
-		$confirm = $this->params()->fromPost('confirm');
-		$fail = $this->params()->fromPost('fail');
+		$invoice = $this->getServiceLocator()->get('PM\Model\Invoices');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+		$id = $this->params()->fromRoute('invoice_id');
 		
-    	if(!$id)
-    	{
-    		return $this->redirect()->toRoute('contacts');
+		$view['invoice_data'] = $invoice->getInvoiceById($id);
+		if(!$view['invoice_data'])
+		{
+			return $this->redirect()->toRoute('companies');
+		}		
+    	
+	    $request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid())
+			{
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('invoices/view', array('invoice_id' => $id));
+				}
+				
+	    	   	if($invoice->removeInvoice($id))
+	    		{	
+					$this->flashMessenger()->addMessage('Invoice Removed');
+					return $this->redirect()->toRoute('companies/view', array('company_id' => $view['invoice_data']['company_id']));
+	    		}
+			}
     	}
     	
-    	$view['contact'] = $contacts->getContactById($id);
-    	if(!$view['contact'])
-    	{
-			return $this->redirect()->toRoute('contacts');
-    	}
-
-    	if($fail)
-    	{
-			return $this->redirect()->toRoute('contacts/view', array('contact_id' => $id));
-    	}
-    	
-    	if($confirm)
-    	{
-    	   	if($contacts->removeContact($id))
-    		{	
-				$this->flashMessenger()->addMessage('Contact Removed');
-				return $this->redirect()->toRoute('companies/view', array('company_id' => $view['contact']['company_id']));
-    		}
-    	}
-    	
-		$view['title'] = "Delete Contact: ". $this->view->contact['first_name'].' '.$this->view->contact['last_name'];
-		//$this->view->headTitle('Delete Contact: '. $this->view->contact['first_name'].' '.$this->view->contact['last_name'], 'PREPEND');
+		$view['title'] = "Delete Invoice: ". $this->view->invoice_data['invoice_number'];
 		$view['id'] = $id;
+		$view['form'] = $form;
 		return $this->ajaxOutput($view);
 	}
 }

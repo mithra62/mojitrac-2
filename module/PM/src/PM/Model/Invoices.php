@@ -158,7 +158,11 @@ class Invoices extends AbstractModel
 		$sql = $sql->join(array('o' => 'companies'), 'o.id = i.company_id', array('company_name' => 'name'), 'left');
 		
 		$data = $this->getRow($sql);
-		$data['line_items'] = $this->lineItem->getLineItemByInvoiceId($id);
+		if($data)
+		{
+			$data['line_items'] = $this->lineItem->getLineItemByInvoiceId($id);
+		}
+		
 		return $data;
 	}
 	
@@ -259,13 +263,12 @@ class Invoices extends AbstractModel
 	 */
 	public function removeInvoice($id)
 	{
-	    $data = $this->getContactById($id);
-	    $ext = $this->trigger(self::EventInvoicesRemovePre, $this, compact('id', 'data'), $this->setXhooks($data));
+	    $ext = $this->trigger(self::EventInvoiceRemovePre, $this, compact('id'));
 	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $id = $ext->last();
 	    	    
 		$remove = $this->remove('invoices', array('id' => $id));
 		
-		$ext = $this->trigger(self::EventInvoiceRemovePost, $this, compact('id', 'data'), $this->setXhooks($data));
+		$ext = $this->trigger(self::EventInvoiceRemovePost, $this, compact('remove'));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $remove = $ext->last();
 				
 		return $remove;
