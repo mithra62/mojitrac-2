@@ -161,63 +161,7 @@ class PrefsForm extends BaseForm
 				'value_options' => Languages::langs(),
 			)
 		));
-			
-		/*
-		$this->add(array(
-			'name' => 'timezone',
-			'type' => 'Select',
-			'attributes' => array(
-				'class' => 'select input',
-				'id' => 'timezone'
-			),
-			'options' => array(
-				'value_options' => PM_Model_Options_Timezones::tz(),
-			)
-		));	
-
-		$this->add(array(
-			'name' => 'date_format',
-			'type' => 'Select',
-			'attributes' => array(
-				'class' => 'select input',
-				'id' => 'date_format'
-			),
-			'options' => array(
-				'value_options' => PM_Model_Options_Datetime::date_formats(),
-			)
-		));	
-
-		$this->add(array(
-			'name' => 'date_format_custom',
-			'type' => 'Text',
-			'attributes' => array(
-				'class' => 'input small',
-				'id' => 'date_format_custom'
-			),
-		));	
-			
-		$this->add(array(
-			'name' => 'time_format',
-			'type' => 'Select',
-			'attributes' => array(
-				'class' => 'select input',
-				'id' => 'time_format'
-			),
-			'options' => array(
-				'value_options' => PM_Model_Options_Datetime::time_formats(),
-			)
-		));	
-
-		$this->add(array(
-			'name' => 'time_format_custom',
-			'type' => 'Text',
-			'attributes' => array(
-				'class' => 'input small',
-				'id' => 'time_format_custom'
-			),
-		));
-
-		*/
+		
 		$this->add(array(
 			'name' => 'enable_rel_time',
 			'type' => 'Checkbox',
