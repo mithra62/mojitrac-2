@@ -208,11 +208,13 @@ class ProjectsController extends AbstractPmController
             	} 
 
             	$view['errors'] = array($this->translate('cant_update_project', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
             	$form->setData($formData);
             } 
             else 
             {
             	$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
                 $form->setData($formData);
             }
 	    }
@@ -275,6 +277,7 @@ class ProjectsController extends AbstractPmController
 			else 
 			{
 				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
 			}
 		 }
 		

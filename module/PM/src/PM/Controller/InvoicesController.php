@@ -131,6 +131,7 @@ class InvoicesController extends AbstractPmController
             	else 
             	{
             		$view['errors'] = array($this->translate('cant_update_invoice', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
             		$form->setData($formData);
             	}
                 
@@ -138,6 +139,7 @@ class InvoicesController extends AbstractPmController
             else 
             {
             	$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
                 $form->setData($formData);
             }
             
@@ -200,10 +202,12 @@ class InvoicesController extends AbstractPmController
 					return $this->redirect()->toRoute('invoices/view', array('invoice_id' => $invoice_id));
 				} else {	
 					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
 				}
 				
 			} else {
 				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
 			}
 
 		}

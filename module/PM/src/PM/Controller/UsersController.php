@@ -99,10 +99,7 @@ class UsersController extends AbstractPmController
 		
 		$times = $this->getServiceLocator()->get('PM\Model\Times');
 		$view['times'] = $times->getTimesByUserId($id);
-
 		$view['hours'] = $times->getTotalTimesByUserId($id);
-		
-		//$this->view->headTitle('Viewing User: '. $this->view->user['first_name'].' '.$this->view->user['last_name'], 'PREPEND');
 		$view['id'] = $id;
 		return $view;
 	}
@@ -159,7 +156,8 @@ class UsersController extends AbstractPmController
 				} 
 				else 
 				{
-					$this->view->errors = array($this->translate('something_went_wrong', 'pm'));
+					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
 					$user_form->setData($formData);
 				}
 
@@ -167,6 +165,7 @@ class UsersController extends AbstractPmController
 			else 
 			{
 				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
 				$user_form->setData($formData);
 			}
 
@@ -216,12 +215,14 @@ class UsersController extends AbstractPmController
 				else 
 				{
 					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
 				}
 
 			} 
 			else 
 			{
 				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
 				$user_form->setData($formData);
 			}
 		}
@@ -278,10 +279,6 @@ class UsersController extends AbstractPmController
 				{
 					$this->flashMessenger()->addMessage($this->translate('user_removed', 'pm'));
 					return $this->redirect()->toRoute('users');
-					exit;
-	
-				} else {
-					 
 				}
 			}
 		}

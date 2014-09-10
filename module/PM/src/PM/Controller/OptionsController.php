@@ -141,6 +141,7 @@ class OptionsController extends AbstractPmController
 				else 
 				{
 					$view['errors'] = array('Couldn\'t update Option...');
+					$this->layout()->setVariable('errors', $view['errors']);
 					$form->setData($formData);
 				}
 
@@ -148,6 +149,7 @@ class OptionsController extends AbstractPmController
 			else 
 			{
 				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
 				$form->setData($formData);
 			}
 		}

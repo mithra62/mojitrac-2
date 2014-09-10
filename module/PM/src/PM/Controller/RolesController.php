@@ -122,6 +122,7 @@ class RolesController extends AbstractPmController
 				else 
 				{
 					$view['errors'] = array($this->translate('update_role_fail', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
 					$form->setData($formData);
 				}
 
@@ -129,6 +130,7 @@ class RolesController extends AbstractPmController
 			else 
 			{
 				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
 				$form->setData($formData);
 			}
 		}
@@ -168,12 +170,14 @@ class RolesController extends AbstractPmController
 				else 
 				{
 					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
 				}
 
 			} 
 			else 
 			{
 				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
 			}
 		}
 

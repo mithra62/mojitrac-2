@@ -131,6 +131,7 @@ class ContactsController extends AbstractPmController
             	else 
             	{
             		$view['errors'] = array($this->translate('cant_update_contact', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
             		$form->setData($formData);
             	}
                 
@@ -138,6 +139,7 @@ class ContactsController extends AbstractPmController
             else 
             {
             	$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
                 $form->setData($formData);
             }
 	    }
@@ -193,10 +195,12 @@ class ContactsController extends AbstractPmController
 					return $this->redirect()->toRoute('contacts/view', array('contact_id' => $contact_id));
 				} else {	
 					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
 				}
 				
 			} else {
 				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
 			}
 
 		}

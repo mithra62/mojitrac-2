@@ -16,6 +16,9 @@ return array(
 	'no' => 'No',
 	'yes' => 'Yes',
 		
+	//admin
+	'settings_updated' => 'Settings updated!',
+		
 	//account
 	'prefs_updated' => 'Preferences updated!',
 	'password_changed' => 'Password Changed',

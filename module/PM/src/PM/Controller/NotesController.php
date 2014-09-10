@@ -218,6 +218,7 @@ class NotesController extends AbstractPmController
             	else 
             	{
             		$view['errors'] = array('Couldn\'t update note...');
+					$this->layout()->setVariable('errors', $view['errors']);
             		$form->setData($formData);
             	}
                 
@@ -225,6 +226,7 @@ class NotesController extends AbstractPmController
             else 
             {
             	$view['errors'] = array('Please fix the errors below.');
+				$this->layout()->setVariable('errors', $view['errors']);
                 $form->setData($formData);
             }
             
@@ -318,11 +320,13 @@ class NotesController extends AbstractPmController
 				}
 				
 				$view['errors'] = array('Please fix the errors below.');
+				$this->layout()->setVariable('errors', $view['errors']);
 				
 			} 
 			else 
 			{
 				$view['errors'] = array('Please fix the errors below.');
+				$this->layout()->setVariable('errors', $view['errors']);
 			}
 
 		 }

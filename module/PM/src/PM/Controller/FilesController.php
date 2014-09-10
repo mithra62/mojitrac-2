@@ -204,6 +204,7 @@ class FilesController extends AbstractPmController
             	else 
             	{
             		$view['errors'] = array($this->translate('cant_update_file', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
             	}
 			}
 		}
@@ -315,17 +316,20 @@ class FilesController extends AbstractPmController
 						else
 						{
 							$view['file_errors'] = array($this->translate('cant_upload_file', 'pm'));
+							$this->layout()->setVariable('errors', $view['errors']);
 						}
 					}		
 				} 
 				else 
 				{
 					$view['file_errors'] = $adapter->getMessages();
+					$this->layout()->setVariable('errors', $view['file_errors']);
 				}
 			} 
 			else 
 			{
 				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
 			}
 		}
 

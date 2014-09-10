@@ -184,7 +184,7 @@ class Companies extends AbstractModel
 	public function getProjectCount($id, $status = FALSE)
 	{
 		$sql = $this->db->select()
-					->from('projects', array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
+					->from('projects')->columns(array('count' => new \Zend\Db\Sql\Expression('COUNT(id)')))
 					->where(array('company_id' => $id));
 		$data = $this->getRow($sql);
 		if(is_array($data))
@@ -202,7 +202,7 @@ class Companies extends AbstractModel
 	public function getTaskCount($id, $status = FALSE)
 	{
 		$sql = $this->db->select()
-					->from('tasks', array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
+					->from('tasks')->columns(array('count' => new \Zend\Db\Sql\Expression('COUNT(id)')))
 					->where(array('company_id' => $id));
 		$data = $this->getRow($sql);
 		if(is_array($data))
@@ -220,7 +220,7 @@ class Companies extends AbstractModel
 	public function getFileCount($id, $status = FALSE)
 	{
 		$sql = $this->db->select()
-					->from('files', array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
+					->from('files')->columns(array('count' => new \Zend\Db\Sql\Expression('COUNT(id)')))
 					->where(array('company_id' => $id));
 		$data = $this->getRow($sql);
 		if(is_array($data))

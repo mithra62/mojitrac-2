@@ -186,12 +186,14 @@ class BookmarksController extends AbstractPmController
             	else 
             	{
             		$view['errors'] = array($this->translate('cant_update_bookmark', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
             		$form->setData($formData);
             	}
             } 
             else 
             {
             	$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
                 $form->setData($formData);
             }
             
@@ -282,6 +284,7 @@ class BookmarksController extends AbstractPmController
 			else 
 			{
 				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
 			}
 		}
 		

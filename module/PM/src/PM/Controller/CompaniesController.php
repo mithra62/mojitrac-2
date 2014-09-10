@@ -180,11 +180,13 @@ class CompaniesController extends AbstractPmController
 					        		
             	} else {
             		$view['errors'] = array($this->translate('cant_update_company', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
             		$form->setData($formData);
             	}
                 
             } else {
             	$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
                 $form->setData($formData);
             }
             
@@ -244,11 +246,13 @@ class CompaniesController extends AbstractPmController
 				else 
 				{	
 					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
 				}
 			} 
 			else 
 			{
 				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
 			}
 
 		 }

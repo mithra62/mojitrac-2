@@ -179,6 +179,7 @@ class IpsController extends AbstractPmController
 				else 
 				{
 					$view['errors'] = array($this->translate('cant_update_ip_address', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
 					$form->setData($formData);
 				}
 
@@ -186,6 +187,7 @@ class IpsController extends AbstractPmController
 			else 
 			{
 				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm')); 
+				$this->layout()->setVariable('errors', $view['errors']);
 				$form->setData($formData);
 			}
 		}

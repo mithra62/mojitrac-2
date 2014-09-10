@@ -67,7 +67,7 @@ class AdminController extends AbstractPmController
     		$formData = $formData->toArray();
 			if($setting->updateSettings($formData))
 			{
-		    	$this->flashMessenger()->addMessage('Settings updated!');
+		    	$this->flashMessenger()->addMessage($this->translate('settings_updated', 'pm')); 
 				return $this->redirect()->toRoute('admin/settings');	
 			}
 		}
