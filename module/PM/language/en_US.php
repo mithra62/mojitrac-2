@@ -64,15 +64,32 @@ return array(
 	'cant_remove_role' => 'You can\'t remove this role.',
 	'role_removed' => 'Role Removed!',
 		
+	//company contacts
+	'contact_updated' => 'Contact Updated!',
+	'cant_update_contact' => 'Can\'t Update Contact',
+	'contact_added' => 'Contact Added',
+	'contact_removed' => 'Contact Removed',
+		
 	//projects
 	'projects' => 'Projects',
 	'project_team_modified' => 'Project Team Modified',
+
+	//tasks
+	'tasks_updated' => 'Task(s) Updated!',
+	
+	//notes
+	'note_updated' => 'Note Updated!',
+	'note_added' => 'Note Added!',
+	'note_removed' => 'Note Removed!',		
 		
 	//files
 	'file_added' => 'File Added!',
 	'file_removed' => 'File Removed!',
 	'file_updated' => 'File Updated!',
 	'file_not_found' => 'File Not Found',
+	'cant_update_file' => 'Can\'t Update File',
+	'cant_upload_file' => 'Can\'t Upload File',
+	'cant_remove_file' => 'Can\'t Remove File',
 		
 	//file revisions
 	'file_revision_added' => 'File Revision Added!',

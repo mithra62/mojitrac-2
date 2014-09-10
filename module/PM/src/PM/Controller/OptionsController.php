@@ -89,7 +89,7 @@ class OptionsController extends AbstractPmController
 				$option_id = $options->addOption($formData->toArray(), $this->identity);
 				if($option_id)
 				{
-					$this->flashMessenger()->addMessage($translate('option_added', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('option_added', 'pm'));
 					return $this->redirect()->toRoute('options/view', array('option_id' => $option_id));
 				}
 			}
@@ -134,7 +134,7 @@ class OptionsController extends AbstractPmController
 			{
 				if($options->updateOption($formData->toArray(), $formData['id']))
 				{
-					$this->flashMessenger()->addMessage($translate('option_updated', 'pm'));
+					$this->flashMessenger()->addMessage($this->translate('option_updated', 'pm'));
 					return $this->redirect()->toRoute('options/view', array('option_id' => $id));
 					 
 				} 
@@ -147,7 +147,7 @@ class OptionsController extends AbstractPmController
 			} 
 			else 
 			{
-				$view['errors'] = array($translate('please_fix_the_errors_below', 'pm'));
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 				$form->setData($formData);
 			}
 		}

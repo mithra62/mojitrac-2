@@ -257,18 +257,21 @@ class Invoices extends AbstractModel
 	
 	/**
 	 * Handles everything for removing an invoice.
-	 * @param $id
-	 * @param $campaign_id
+	 * @param $invoice_id
 	 * @return bool
 	 */
-	public function removeInvoice($id)
+	public function removeInvoice($invoice_id)
 	{
-	    $ext = $this->trigger(self::EventInvoiceRemovePre, $this, compact('id'));
-	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $id = $ext->last();
+	    $ext = $this->trigger(self::EventInvoiceRemovePre, $this, compact('invoice_id'));
+	    if($ext->stopped()) return $ext->last(); elseif($ext->last()) $invoice_id = $ext->last();
 	    	    
-		$remove = $this->remove('invoices', array('id' => $id));
+		$remove = $this->remove('invoices', array('id' => $invoice_id));
+		if($remove)
+		{
+			$this->remove('invoices_line_items', array('invoice_id' => $invoice_id));
+		}
 		
-		$ext = $this->trigger(self::EventInvoiceRemovePost, $this, compact('remove'));
+		$ext = $this->trigger(self::EventInvoiceRemovePost, $this, compact('remove', 'invoice_id'));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $remove = $ext->last();
 				
 		return $remove;

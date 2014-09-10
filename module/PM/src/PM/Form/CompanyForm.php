@@ -101,13 +101,10 @@ class CompanyForm extends BaseForm
 		
 		$this->add(array(
 			'name' => 'state',
-			'type' => 'Select',
+			'type' => 'Text',
 			'attributes' => array(
 				'class' => 'select input',
 				'id' => 'state'
-			),
-			'options' => array(
-				'value_options' => States::states(TRUE),
 			)
 		));	
 

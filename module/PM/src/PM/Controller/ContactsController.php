@@ -84,9 +84,7 @@ class ContactsController extends AbstractPmController
 		{
 			return $this->redirect()->toRoute('contacts');
 		}
-			
-		//$this->view->title = FALSE;
-		//$this->view->headTitle('Viewing Contact: '. $this->view->contact['first_name'].' '.$this->view->contact['last_name'], 'PREPEND');
+		
 		$view['id'] = $id;
 		
 		return $this->ajaxOutput($view);
@@ -126,32 +124,28 @@ class ContactsController extends AbstractPmController
             {
             	if($contact->updateContact($formData->toArray(), $id))
 	            {	
-			    	$this->flashMessenger()->addMessage('Contact updated!');
+			    	$this->flashMessenger()->addMessage($this->translate('contact_updated', 'pm'));
 					return $this->redirect()->toRoute('contacts/view', array('contact_id' => $id));
 					        		
             	} 
             	else 
             	{
-            		$view['errors'] = array('Couldn\'t update contact...');
+            		$view['errors'] = array($this->translate('cant_update_contact', 'pm'));
             		$form->setData($formData);
             	}
                 
             } 
             else 
             {
-            	$view['errors'] = array('Please fix the errors below.');
+            	$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
                 $form->setData($formData);
             }
-            
 	    }
 	    
 	    $view['id'] = $id;
-	    $view['form'] = $form;	    
-	    
+	    $view['form'] = $form;
 	    $view['contact_data'] = $contact_data;
-		$this->layout()->setVariable('layout_style', 'right');     
-		//$this->view->headTitle('Edit Contact', 'PREPEND');     	
-		
+		$this->layout()->setVariable('layout_style', 'right');
 		return $this->ajaxOutput($view);
 	}
 	
@@ -195,22 +189,22 @@ class ContactsController extends AbstractPmController
 				$formData['creator'] = $this->identity;
 				$contact_id = $contact->addContact($formData->toArray());
 				if($contact_id){
-			    	$this->flashMessenger()->addMessage('Contact Added!');
+			    	$this->flashMessenger()->addMessage($this->translate('contact_added', 'pm'));
 					return $this->redirect()->toRoute('contacts/view', array('contact_id' => $contact_id));
 				} else {	
-					$view['errors'] = array('Something went wrong...');
+					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
 				}
 				
 			} else {
-				$view['errors'] = array('Please fix the errors below.');
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 			}
 
 		}
-		$view['addAction'] = TRUE;
-		$view['company_data'] = $company_data;
 
 		$this->layout()->setVariable('active_sub', $company_data['type']);
 		$this->layout()->setVariable('layout_style', 'left');
+		$view['addAction'] = TRUE;
+		$view['company_data'] = $company_data;
 		$view['form'] = $form;
 		$view['id'] = $company_id;
 		return $this->ajaxOutput($view);
@@ -224,6 +218,8 @@ class ContactsController extends AbstractPmController
         }
         		
 		$contacts = $this->getServiceLocator()->get('PM\Model\Contacts');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+		
 		$id = $this->params()->fromRoute('contact_id');
 		$confirm = $this->params()->fromPost('confirm');
 		$fail = $this->params()->fromPost('fail');
@@ -233,29 +229,35 @@ class ContactsController extends AbstractPmController
     		return $this->redirect()->toRoute('contacts');
     	}
     	
-    	$view['contact'] = $contacts->getContactById($id);
-    	if(!$view['contact'])
+    	$view['contact_data'] = $contacts->getContactById($id);
+    	if(!$view['contact_data'])
     	{
 			return $this->redirect()->toRoute('contacts');
     	}
 
-    	if($fail)
-    	{
-			return $this->redirect()->toRoute('contacts/view', array('contact_id' => $id));
+    	$request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid())
+			{
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('contacts/view', array('contact_id' => $id));
+				}
+				
+	    	   	if($contacts->removeContact($id))
+	    		{	
+					$this->flashMessenger()->addMessage($this->translate('contact_removed', 'pm'));
+					return $this->redirect()->toRoute('companies/view', array('company_id' => $view['contact_data']['company_id']));
+	    		}
+			}
     	}
     	
-    	if($confirm)
-    	{
-    	   	if($contacts->removeContact($id))
-    		{	
-				$this->flashMessenger()->addMessage('Contact Removed');
-				return $this->redirect()->toRoute('companies/view', array('company_id' => $view['contact']['company_id']));
-    		}
-    	}
-    	
-		$view['title'] = "Delete Contact: ". $this->view->contact['first_name'].' '.$this->view->contact['last_name'];
-		//$this->view->headTitle('Delete Contact: '. $this->view->contact['first_name'].' '.$this->view->contact['last_name'], 'PREPEND');
 		$view['id'] = $id;
+		$view['form'] = $form;
 		return $this->ajaxOutput($view);
 	}
 }

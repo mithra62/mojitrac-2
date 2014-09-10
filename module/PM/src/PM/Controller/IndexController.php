@@ -67,7 +67,7 @@ class IndexController extends AbstractPmController
 	    		}
 	    		if($looped)
 	    		{
-			    	$this->flashMessenger()->addMessage('Task(s) Updated!');
+			    	$this->flashMessenger()->addMessage($this->translate('tasks_updated', 'pm'));
 					return $this->redirect()->toRoute('home');	
 					exit;	    			
 	    		}

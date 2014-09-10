@@ -198,12 +198,12 @@ class FilesController extends AbstractPmController
 				$formData['creator'] = $this->identity;
 			    if($file->updateFile($formData, $id))
 	            {
-					$this->flashMessenger()->addMessage($this->translate('file_updated', 'pm'));
+					$this->flashMessenger()->addMessage();
 					return $this->redirect()->toRoute('files/view', array('file_id' => $id));  	        		
             	} 
             	else 
             	{
-            		$view['errors'] = array('Couldn\'t update file...');
+            		$view['errors'] = array($this->translate('cant_update_file', 'pm'));
             	}
 			}
 		}
@@ -314,7 +314,7 @@ class FilesController extends AbstractPmController
 						}
 						else
 						{
-							$view['file_errors'] = array('Couldn\'t upload file :(');
+							$view['file_errors'] = array($this->translate('cant_upload_file', 'pm'));
 						}
 					}		
 				} 
@@ -325,7 +325,7 @@ class FilesController extends AbstractPmController
 			} 
 			else 
 			{
-				$view['errors'] = array('Please fix the errors below.');
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 			}
 		}
 
@@ -394,7 +394,7 @@ class FilesController extends AbstractPmController
 	    		} 
 	    		else
 	    		{
-	    			$view['errors'] = array('Couldn\'t remove the file :(');
+	    			$view['errors'] = array($this->translate('cant_remove_file', 'pm'));
 	    		}
     		}
     	

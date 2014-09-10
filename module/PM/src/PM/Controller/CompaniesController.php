@@ -136,8 +136,7 @@ class CompaniesController extends AbstractPmController
 		
 		$view['sub_menu'] = 'company';
 		$view['layout_style'] = 'single';
-		$view['active_sub'] = $view['company']['type'];		
-		//$this->view->headTitle('Viewing Company: '. $this->view->company['name'], 'PREPEND');
+		$view['active_sub'] = $view['company']['type'];
 		$view['id'] = $view['company_id'] = $id;
 		
 		return $view;
@@ -215,7 +214,6 @@ class CompaniesController extends AbstractPmController
 	 */
 	public function addAction()
 	{
-		
 	    if(!$this->perm->check($this->identity, 'manage_companies'))
         {
         	return $this->redirect()->toRoute('companies');
@@ -261,9 +259,7 @@ class CompaniesController extends AbstractPmController
 		 }
 		
         $view['layout_style'] = 'right';
-        $view['sidebar'] = 'dashboard';		
-		//$this->view->headTitle('Add Company', 'PREPEND');
-
+        $view['sidebar'] = 'dashboard';
 		$view['form'] = $form;
 		$this->layout()->setVariable('layout_style', 'left');
 		return $view;
@@ -278,8 +274,7 @@ class CompaniesController extends AbstractPmController
         
 		$companies = $this->getServiceLocator()->get('PM\Model\Companies');
 		$id = $this->params()->fromRoute('company_id');
-		$confirm = $this->params()->fromPost('confirm');
-		$fail = $this->params()->fromPost('fail');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
 		
     	if(!$id)
     	{
@@ -293,27 +288,32 @@ class CompaniesController extends AbstractPmController
 			return $this->redirect()->toRoute('companies');
     	}
 
-    	if($fail)
-    	{
-    		return $this->redirect()->toRoute('companies/view',  array('company_id' => $id));
-    	}
-    	
-    	if($confirm)
-    	{
-    	   	if($companies->removeCompany($id))
-    		{	
-				$this->flashMessenger()->addMessage('Company Removed');
-				return $this->redirect()->toRoute('companies');
-    		} 
+	    $request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid())
+			{
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('contacts/view', array('contact_id' => $id));
+				}
+				
+	    	   	if($companies->removeCompany($id))
+	    		{	
+					$this->flashMessenger()->addMessage('Company Removed');
+					return $this->redirect()->toRoute('companies');
+	    		} 
+			}
     	}
     	
     	$view['project_count'] = $companies->getProjectCount($id);
     	$view['task_count'] = $companies->getTaskCount($id);
     	$view['file_count'] = $companies->getFileCount($id);
-    	
-		//$this->view->headTitle('Delete Company: '. $this->view->company['name'], 'PREPEND');
 		$view['id'] = $id;
-
+		$view['form'] = $form;
 		return $this->ajaxOutput($view);
 	}
 	

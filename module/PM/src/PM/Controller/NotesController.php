@@ -155,7 +155,6 @@ class NotesController extends AbstractPmController
 			$view['company'] = $company->getCompanyById($note_data['company_id'], array('id', 'name'));
 		}		
 
-		//$this->view->headTitle('Viewing Note: '. $this->view->note['subject'], 'PREPEND');
 		$view['id'] = $id;
 		return $this->ajaxOutput($view);
 	}
@@ -212,7 +211,7 @@ class NotesController extends AbstractPmController
             	$formData['project'] = $note_data['project_id'];
             	if($note->updateNote($formData, $id))
 	            {	
-			    	$this->flashMessenger()->addMessage('Note updated!');
+			    	$this->flashMessenger()->addMessage($this->translate('note_updated', 'pm'));
 					return $this->redirect()->toRoute('notes/view', array('note_id' => $id));
 					        		
             	} 
@@ -314,7 +313,7 @@ class NotesController extends AbstractPmController
 				$note_id = $note->addNote($formData->toArray(), $this->identity);
 				if($note_id)
 				{
-			    	$this->flashMessenger()->addMessage('Note Added!');
+			    	$this->flashMessenger()->addMessage($this->translate('note_added', 'pm'));
 					return $this->redirect()->toRoute('notes/view', array('note_id' => $note_id));
 				}
 				
@@ -401,7 +400,7 @@ class NotesController extends AbstractPmController
 					$formData['task'] = $note_data['task_id'];
 					$formData['company'] = $note_data['company_id'];
 					$formData['project'] = $note_data['project_id'];			
-					$this->flashMessenger()->addMessage('Note Removed');
+					$this->flashMessenger()->addMessage($this->translate('note_removed', 'pm'));
 					if($note_data['task_id'] > 0)
 					{
 						return $this->redirect()->toRoute('tasks/view', array('task_id' => $note_data['task_id']));
