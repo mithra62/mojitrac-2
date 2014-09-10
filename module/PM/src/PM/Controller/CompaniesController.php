@@ -273,17 +273,17 @@ class CompaniesController extends AbstractPmController
         }
         
 		$companies = $this->getServiceLocator()->get('PM\Model\Companies');
-		$id = $this->params()->fromRoute('company_id');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
 		
+		$id = $this->params()->fromRoute('company_id');
     	if(!$id)
     	{
     		return $this->redirect()->toRoute('companies');
     	}
     	
     	$view = array();
-    	$view['company'] = $companies->getCompanyById($id);
-    	if(!$view['company'])
+    	$view['company_data'] = $companies->getCompanyById($id);
+    	if(!$view['company_data'])
     	{
 			return $this->redirect()->toRoute('companies');
     	}
@@ -298,7 +298,7 @@ class CompaniesController extends AbstractPmController
 				$formData = $formData->toArray();
 				if(!empty($formData['fail']))
 				{
-					return $this->redirect()->toRoute('contacts/view', array('contact_id' => $id));
+					return $this->redirect()->toRoute('companies/view', array('company_id' => $id));
 				}
 				
 	    	   	if($companies->removeCompany($id))
