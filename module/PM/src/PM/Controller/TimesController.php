@@ -97,13 +97,13 @@ class TimesController extends AbstractPmController
 				} 
 				else 
 				{	
-					$view['errors'] = array('Something went wrong...');
+					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
 				}
 				
 			} 
 			else 
 			{
-				$view['errors'] = array('Please fix the errors below.');
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 			}
 		}    	
     	

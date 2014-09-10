@@ -109,6 +109,10 @@ class TimersController extends AbstractPmController
     	return $this->ajaxOutput($view);
     }
     
+    /**
+     * Action to remove a timer
+     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>
+     */
     public function removeAction()
     {
     	$timer = $this->getServiceLocator()->get('PM\Model\Timers');
@@ -117,6 +121,10 @@ class TimersController extends AbstractPmController
         return $this->redirect()->toRoute('pm');    	
     }
     
+    /**
+     * Action to start a timer
+     * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|multitype:
+     */
     public function startAction()
     {
     	if ($this->getRequest()->isPost()) 
@@ -150,7 +158,9 @@ class TimersController extends AbstractPmController
         	{
         		$this->view->errors = array('Couldn\'t start timer...');
         	}
-        }  	
+        } 
+
+        return array();
     }
     
     public function stopAction()

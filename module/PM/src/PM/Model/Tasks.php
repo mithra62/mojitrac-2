@@ -500,7 +500,7 @@ class Tasks extends AbstractModel
 	{
 		$sql = $this->db->select()
 					->from('files')->columns( array(new \Zend\Db\Sql\Expression('COUNT(id) AS count')))
-					->where('task_id = ?', $id);
+					->where(array('task_id' => $id));
 		$data = $this->getRow($sql);
 		if(is_array($data))
 		{

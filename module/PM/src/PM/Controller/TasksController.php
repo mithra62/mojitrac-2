@@ -37,7 +37,6 @@ class TasksController extends AbstractPmController
         $this->layout()->setVariable('active_nav', 'projects');
         $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
-		$this->layout()->setVariable('active_sub', 'None');   
 		return $e;      
 	}
     
@@ -111,6 +110,7 @@ class TasksController extends AbstractPmController
 			return $this->redirect()->toRoute('pm');				
 		}		
 		
+		$view['project_data'] = $project->getProjectById($task_data['project_id']);
 		$view['assignment_history'] = $task->getTaskAssignments($id);
 		if($this->perm->check($this->identity, 'view_files'))
 		{
@@ -131,6 +131,8 @@ class TasksController extends AbstractPmController
 		$notes = $this->getServiceLocator()->get('PM\Model\Notes');
 		$view['notes'] = $notes->getNotesByTaskId($id);
 		$view['id'] = $id;
+
+		$this->layout()->setVariable('active_sub', $view['project_data']['status']);
 		return $view;
 	}
 	
@@ -196,19 +198,19 @@ class TasksController extends AbstractPmController
             	if($task->updateTask($formData->toArray(), $id))
 	            {	
 	            	//$task->updateCompanyId($id, FALSE, $formData['project_id']);	            	
-			    	$this->flashMessenger()->addMessage('Task updated!');
+			    	$this->flashMessenger()->addMessage($this->translate('task_updated', 'pm'));
 					return $this->redirect()->toRoute('tasks/view', array('task_id' => $id));
             	} 
             	else 
             	{
-            		$view['errors'] = array('Couldn\'t update task...');
+            		$view['errors'] = array($this->translate('cant_update_task', 'pm'));
             		$form->setData($formData);
             	}
                 
             } 
             else 
             {
-            	$view['errors'] = array('Please fix the errors below.');
+            	$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
                 $form->setData($formData);
             }
 	    }
@@ -239,7 +241,6 @@ class TasksController extends AbstractPmController
 			{
 				return $this->redirect()->toRoute('pm');			
 			}
-			
 		}
 				
 		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
@@ -252,7 +253,6 @@ class TasksController extends AbstractPmController
 				'priority' => $this->settings['default_task_priority'],
 			)
 		);
-				
 		
 		if ($this->getRequest()->isPost()) {
     		
@@ -264,30 +264,23 @@ class TasksController extends AbstractPmController
 				$formData['creator'] = $this->identity;
 				$task_id = $task->addTask($formData->toArray());
 				if($task_id)
-				{
-					//PM_Model_ActivityLog::logTaskAdd($formData, $id, $formData['project_id'], $this->identity);					
-				    if($formData['assigned_to'] != 0)
-            		{
-            		    //todo
-//             			$noti = new PM_Model_Notifications;            			
-//             			$noti->sendTaskAssignment($formData);
-            		}
-            							
+				{					
 					$project = $this->getServiceLocator()->get('PM\Model\Projects');
 					$project->updateProjectTaskCount($formData['project_id']);
 					$project_data = $project->getProjectById($formData['project_id']);
 					$task->updateCompanyId($task_id, $project_data['company_id']);
-
-			    	$this->flashMessenger()->addMessage('Task Added!');
+ 
+			    	$this->flashMessenger()->addMessage($this->translate('task_added', 'pm'));
 					return $this->redirect()->toRoute('tasks/view', array('task_id' => $task_id));
 				}
 			} 
 			else 
 			{
-				$view['errors'] = array('Please fix the errors below.');
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 			}
 		 }
-		
+
+		$this->layout()->setVariable('active_sub', $view['project_data']['status']);
 		$view['form'] = $form;
         $this->layout()->setVariable('layout_style', 'left');
 		return $view;
@@ -332,7 +325,7 @@ class TasksController extends AbstractPmController
 				
 	    	   	if($task->removeTask($id))
 	    		{	
-					$this->flashMessenger()->addMessage('Task Removed');
+					$this->flashMessenger()->addMessage($this->translate('task_removed', 'pm')); 
 					return $this->redirect()->toRoute('projects/view', array('project_id' => $task_data['project_id']));
 	    		}
 			}

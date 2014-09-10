@@ -124,20 +124,20 @@ class InvoicesController extends AbstractPmController
             {
             	if($invoice->updateInvoice($formData->toArray(), $id))
 	            {	
-			    	$this->flashMessenger()->addMessage('Invoice updated!');
+			    	$this->flashMessenger()->addMessage($this->translate('invoice_updated', 'pm')); 
 					return $this->redirect()->toRoute('invoices/view', array('invoices_id' => $id));
 					        		
             	} 
             	else 
             	{
-            		$view['errors'] = array('Couldn\'t update invoice...');
+            		$view['errors'] = array($this->translate('cant_update_invoice', 'pm'));
             		$form->setData($formData);
             	}
                 
             } 
             else 
             {
-            	$view['errors'] = array('Please fix the errors below.');
+            	$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
                 $form->setData($formData);
             }
             
@@ -196,14 +196,14 @@ class InvoicesController extends AbstractPmController
 				$line_items = $invoice->lineItem->parseItems($data);
 				$invoice_id = $invoice->addInvoice($company_id, $data, $line_items);
 				if($invoice_id){
-			    	$this->flashMessenger()->addMessage('Invoice Added!');
+			    	$this->flashMessenger()->addMessage($this->translate('invoice_added', 'pm'));
 					return $this->redirect()->toRoute('invoices/view', array('invoice_id' => $invoice_id));
 				} else {	
-					$view['errors'] = array('Something went wrong...');
+					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
 				}
 				
 			} else {
-				$view['errors'] = array('Please fix the errors below.');
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 			}
 
 		}
@@ -253,7 +253,7 @@ class InvoicesController extends AbstractPmController
 				
 	    	   	if($invoice->removeInvoice($id))
 	    		{	
-					$this->flashMessenger()->addMessage('Invoice Removed');
+					$this->flashMessenger()->addMessage($this->translate('invoice_removed', 'pm'));
 					return $this->redirect()->toRoute('companies/view', array('company_id' => $view['invoice_data']['company_id']));
 	    		}
 			}

@@ -107,11 +107,6 @@ class BookmarksController extends AbstractPmController
 	}
 	
 	/**
-	 * Bookmark View Page
-	 * @return void
-	 */
-	
-	/**
 	 * View a Bookmark Action
 	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|Ambigous <\Zend\View\Model\ViewModel, boolean, array>
 	 */
@@ -148,7 +143,6 @@ class BookmarksController extends AbstractPmController
 			}			
 		}		
 
-		//$this->view->headTitle('Viewing Bookmark: '. $this->view->bookmark['name'], 'PREPEND');
 		$view['id'] = $id;
 		return $this->ajaxOutput($view);
 	}
@@ -186,23 +180,23 @@ class BookmarksController extends AbstractPmController
             {
             	if($bookmark->updateBookmark($formData->toArray(), $id))
 	            {		            	
-			    	$this->flashMessenger()->addMessage('Bookmark updated!');
+			    	$this->flashMessenger()->addMessage($this->translate('bookmark_updated', 'pm'));
 					return $this->redirect()->toRoute('bookmarks/view', array('bookmark_id' => $id));   
             	} 
             	else 
             	{
-            		$view['errors'] = array('Couldn\'t update bookmark...');
+            		$view['errors'] = array($this->translate('cant_update_bookmark', 'pm'));
             		$form->setData($formData);
             	}
             } 
             else 
             {
-            	$view['errors'] = array('Please fix the errors below.');
+            	$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
                 $form->setData($formData);
             }
             
 	    }	    
-		//$this->view->headTitle('Edit Bookmark', 'PREPEND');  
+	    
 		$view['form_action'] = $this->getRequest()->getRequestUri(); 
 		return $view;  	
 	}
@@ -281,16 +275,14 @@ class BookmarksController extends AbstractPmController
 				$id = $bookmark->addBookmark($formData->toArray());
 				if($id)
 				{
-					$this->flashMessenger()->addMessage('Bookmark Added!');
+					$this->flashMessenger()->addMessage($this->translate('bookmark_added', 'pm'));
 					return $this->redirect()->toRoute('bookmarks/view', array('bookmark_id' => $id));
 				}
-				
 			} 
 			else 
 			{
-				$view['errors'] = array('Please fix the errors below.');
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 			}
-
 		}
 		
         $this->layout()->setVariable('sidebar', 'dashboard');
@@ -336,7 +328,7 @@ class BookmarksController extends AbstractPmController
 					$formData['task'] = $bookmark_data['task_id'];
 					$formData['company'] = $bookmark_data['company_id'];
 					$formData['project'] = $bookmark_data['project_id'];
-					$this->flashMessenger()->addMessage('Bookmark Removed');
+					$this->flashMessenger()->addMessage($this->translate('bookmark_removed', 'pm'));
 					if($bookmark_data['task_id'] > 0)
 					{
 					    return $this->redirect()->toRoute('tasks/view', array('task_id' => $bookmark_data['task_id']));

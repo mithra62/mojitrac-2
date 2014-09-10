@@ -78,15 +78,29 @@ return array(
 		
 	//projects
 	'projects' => 'Projects',
+	'project_updated' => 'Project Updated!',
+	'project_added' => 'Project Added!',
+	'cant_update_project' => 'Couldn\'t update project...',
 	'project_team_modified' => 'Project Team Modified',
+	'project_removed' => 'Project Removed!',
 
 	//tasks
 	'tasks_updated' => 'Task(s) Updated!',
+	'task_added' => 'Task Added!',
+	'task_removed' => 'Task Removed!',
+	'task_updated' => 'Task updated!',
+	'cant_update_task' => 'Couldn\'t update task...',
 	
 	//notes
 	'note_updated' => 'Note Updated!',
 	'note_added' => 'Note Added!',
-	'note_removed' => 'Note Removed!',		
+	'note_removed' => 'Note Removed!',	
+
+	//bookmarks
+	'bookmark_updated' => 'Bookmark Updated!',
+	'cant_update_bookmark' => 'Couldn\'t update bookmark...',
+	'bookmark_added' => 'Bookmark Added!',
+	'bookmark_removed' => 'Bookmark Removed',
 		
 	//files
 	'file_added' => 'File Added!',
@@ -109,10 +123,27 @@ return array(
 	'option_updated' => 'Option Updated!',
 	'option_removed' => 'Option Removed!',
 		
+	//times
+	'time_added' => 'Time Added!',
+	'time_removed' => 'Time Removed!',
+		
 	//timers
 	'timer_stopped' => 'Timer Stopped',
 	'timer_started' => 'Timer Started',
 	'timer_removed' => 'Timer Removed',
+		
+	//ip locker
+	'ip_locker_disabled' => 'Ip Blocking Disabled!',
+	'ip_locker_enabled' => 'Ip Blocking Enabled!',
+	'ip_address_added' => 'IP Address Added!',
+	'ip_address_updated' => 'IP Address Updated!',
+	'cant_update_ip_address' => 'Couldn\'t update Ip Address...', 
+		
+	//invoices
+	'invoice_updated' => 'Invoice Updated!',
+	'invoice_removed' => 'Invoice Removed!',
+	'cant_update_invoice' => 'Couldn\'t update invoice...',
+	'invoice_added' => 'Invoice Added!',
 		
 	//emails
 	'email_subject_task_status_change' => 'Task status changed',

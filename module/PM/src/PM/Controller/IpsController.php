@@ -38,6 +38,10 @@ class IpsController extends AbstractPmController
 		return $e;       
 	}
     
+	/**
+	 * Action for enabling the IP Locker
+	 * @return Ambigous <\Zend\Http\Response, \Zend\Stdlib\ResponseInterface>|Ambigous <\Zend\View\Model\ViewModel, boolean, array>
+	 */
     public function enableAction()
     {
     	$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
@@ -61,7 +65,7 @@ class IpsController extends AbstractPmController
     			$data = array('enable_ip' => ($this->settings['enable_ip'] == '1' ? '0' : '1'));
     			if($settings->updateSettings($data))
     			{
-					$this->flashMessenger()->addMessage($this->settings['enable_ip'] == '1' ? 'Ip Blocking Disabled!' : 'Ip Blocking Enabled!');
+					$this->flashMessenger()->addMessage($this->settings['enable_ip'] == '1' ? $this->translate('ip_locker_disabled', 'pm') : $this->translate('ip_locker_enabled', 'pm'));
 			    	return $this->redirect()->toRoute('ips');
     			}
     		}
@@ -119,7 +123,7 @@ class IpsController extends AbstractPmController
 				$ip_id = $ip->addIp($formData->toArray(), $this->identity);
 				if($ip_id)
 				{
-					$this->flashMessenger()->addMessage('IP Address Added!');
+					$this->flashMessenger()->addMessage($this->translate('ip_address_added', 'pm'));
 			    	return $this->redirect()->toRoute('ips/view', array('ip_id' => $ip_id));
 				}
 			}
@@ -169,19 +173,19 @@ class IpsController extends AbstractPmController
 			{
 				if($ip->updateIp($formData->toArray(), $formData['id']))
 				{
-					$this->flashMessenger()->addMessage('IP Address Updated!');
+					$this->flashMessenger()->addMessage($this->translate('ip_address_updated', 'pm')); 
 			    	return $this->redirect()->toRoute('ips/view', array('ip_id' => $id));
 				} 
 				else 
 				{
-					$view['errors'] = array('Couldn\'t update Ip Address...');
+					$view['errors'] = array($this->translate('cant_update_ip_address', 'pm'));
 					$form->setData($formData);
 				}
 
 			} 
 			else 
 			{
-				$view['errors'] = array('Please fix the errors below.');
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm')); 
 				$form->setData($formData);
 			}
 		}

@@ -39,7 +39,6 @@ class ProjectsController extends AbstractPmController
         $this->layout()->setVariable('active_nav', 'projects');
         $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
-		$this->layout()->setVariable('active_sub', 'None');
 		    
 		return $e;
 	}
@@ -204,31 +203,26 @@ class ProjectsController extends AbstractPmController
             {
             	if($project->updateProject($formData->toArray(), $id))
 	            {
-	            	//PM_Model_ActivityLog::logProjectUpdate($formData, $id, $this->identity);
-					$this->flashMessenger()->addMessage('Project updated!');
+					$this->flashMessenger()->addMessage($this->translate('project_updated', 'pm')); 
 					return $this->redirect()->toRoute('projects/view', array('project_id' => $id));      		
             	} 
 
-            	$view['errors'] = array('Couldn\'t update project...');
-            	$form->setData($formData);            	
-                
+            	$view['errors'] = array($this->translate('cant_update_project', 'pm'));
+            	$form->setData($formData);
             } 
             else 
             {
-            	$view['errors'] = array('Please fix the errors below.');
+            	$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
                 $form->setData($formData);
             }
-            
 	    }
 	    
 	    $view['form'] = $form;
 	    $view['project_data'] = $project_data;
-	    $view['active_sub'] = $project_data['status'];
         $view['layout_style'] = 'right';
         $view['sidebar'] = 'dashboard';	
         $this->layout()->setVariable('layout_style', 'left');
-		//$this->view->headTitle('Edit Project', 'PREPEND');   
-
+		$this->layout()->setVariable('active_sub', $project_data['status']);
         return $view;
 	}
 	
@@ -274,21 +268,18 @@ class ProjectsController extends AbstractPmController
 						$company->updateCompanyProjectCount($formData['company_id']);
 					}
 					
-					$this->flashMessenger()->addMessage('Project Added!');
+					$this->flashMessenger()->addMessage($this->translate('project_added', 'pm'));
 			    	return $this->redirect()->toRoute('projects/view', array('project_id' => $id));
 				}
-				
 			} 
 			else 
 			{
-				$view['errors'] = array('Please fix the errors below.');
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 			}
-
 		 }
 		
         $this->layout()->setVariable('layout_style', 'left');
         $view['sidebar'] = 'dashboard';
-
 		$view['form'] = $form;
 		return $view;
 	}
@@ -326,7 +317,7 @@ class ProjectsController extends AbstractPmController
 	    	   	if($project->removeProject($id))
 	    		{	
 	    			$project->removeProjectTeam($id);
-					$this->flashMessenger()->addMessage('Project Removed');
+					$this->flashMessenger()->addMessage($this->translate('project_removed', 'pm'));
 					$this->redirect()->toRoute('projects');
 	    		}
 			}
@@ -397,7 +388,7 @@ class ProjectsController extends AbstractPmController
 		$view['project'] = $project_data;
 
 		$view['proj_team'] = $proj_team;
-		$users = $this->getServiceLocator()->get('Application\Model\Users');
+		$users = $this->getServiceLocator()->get('PM\Model\Users');
 		$view['users'] = $users->getAllUsers('d');
 		
 		return $view;
