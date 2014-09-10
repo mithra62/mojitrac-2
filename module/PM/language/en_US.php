@@ -64,6 +64,12 @@ return array(
 	'cant_remove_role' => 'You can\'t remove this role.',
 	'role_removed' => 'Role Removed!',
 		
+	//companies 
+	'contact_updated' => 'Company updated!',
+	'cant_update_company' => 'Couldn\'t update company...',	
+	'company_added' => 'Company Added!',
+	'company_removed' => 'Company Removed',
+		
 	//company contacts
 	'contact_updated' => 'Contact Updated!',
 	'cant_update_contact' => 'Can\'t Update Contact',

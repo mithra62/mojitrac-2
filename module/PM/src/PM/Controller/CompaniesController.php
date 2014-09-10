@@ -38,7 +38,6 @@ class CompaniesController extends AbstractPmController
 		$this->layout()->setVariable('active_nav', 'companies');
 		$this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Companies::types());
 		$this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
-		$this->layout()->setVariable('active_sub', 'None');
 	
 		return $e;
 	}	
@@ -129,11 +128,9 @@ class CompaniesController extends AbstractPmController
 		$view['bookmarks'] = $bookmarks->getBookmarksByCompanyId($id);
 		
 		$notes = $this->getServiceLocator()->get('PM\Model\Notes');
+
+		$this->layout()->setVariable('active_sub', $view['company']['type']);
 		$view['notes'] = $notes->getNotesByCompanyId($id);
-		
-		//$this->view->layout_style = 'right';
-		
-		
 		$view['sub_menu'] = 'company';
 		$view['layout_style'] = 'single';
 		$view['active_sub'] = $view['company']['type'];
@@ -178,16 +175,16 @@ class CompaniesController extends AbstractPmController
             {        
             	if($company->updateCompany($formData->toArray(), $id))
 	            {	
-			    	$this->flashMessenger()->addMessage('Company updated!');
+			    	$this->flashMessenger()->addMessage($this->translate('company_updated', 'pm'));
 			    	return $this->redirect()->toRoute('companies/view', array('company_id' => $id));
 					        		
             	} else {
-            		$view['errors'] = array('Couldn\'t update company...');
+            		$view['errors'] = array($this->translate('cant_update_company', 'pm'));
             		$form->setData($formData);
             	}
                 
             } else {
-            	$view['errors'] = array('Please fix the errors below.');
+            	$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
                 $form->setData($formData);
             }
             
@@ -198,13 +195,11 @@ class CompaniesController extends AbstractPmController
 	    {
 	    	//Zend_Registry::set('pm_activity_filter', array('company_id' => $id));
 	    }
-	    
+
+	    $this->layout()->setVariable('active_sub', $company_data['type']);
 	    $view['form'] = $form;
-	    $view['active_sub'] = $company_data['type'];	
-        //$view['layout_style'] = 'right';
         $view['sidebar'] = 'dashboard';		
-		$this->layout()->setVariable('layout_style', 'left');    
-		//$this->view->headTitle('Edit Company', 'PREPEND');  
+		$this->layout()->setVariable('layout_style', 'left'); 
 		return $view;   	
 	}
 	
@@ -243,17 +238,17 @@ class CompaniesController extends AbstractPmController
 				$company_id = $company->addCompany($formData->toArray());
 				if($company_id)
 				{
-			    	$this->flashMessenger()->addMessage('Company Added!');
+			    	$this->flashMessenger()->addMessage($this->translate('company_added', 'pm'));
 					return $this->redirect()->toRoute('companies/view', array('company_id' => $company_id));
 				} 
 				else 
 				{	
-					$view['errors'] = array('Something went wrong...');
+					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
 				}
 			} 
 			else 
 			{
-				$view['errors'] = array('Please fix the errors below.');
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
 			}
 
 		 }
@@ -303,12 +298,13 @@ class CompaniesController extends AbstractPmController
 				
 	    	   	if($companies->removeCompany($id))
 	    		{	
-					$this->flashMessenger()->addMessage('Company Removed');
+					$this->flashMessenger()->addMessage($this->translate('company_removed', 'pm'));
 					return $this->redirect()->toRoute('companies');
 	    		} 
 			}
     	}
-    	
+
+    	$this->layout()->setVariable('active_sub', $view['company_data']['type']);
     	$view['project_count'] = $companies->getProjectCount($id);
     	$view['task_count'] = $companies->getTaskCount($id);
     	$view['file_count'] = $companies->getFileCount($id);
