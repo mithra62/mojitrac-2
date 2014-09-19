@@ -66,11 +66,20 @@ class Times extends AbstractModel
 		);
 	}
 	
+	/**
+	 * @ignore
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
+	 */
 	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
 		throw new \Exception("Not used");
 	}
 	
+	/**
+	 * Returns na instance of the InputFilter for validation purposes
+	 * @return \Zend\InputFilter\InputFilter
+	 */
 	public function getInputFilter()
 	{
 		if (!$this->inputFilter) {
@@ -402,7 +411,14 @@ class Times extends AbstractModel
 		$paid = $this->getRow($sql);
 		return array('total' => $total['hours'], 'sent' => $sent['hours'], 'unsent' => $unsent['hours'], 'paid' => $paid['hours']);				
 	}	
-	
+
+	/**
+	 * Returns the items ready for parsing by the CalendarHelper object
+	 * @param string $month
+	 * @param string $year
+	 * @param string $user_id
+	 * @return Ambigous <multitype:, multitype:string >
+	 */
 	public function getCalendarItems($month = FALSE, $year = FALSE, $user_id = FALSE)
 	{
 		$sql = $this->db->select();
@@ -429,6 +445,16 @@ class Times extends AbstractModel
 		return $this->_translateCalendarItems($this->getRows($sql), 'date', 'Hours', 'Hour', 'Worked', 'creator');
 	}
 	
+	/**
+	 * Converts the passed items into a format usable by the CalendareViewHelper
+	 * @param unknown $arr
+	 * @param unknown $master_key
+	 * @param unknown $plural
+	 * @param unknown $singular
+	 * @param unknown $tail
+	 * @param unknown $url_view
+	 * @return Ambigous <multitype:, multitype:string >
+	 */
 	private function _translateCalendarItems($arr, $master_key, $plural, $singular, $tail, $url_view)
 	{
 		$_arr = array();

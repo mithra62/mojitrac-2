@@ -298,7 +298,7 @@ class Calendar extends BaseViewHelper
 		$headDate = $this->getDateAsString();
 		if ($selectBox) 
 		{
-			$headDate = "\n<form name=\"$selectBoxFormName\" method=\"get\">\n";
+			$headDate = "\n<form name=\"$selectBoxFormName\" id=\"$selectBoxFormName\" method=\"get\">\n";
 			$headDate .= $this->getValidDatesSelectBox(array('selectedDateStr'=>$this->getDateAsString(),
 					'selectBoxName'=>$selectBoxName));
 			$headDate .= "</form>\n";
@@ -356,7 +356,7 @@ class Calendar extends BaseViewHelper
 		 		$date = FALSE;
 		 		if ($cellNum >= $this->getFirstDayOfWeek() && $cellNum < ($this->getNumMonthDays() + $this->getFirstDayOfWeek()))
 		 		{
-		 			$date = $calDayNum;// Zend_Locale_Format::toNumber($calDayNum, array('locale' => $this->localeStr));
+		 			$date = $calDayNum;
 		 			if($m_date && $this->day_route_name)
 		 			{
 		 				$link = '<a href="'.$this->view->url($this->day_route_name, array('month' => $this->date->format('n'), 'year' => $this->date->format('Y'), 'day' => $date)).'" rel="'.$this->link_rel.'">'.$date.'</a>';
@@ -425,20 +425,32 @@ class Calendar extends BaseViewHelper
 
 	public function getValidDatesSelectBox ( $arr = NULL )
 	{
+		$month_route = $this->getMonthRouteName();
 		$selectedDateStr=false;
 		$selectBoxName="";
 	    if (is_array($arr))
 	    	extract($arr);
 	
-		$html = "<select name=\"$selectBoxName\" class=\"select\" onchange=\"submit();\">\n";
-	 	foreach ($this->validDates as $option => $value) {
-	 		$sel = "";
+		$html = "<select name=\"$selectBoxName\" id=\"$selectBoxName\" class=\"select\" >\n";
+	 	foreach ($this->validDates as $option => $value) 
+	 	{
+	 		$selected = '';
 	 		if ($selectedDateStr && $selectedDateStr == $option)
-	 			$sel = "selected";
-	 		$html .= "<option value=\"$option\" $sel>$value</option>\n";
+	 		{
+	 			$selected = "selected";
+	 		}
+	 		
+	 		$date_str = strtotime($option);
+	 		$html .= '<option value="'.$this->view->url($this->getMonthRouteName(), array('month' => date('n', $date_str), 'year' => date('Y', $date_str))).'" '.$selected.'>'.$value.'</option>'."\n";
 		}
+		
 	 	$html .= "</select>\n";
-	 return $html;
+	 	return $html;
+	}
+	
+	public function getMonthRouteName()
+	{
+		return $this->month_route_name;
 	}
 	
 	public function getValidDates ()

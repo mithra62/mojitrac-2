@@ -182,7 +182,15 @@ $(document).ready(function() {
         "bLengthChange": false,
         "bPaginate": false,
 		"aaSorting": [[ 0, "desc" ]]
-	});     
+	}); 
+    
+    $('#dateSelect').bind('change', function () {
+        var url = $(this).val(); // get selected value
+        if (url) { // require a URL
+            window.location = url; // redirect
+        }
+        return false;
+    });
     
 // Closing jQuery
 });
