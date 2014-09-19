@@ -58,6 +58,10 @@ class CalendarController extends AbstractPmController
     	return $view;
     }
     
+    /**
+     * View Day Action
+     * @return Ambigous <unknown, \Base\Model\array:, multitype:, \Zend\EventManager\mixed, NULL, mixed>
+     */
     public function viewDayAction()
     {
     	$month = $this->params()->fromRoute('month');

@@ -422,7 +422,7 @@ class Times extends AbstractModel
 	public function getCalendarItems($month = FALSE, $year = FALSE, $user_id = FALSE)
 	{
 		$sql = $this->db->select();
-		$sql = $sql->from(array('i'=>'times'))->columns(array(new \Zend\Db\Sql\Expression('SUM(hours) AS total'), 'date', 'creator'));
+		$sql = $sql->from(array('i'=>'times'))->columns(array(new \Zend\Db\Sql\Expression('SUM(hours) AS total'), 'date', 'creator', 'user_id'));
 
 		if($month)
 		{
@@ -442,7 +442,11 @@ class Times extends AbstractModel
 		$sql = $sql->join(array('u' => 'users'), 'u.id = i.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), 'left');				   
 		$sql = $sql->group('date')
 				   ->group('creator');
-		return $this->_translateCalendarItems($this->getRows($sql), 'date', 'Hours', 'Hour', 'Worked', 'creator');
+		
+		$route_options = array('month' => $month, 'year' => $year);
+		$route_options['user_id'] = $user_id;
+		
+		return $this->_translateCalendarItems($this->getRows($sql), 'date', array('route_name' => 'times/view-day', 'options' => $route_options));
 	}
 	
 	/**
@@ -455,14 +459,15 @@ class Times extends AbstractModel
 	 * @param unknown $url_view
 	 * @return Ambigous <multitype:, multitype:string >
 	 */
-	private function _translateCalendarItems($arr, $master_key, $plural, $singular, $tail, $url_view)
+	private function _translateCalendarItems($arr, $master_key, array $route = array())
 	{
 		$_arr = array();
 		foreach($arr AS $key)
 		{
+			$route_options = array();
 			$_arr[$key[$master_key]][] = array(
 											'string' => $key['creator_first_name'].' '.$key['creator_last_name'].' ('.number_format($key['total'], 2).')',
-											'href' => '/pm/times/view-day/date/'.$key[$master_key].'/user/'.$key[$url_view],
+											'route' => $route,
 											'rel' => ''
 			);
 		}

@@ -47,19 +47,20 @@ class Calendar extends AbstractModel
     	$complete_tasks = $this->getCompletedTasksByDate($month, $year);
     	
     	$stuff = FALSE;
+    	$route_options = array();
     	if(is_array($started_projects))
     	{
-    		$stuff = $this->_translateItems($started_projects, 'start_date', 'projects');
+    		$stuff = $this->_translateItems($started_projects, 'start_date', array('route_name' => 'calendar/view-day', 'options' => $route_options));
     	}
     	
 	    if(is_array($started_tasks))
     	{
-    		$stuff = $this->_translateItems($started_tasks, 'start_date', 'tasks', $stuff);
+    		$stuff = $this->_translateItems($started_tasks, 'start_date', array('route_name' => 'calendar/view-day', 'options' => $route_options), $stuff);
     	} 
     	
 	    if(is_array($complete_tasks))
     	{
-    		$stuff = $this->_translateItems($complete_tasks, 'end_date', 'tasks', $stuff);
+    		$stuff = $this->_translateItems($complete_tasks, 'end_date', array('route_name' => 'calendar/view-day', 'options' => $route_options), $stuff);
     	} 
     	
     	return $stuff;
@@ -76,9 +77,11 @@ class Calendar extends AbstractModel
 		$sql = $this->db->select()->from(array('pt' => 'project_teams'))->columns( array('project_id' => 'project_id') )->where(array('pt.user_id' => $identity));
 		$sql = $sql->join(array('p' => 'projects'), 'p.id = pt.project_id');
 		$sql = $sql->where(array('start_year' => $year, 'start_month' => $month));	
-		$arr = $this->_translateItems($this->getRows($sql), 'start_date', 'projects');
-		$arr = $this->_translateItems($this->getStartedTasksByDate($month, $year, $identity), 'start_date', 'tasks', $arr);
-		$arr = $this->_translateItems($this->getCompletedTasksByDate($month, $year, $identity), 'end_date', 'tasks', $arr);
+		
+		$route_options = array();
+		$arr = $this->_translateItems($this->getRows($sql), 'start_date', array('route_name' => 'calendar/view-day', 'options' => $route_options));
+		$arr = $this->_translateItems($this->getStartedTasksByDate($month, $year, $identity), 'start_date', array('route_name' => 'calendar/view-day', 'options' => $route_options), $arr);
+		$arr = $this->_translateItems($this->getCompletedTasksByDate($month, $year, $identity), 'end_date', array('route_name' => 'calendar/view-day', 'options' => $route_options), $arr);
 		
 		return $arr;
 	}
@@ -90,7 +93,7 @@ class Calendar extends AbstractModel
 	 * @param string $view
 	 * @param mixed $_arr
 	 */
-	private function _translateItems($arr, $master_key, $view = 'projects', $_arr = array())
+	private function _translateItems($arr, $master_key, array $route, $_arr = array())
 	{
 		if(!is_array($_arr))
 		{
@@ -102,9 +105,7 @@ class Calendar extends AbstractModel
 			$_arr[$key[$master_key]][] = array(
 											'string' => $key['name'],
 											'rel' => '',
-											'type' => $view,
-											'status' => $key['status'],
-											'href' => '/pm/'.$view.'/view/id/'.$key['id']
+											'route' => $route,
 			);
 		}
 		

@@ -120,7 +120,7 @@ class Calendar extends BaseViewHelper
 		}
 		
 		$this->setDate($base_date, $locale);
-		$this->setValidDateRange(-12,24);
+		$this->setValidDateRange(-36,48);
 		return $this;
 	}
 	
@@ -384,9 +384,12 @@ class Calendar extends BaseViewHelper
         $stuff = '';
         if(array_key_exists($m_date, $this->date_data))
         {
+        	$route_date = strtotime($m_date);
+        	$route_options = array('day' => date('j', $route_date), 'year' => date('Y', $route_date), 'month' => date('n', $route_date));
             foreach($this->date_data[$m_date] AS $data)
             {
-                $stuff .= '<br /><a href="'.$data['href'].'" rel="'.$data['rel'].'" title="'.strip_tags($data['string']).'">'.$data['string'].'</a>';
+            	$route_options = array_merge($route_options, $data['route']['options']);
+                $stuff .= '<br /><a href="'.$this->view->url($data['route']['route_name'], $route_options).'" rel="'.$data['rel'].'" title="'.strip_tags($data['string']).'">'.$data['string'].'</a>';
             }
         }
 	
