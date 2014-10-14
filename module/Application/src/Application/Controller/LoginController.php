@@ -1,5 +1,5 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
  * @author		Eric Lamb <eric@mithra62.com>
@@ -14,7 +14,7 @@ namespace Application\Controller;
 use Application\Controller\AbstractController;
 use Zend\Authentication\Result as AuthenticationResult;
 
- /**
+/**
  * Application - Login Class
  *
  * Handles login routing 

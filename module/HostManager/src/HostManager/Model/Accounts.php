@@ -16,7 +16,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 use Application\Model\AbstractModel;
 
- /**
+/**
  * HostManager - Accounts Model
  *
  * @package 	HostManager
@@ -24,17 +24,12 @@ use Application\Model\AbstractModel;
  * @filesource 	./module/HostManager/src/HostManager/Model/Accounts.php
  */
 class Accounts extends AbstractModel
-{	
+{
 	/**
-	 * The System Options
-	 * @param \Zend\Db\Adapter\Adapter $adapter
-	 * @param \Zend\Db\Sql\Sql $db
-	 */
-	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
-	{
-		parent::__construct($adapter, $db);
-	}
-	
+	 * Prepares the SQL array for the accounts table
+	 * @param array $data
+	 * @return array
+	 */	
 	public function getSQL(array $data){
 		return array(
 			'name' => $data['name'],
@@ -43,34 +38,92 @@ class Accounts extends AbstractModel
 		);
 	}
 	
+	/**
+	 * @ignore
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
+	 */
 	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
 		throw new \Exception("Not used");
 	}
 	
-	public function getInputFilter($translator)
+	/**
+	 * Returns an instance of the InputFilter for data validation
+	 * @return \Zend\InputFilter\InputFilter
+	 */
+	public function getInputFilter()
 	{
 		if (!$this->inputFilter) {
 			$inputFilter = new InputFilter();
 			$factory = new InputFactory();
 	
 			$inputFilter->add($factory->createInput(array(
-				'name'     => 'name',
+				'name'     => 'email',
 				'required' => true,
 				'filters'  => array(
 					array('name' => 'StripTags'),
 					array('name' => 'StringTrim'),
 				),
-                'validators' => array(
-                    array(
-                      'name' =>'NotEmpty', 
-                        'options' => array(
-                            'messages' => array(
-                                \Zend\Validator\NotEmpty::IS_EMPTY => $translator('required', 'pm') 
-                            ),
-                        ),
-                    ),
-                ),
+				'validators' => array(
+					array(
+						'name' => 'EmailAddress',
+					),
+					array(
+						'name' => 'Db\NoRecordExists',
+						'options' => array(
+							'table' => 'users',
+						    'field' => 'email',
+							'adapter' => $this->adapter
+						)
+					),
+				),
+			)));
+	
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'subdomain',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+				'validators' => array(
+					array(
+						'name' => 'Db\NoRecordExists',
+						'options' => array(
+							'table' => 'accounts',
+						    'field' => 'slug',
+							'adapter' => $this->adapter
+						)
+					),
+				),
+			)));
+			
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'password',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				)
+			)));
+			
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'last_name',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				)
+			)));
+			
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'first_name',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				)
 			)));
 	
 			$this->inputFilter = $inputFilter;
@@ -79,6 +132,11 @@ class Accounts extends AbstractModel
 		return $this->inputFilter;
 	}
 	
+	/**
+	 * Returns the Account ID
+	 * @param array $where
+	 * @return int
+	 */
 	public function getAccountId(array $where = array())
 	{
 		$sql = $this->db->select()->from(array('a'=> 'accounts'))->columns(array('id'))->where($where);
@@ -88,4 +146,6 @@ class Accounts extends AbstractModel
 			return $account['id'];
 		}
 	}
+	
+	
 }
