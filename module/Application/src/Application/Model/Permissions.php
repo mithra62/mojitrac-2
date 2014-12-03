@@ -14,8 +14,8 @@ namespace Application\Model;
 use Zend\Db\Sql\Sql;
 use Application\Model\AbstractModel;
 
- /**
- * PM - Permission Model
+/**
+ * Application - Permission Model
  *
  * @package 	Users\Roles\Permissions
  * @author		Eric Lamb <eric@mithra62.com>

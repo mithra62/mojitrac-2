@@ -51,6 +51,7 @@ use PM\Form\TimerForm;
 use PM\Form\FileForm;
 use PM\Form\File\RevisionForm;
 use PM\Form\InvoiceForm;
+use PM\Form\PrefsForm;
 
 use PM\Event\ActivityLogEvent;
 use PM\Event\NotificationEvent;
@@ -338,7 +339,10 @@ class Module implements
 				'PM\Form\File\RevisionForm' => function($sm) {
 					$file = $sm->get('PM\Model\Files'); 
 					return new RevisionForm('file_revisions', $file);
-				},				
+				},	
+				'PM\Form\PrefsForm' => function($sm) {
+					return new PrefsForm('preferences');
+				},			
 				
 				//events
 				'PM\Event\ActivityLogEvent' => function($sm) {

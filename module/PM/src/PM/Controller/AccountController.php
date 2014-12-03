@@ -94,7 +94,7 @@ class AccountController extends AbstractPmController
 		$view['sidebar'] = 'dashboard';
 		
 		$request = $this->getRequest();
-		$form = $this->getServiceLocator()->get('Application\Form\PrefsForm'); 
+		$form = $this->getServiceLocator()->get('PM\Form\PrefsForm'); 
         if ($request->isPost()) {
 			$ud = $this->getServiceLocator()->get('Application\Model\User\Data');
 			$formData = $this->getRequest()->getPost();

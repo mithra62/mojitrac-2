@@ -101,9 +101,8 @@ class UserData extends KeyValue
 	}
 	
 	/**
-	 * Creates the array for modifying the DB
-	 * @param array $data
-	 * @return multitype:\PM\Model\Zend_Db_Expr unknown
+	 * (non-PHPdoc)
+	 * @see \Base\Model\KeyValue::getSQL()
 	 */
 	public function getSQL(array $data, $create = TRUE){
 		$sql = array(
