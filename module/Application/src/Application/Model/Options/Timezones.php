@@ -6,19 +6,19 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/src/PM/Model/Options/Timezones.php
+ * @filesource 	./module/Application/src/Application/Model/Options/Timezones.php
  */
 
-namespace PM\Model\Options;
+namespace Application\Model\Options;
 
 use DateTimeZone;
 
 /**
- * PM - Timezones Options Model
+ * Application - Timezones Options Model
  *
  * @package 	Localization\Options
  * @author		Eric Lamb <eric@mithra62.com>
- * @filesource 	./module/PM/src/PM/Model/Options/Timezones.php
+ * @filesource 	./module/Application/src/Application/Model/Options/Timezones.php
  */
 class Timezones
 {

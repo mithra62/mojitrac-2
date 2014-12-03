@@ -20,7 +20,7 @@ use Application\Model\AbstractModel;
 use Application\Model\Hash;
 
 /**
- * PM - User Model
+ * Application - User Model
  *
  * @package 	Users
  * @author		Eric Lamb <eric@mithra62.com>
@@ -575,18 +575,6 @@ class Users extends AbstractModel
 		}
 		return $return;
 	}
-	
-	/**
-	 * Returns all the roles a user is attached to
-	 * @param int $id
-	 * @return array
-	 */
-	public function getAllUserRoles($id)
-	{
-		$users = new PM_Model_DbTable_User_;
-		$sql = $users->select();
-		return $users->getUsers($sql);
-	}	
 	
 	private function getUsersWhere(array $where = null, array $not = null, array $orwhere = null, array $ornot = null)
 	{

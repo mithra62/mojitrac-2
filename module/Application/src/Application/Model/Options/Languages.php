@@ -6,19 +6,19 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/src/PM/Model/Options/Languages.php
+ * @filesource 	./module/Application/src/Application/Model/Options/Languages.php
  */
 
-namespace PM\Model\Options;
+namespace Application\Model\Options;
 
 use DateTimeZone;
 
 /**
- * PM - Languages Options Model
+ * Application - Languages Options Model
  *
  * @package 	Localization\Options
  * @author		Eric Lamb <eric@mithra62.com>
- * @filesource 	./module/PM/src/PM/Model/Options/Languages.php
+ * @filesource 	./module/Application/src/Application/Model/Options/Languages.php
  */
 class Languages
 {

@@ -14,7 +14,7 @@ namespace Application\Model;
 use Application\Model\AbstractModel;
 
 /**
- * PM - View Events Model
+ * Application - View Events Model
  *
  * @package 	Events\View
  * @author		Eric Lamb <eric@mithra62.com>

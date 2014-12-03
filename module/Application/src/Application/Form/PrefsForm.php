@@ -12,8 +12,8 @@
 namespace Application\Form;
 
 use Base\Form\BaseForm;
-use PM\Model\Options\Timezones;
-use PM\Model\Options\Languages;
+use Application\Model\Options\Timezones;
+use Application\Model\Options\Languages;
 
 /**
  * PrefsForm Form

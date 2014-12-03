@@ -20,7 +20,7 @@ use Zend\InputFilter\InputFilterInterface;
 use Application\Model\AbstractModel;
 
 /**
- * PM - User Roles Model
+ * Application - User Roles Model
  *
  * @package 	Users\Roles
  * @author		Eric Lamb <eric@mithra62.com>

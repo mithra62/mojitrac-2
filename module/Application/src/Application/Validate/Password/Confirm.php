@@ -1,27 +1,27 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/PM/src/PM/Validate/Password/Confirm.php
+ *
+ * @package		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link			http://mithra62.com/
+ * @version		2.0
+ * @filesource 	./module/Application/src/Application/Validate/Password/Confirm.php
 */
 
-namespace PM\Validate\Password;
+namespace Application\Validate\Password;
 
 use Zend\Validator\AbstractValidator;
 
 /**
-* PM - Confirm Password Validator
-*
-* Ensures password confirmation values match
-*
-* @package 		mithra62:Mojitrac
-* @author		Eric Lamb
-* @filesource 	./module/PM/src/PM/Validate/Password/Confirm.php
+ * Application - Confirm Password Validator
+ *
+ * Ensures password confirmation values match
+ *
+ * @package 		mithra62:Mojitrac
+ * @author		Eric Lamb
+ * @filesource 	./module/Application/src/Application/Validate/Password/Confirm.php
 */
 class Confirm extends AbstractValidator
 {
