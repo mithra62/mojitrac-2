@@ -53,7 +53,14 @@ class Module
 	
     public function getConfig()
     {
-        return include __DIR__ . '/config/module.config.php';
+    	$config = include __DIR__ . '/config/module.config.php';
+    	$local_config = __DIR__ . '/config/module.local.config.php';
+    	if( file_exists($local_config) )
+    	{
+    		$local_config = include $local_config;
+    		$config = array_merge($config, $local_config);
+    	}
+    	return $config;
     }
 
     public function getAutoloaderConfig()

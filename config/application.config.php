@@ -19,7 +19,8 @@ return array(
         'ZF\ApiProblem',
         'Freshbooks',
     	'HostManager', //keep this as last at all times if being hosted
-        'ZendDeveloperTools'
+        'ZendDeveloperTools',
+    	'ZfSimpleMigrations'
     ),
     'module_listener_options' => array(
         'module_paths' => array(

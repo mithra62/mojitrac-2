@@ -12,6 +12,7 @@
 namespace HostManager\Event;
 
 use Base\Event\BaseEvent, Exception;
+use Zend\Console\Adapter\AdapterInterface as Console;
 
 /**
  * HostManager - SQL Events
@@ -50,7 +51,7 @@ class SqlEvent extends BaseEvent
      * @param int $identity
      */
     public function __construct($identity = null, \HostManager\Model\Accounts $account = null, $base_url = null)
-    {
+    {  	
         $this->identity = $identity;
         $this->account = $account;
         $this->base_url = $base_url;
@@ -63,6 +64,12 @@ class SqlEvent extends BaseEvent
      */
     public function register( \Zend\EventManager\SharedEventManager $ev)
     {
+    	//we can't use HostManager Events through CLI so check and bounce as needed
+    	$console = $this->getServiceLocator()->get('Console');
+    	if ($console instanceof Console) {
+    		return;
+    	}
+    	return;
     	foreach($this->hooks AS $key => $value)
     	{
     		$ev->attach('Base\Model\BaseModel', $key, array($this, $value));
