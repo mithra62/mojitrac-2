@@ -12,7 +12,6 @@
 namespace HostManager\Event;
 
 use Base\Event\BaseEvent, Exception;
-use Zend\Console\Adapter\AdapterInterface as Console;
 
 /**
  * HostManager - SQL Events

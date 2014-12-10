@@ -12,3 +12,4 @@ vendor/
 /data/mail/*.txt
 /bin
 /docs
+/module/HostManager/config/module.local.config.php
