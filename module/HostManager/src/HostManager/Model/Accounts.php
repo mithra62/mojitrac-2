@@ -32,8 +32,7 @@ class Accounts extends AbstractModel
 	 */	
 	public function getSQL(array $data){
 		return array(
-			'name' => $data['name'],
-			'area' => $data['area'],
+			'slug' => $data['subdomain'],
 			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
 		);
 	}
@@ -69,14 +68,6 @@ class Accounts extends AbstractModel
 					array(
 						'name' => 'EmailAddress',
 					),
-					array(
-						'name' => 'Db\NoRecordExists',
-						'options' => array(
-							'table' => 'users',
-						    'field' => 'email',
-							'adapter' => $this->adapter
-						)
-					),
 				),
 			)));
 	
@@ -101,6 +92,15 @@ class Accounts extends AbstractModel
 			
 			$inputFilter->add($factory->createInput(array(
 				'name'     => 'password',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				)
+			)));
+			
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'organization',
 				'required' => true,
 				'filters'  => array(
 					array('name' => 'StripTags'),
@@ -139,7 +139,12 @@ class Accounts extends AbstractModel
 	 */
 	public function getAccountId(array $where = array())
 	{
-		$sql = $this->db->select()->from(array('a'=> 'accounts'))->columns(array('id'))->where($where);
+		$sql = $this->db->select()->from(array('a'=> 'accounts'))->columns(array('id'));
+		if( $where )
+		{
+			$sql = $sql->where($where);
+		}
+		
 		$account = $this->getRow($sql);
 		if( !empty($account['id']) )
 		{
@@ -147,5 +152,80 @@ class Accounts extends AbstractModel
 		}
 	}
 	
+	/**
+	 * Returns the data on an account
+	 * @param array $where
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 */
+	public function getAccount(array $where = array())
+	{
+		$sql = $this->db->select()->from(array('a'=> 'accounts'));
+		if( $where )
+		{
+			$sql = $sql->where($where);
+		}
+		
+		return $this->getRow($sql);	
+	}
+	
+	/**
+	 * Creates a MojiTrac account 
+	 * @param array $data
+	 * @param \Application\Model\Users $user
+	 * @param \PM\Model\Companies $company
+	 * @param \Application\Model\Hash $hash
+	 */
+	public function createAccount(array $data, \Application\Model\Users $user, \PM\Model\Companies $company, \Application\Model\Hash $hash)
+	{
+		$user_data = $user->getUserByEmail($data['email']);
+		if( !$user_data )
+		{
+			$user_id = $user->addUser($data, $hash);
+			$user_data = $user->getUserById($user_id);
+		}
+		
+		$sql = $this->getSQL($data);
+		$sql['owner_id'] = $user_data['id'];
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
+		$account_id = $this->insert('accounts', $sql);
+		
+		$this->linkUserToAccount($user_data['id'], $account_id);
+		
+		$company_data = array('name' => $data['organization'], 'type' => '6');
+		$company_id = $company->addCompany($company_data);
+		if( $company_id )
+		{
+			$sql = array('account_id' => $account_id);
+			$this->update('companies', $sql, array('id' => $company_id));
+		}
+		
+		return $account_id;
+	}
+	
+	/**
+	 * Links a user to a given account
+	 * @param int $user_id
+	 * @param int $account_id
+	 */
+	public function linkUserToAccount($user_id, $account_id)
+	{
+		$data = array('user_id' => $user_id, 'account_id' => $account_id);
+		if( !$this->userOnAccount($user_id, $account_id) )
+		{
+			$this->insert('user_accounts', $data);
+		}
+	}
+	
+	/**
+	 * Checks if a user is on a given account
+	 * @param int $user_id
+	 * @param int $account_id
+	 */
+	public function userOnAccount($user_id, $account_id)
+	{
+		$where = array('user_id' => $user_id, 'account_id' => $account_id);
+		$sql = $this->db->select()->from('user_accounts')->where($where);
+		return $this->getRow($sql);
+	}
 	
 }

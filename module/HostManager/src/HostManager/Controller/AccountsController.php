@@ -33,21 +33,23 @@ class AccountsController extends AbstractController
     	$form = $this->getServiceLocator()->get('HostManager\Form\SignupForm');
     	$request = $this->getRequest();
     	if ($request->isPost())
-    	{	
+    	{
     		$account = $this->getServiceLocator()->get('HostManager\Model\Accounts');
     		$user = $this->getServiceLocator()->get('Application\Model\Users');
+    		$hash = $this->getServiceLocator()->get('Application\Model\Hash');
+    		$company = $this->getServiceLocator()->get('PM\Model\Companies');
+    		
 			$form->setInputFilter($account->getInputFilter());
 			$form->setData($request->getPost());
 			if ($form->isValid()) 
 			{
 				$data = $form->getData();
-				$account_data = $account->createAccount($data, $user);
+				$account_data = $account->createAccount($data, $user, $company, $hash);
 				if($account_data)
 				{
-					print_r($account_data);
-					exit;
 					$this->flashMessenger()->addMessage($this->translate('login_successful', 'app'));
-					return $this->redirect()->toRoute('pm');
+					$url = 'https://';
+					return $this->redirect()->toUrl($url);
 				}
 			}
     	}

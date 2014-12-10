@@ -25,6 +25,12 @@ $subdomain = $form->get('subdomain');
 echo $this->formRow($subdomain); ?>
 </p>
 
+<p><label><?php echo $this->_('company', 'hm'); ?></label>
+<?php 
+$organization = $form->get('organization');
+echo $this->formRow($organization); ?>
+</p>
+
 <p><label><?php echo $this->_('first_name', 'hm'); ?></label>
 <?php 
 $first_name = $form->get('first_name');
@@ -50,7 +56,7 @@ echo $this->formRow($password); ?>
 </p>
 
 <p>
-<input type="submit" name="Submit" id="button" value="Login"  class="button"/>
+<input type="submit" name="submit" id="button" value="Create Account"  class="button"/>
 <input type="reset" name="reset" id="reset" value="Reset" class="button" />
 </p>
 		
@@ -70,14 +76,16 @@ $().ready(function() {
 			password: "required",
 			first_name: "required",
 			last_name: "required",
-			subdomain: "required"
+			subdomain: "required",
+			organization: "required"
 		},
 		messages: {
 			email: "<?php echo $this->_('js_email_validation_message', 'app'); ?>",
 			password: "<?php echo $this->_('js_password_validation_message', 'app'); ?>",
 			first_name: "<?php echo $this->_('js_first_name_validation_message', 'hm'); ?>",
 			last_name: "<?php echo $this->_('js_last_name_validation_message', 'hm'); ?>",
-			subdomain: "<?php echo $this->_('js_subdomain_validation_message', 'hm'); ?>"
+			subdomain: "<?php echo $this->_('js_subdomain_validation_message', 'hm'); ?>",
+			organization: "<?php echo $this->_('js_organization_validation_message', 'hm'); ?>"
 		}
 	});
 
