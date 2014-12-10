@@ -47,7 +47,6 @@ class AccountsController extends AbstractController
 				$account_data = $account->createAccount($data, $user, $company, $hash);
 				if($account_data)
 				{
-					$this->flashMessenger()->addMessage($this->translate('login_successful', 'app'));
 					$url = 'https://';
 					return $this->redirect()->toUrl($url);
 				}
