@@ -65,11 +65,10 @@ class SqlEvent extends BaseEvent
     public function register( \Zend\EventManager\SharedEventManager $ev)
     {
     	//we can't use HostManager Events through CLI so check and bounce as needed
-    	$console = $this->getServiceLocator()->get('Console');
-    	if ($console instanceof Console) {
+    	if (php_sapi_name() == "cli") {
     		return;
     	}
-    	return;
+    	
     	foreach($this->hooks AS $key => $value)
     	{
     		$ev->attach('Base\Model\BaseModel', $key, array($this, $value));
@@ -84,6 +83,11 @@ class SqlEvent extends BaseEvent
      */
     public function getAccountId($forced = FALSE)
     {
+    	//we can't use HostManager Events through CLI so check and bounce as needed
+    	if (php_sapi_name() == "cli") {
+    		return 0;
+    	}
+    	
     	if( !$this->account_id || $forced)
     	{
 	    	$parts = parse_url($_SERVER['HTTP_HOST']);
