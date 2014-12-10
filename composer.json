@@ -17,6 +17,7 @@
         "zfcampus/zf-api-problem": "~1.0-dev",
 	"zircote/hal": "dev-master",
 	"phpunit/phpunit": "4.1.*",
-	"rtconner/freshbooks-api": "dev-master"
+	"rtconner/freshbooks-api": "dev-master",
+        "vgarvardt/zf-simple-migrations": "dev-master"
     }
 }

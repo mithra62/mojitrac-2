@@ -11,7 +11,7 @@
 */
 
 return array(
-	'sub_primary_url' => '.moji2.com',    
+	'sub_primary_url' => '.mojitrac.com',    
 	'router' => array(
         'routes' => array(
         	'hosted-accounts' => array( //Account Routes
