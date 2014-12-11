@@ -389,33 +389,32 @@ CREATE TABLE IF NOT EXISTS `options` (
   PRIMARY KEY (`id`),
   KEY `area` (`area`),
   KEY `account_id` (`account_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `options`
 --
 
-INSERT INTO `options` (`id`, `account_id`, `name`, `area`, `creator`, `created_date`, `last_modified`) VALUES
-(2, 1, 'IT', 'project_type', 0, NOW(), NOW()),
-(3, 1, 'Programming', 'project_type', 0, NOW(), NOW()),
-(4, 1, 'Website', 'project_type', 0, NOW(), NOW()),
-(6, 1, 'Writing', 'project_type', 0, NOW(), NOW()),
-(7, 1, 'Reporting', 'project_type', 0, NOW(), NOW()),
-(8, 1, 'Research', 'project_type', 0, NOW(), NOW()),
-(9, 1, 'Quality Assurance', 'project_type', 0, NOW(), NOW()),
-(10, 1, 'Administrative', 'task_type', 0, NOW(), NOW()),
-(12, 1, 'Programming', 'task_type', 0, NOW(), NOW()),
-(13, 1, 'Website', 'task_type', 0, NOW(), NOW()),
-(14, 1, 'Proposal', 'task_type', 0, NOW(), NOW()),
-(15, 1, 'Writing', 'task_type', 0, NOW(), NOW()),
-(16, 1, 'Reporting', 'task_type', 0, NOW(), NOW()),
-(17, 1, 'Research', 'task_type', 0, NOW(), NOW()),
-(18, 1, 'Quality Assurance', 'task_type', 0, NOW(), NOW()),
-(19, 1, 'Conference Call', 'task_type', 1, NOW(), NOW()),
-(20, 1, 'Business Development', 'task_type', 1, NOW(), NOW()),
-(22, 1, 'Email Blast', 'project_type', 1, NOW(), NOW()),
-(23, 1, 'Tech Support', 'task_type', 1, NOW(), NOW()),
-(26, 1, 'My Test Option 4', 'project_type', 1, NOW(), NOW());
+INSERT INTO `options` (`account_id`, `name`, `area`, `creator`, `created_date`, `last_modified`) VALUES
+(1, 'IT', 'project_type', 1, NOW(), NOW()),
+(1, 'Programming', 'project_type', 1, NOW(), NOW()),
+(1, 'Website', 'project_type', 1, NOW(), NOW()),
+(1, 'Writing', 'project_type', 1, NOW(), NOW()),
+(1, 'Reporting', 'project_type', 1, NOW(), NOW()),
+(1, 'Research', 'project_type', 1, NOW(), NOW()),
+(1, 'Quality Assurance', 'project_type', 1, NOW(), NOW()),
+(1, 'Administrative', 'task_type', 1, NOW(), NOW()),
+(1, 'Programming', 'task_type', 1, NOW(), NOW()),
+(1, 'Website', 'task_type', 1, NOW(), NOW()),
+(1, 'Proposal', 'task_type', 1, NOW(), NOW()),
+(1, 'Writing', 'task_type', 1, NOW(), NOW()),
+(1, 'Reporting', 'task_type', 1, NOW(), NOW()),
+(1, 'Research', 'task_type', 1, NOW(), NOW()),
+(1, 'Quality Assurance', 'task_type', 1, NOW(), NOW()),
+(1, 'Conference Call', 'task_type', 1, NOW(), NOW()),
+(1, 'Business Development', 'task_type', 1, NOW(), NOW()),
+(1, 'Email Blast', 'project_type', 1, NOW(), NOW()),
+(1, 'Tech Support', 'task_type', 1, NOW(), NOW());
 
 -- --------------------------------------------------------
 
