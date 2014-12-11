@@ -5,13 +5,15 @@ namespace ZfSimpleMigrations\Migrations;
 use ZfSimpleMigrations\Library\AbstractMigration;
 use Zend\Db\Metadata\MetadataInterface;
 
-class Version20141210143053 extends AbstractMigration
+class Version20141210161142 extends AbstractMigration
 {
     public static $description = "Migration description";
 
     public function up(MetadataInterface $schema)
     {
-        //$this->addSql(/*Sql instruction*/);
+    	$path = realpath(__DIR__.'/../data/moji.sql');
+    	$sql = file_get_contents($path);
+        $this->addSql($sql);
     }
 
     public function down(MetadataInterface $schema)
