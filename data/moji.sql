@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
 --
 
 INSERT INTO `accounts` (`id`, `slug`, `account_plan_id`, `owner_id`, `created_date`, `last_modified`) VALUES
-(1, 'install', 1, 1, '2014-05-24 00:00:00', '2014-05-24 00:00:00');
+(1, 'install', 1, 1, NOW(), NOW());
 
 -- --------------------------------------------------------
 
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `companies` (
 --
 
 INSERT INTO `companies` (`id`, `account_id`, `name`, `phone1`, `phone2`, `fax`, `address1`, `address2`, `city`, `state`, `zip`, `primary_url`, `description`, `type`, `client_language`, `currency_code`, `default_hourly_rate`, `custom`, `active_projects`, `archived_projects`, `last_modified`, `created_date`) VALUES
-(1, 1, 'mithra62', '310-739-3322', '', '', '824 N. Victory Blvd.', 'Second Floor', 'Burbank', 'CA', '91502', 'http://mithra62.com', '', 6, 'en_US', 'USD', '0.00', NULL, 0, 0, '2010-04-21 07:40:33', '2009-12-12 09:02:15');
+(1, 1, 'mithra62', '310-739-3322', '', '', '824 N. Victory Blvd.', 'Second Floor', 'Burbank', 'CA', '91502', 'http://mithra62.com', '', 6, 'en_US', 'USD', '0.00', NULL, 0, 0, NOW(), NOW());
 
 -- --------------------------------------------------------
 
@@ -396,26 +396,26 @@ CREATE TABLE IF NOT EXISTS `options` (
 --
 
 INSERT INTO `options` (`id`, `account_id`, `name`, `area`, `creator`, `created_date`, `last_modified`) VALUES
-(2, 1, 'IT', 'project_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(3, 1, 'Programming', 'project_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(4, 1, 'Website', 'project_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(6, 1, 'Writing', 'project_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(7, 1, 'Reporting', 'project_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(8, 1, 'Research', 'project_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(9, 1, 'Quality Assurance', 'project_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(10, 1, 'Administrative', 'task_type', 0, '2010-09-23 02:48:13', '2010-09-29 17:30:57'),
-(12, 1, 'Programming', 'task_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(13, 1, 'Website', 'task_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(14, 1, 'Proposal', 'task_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(15, 1, 'Writing', 'task_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(16, 1, 'Reporting', 'task_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(17, 1, 'Research', 'task_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(18, 1, 'Quality Assurance', 'task_type', 0, '2010-09-23 02:48:13', '2010-09-23 02:48:13'),
-(19, 1, 'Conference Call', 'task_type', 1, '2010-10-08 05:09:01', '2010-10-08 05:09:01'),
-(20, 1, 'Business Development', 'task_type', 1, '2010-10-10 22:28:09', '2010-10-10 22:28:09'),
-(22, 1, 'Email Blast', 'project_type', 1, '2010-10-13 14:46:36', '2010-10-13 14:46:36'),
-(23, 1, 'Tech Support', 'task_type', 1, '2011-04-21 21:56:56', '2011-04-21 21:56:56'),
-(26, 1, 'My Test Option 4', 'project_type', 1, '2014-08-09 22:54:12', '2014-08-09 23:11:27');
+(2, 1, 'IT', 'project_type', 0, NOW(), NOW()),
+(3, 1, 'Programming', 'project_type', 0, NOW(), NOW()),
+(4, 1, 'Website', 'project_type', 0, NOW(), NOW()),
+(6, 1, 'Writing', 'project_type', 0, NOW(), NOW()),
+(7, 1, 'Reporting', 'project_type', 0, NOW(), NOW()),
+(8, 1, 'Research', 'project_type', 0, NOW(), NOW()),
+(9, 1, 'Quality Assurance', 'project_type', 0, NOW(), NOW()),
+(10, 1, 'Administrative', 'task_type', 0, NOW(), NOW()),
+(12, 1, 'Programming', 'task_type', 0, NOW(), NOW()),
+(13, 1, 'Website', 'task_type', 0, NOW(), NOW()),
+(14, 1, 'Proposal', 'task_type', 0, NOW(), NOW()),
+(15, 1, 'Writing', 'task_type', 0, NOW(), NOW()),
+(16, 1, 'Reporting', 'task_type', 0, NOW(), NOW()),
+(17, 1, 'Research', 'task_type', 0, NOW(), NOW()),
+(18, 1, 'Quality Assurance', 'task_type', 0, NOW(), NOW()),
+(19, 1, 'Conference Call', 'task_type', 1, NOW(), NOW()),
+(20, 1, 'Business Development', 'task_type', 1, NOW(), NOW()),
+(22, 1, 'Email Blast', 'project_type', 1, NOW(), NOW()),
+(23, 1, 'Tech Support', 'task_type', 1, NOW(), NOW()),
+(26, 1, 'My Test Option 4', 'project_type', 1, NOW(), NOW());
 
 -- --------------------------------------------------------
 
@@ -505,23 +505,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `data_name` (`option_name`),
   KEY `account_id` (`account_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
-
---
--- Dumping data for table `settings`
---
-
-INSERT INTO `settings` (`id`, `account_id`, `option_value`, `option_name`, `created_date`, `last_modified`) VALUES
-(1, 1, '11', 'master_company', '2010-06-07 22:23:03', '2014-08-29 03:48:17'),
-(2, 1, '0', 'enable_ip', '2010-06-07 22:23:03', '2014-08-29 03:48:17'),
-(3, 1, 'America/Los_Angeles', 'timezone', '2011-02-25 12:22:16', '2011-03-01 06:40:14'),
-(4, 1, 'F j, Y', 'date_format', '2011-02-25 12:22:16', '2011-03-01 06:40:14'),
-(5, 1, '', 'date_format_custom', '2011-02-25 12:22:16', '2011-03-01 06:40:14'),
-(6, 1, 'g:i A', 'time_format', '2011-02-25 12:22:16', '2011-03-01 06:40:14'),
-(7, 1, '', 'time_format_custom', '2011-02-25 12:22:16', '2011-03-01 06:40:14'),
-(8, 1, 'jpg,gif,png,txt,docx,doc,pdf,php,xls,xlsx,csv,psd,ppt,pptx,pot,potx,rar,zip,tar,gz,tgz,bz2,html,htm,avi,mov,fla,swf,asf,flv,sql,mp3', 'allowed_file_formats', '2011-05-03 09:45:48', '2011-05-03 09:45:48'),
-(9, 1, '717cde7aa978c1c87e4f79c823572c77', 'freshbooks_auth_token', '2014-09-05 06:31:44', '2014-09-05 06:31:44'),
-(10, 1, 'mithra62', 'freshbooks_account_url', '2014-09-05 06:31:44', '2014-09-05 06:31:44');
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -721,7 +705,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `first_name`, `last_name`, `phone_mobile`, `phone_home`, `phone_work`, `phone_fax`, `job_title`, `jabber`, `aol`, `yahoo`, `google_talk`, `msn`, `ichat`, `skype`, `description`, `user_status`, `last_login`, `hash`, `pw_forgotten`, `forgotten_hash`, `harvest_id`, `created_date`, `last_modified`) VALUES
-(1, 'default@mojitrac.com', '1be4bef311581de40ed1b2ff31af49a6e77428a1116dcfc132ec69c95de138de76502644ddb5ee0369dd5761eba17ec722e3c46ba1e35815f712db8191060985', 'Default', 'Account', '', '', '', '', '', '', '', '', '', '', NULL, NULL, '', 'd', '2014-12-11 02:50:42', 'de144cbb6ca0ed43dce8bd86b5435639', '2014-09-03 12:16:01', '', NULL, '2006-08-18 07:05:36', '2014-12-11 02:50:42');
+(1, 'default@mojitrac.com', '1be4bef311581de40ed1b2ff31af49a6e77428a1116dcfc132ec69c95de138de76502644ddb5ee0369dd5761eba17ec722e3c46ba1e35815f712db8191060985', 'Default', 'Account', '', '', '', '', '', '', '', '', '', '', NULL, NULL, '', 'd', '2014-12-11 02:50:42', 'de144cbb6ca0ed43dce8bd86b5435639', NOW(), '', NULL, NOW(), NOW());
 
 -- --------------------------------------------------------
 
@@ -758,43 +742,7 @@ CREATE TABLE IF NOT EXISTS `user_data` (
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `last_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
-
---
--- Dumping data for table `user_data`
---
-
-INSERT INTO `user_data` (`id`, `user_id`, `option_value`, `option_name`, `created_date`, `last_modified`) VALUES
-(1, 1, '0', 'noti_assigned_task', '2014-08-30 06:40:29', '2014-08-30 06:40:29'),
-(2, 1, '0', 'noti_status_task', '2014-08-30 06:40:29', '2014-08-30 06:40:29'),
-(3, 1, '1', 'noti_priority_task', '2014-08-30 06:40:29', '2014-08-30 06:40:29'),
-(4, 1, '1', 'noti_daily_task_reminder', '2014-08-30 06:40:29', '2014-08-30 06:40:29'),
-(5, 1, '1', 'noti_add_proj_team', '2014-08-30 06:40:29', '2014-08-30 06:40:29'),
-(6, 1, '1', 'noti_remove_proj_team', '2014-08-30 06:40:29', '2014-08-30 06:40:29'),
-(7, 1, '1', 'noti_file_uploaded', '2014-08-30 06:40:29', '2014-08-30 06:40:29'),
-(8, 1, '1', 'noti_file_revision_uploaded', '2014-08-30 06:40:29', '2014-08-30 06:40:29'),
-(9, 1, 'America/Los_Angeles', 'timezone', '2014-08-30 06:40:29', '2014-08-30 06:40:29'),
-(10, 1, 'F j, Y', 'date_format', '2012-07-23 07:30:21', '2012-07-23 07:30:21'),
-(11, 1, '', 'date_format_custom', '2012-07-23 07:30:21', '2012-07-23 07:30:21'),
-(12, 1, 'g:i A', 'time_format', '2012-07-23 07:30:21', '2012-07-23 07:30:21'),
-(13, 1, '', 'time_format_custom', '2012-07-23 07:30:21', '2012-07-23 07:30:21'),
-(15, 1, '1', 'enable_rel_time', '2014-08-30 06:40:29', '2014-08-30 06:40:29'),
-(16, 1, '0', 'enable_contextual_help', '2014-08-30 06:40:29', '2014-08-30 06:40:29'),
-(17, 18, '1', 'noti_assigned_task', '2014-08-17 03:15:03', '2014-08-17 03:15:03'),
-(18, 18, '1', 'noti_status_task', '2014-08-17 03:15:03', '2014-08-17 03:15:03'),
-(19, 18, '1', 'noti_priority_task', '2014-08-17 03:15:03', '2014-08-17 03:15:03'),
-(20, 18, '1', 'noti_daily_task_reminder', '2014-08-17 03:15:03', '2014-08-17 03:15:03'),
-(21, 18, '1', 'noti_add_proj_team', '2014-08-17 03:15:03', '2014-08-17 03:15:03'),
-(22, 18, '1', 'noti_remove_proj_team', '2014-08-17 03:15:03', '2014-08-17 03:15:03'),
-(23, 18, '1', 'noti_file_uploaded', '2014-08-17 03:15:03', '2014-08-17 03:15:03'),
-(24, 18, '1', 'noti_file_revision_uploaded', '2014-08-17 03:15:03', '2014-08-17 03:15:03'),
-(25, 18, '1', 'enable_rel_time', '2014-08-17 03:15:03', '2014-08-17 03:15:03'),
-(26, 18, 'America/Los_Angeles', 'timezone', '2014-08-17 03:15:03', '2014-08-17 03:15:03'),
-(27, 18, '1', 'enable_contextual_help', '2014-08-17 03:15:03', '2014-08-17 03:15:03'),
-(28, 18, 'en_US', 'locale', '2014-08-17 03:15:03', '2014-08-17 03:15:03'),
-(29, 18, '{"project_id":"59","start_time":1408245720}', 'timer_data', '2014-08-17 03:22:00', '2014-08-17 03:22:00'),
-(31, 1, '', 'timer_data', '2014-08-19 19:52:42', '2014-08-19 19:52:42'),
-(32, 1, 'en_US', 'locale', '2014-08-30 06:40:29', '2014-08-30 06:40:29');
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -818,15 +766,15 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
 --
 
 INSERT INTO `user_roles` (`id`, `account_id`, `name`, `description`, `last_modified`, `created_date`) VALUES
-(1, 1, 'Super Admin', 'Moji System Administrators', '2014-09-10 08:34:19', '2010-02-20 02:19:20'),
-(2, 1, 'User', '', '2010-07-14 06:33:35', '2010-02-24 21:05:03'),
-(4, 1, 'Project Manager', '', '2010-02-24 03:26:07', '2010-02-24 02:20:31'),
-(8, 1, 'Company Manager', '', '2014-08-29 06:41:51', '2010-02-24 04:10:31'),
-(9, 1, 'Task Manager', '', '2010-02-24 04:11:29', '2010-02-24 04:11:29'),
-(11, 1, 'User Manager', '', '2010-02-28 03:47:03', '2010-02-28 02:31:12'),
-(12, 1, 'Freelance', 'Container for the default freelancer functionality', '2010-07-11 08:55:18', '2010-07-11 08:55:18'),
-(15, 1, 'My Test Role', NULL, '2014-08-10 12:24:22', '2014-08-10 12:13:15'),
-(16, 1, 'Account', '', '2014-09-15 18:37:45', '2014-09-15 18:37:45');
+(1, 1, 'Super Admin', 'Moji System Administrators', NOW(), NOW()),
+(2, 1, 'User', '', NOW(), NOW()),
+(4, 1, 'Project Manager', '', NOW(), NOW()),
+(8, 1, 'Company Manager', '', NOW(), NOW()),
+(9, 1, 'Task Manager', '', NOW(), NOW()),
+(11, 1, 'User Manager', '', NOW(), NOW()),
+(12, 1, 'Freelance', 'Container for the default freelancer functionality', NOW(), NOW()),
+(15, 1, 'My Test Role', NULL, NOW(), NOW()),
+(16, 1, 'Account', '', NOW(), NOW());
 
 -- --------------------------------------------------------
 
