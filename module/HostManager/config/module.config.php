@@ -11,7 +11,8 @@
 */
 
 return array(
-	'sub_primary_url' => '.mojitrac.com',    
+	'sub_primary_url' => '.mojitrac.com', 
+	'master_host_account' => '1',
 	'router' => array(
         'routes' => array(
         	'hosted-accounts' => array( //Account Routes

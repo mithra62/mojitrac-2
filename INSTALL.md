@@ -8,13 +8,13 @@ MojiTrac 2 requires the below server setup:
 
 1. Apache 2.X
 	1. Requires its own vhost (will not work as subdirectory of existing vhost)
-2. PHP >= 5.4
+2. PHP >= 5.4.17
 	1. Intl Extension is required
 	2. MySQL PDO Extension is required
 	3. Composer
 3. MySQL >= 5.2
 
-## Installation Instructions ##
+## Manual Installation Instructions ##
 
 For the most part, MojiTrac 2 is just like any other installed software:
 

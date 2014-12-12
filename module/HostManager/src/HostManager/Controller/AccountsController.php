@@ -47,8 +47,7 @@ class AccountsController extends AbstractController
 				$account_data = $account->createAccount($data, $user, $company, $hash);
 				if($account_data)
 				{
-					$url = 'https://';
-					return $this->redirect()->toUrl($url);
+					return $this->redirect()->toRoute('account/signup/complete');
 				}
 			}
     	}

@@ -11,5 +11,6 @@
 */
 
 return array(
-	'sub_primary_url' => '.YOUR_PRIMARY_DOMAIN.com'
+	'sub_primary_url' => '.YOUR_PRIMARY_DOMAIN.com',
+	'master_host_account' => '1'
 );

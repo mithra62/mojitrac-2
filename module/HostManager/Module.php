@@ -97,7 +97,7 @@ class Module
 					$auth = $sm->get('AuthService');
 					$config = $sm->get('Config');
 					$account = $sm->get('HostManager\Model\Accounts');
-					$sqlEvent = new SqlEvent($auth->getIdentity(), $account, $config['sub_primary_url']);
+					$sqlEvent = new SqlEvent($auth->getIdentity(), $account, $config);
 					return $sqlEvent;
 				},
 			)

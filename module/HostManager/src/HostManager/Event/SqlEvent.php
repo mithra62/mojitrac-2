@@ -28,6 +28,12 @@ class SqlEvent extends BaseEvent
 	 */
 	public $account_id = null;
 	
+	/**
+	 * Account management object
+	 * @var \HostManager\Model\Accounts
+	 */
+	public $account = null;
+	
     /**
      * User Identity
      * @var int
@@ -49,12 +55,14 @@ class SqlEvent extends BaseEvent
      * The Hosted SQL Event
      * @param int $identity
      */
-    public function __construct($identity = null, \HostManager\Model\Accounts $account = null, $base_url = null)
+    public function __construct($identity = null, \HostManager\Model\Accounts $account = null, array $config = null)
     {  	
         $this->identity = $identity;
         $this->account = $account;
-        $this->base_url = $base_url;
+        $this->base_url = $config['sub_primary_url'];
         $this->account_id = $this->getAccountId();
+        $this->master_account = $config['master_host_account'];
+        $this->config = $config;
     }
 
     /**

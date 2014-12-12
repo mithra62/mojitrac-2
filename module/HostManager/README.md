@@ -6,7 +6,13 @@ The basic principle is to limit all SQL calls by an `account_id` column on the t
 
 ## Installation ##
 
-Once the module is installed like any other Zend Framework 2 module, be sure to update the `module.config.php` file with your primary domain. 
+Once the module is installed like any other Zend Framework 2 module, be sure to rename `module.local.config.php.dist` to `module.local.config.php` and add any overrides needed from `module.config.php`. 
+
+### Configuration Details ###
+
+`sub_primary_url` is the main domain host your MojiTrac is installed on. For example, the default is `.mojitrac.com` for domains like `test.mojitrac.com` and `install1.mojitrac.com`. 
+
+`master_host_account` is the account all subsequent accounts are based on. All settings and configuration, in User Roles and Options, are used when creating new accounts. It should always match to an existing account.
 
 ### Adding New Tables ###
 
