@@ -9,9 +9,9 @@
 		</div>			
 		<?php if($this->CheckPermission('manage_users')):?>
 		<div class="actions">
-			<a href="<?php echo $this->url('users/add', array('module' => 'pm','controller' => 'users','action'=>'add'), null, TRUE); ?>" title="Add User">
-				<?php echo $this->InteractIcon('add', 'Add User');?>
-				<div class="action_text">Add User</div>
+			<a href="<?php echo $this->url('users/invite'); ?>" title="Invite User">
+				<?php echo $this->InteractIcon('add', 'Invite User');?>
+				<div class="action_text">Invite User</div>
 			</a>
 		</div>
 		<?php endif; ?>		

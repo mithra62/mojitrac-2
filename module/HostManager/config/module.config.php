@@ -94,10 +94,19 @@ return array(
         					)
         				)
         			),
+        			'invite' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/invite',
+        					'defaults' => array(
+        						'action' => 'invite'
+        					)
+        				)
+        			),
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/[:user_id]',
+        					'route' => '/edit[/:user_id]',
         					'constraints' => array(
         						'user_id' => '[0-9]+'
         					),

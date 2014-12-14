@@ -50,6 +50,12 @@ class UsersController extends PmUsers
 		$view['users'] = $users->getAccountUsers();
 		return $view;
 	}
+	
+	public function inviteAction()
+	{
+		$view = array();
+		return $view;
+	}
 
 	/**
 	 * User Edit Page
