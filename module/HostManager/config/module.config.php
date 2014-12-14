@@ -49,6 +49,65 @@ return array(
         		'child_routes' => array( 
         		)
         	), //end Companies Options
+
+        	'users' => array( //User Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/users',
+        			'defaults' => array(
+        				'controller' => 'HostManager\Controller\Users',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'view' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/[:user_id]',
+        					'constraints' => array(
+        						'user_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'view'
+        					)
+        				)
+        			),
+        			'remove' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove/:user_id',
+        					'constraints' => array(
+        						'user_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'remove'
+        					)
+        				)
+        			),
+        			'add' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/add',
+        					'defaults' => array(
+        						'action' => 'add'
+        					)
+        				)
+        			),
+        			'edit' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/edit/[:user_id]',
+        					'constraints' => array(
+        						'user_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'edit'
+        					)
+        				)
+        			)
+        		)
+        	), //End User Routes 
         )
     ),
 		
@@ -56,6 +115,7 @@ return array(
         'invokables' => array(
             'HostManager\Controller\Accounts' => 'HostManager\Controller\AccountsController',
             'HostManager\Controller\AccountsApi' => 'HostManager\Controller\AccountsApiController',
+            'HostManager\Controller\Users' => 'HostManager\Controller\UsersController',
         ),
     ),
     'view_manager' => array(
