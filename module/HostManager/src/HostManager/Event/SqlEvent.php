@@ -189,6 +189,32 @@ class SqlEvent extends BaseEvent
     }
     
     /**
+     * Returns the account_id to use for INSERT queries
+     * 
+     * Parses the INSERT object to ensure another account_id column isn't set
+     * and returns the set one from $sql if it is. This allows us to override the
+     * account_id taken from the URL request
+     * 
+     * @param \Zend\Db\Sql\Insert $sql
+     */
+    public function verifyInsertAccountId(\Zend\Db\Sql\Insert $sql)
+    {
+    	$state = $sql->getRawState();
+    	if(isset($state['columns']) && is_array($state['columns']))
+    	{
+    		foreach($state['columns'] AS $key => $column)
+    		{
+    			if($column == 'account_id' && isset($state['values'][$key]))
+    			{
+    				return $state['values'][$key];
+    			}
+    		}
+    	}
+    	
+    	return $this->account_id;
+    }
+    
+    /**
      * Modifies all the SELECT calls to inject account_id to all WHERE clauses (where appropriate)
      * @param \Zend\EventManager\Event $event
      */
@@ -228,7 +254,8 @@ class SqlEvent extends BaseEvent
     		if(class_exists($class_name))
     		{
     			$class = new $class_name($sql);
-    			$sql = $class->Insert($sql, $this->account_id);
+    			$account_id = $this->verifyInsertAccountId($sql);
+    			$sql = $class->Insert($sql, $account_id);
     		}
     	}
     	catch (Exception $e)

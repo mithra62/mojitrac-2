@@ -697,7 +697,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   KEY `UserStatus` (`user_status`),
   KEY `Joined` (`created_date`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `users`
@@ -718,7 +718,7 @@ CREATE TABLE IF NOT EXISTS `user_accounts` (
   `account_id` int(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`,`account_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `user_accounts`
@@ -765,15 +765,14 @@ CREATE TABLE IF NOT EXISTS `user_roles` (
 --
 
 INSERT INTO `user_roles` (`id`, `account_id`, `name`, `description`, `last_modified`, `created_date`) VALUES
-(1, 1, 'Super Admin', 'Moji System Administrators', NOW(), NOW()),
-(2, 1, 'User', '', NOW(), NOW()),
-(4, 1, 'Project Manager', '', NOW(), NOW()),
-(8, 1, 'Company Manager', '', NOW(), NOW()),
-(9, 1, 'Task Manager', '', NOW(), NOW()),
-(11, 1, 'User Manager', '', NOW(), NOW()),
+(1, 1, 'Administrator', 'Moji System Administrators', NOW(), NOW()),
+(2, 1, 'User', 'Can manage users', NOW(), NOW()),
+(4, 1, 'Project Manager', 'Can manage projects', NOW(), NOW()),
+(8, 1, 'Company Manager', 'Can manage companies', NOW(), NOW()),
+(9, 1, 'Task Manager', 'Can manage tasks', NOW(), NOW()),
+(11, 1, 'User Manager', 'Can manage users only', NOW(), NOW()),
 (12, 1, 'Freelance', 'Container for the default freelancer functionality', NOW(), NOW()),
-(15, 1, 'My Test Role', NULL, NOW(), NOW()),
-(16, 1, 'Account', '', NOW(), NOW());
+(16, 1, 'Accountant', 'Contains basic accounting access', NOW(), NOW());
 
 -- --------------------------------------------------------
 

@@ -207,15 +207,16 @@ class Accounts extends AbstractModel
 			$permissions = $user->roles->getRolePermissions($user_role['id']);
 			$sql = array('name' => $user_role['name'], 'description' => $user_role['description'], 'account_id' => $account_id, 'created_date' => new \Zend\Db\Sql\Expression('NOW()'), 'last_modified' => new \Zend\Db\Sql\Expression('NOW()'));
 			$role_id = $this->insert('user_roles', $sql);
-			$new_user_roles[] = $role_id;
 			foreach($permissions As $perm)
 			{
 				$sql = array('role_id' => $role_id, 'permission_id' => $perm);
 				$this->insert('user_role_2_permissions', $sql);
 			}
+
+			//attach the user to the role
+			$sql = array('role_id' => $role_id, 'user_id' => $user_data['id'], 'account_id' => $account_id);
+			$this->insert('user2role', $sql);
 		}
-		//and link the new user to ALL the new roles
-		$user->roles->updateUsersRoles($user_data['id'], $new_user_roles);
 		
 		//now create the initial company
 		$company_data = array('name' => $data['organization'], 'type' => '6');
