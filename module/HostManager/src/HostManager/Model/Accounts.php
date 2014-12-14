@@ -25,6 +25,13 @@ use Application\Model\AbstractModel;
  */
 class Accounts extends AbstractModel
 {
+	public $account_id = false;
+	
+	public function setConfig($config)
+	{
+		$this->config = $config;	
+	}
+	
 	/**
 	 * Prepares the SQL array for the accounts table
 	 * @param array $data
@@ -139,17 +146,24 @@ class Accounts extends AbstractModel
 	 */
 	public function getAccountId(array $where = array())
 	{
-		$sql = $this->db->select()->from(array('a'=> 'accounts'))->columns(array('id'));
-		if( $where )
+		if( !$this->account_id )
 		{
-			$sql = $sql->where($where);
+			$parts = parse_url($_SERVER['HTTP_HOST']);
+			$sub = str_replace($this->config['sub_primary_url'], '', $parts['path']);
+			$sql = $this->db->select()->from(array('a'=> 'accounts'))->columns(array('id'))->where(array('slug' => $sub));
+			if( $where )
+			{
+				$sql = $sql->where($where);
+			}
+			
+			$account = $this->getRow($sql);
+			if( !empty($account['id']) )
+			{
+				$this->account_id = $account['id'];
+			}		
 		}
 		
-		$account = $this->getRow($sql);
-		if( !empty($account['id']) )
-		{
-			return $account['id'];
-		}
+		return $this->account_id;
 	}
 	
 	/**

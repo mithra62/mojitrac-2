@@ -351,25 +351,6 @@ class Users extends AbstractModel
 	}
 	
 	/**
-	 * Returns a user array by email address
-	 * @param string $email
-	 */
-	public function getUserByHarvestId($harvest_id)
-	{
-		$sql = $this->db->select()->where('harvest_id = ?', $harvest_id);
-		return $this->db->getUser($sql);
-	}
-	
-	/**
-	 * Returns all the users that were imported from Harvest
-	 */
-	public function getHarvestUsers()
-	{
-		$sql = $this->db->select()->where("harvest_id != ''");
-		return $this->db->getUsers($sql);
-	}
-	
-	/**
 	 * Returns a user array by password hash
 	 * @param string $email
 	 */
@@ -420,7 +401,7 @@ class Users extends AbstractModel
 			$sql = $sql->where(array('user_status' => $status));
 		}
 		
-		return $this->getRows($sql);		
+		return $this->getRows($sql);	
 	}
 	
 	/**

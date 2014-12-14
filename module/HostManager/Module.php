@@ -15,6 +15,7 @@ namespace HostManager;
 use Zend\EventManager\EventInterface as Event;
 use HostManager\Event\SqlEvent;
 use HostManager\Model\Accounts;
+use HostManager\Model\Users;
 use HostManager\Form\SignUpForm;
 
 use Zend\ModuleManager\ModuleManager;
@@ -84,7 +85,20 @@ class Module
 				'HostManager\Model\Accounts' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Accounts($adapter, $db);
+					$config = $sm->get('Config');
+					$account = new Accounts($adapter, $db);
+					$account->setConfig($config);
+					return $account;
+				},
+				'HostManager\Model\Users' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$account = $sm->get('HostManager\Model\Accounts');
+					$roles = $sm->get('Application\Model\Roles');
+					$ud = $sm->get('Application\Model\UserData');
+					$db = $sm->get('SqlObject');
+					$user = new Users($adapter, $db, $roles, $ud);
+					$user->setAccount($account);
+					return $user;
 				},
 
 				//forms

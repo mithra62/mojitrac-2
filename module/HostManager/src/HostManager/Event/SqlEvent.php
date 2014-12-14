@@ -97,23 +97,23 @@ class SqlEvent extends BaseEvent
     	
     	if( !$this->account_id || $forced)
     	{
-	    	$parts = parse_url($_SERVER['HTTP_HOST']);
-			$sub = str_replace($this->base_url, '', $parts['path']);
-	    	$this->account_id = $this->account->getAccountId(array('slug' => $sub));
-	    	if( !$this->account_id )
-	    	{
-	    		//do some error handling
-	    		throw(new \Exception('NO!!!'));
-	    	}
-	    	
-	    	//now verify the member is actually attached to this account
-	    	if($this->identity)
-	    	{
-	    		if( !$this->account->userOnAccount($this->identity, $this->account_id) )
-	    		{
-	    			throw(new \Exception('NO!!!'));
-	    		}
-	    	}
+	    	$this->account_id = $this->account->getAccountId();
+		
+			//now verify the member is actually attached to this account
+			if($this->identity)
+			{
+				if( !$this->account->userOnAccount($this->identity, $this->account_id) )
+				{
+					throw(new \Exception('NO!!!'));
+					
+					/**
+					 * @todo redirect to proper account if not a valid request
+					 */
+					//get a valid account
+					
+					//redirect the user to it
+				}
+			}
     	}
     	
     	return $this->account_id;

@@ -6,23 +6,23 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/src/PM/Controller/UsersController.php
+ * @filesource 	./module/HostManager/src/HostManager/Controller/UsersController.php
  */
 
 namespace HostManager\Controller;
 
-use PM\Controller\AbstractPmController;
+use PM\Controller\UsersController AS PmUsers;
 
 /**
- * PM - Users Controller
+ * HostManager - Users Controller
  *
- * Routes the Users requests
+ * Routes the Users requests with an account concept in mind
  *
  * @package 	Users
  * @author		Eric Lamb <eric@mithra62.com>
- * @filesource 	./module/PM/src/PM/Controller/UsersController.php
+ * @filesource 	./module/HostManager/src/HostManager/Controller/UsersController.php
  */
-class UsersController extends AbstractPmController
+class UsersController extends PmUsers
 {
 	/**
 	 * (non-PHPdoc)
@@ -31,22 +31,13 @@ class UsersController extends AbstractPmController
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
 		$e = parent::onDispatch($e);
-        //$this->layout()->setVariable('layout_style', 'single');
-        $this->layout('layout/pm');
-        $this->layout()->setVariable('sidebar', 'dashboard');
-        $this->layout()->setVariable('active_nav', 'users');
-        $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
-        $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
-		$this->layout()->setVariable('active_sub', 'None');
-
-		$this->layout()->setVariable('sub_menu', 'admin');
-		$this->layout()->setVariable('active_nav', 'admin');		    
+        $this->layout('layout/pm');	
 		return $e;
 	}
 
 	/**
-	 * Main Page
-	 * @return void
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\UsersController::indexAction()
 	 */
 	public function indexAction()
 	{
@@ -55,53 +46,8 @@ class UsersController extends AbstractPmController
             return $this->redirect()->toRoute('pm');
         }
         
-		$users = $this->getServiceLocator()->get('Application\Model\Users');
-		$view['users'] = $users->getAllUsers();
-		return $view;
-	}
-
-	/**
-	 * User View Page
-	 * @return void
-	 */
-	public function viewAction()
-	{
-		$id = $this->params()->fromRoute('user_id');
-		if (!$id) 
-		{
-			$this->layout()->setVariable('active_nav', '');
-			$this->layout()->setVariable('sub_menu', 'settings');
-			$id = $this->identity;
-		}
-		
-		if(!$this->perm->check($this->identity, 'view_users_data'))
-        {
-			$this->layout()->setVariable('active_nav', '');
-			$this->layout()->setVariable('sub_menu', 'settings');
-        	$id = $this->identity;
-        }		
-
-		$user = $this->getServiceLocator()->get('Pm\Model\Users');
-		$view['user'] = $user->getUserById($id);
-		if(!$view['user'])
-		{
-			return $this->redirect()->toRoute('pm');
-		}
-		
-		$view['roles'] = $user->getUserRoles($id);
-		$view['projects'] = $user->getAssignedProjects($id);
-
-		$task = $this->getServiceLocator()->get('PM\Model\Tasks');
-		$view['tasks'] = $task->getTasksByUserId($id, TRUE, TRUE, TRUE);
-		
-		$file = $this->getServiceLocator()->get('PM\Model\Files');
-		$view['files'] = $file->getFilesByUserId($id);
-
-		
-		$times = $this->getServiceLocator()->get('PM\Model\Times');
-		$view['times'] = $times->getTimesByUserId($id);
-		$view['hours'] = $times->getTotalTimesByUserId($id);
-		$view['id'] = $id;
+		$users = $this->getServiceLocator()->get('HostManager\Model\Users');
+		$view['users'] = $users->getAccountUsers();
 		return $view;
 	}
 
