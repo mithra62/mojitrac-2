@@ -50,7 +50,7 @@ class AccountsController extends AbstractController
 				$account_data = $account->createAccount($data, $user, $company, $hash, $setting, $option);
 				if($account_data)
 				{
-					return $this->redirect()->toRoute('account/signup/complete');
+					return $this->redirect()->toRoute('hosted-accounts/signup', array('status' => 'complete'));
 				}
 			}
     	}

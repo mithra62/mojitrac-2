@@ -36,13 +36,26 @@ return array(
         				)
         			),
         		)
-        	), //end Login Routes
+        	), //end Account Routes
+        	'api-hosted-accounts' => array( //Options Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/api/accounts[/:id]',
+        			'defaults' => array(
+        				'controller' => 'HostManager\Controller\AccountsApi',
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array( 
+        		)
+        	), //end Companies Options
         )
     ),
 		
     'controllers' => array(
         'invokables' => array(
             'HostManager\Controller\Accounts' => 'HostManager\Controller\AccountsController',
+            'HostManager\Controller\AccountsApi' => 'HostManager\Controller\AccountsApiController',
         ),
     ),
     'view_manager' => array(
