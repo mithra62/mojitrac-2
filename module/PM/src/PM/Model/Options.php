@@ -145,9 +145,14 @@ class Options extends AbstractModel
 	/**
 	 * Returns all the Options
 	 */
-	public function getAllOptions()
+	public function getAllOptions(array $where = array())
 	{
 		$sql = $this->db->select()->from('options');
+		if($where)
+		{
+			$sql = $sql->where($where);
+		}
+		
 		return $this->getRows($sql);
 	}
 	

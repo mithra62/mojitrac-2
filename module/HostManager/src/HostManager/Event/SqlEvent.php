@@ -107,7 +107,13 @@ class SqlEvent extends BaseEvent
 	    	}
 	    	
 	    	//now verify the member is actually attached to this account
-	    	//TODO
+	    	if($this->identity)
+	    	{
+	    		if( !$this->account->userOnAccount($this->identity, $this->account_id) )
+	    		{
+	    			throw(new \Exception('NO!!!'));
+	    		}
+	    	}
     	}
     	
     	return $this->account_id;
@@ -147,6 +153,42 @@ class SqlEvent extends BaseEvent
     }
     
     /**
+     * Returns the account_id to use for SELECT queries
+     * 
+     * Parses the SELECT object to ensure another account_id column isn't set
+     * and returns the set one from $sql if it is. This allows us to override the
+     * account_id taken from the URL request
+     * 
+     * @param \Zend\Db\Sql\Select $sql
+     */
+    public function verifySelectAccountId(\Zend\Db\Sql\Select $sql)
+    {
+    	$predicates = $sql->where->getPredicates();
+    	foreach($predicates AS $predicate)
+    	{
+    		if(is_array($predicate))
+    		{
+    			foreach($predicate AS $key => $value)
+    			{
+    				//ok, we're just checking here for any call to an account_id column 
+    				//and using THAT value as the account_id for the SQL call if found
+    				if(is_object($value) && $value instanceof \Zend\Db\Sql\Predicate\Operator)
+    				{
+    					$left = $value->getLeft();
+    					$right = $value->getRight();
+    					if($left == 'account_id' && $right >= '1')
+    					{
+    						return $right;
+    					}
+    				}    				
+    			}
+    		}
+    	}
+    	
+    	return $this->account_id;
+    }
+    
+    /**
      * Modifies all the SELECT calls to inject account_id to all WHERE clauses (where appropriate)
      * @param \Zend\EventManager\Event $event
      */
@@ -160,7 +202,8 @@ class SqlEvent extends BaseEvent
     		if(class_exists($class_name))
     		{
     			$class = new $class_name($sql);
-    			$sql = $class->Select($sql, $this->account_id);
+    			$account_id = $this->verifySelectAccountId($sql);
+    			$sql = $class->Select($sql, $account_id);
     		}
     	}
     	catch (Exception $e)

@@ -28,8 +28,9 @@ class AccountsController extends AbstractController
 	 * (non-PHPdoc)
 	 * @see \Zend\Mvc\Controller\AbstractActionController::indexAction()
 	 */
-    public function indexAction() 
+    public function signupAction() 
     {
+					//return $this->redirect()->toRoute('account/signup/complete');
     	$form = $this->getServiceLocator()->get('HostManager\Form\SignupForm');
     	$request = $this->getRequest();
     	if ($request->isPost())
@@ -38,13 +39,15 @@ class AccountsController extends AbstractController
     		$user = $this->getServiceLocator()->get('Application\Model\Users');
     		$hash = $this->getServiceLocator()->get('Application\Model\Hash');
     		$company = $this->getServiceLocator()->get('PM\Model\Companies');
+    		$setting = $this->getServiceLocator()->get('Application\Model\Settings');
+    		$option = $this->getServiceLocator()->get('PM\Model\Options');
     		
 			$form->setInputFilter($account->getInputFilter());
 			$form->setData($request->getPost());
 			if ($form->isValid()) 
 			{
 				$data = $form->getData();
-				$account_data = $account->createAccount($data, $user, $company, $hash);
+				$account_data = $account->createAccount($data, $user, $company, $hash, $setting, $option);
 				if($account_data)
 				{
 					return $this->redirect()->toRoute('account/signup/complete');
@@ -56,5 +59,11 @@ class AccountsController extends AbstractController
     	$view['messages'] = $this->flashMessenger()->getMessages();
         $view['form'] = $form;
         return $view;
-    }  
+    } 
+
+    public function indexAction()
+    {
+    	echo 'fdsa';
+    	exit;
+    }
 }

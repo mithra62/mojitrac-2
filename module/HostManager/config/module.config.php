@@ -26,21 +26,12 @@ return array(
         		),
         		'may_terminate' => true,
         		'child_routes' => array(
-        			'process' => array(
+        			'signup' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/signup',
+        					'route' => '/signup[/:status]',
         					'defaults' => array(
-        						'action' => 'process'
-        					)
-        				)
-        			),
-        			'logout' => array(
-        				'type' => 'segment',
-        				'options' => array(
-        					'route' => '/logout',
-        					'defaults' => array(
-        						'action' => 'logout'
+        						'action' => 'signup'
         					)
         				)
         			),

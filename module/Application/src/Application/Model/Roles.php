@@ -130,9 +130,14 @@ class Roles extends AbstractModel
 	 * @param string $view_type
 	 * @return array
 	 */
-	public function getAllRoles()
+	public function getAllRoles(array $where = array())
 	{
 		$sql = $this->db->select()->from('user_roles');
+		if($where)
+		{
+			$sql = $sql->where($where);
+		}
+		
 		return $this->getRows($sql);
 	}
 	

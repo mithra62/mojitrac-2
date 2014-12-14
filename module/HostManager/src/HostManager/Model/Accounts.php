@@ -174,9 +174,17 @@ class Accounts extends AbstractModel
 	 * @param \Application\Model\Users $user
 	 * @param \PM\Model\Companies $company
 	 * @param \Application\Model\Hash $hash
+	 * @param \Application\Model\Settings $setting
+	 * @param \PM\Model\Options $hash
 	 */
-	public function createAccount(array $data, \Application\Model\Users $user, \PM\Model\Companies $company, \Application\Model\Hash $hash)
-	{
+	public function createAccount(array $data, 
+			\Application\Model\Users $user, 
+			\PM\Model\Companies $company, 
+			\Application\Model\Hash $hash, 
+			\Application\Model\Settings $setting, 
+			\PM\Model\Options $option
+	)
+	{		
 		$user_data = $user->getUserByEmail($data['email']);
 		if( !$user_data )
 		{
@@ -191,6 +199,25 @@ class Accounts extends AbstractModel
 		
 		$this->linkUserToAccount($user_data['id'], $account_id);
 		
+		//create the user roles now
+		$user_roles = $user->roles->getAllRoles(array('account_id' => 1));
+		$new_user_roles = array();
+		foreach($user_roles AS $user_role)
+		{
+			$permissions = $user->roles->getRolePermissions($user_role['id']);
+			$sql = array('name' => $user_role['name'], 'description' => $user_role['description'], 'account_id' => $account_id, 'created_date' => new \Zend\Db\Sql\Expression('NOW()'), 'last_modified' => new \Zend\Db\Sql\Expression('NOW()'));
+			$role_id = $this->insert('user_roles', $sql);
+			$new_user_roles[] = $role_id;
+			foreach($permissions As $perm)
+			{
+				$sql = array('role_id' => $role_id, 'permission_id' => $perm);
+				$this->insert('user_role_2_permissions', $sql);
+			}
+		}
+		//and link the new user to ALL the new roles
+		$user->roles->updateUsersRoles($user_data['id'], $new_user_roles);
+		
+		//now create the initial company
 		$company_data = array('name' => $data['organization'], 'type' => '6');
 		$company_id = $company->addCompany($company_data);
 		if( $company_id )
@@ -199,6 +226,18 @@ class Accounts extends AbstractModel
 			$this->update('companies', $sql, array('id' => $company_id));
 		}
 		
+		//and link the new company as the master company for this account
+		$setting->updateSettings(array('master_company' => $company_id));
+		
+		//now create the option types
+		$option_data = $option->getAllOptions();
+		foreach($option_data AS $opt)
+		{
+			$sql = array('name' => $opt['name'], 'area' => $opt['area'], 'account_id' => $account_id, 'created_date' => new \Zend\Db\Sql\Expression('NOW()'), 'last_modified' => new \Zend\Db\Sql\Expression('NOW()'));
+			$this->insert('options', $sql);
+		}		
+		
+		//and wrap it up so we can go home
 		return $account_id;
 	}
 	

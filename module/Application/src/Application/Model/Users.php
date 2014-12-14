@@ -48,7 +48,7 @@ class Users extends AbstractModel
 	
 	/**
 	 * The Roles Model
-	 * @var object
+	 * @var \Application\Model\Roles
 	 */
 	public $roles = null;
 	

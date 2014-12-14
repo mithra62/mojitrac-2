@@ -18,7 +18,7 @@ MojiTrac 2 requires the below server setup:
 
 For the most part, MojiTrac 2 is just like any other installed software:
 
-1. Setup vhost to install.mojitrac.com*
+1. Setup vhost to install.YOURDOMAIN.com*
 2. Create MySQL database, username, and password
 	1. Import `data\moji.sql` to your database
 3. Configure code to connect to the database
