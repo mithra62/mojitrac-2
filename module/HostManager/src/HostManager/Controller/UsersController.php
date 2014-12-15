@@ -47,6 +47,9 @@ class UsersController extends PmUsers
         }
         
 		$users = $this->getServiceLocator()->get('HostManager\Model\Users');
+		$invite = $this->getServiceLocator()->get('HostManager\Model\Account\Invites');
+		
+		$view['invites'] = $invite->getAccountInvites();
 		$view['users'] = $users->getAccountUsers();
 		return $view;
 	}

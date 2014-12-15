@@ -126,6 +126,12 @@ $(document).ready(function() {
 		"bStateSave": false
 	}); 
     
+    $('#moji_invites').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"bStateSave": false
+	}); 
+    
     $('#project_team').dataTable({
 		"bJQueryUI": true,
 		"bFilter": false,

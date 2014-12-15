@@ -132,6 +132,36 @@ class Invites extends AbstractModel
 	}
 	
 	/**
+	 * Returns an account's invites
+	 * @param int $account_id
+	 * @param array $where
+	 * @return array
+	 */
+	public function getAccountInvites($account_id = false, array $where = array())
+	{
+		if(!$account_id)
+		{
+			$account_id = $this->getAccountId();
+		}
+		
+		$columns = array(
+				'user_id',
+				'total_invites' => new \Zend\Db\Sql\Expression('COUNT(ai.id)'),
+				'last_sent' => new \Zend\Db\Sql\Expression('MAX(ai.created_date)')
+		);
+		$sql = $this->db->select()->columns($columns)->from(array('ai' => 'account_invites'))
+					->where(array('account_id' => $account_id))
+					->join(array('u' => 'users'), 'u.id = user_id', array('first_name', 'last_name', 'email'))
+					->group('user_id');
+		if($where)
+		{
+			$sql = $sql->where($where);
+		}
+		
+		return $this->getRows($sql);
+	}
+	
+	/**
 	 * Creats the URL for the Invite to Account system
 	 * @param string $code
 	 * @param string $account_id
