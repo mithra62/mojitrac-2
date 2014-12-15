@@ -26,6 +26,12 @@ use HostManager\Traits\Account;
  */
 class Invites extends AbstractModel
 {
+	const EventAddAccountInvitePre = 'account.invite.pre';
+	const EventAddAccountInvitePost = 'account.invite.post';
+	
+	/**
+	 * Setup the Account Trait
+	 */
 	use Account;
 
 	/**
@@ -95,8 +101,18 @@ class Invites extends AbstractModel
 			$account_id = $this->getAccountId();
 		}
 	
-		$data = $this->getSQL();
+		$data = array('user_id' => $user_id, 'account_id' => $account_id, 'verification_hash' => $hash->guidish());
+
+		$ext = $this->trigger(self::EventAddAccountInvitePre, $this, compact('data'), array());
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+				
+		$data = $this->getSQL($data);
 		$data['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 		$invite_id = $this->insert('account_invites', $data);
+		
+		$ext = $this->trigger(self::EventAddAccountInvitePost, $this, compact('invite_id'), array());
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $invite_id = $ext->last();
+		
+		return $invite_id;
 	}
 }

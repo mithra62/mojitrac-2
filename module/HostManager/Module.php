@@ -15,6 +15,7 @@ namespace HostManager;
 use Zend\EventManager\EventInterface as Event;
 use HostManager\Event\SqlEvent;
 use HostManager\Model\Accounts;
+use HostManager\Model\Account\Invites;
 use HostManager\Model\Users;
 use HostManager\Form\SignUpForm;
 use HostManager\Form\InviteForm;
@@ -90,6 +91,14 @@ class Module
 					$account = new Accounts($adapter, $db);
 					$account->setConfig($config);
 					return $account;
+				},
+				'HostManager\Model\Account\Invites' => function($sm) {
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$db = $sm->get('SqlObject');
+					$config = $sm->get('Config');
+					$invite = new Invites($adapter, $db);
+					$invite->setConfig($config);
+					return $invite;
 				},
 				'HostManager\Model\Users' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');

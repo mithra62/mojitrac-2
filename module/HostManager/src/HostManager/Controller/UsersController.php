@@ -59,7 +59,7 @@ class UsersController extends PmUsers
         }
 
         $user = $this->getServiceLocator()->get('HostManager\Model\Users');
-        $account = $this->getServiceLocator()->get('HostManager\Model\Accounts');
+        $invite = $this->getServiceLocator()->get('HostManager\Model\Account\Invites');
 		$form = $this->getServiceLocator()->get('HostManager\Form\InviteForm');
 
 		$form = $form->rolesFields($user->roles);
@@ -67,6 +67,7 @@ class UsersController extends PmUsers
 		if ($request->isPost())
 		{
 			$formData = $this->getRequest()->getPost();
+            $form->setInputFilter($invite->getInputFilter());
 			$form->setData($request->getPost());
 			if ($form->isValid($formData))
 			{
@@ -77,7 +78,7 @@ class UsersController extends PmUsers
 				{
 					//just process the invite
 					$hash = $this->getServiceLocator()->get('Application\Model\Hash');
-					if($account->addInvite($user_data['id'], $hash))
+					if($invite->addInvite($user_data['id'], $hash))
 					{
 						$this->flashMessenger()->addMessage($this->translate('invite_sent', 'hm'));
 						return $this->redirect()->toRoute('users');
