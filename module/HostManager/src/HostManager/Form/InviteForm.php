@@ -52,4 +52,33 @@ class InviteForm extends BaseForm
 			),
 		));
     }
+    
+    /**
+     * Adds the Role selection fields to the form
+     * @param \Application\Model\Roles $roles
+     * @return \Application\Form\UsersForm
+     */
+    public function rolesFields(\Application\Model\Roles $roles)
+    {
+    	$roles = $roles->getAllRoleNames();
+    	$role_fields = array();
+    	foreach($roles AS $role)
+    	{
+    		$role_fields[$role['id']] = $role['name'];
+    	}
+    
+    	$this->add(array(
+    			'name' => 'user_roles',
+    			'type' => 'MultiCheckbox',
+    			'attributes' => array(
+    					'id' => 'user_roles'
+    			),
+    			'options' => array(
+    					'value_options' => $role_fields,
+    			)
+    	));
+    
+    	return $this;
+    	 
+    }    
 }

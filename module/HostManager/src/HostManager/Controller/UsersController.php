@@ -58,9 +58,10 @@ class UsersController extends PmUsers
 			return $this->redirect()->toRoute('users');  
         }
 
-        $users = $this->getServiceLocator()->get('HostManager\Model\Users');
+        $user = $this->getServiceLocator()->get('HostManager\Model\Users');
 		$form = $this->getServiceLocator()->get('HostManager\Form\InviteForm');
 
+		$form = $form->rolesFields($user->roles);
 		$request = $this->getRequest();
 		if ($request->isPost())
 		{
@@ -68,9 +69,11 @@ class UsersController extends PmUsers
 			$form->setData($request->getPost());
 			if ($form->isValid($formData))
 			{
-				echo 'fdsa';
-				exit;
+				//check if this user exists already
 				$formData = $formData->toArray();
+				$user_data = $user->getUserByEmail($formData['email']);
+				print_r($user_data);
+				exit;
 				if(!empty($formData['fail']))
 				{
 					return $this->redirect()->toRoute('users/view', array('user_id' => $id));

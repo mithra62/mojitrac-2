@@ -22,6 +22,10 @@ echo $this->formRow($csrf);
 	<?php $name = $form->get('email'); echo $this->formRow($name); ?>
 </p>
 
+<p class="user_role_boxes"><br /><label for="">Assigned Roles:</label>
+	<?php $field = $form->get('user_roles'); echo $this->formRow($field); ?>		
+</p>
+
 <p>
 	<input type="submit" class="submit" value="Submit" />
 </p>
