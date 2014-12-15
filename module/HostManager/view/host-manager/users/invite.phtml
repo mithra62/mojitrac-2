@@ -18,6 +18,16 @@ echo $this->formRow($csrf);
 </style>
 <div id="oputput"></div>
 <p>
+	<label for="first_name">First Name</label>
+	<?php $name = $form->get('first_name'); echo $this->formRow($name); ?>
+</p>
+
+<p>
+	<label for="last_name">Last Name</label>
+	<?php $name = $form->get('last_name'); echo $this->formRow($name); ?>
+</p>
+
+<p>
 	<label for="email">Email</label>
 	<?php $name = $form->get('email'); echo $this->formRow($name); ?>
 </p>
@@ -41,12 +51,16 @@ jQuery(document).ready(function($){
 				required: true,
 				email: true
 			},
+			first_name: "required",
+			last_name: "required",
 		},
 		messages: {
 			email: {
 				required: "Please enter an email",
 				email: "Please enter a valid email address"
-			},			
+			},	
+			first_name: "Please enter a first name",
+			last_name: "Please enter a last name",		
 		}
 	});	
 });

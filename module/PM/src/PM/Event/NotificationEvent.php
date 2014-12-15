@@ -87,6 +87,7 @@ class NotificationEvent extends BaseEvent
     	$this->mail->addTo($data['email'], $data['first_name'].' '.$data['last_name']);
     	$this->mail->setViewDir($this->email_view_path);
     	$this->mail->setEmailView('user-registration', array('user_data' => $data, 'user_id' => $user_id));
+    	$this->mail->setTranslationDomain('pm');
     	$this->mail->setSubject('user_registration_email_subject');
     	$this->mail->send();    	
     }

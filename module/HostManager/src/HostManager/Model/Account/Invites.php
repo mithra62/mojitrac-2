@@ -26,8 +26,8 @@ use HostManager\Traits\Account;
  */
 class Invites extends AbstractModel
 {
-	const EventAddAccountInvitePre = 'account.invite.pre';
-	const EventAddAccountInvitePost = 'account.invite.post';
+	const EventAddAccountInvitePre = 'invite.add.pre';
+	const EventAddAccountInvitePost = 'invite.add.post';
 	
 	/**
 	 * Setup the Account Trait

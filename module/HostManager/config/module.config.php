@@ -37,7 +37,7 @@ return array(
         			),
         		)
         	), //end Account Routes
-        	'api-hosted-accounts' => array( //Options Routes
+        	'api-hosted-accounts' => array( //Hosted Accounts Routes
         		'type' => 'segment',
         		'options' => array(
         			'route' => '/api/accounts[/:id]',
@@ -48,7 +48,7 @@ return array(
         		'may_terminate' => true,
         		'child_routes' => array( 
         		)
-        	), //end Companies Options
+        	), //end Hosted Accounts 
 
         	'users' => array( //User Routes
         		'type' => 'segment',

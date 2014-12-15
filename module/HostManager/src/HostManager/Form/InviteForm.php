@@ -42,6 +42,21 @@ class InviteForm extends BaseForm
 				'class' => 'input large',
 			),
 		));
+
+		$this->add(array(
+			'name' => 'first_name',
+			'type' => 'Text',
+			'attributes' => array(
+				'class' => 'input large',
+			),
+		));
+		$this->add(array(
+			'name' => 'last_name',
+			'type' => 'Text',
+			'attributes' => array(
+				'class' => 'input large',
+			),
+		));
 	
 		$this->add(array(
 			'name' => 'submit',

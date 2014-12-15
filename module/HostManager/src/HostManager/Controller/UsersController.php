@@ -74,31 +74,29 @@ class UsersController extends PmUsers
 				//check if this user exists already
 				$formData = $formData->toArray();
 				$user_data = $user->getUserByEmail($formData['email']);
+				$hash = $this->getServiceLocator()->get('Application\Model\Hash');
 				if($user_data)
 				{
 					//just process the invite
-					$hash = $this->getServiceLocator()->get('Application\Model\Hash');
 					if($invite->addInvite($user_data['id'], $hash))
 					{
 						$this->flashMessenger()->addMessage($this->translate('invite_sent', 'hm'));
 						return $this->redirect()->toRoute('users');
 					}
-					else
+				}
+				else 
+				{
+					//create the user
+					$formData['password'] = $hash->guidish();
+					$user_id = $id = $user->addUser($formData, $hash);
+					if($user_id)
 					{
-						
+						if($invite->addInvite($user_id, $hash))
+						{
+							$this->flashMessenger()->addMessage($this->translate('invite_sent', 'hm'));
+							return $this->redirect()->toRoute('users');
+						}
 					}
-				}
-				print_r($user_data);
-				exit;
-				if(!empty($formData['fail']))
-				{
-					return $this->redirect()->toRoute('users/view', array('user_id' => $id));
-				}
-		
-				if($user->removeUser($id))
-				{
-					$this->flashMessenger()->addMessage($this->translate('user_removed', 'pm'));
-					return $this->redirect()->toRoute('users');
 				}
 			}
 		}
@@ -182,62 +180,17 @@ class UsersController extends PmUsers
 	}
 
 	/**
-	 * User Add Page
-	 * @return void
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\UsersController::addAction()
 	 */
 	public function addAction()
 	{
-		if(!$this->perm->check($this->identity, 'manage_users'))
-        {
-			return $this->redirect()->toRoute('users');  
-        }
-
-		$user = $this->getServiceLocator()->get('Application\Model\Users');
-		$user_form = $this->getServiceLocator()->get('Application\Form\UsersForm');
-		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
-		$hash = $this->getServiceLocator()->get('Application\Model\Hash');
-		
-		$view['form'] = $user_form->registrationForm()->rolesFields($roles);
-		$view['addPassword'] = TRUE;
-		$view['user_roles'] = $roles->getAllRoleNames();
-		$view['layout_style'] = 'right';
-		$view['sidebar'] = 'dashboard';
-		$view['addAction'] = TRUE;		
-		$request = $this->getRequest();
-		if ($request->isPost()) {
-
-			$formData = $request->getPost();
-            $user_form->setInputFilter($user->getRegistrationInputFilter());
-			$user_form->setData($request->getPost());
-			if ($user_form->isValid($formData)) 
-			{
-				$user_id = $id = $user->addUser($formData->toArray(), $hash, $roles);
-				if($user_id)
-				{	
-					$this->flashMessenger()->addMessage($this->translate('user_added', 'pm'));
-					return $this->redirect()->toRoute('users/view', array('user_id' => $id));  
-				} 
-				else 
-				{
-					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
-					$this->layout()->setVariable('errors', $view['errors']);
-				}
-
-			} 
-			else 
-			{
-				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
-				$this->layout()->setVariable('errors', $view['errors']);
-				$user_form->setData($formData);
-			}
-		}
-        $this->layout()->setVariable('layout_style', 'left');
-		return $view;
+		return $this->redirect()->toRoute('users');
 	}
 
 	/**
-	 * The Remove User Action
-	 * @return array
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\UsersController::removeAction()
 	 */
 	public function removeAction()
 	{

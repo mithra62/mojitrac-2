@@ -156,6 +156,7 @@ return array(
 	'email_subject_project_team_add' => 'Added to project team',	
 	'daily_task_reminder_email_subject' => 'Daily Task Reminder',
 	'email_subject_file_add' => 'File Uploaded',
+	'user_registration_email_subject' => 'New MojiTrac Account Created!',
 		
 	'sent_by_moji' => 'Sent By: MojiTrac',
 	

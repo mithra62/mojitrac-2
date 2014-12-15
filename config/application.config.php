@@ -17,7 +17,7 @@ return array(
         'PM',
         'Api',
         'ZF\ApiProblem',
-        'Freshbooks',
+        //'Freshbooks',
     	'HostManager', //keep this as last at all times if being hosted
         'ZendDeveloperTools',
     	'ZfSimpleMigrations'
