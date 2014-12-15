@@ -14,6 +14,7 @@ namespace HostManager;
 
 use Zend\EventManager\EventInterface as Event;
 use HostManager\Event\SqlEvent;
+use HostManager\Event\NotificationEvent;
 use HostManager\Model\Accounts;
 use HostManager\Model\Account\Invites;
 use HostManager\Model\Users;
@@ -127,6 +128,14 @@ class Module
 					$sqlEvent = new SqlEvent($auth->getIdentity(), $account, $config);
 					return $sqlEvent;
 				},
+				'PM\Event\NotificationEvent' => function($sm) {
+				    $auth = $sm->get('AuthService');
+				    $mail = $sm->get('Application\Model\Mail');
+				    $user = $sm->get('PM\Model\Users');
+				    $task = $sm->get('PM\Model\Tasks');
+				    $project = $sm->get('PM\Model\Projects');
+					return new NotificationEvent($mail, $user, $project, $task, $auth->getIdentity());
+				},	
 			)
 		);
     }
