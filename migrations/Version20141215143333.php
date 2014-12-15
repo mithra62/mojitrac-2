@@ -11,7 +11,7 @@ class Version20141215143333 extends AbstractMigration
 
     public function up(MetadataInterface $schema)
     {
-        $this->addSql('ALTER TABLE `user_accounts` ADD `created_date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `account_id`; ');
+        $this->addSql("ALTER TABLE `user_accounts` ADD `created_date` DATETIME NULL DEFAULT NULL AFTER `account_id`; ");
     }
 
     public function down(MetadataInterface $schema)
