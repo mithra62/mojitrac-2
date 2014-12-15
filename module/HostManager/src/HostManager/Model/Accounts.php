@@ -224,30 +224,4 @@ class Accounts extends AbstractModel
 		//and wrap it up so we can go home
 		return $account_id;
 	}
-	
-	/**
-	 * Links a user to a given account
-	 * @param int $user_id
-	 * @param int $account_id
-	 */
-	public function linkUserToAccount($user_id, $account_id)
-	{
-		$data = array('user_id' => $user_id, 'account_id' => $account_id);
-		if( !$this->userOnAccount($user_id, $account_id) )
-		{
-			$this->insert('user_accounts', $data);
-		}
-	}
-	
-	/**
-	 * Checks if a user is on a given account
-	 * @param int $user_id
-	 * @param int $account_id
-	 */
-	public function userOnAccount($user_id, $account_id)
-	{
-		$where = array('user_id' => $user_id, 'account_id' => $account_id);
-		$sql = $this->db->select()->from('user_accounts')->where($where);
-		return $this->getRow($sql);
-	}
 }

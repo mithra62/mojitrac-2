@@ -74,15 +74,14 @@ class NotificationEvent extends PMNotificationEvent
     {
     	$invite_id = $event->getParam('invite_id');
     	$invite = $event->getTarget();
-    	$invite_data = $invite->getInvite(array('id' => $invite_id));
-    	print_r($invite_data);
-    	echo $invite_id;
-    	exit;
-    	$this->mail->addTo($data['email'], $data['first_name'].' '.$data['last_name']);
+    	$invite_data = $invite->getInvite(array('ai.id' => $invite_id));
+    	$invite_url = $this->mail->web_url.'/invite/confirm/'.$invite_data['verification_hash'];
+    	
+    	$this->mail->addTo($invite_data['email'], $invite_data['first_name'].' '.$invite_data['last_name']);
     	$this->mail->setViewDir($this->email_view_path);
-    	$this->mail->setEmailView('account-invite', array('invite_data' => $invite_data));
+    	$this->mail->setEmailView('account-invite', array('invite_data' => $invite_data, 'invite_url' => $invite_url));
     	$this->mail->setTranslationDomain('hm');
     	$this->mail->setSubject('account_invite_email_subject');
-    	$this->mail->send();		
+    	$this->mail->send();
     }
 }

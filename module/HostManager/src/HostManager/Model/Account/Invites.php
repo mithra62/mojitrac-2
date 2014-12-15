@@ -122,7 +122,7 @@ class Invites extends AbstractModel
 	 */
 	public function getInvite(array $where = array())
 	{
-		$sql = $this->db->select()->from('account_invites');
+		$sql = $this->db->select()->from(array('ai' => 'account_invites'))->join(array('u' => 'users'), 'u.id = user_id', array('first_name', 'last_name', 'email'));
 		if($where)
 		{
 			$sql = $sql->where($where);
@@ -172,5 +172,20 @@ class Invites extends AbstractModel
 		{
 			$account_id = $this->getAccountId();
 		}
+	}
+	
+	/**
+	 * Wrapper to approve an Invite code and attach a user to an account
+	 * @param string $code
+	 * @return bool
+	 */
+	public function approveCode($code)
+	{
+        $invite_data = $this->getInvite(array('verification_hash' => $code));
+        if( $this->linkUserToAccount($invite_data['user_id'], $invite_data['account_id']) )
+        {
+        	$this->remove('account_invites', array('user_id' => $invite_data['user_id'], 'account_id' => $invite_data['account_id']));
+        	return true;
+        }
 	}
 }

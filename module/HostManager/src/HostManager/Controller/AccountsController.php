@@ -59,7 +59,26 @@ class AccountsController extends AbstractController
     	$view['messages'] = $this->flashMessenger()->getMessages();
         $view['form'] = $form;
         return $view;
-    } 
+    }
+    
+    public function confirmAction()
+    {
+    	$code = $this->params()->fromRoute('confirm_code');
+        $user = $this->getServiceLocator()->get('HostManager\Model\Users');
+        $invite = $this->getServiceLocator()->get('HostManager\Model\Account\Invites');
+        
+        $invite_data = $invite->getInvite(array('verification_hash' => $code));
+        if( !$invite_data )
+        {
+        	return $this->redirect()->toRoute('login');
+        }
+        
+        if( $invite->approveCode($code) )
+        {
+			$this->flashMessenger()->addMessage($this->translate('invite_accepted', 'hm'));
+        	return $this->redirect()->toRoute('login');
+        }
+    }
 
     public function indexAction()
     {

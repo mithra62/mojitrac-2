@@ -49,6 +49,32 @@ return array(
         		'child_routes' => array( 
         		)
         	), //end Hosted Accounts 
+        	
+        	'account-invites' => array( //Account Invite Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/invite',
+        			'defaults' => array(
+        				'controller' => 'HostManager\Controller\Accounts',
+        				'action' => 'index'
+        			),
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'confirm' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/confirm/:confirm_code',
+        					'constraints' => array(
+        						'confirm_code' => '([a-z0-9]{8})-([a-z0-9]{4})-([a-z0-9]{4})-([a-z0-9]{4})-([a-z0-9]{12})'
+        					),
+        					'defaults' => array(
+        						'action' => 'confirm'
+        					)
+        				)
+        			)
+        		)
+        	), //End Account Invite Routes 
 
         	'users' => array( //User Routes
         		'type' => 'segment',

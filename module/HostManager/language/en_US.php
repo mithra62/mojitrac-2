@@ -27,4 +27,19 @@ return array(
 		
 	//invite system
 	'invite_sent' => 'Invitation Sent!',
+	'account_invite_email' => 'Hello %1$s, <br /><br />
+		
+			You have been invited to join a MojiTrac team; to join the team click the link below:<br /><br />
+
+			%2$s<br /><br />
+			
+			Copy and paste the URL in a new browser window if you can\'t click on it. Please keep in mind that the link will only work for 24 hours; after that it will be inactive. 
+			<br /><br />
+			
+			MojiTrac :)<br /><br />
+			
+			Please don\'t respond to this email; all emails are automatically deleted.			
+		',
+	'account_invite_email_subject' => 'Invitation to Join MojiTrac Team!',
+	'invite_accepted' => 'Invite Accepted!',
 );
