@@ -45,7 +45,6 @@ class Users extends PmUsers
 	 */
 	public function getAccountUsers($status = FALSE)
 	{
-
 		$sql = $this->db->select()->from('users');
 		if($status != '')
 		{
@@ -53,7 +52,6 @@ class Users extends PmUsers
 		}
 		
 		$sql = $sql->where(array('account_id' => $this->account->getAccountId()))->join(array('ua' => 'user_accounts'), 'ua.user_id = users.id', array());
-		
 		return $this->getRows($sql);
 	}
 }

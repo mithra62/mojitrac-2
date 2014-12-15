@@ -6,7 +6,6 @@
 		<li><a href="<?php echo $this->url('roles'); ?>" class="<?php echo ($this->active_sub == 'roles' ? 'active' : ''); ?>">Roles</a></li>
 	<?php endif; ?>
 	<li><a href="<?php echo $this->url('admin/settings'); ?>" class=" <?php echo ($this->active_sub == 'global' ? 'active' : ''); ?>">Global Settings</a></li>
-	<li><a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'import','action'=>'index'), null, TRUE); ?>" class="<?php echo ($this->active_sub == 'import' ? 'active' : ''); ?>">Import Data</a></li>
 	<li><a href="<?php echo $this->url('options'); ?>" class="<?php echo ($this->active_sub == 'options' ? 'active' : ''); ?>">Type Options</a></li>
 	<li><a href="<?php echo $this->url('ips'); ?>" class="last <?php echo ($this->active_sub == 'ips' ? 'active' : ''); ?>">Ip Access</a></li>
 </ul>

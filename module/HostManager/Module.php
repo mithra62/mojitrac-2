@@ -17,6 +17,7 @@ use HostManager\Event\SqlEvent;
 use HostManager\Model\Accounts;
 use HostManager\Model\Users;
 use HostManager\Form\SignUpForm;
+use HostManager\Form\InviteForm;
 
 use Zend\ModuleManager\ModuleManager;
 
@@ -104,6 +105,9 @@ class Module
 				//forms
 				'HostManager\Form\SignUpForm' => function($sm) {
 					return new SignUpForm('signup_form');
+				},
+				'HostManager\Form\InviteForm' => function($sm) {
+					return new InviteForm('invite_form');
 				},
 				
 				//events

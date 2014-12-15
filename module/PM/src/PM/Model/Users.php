@@ -1,9 +1,8 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -14,69 +13,15 @@ namespace PM\Model;
 
 use Application\Model\Users AS MojiUsers;
 
- /**
+/**
  * PM - User Model
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	Users
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Model/Users.php
  */
 class Users extends MojiUsers
-{
-	/**
-	 * Returns the number of projects a user $id owns
-	 * @param int $id
-	 * @return int
-	 */
-	public function getProjectCount($id)
-	{
-		$project = new PM_Model_DbTable_Projects;
-		$sql = $project->select()
-					->from($project->getTableName(), array(new Zend_Db_Expr('COUNT(id) AS count')))
-					->where('owner = ?', $id);
-		$data = $project->getProject($sql);
-		if(is_array($data))
-		{
-			return $data['count'];
-		}
-	}
-	
-	/**
-	 * Returns the number of tasks that a user $id owns
-	 * @param int $id
-	 * @return int
-	 */
-	public function getTaskCount($id)
-	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->select()
-					->from($task->getTableName(), array(new Zend_Db_Expr('COUNT(id) AS count')))
-					->where('owner = ?', $id);
-		$data = $task->getTask($sql);
-		if(is_array($data))
-		{
-			return $data['count'];
-		}		
-	}
-
-	/**
-	 * Returns the number of files a given user $id has uploaded
-	 * @param int $id
-	 * @return int
-	 */
-	public function getFileCount($id)
-	{
-		$file = new PM_Model_DbTable_Files;
-		$sql = $file->select()
-					->from($file->getTableName(), array(new Zend_Db_Expr('COUNT(id) AS count')))
-					->where('owner = ?', $id);
-		$data = $file->getFile($sql);
-		if(is_array($data))
-		{
-			return $data['count'];
-		}		
-	}
-	
+{	
 	/**
 	 * Returns the project ids a user is assigned to
 	 * @param int $id
@@ -96,20 +41,6 @@ class Users extends MojiUsers
 			return $arr;
 		}
 	}
-	
-	/**
-	 * Returns the companies for the projects a user is assigned to
-	 * @param int $id
-	 * @return array
-	 */
-	public function getAssignedProjectCompanies($id)
-	{
-		$proj_team = new PM_Model_DbTable_Projects_Teams;
-		$sql = $proj_team->select()->setIntegrityCheck(false)->from(array('pt' => $proj_team->getTableName()), array('project_id'))->where('user_id = ?', $id);
-		$sql = $sql->join(array('p' => 'projects'), 'p.id = pt.project_id AND p.status != 6', array());
-		$sql = $sql->join(array('c' => 'companies'), 'c.id = p.company_id');
-		return $proj_team->getProjectTeamMembers($sql);
-	}	
 	
 	/**
 	 * Returns the project for the projects $id is attached to
@@ -211,43 +142,6 @@ class Users extends MojiUsers
 		
 		return $user_tasks;		
 	}
-	
-	/**
-	 * Returns all the tasks that are starting on $date
-	 * @param string $id
-	 * @param string $date
-	 */
-	public function getAssignedTaskByStartDate($id, $date)
-	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->select()->setIntegrityCheck(false)->from(array('t'=>$task->getTableName()));
-		$sql = $sql->where('assigned_to = ?', $id)->where(new Zend_Db_Expr('date_format(t.start_date,"%Y-%m-%d")').' = ?', $date);	
-		
-		$sql = $sql->joinRight(array('p' => 'projects'), 'p.id = t.project_id', array('name AS project_name'));
-		$sql = $sql->joinLeft(array('u2' => 'users'), 'u2.id = t.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
-		$sql = $sql->joinLeft(array('u3' => 'users'), 'u3.id = t.assigned_to', array('first_name AS assigned_first_name', 'last_name AS assigned_last_name'));		
-
-		return $task->getTasks($sql);		
-	}
-	
-	/**
-	 * Returns all the tasks that are starting on $date
-	 * @param string $id
-	 * @param string $date
-	 */
-	public function getAssignedTaskByDate($id, $date)
-	{
-		$task = new PM_Model_DbTable_Tasks;
-		$sql = $task->select()->setIntegrityCheck(false)->from(array('t'=>$task->getTableName()));
-		$sql = $sql->where('assigned_to = ?', $id)->where(new Zend_Db_Expr('date_format(t.end_date,"%Y-%m-%d")').' = ?', $date);
-		$sql = $sql->orwhere('assigned_to = ?', $id)->where(new Zend_Db_Expr('date_format(t.start_date,"%Y-%m-%d")').' = ?', $date);	
-		
-		$sql = $sql->joinRight(array('p' => 'projects'), 'p.id = t.project_id', array('name AS project_name'));
-		$sql = $sql->joinLeft(array('u2' => 'users'), 'u2.id = t.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
-		$sql = $sql->joinLeft(array('u3' => 'users'), 'u3.id = t.assigned_to', array('first_name AS assigned_first_name', 'last_name AS assigned_last_name'));		
-
-		return $task->getTasks($sql);		
-	}	
 	
 	/**
 	 * Returns an array of all the tasks for a given user. If $project then the array only contains tasks for that project

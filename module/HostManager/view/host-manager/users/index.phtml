@@ -9,7 +9,7 @@
 		</div>			
 		<?php if($this->CheckPermission('manage_users')):?>
 		<div class="actions">
-			<a href="<?php echo $this->url('users/invite'); ?>" title="Invite User">
+			<a href="<?php echo $this->url('users/invite'); ?>" title="Invite User" rel="facebox" >
 				<?php echo $this->InteractIcon('add', 'Invite User');?>
 				<div class="action_text">Invite User</div>
 			</a>

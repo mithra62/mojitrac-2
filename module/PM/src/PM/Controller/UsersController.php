@@ -36,7 +36,7 @@ class UsersController extends AbstractPmController
         $this->layout()->setVariable('active_nav', 'users');
         $this->layout()->setVariable('sub_menu_options', \PM\Model\Options\Projects::status());
         $this->layout()->setVariable('uri', $this->getRequest()->getRequestUri());
-		$this->layout()->setVariable('active_sub', 'None');
+		$this->layout()->setVariable('active_sub', 'users');
 
 		$this->layout()->setVariable('sub_menu', 'admin');
 		$this->layout()->setVariable('active_nav', 'admin');		    

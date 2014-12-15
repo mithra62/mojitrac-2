@@ -53,8 +53,41 @@ class UsersController extends PmUsers
 	
 	public function inviteAction()
 	{
+		if(!$this->perm->check($this->identity, 'manage_users'))
+        {
+			return $this->redirect()->toRoute('users');  
+        }
+
+        $users = $this->getServiceLocator()->get('HostManager\Model\Users');
+		$form = $this->getServiceLocator()->get('HostManager\Form\InviteForm');
+
+		$request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
+			{
+				echo 'fdsa';
+				exit;
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('users/view', array('user_id' => $id));
+				}
+		
+				if($user->removeUser($id))
+				{
+					$this->flashMessenger()->addMessage($this->translate('user_removed', 'pm'));
+					return $this->redirect()->toRoute('users');
+				}
+			}
+		}
+		
+		$this->layout()->setVariable('layout_style', 'left');
 		$view = array();
-		return $view;
+		$view['form'] = $form;
+		return $this->ajaxOutput($view);
 	}
 
 	/**
@@ -195,7 +228,7 @@ class UsersController extends PmUsers
         }
 
         $view = array();
-		$user = $this->getServiceLocator()->get('Application\Model\Users');
+		$user = $this->getServiceLocator()->get('HostManager\Model\Users');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
 		$id = $this->params()->fromRoute('user_id');
 		if(!$id)
