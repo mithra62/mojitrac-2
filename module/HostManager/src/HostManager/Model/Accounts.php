@@ -15,6 +15,7 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 use Application\Model\AbstractModel;
+use HostManager\Traits\Account;
 
 /**
  * HostManager - Accounts Model
@@ -25,12 +26,7 @@ use Application\Model\AbstractModel;
  */
 class Accounts extends AbstractModel
 {
-	public $account_id = false;
-	
-	public function setConfig($config)
-	{
-		$this->config = $config;	
-	}
+	use Account;
 	
 	/**
 	 * Prepares the SQL array for the accounts table
@@ -137,33 +133,6 @@ class Accounts extends AbstractModel
 		}
 	
 		return $this->inputFilter;
-	}
-	
-	/**
-	 * Returns the Account ID
-	 * @param array $where
-	 * @return int
-	 */
-	public function getAccountId(array $where = array())
-	{
-		if( !$this->account_id )
-		{
-			$parts = parse_url($_SERVER['HTTP_HOST']);
-			$sub = str_replace($this->config['sub_primary_url'], '', $parts['path']);
-			$sql = $this->db->select()->from(array('a'=> 'accounts'))->columns(array('id'))->where(array('slug' => $sub));
-			if( $where )
-			{
-				$sql = $sql->where($where);
-			}
-			
-			$account = $this->getRow($sql);
-			if( !empty($account['id']) )
-			{
-				$this->account_id = $account['id'];
-			}		
-		}
-		
-		return $this->account_id;
 	}
 	
 	/**
@@ -281,5 +250,4 @@ class Accounts extends AbstractModel
 		$sql = $this->db->select()->from('user_accounts')->where($where);
 		return $this->getRow($sql);
 	}
-	
 }

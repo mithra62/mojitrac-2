@@ -59,6 +59,7 @@ class UsersController extends PmUsers
         }
 
         $user = $this->getServiceLocator()->get('HostManager\Model\Users');
+        $account = $this->getServiceLocator()->get('HostManager\Model\Accounts');
 		$form = $this->getServiceLocator()->get('HostManager\Form\InviteForm');
 
 		$form = $form->rolesFields($user->roles);
@@ -72,6 +73,20 @@ class UsersController extends PmUsers
 				//check if this user exists already
 				$formData = $formData->toArray();
 				$user_data = $user->getUserByEmail($formData['email']);
+				if($user_data)
+				{
+					//just process the invite
+					$hash = $this->getServiceLocator()->get('Application\Model\Hash');
+					if($account->addInvite($user_data['id'], $hash))
+					{
+						$this->flashMessenger()->addMessage($this->translate('invite_sent', 'hm'));
+						return $this->redirect()->toRoute('users');
+					}
+					else
+					{
+						
+					}
+				}
 				print_r($user_data);
 				exit;
 				if(!empty($formData['fail']))

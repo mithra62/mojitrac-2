@@ -24,4 +24,7 @@ return array(
 	'js_last_name_validation_message' => 'Please enter your last name',
 	'js_subdomain_validation_message' => 'Please enter a subdomain',
 	'js_organization_validation_message' => 'Please enter a company name',
+		
+	//invite system
+	'invite_sent' => 'Invitation Sent!',
 );
