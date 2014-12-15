@@ -115,4 +115,32 @@ class Invites extends AbstractModel
 		
 		return $invite_id;
 	}
+	
+	/**
+	 * Returns details about an Invite
+	 * @param array $where
+	 */
+	public function getInvite(array $where = array())
+	{
+		$sql = $this->db->select()->from('account_invites');
+		if($where)
+		{
+			$sql = $sql->where($where);
+		}
+		
+		return $this->getRow($sql);
+	}
+	
+	/**
+	 * Creats the URL for the Invite to Account system
+	 * @param string $code
+	 * @param string $account_id
+	 */
+	public function createInviteUrl($code, $account_id = false)
+	{
+		if(!$account_id)
+		{
+			$account_id = $this->getAccountId();
+		}
+	}
 }

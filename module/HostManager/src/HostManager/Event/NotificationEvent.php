@@ -1,5 +1,5 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
  * @author		Eric Lamb
@@ -12,9 +12,13 @@
 namespace HostManager\Event;
 
 use PM\Event\NotificationEvent AS PMNotificationEvent;
+use Application\Model\Mail;
+use PM\Model\Users;
+use PM\Model\Projects;
+use PM\Model\Tasks;
 
- /**
- * PM - Notification Events
+/**
+ * HostManager - Notification Events
  *
  * @package 	Events
  * @author		Eric Lamb
@@ -22,6 +26,12 @@ use PM\Event\NotificationEvent AS PMNotificationEvent;
  */
 class NotificationEvent extends PMNotificationEvent
 {   
+	public function __construct( Mail $mail, Users $users, Projects $project, Tasks $task, $identity = null)
+	{
+		parent::__construct($mail, $users, $project, $task, $identity);
+		$this->email_view_path = $this->mail->getModulePath(__DIR__).'/view/emails';
+	}
+	
     /**
      * The hooks used for the Event
      * @var array
@@ -34,6 +44,18 @@ class NotificationEvent extends PMNotificationEvent
     	'file.add.post' => 'sendFileAdd',
     	'invite.add.post' => 'sendInviteAdd',
     );
+
+    /**
+     * Registers the Event with ZF and our Application Model
+     * @param \Zend\EventManager\SharedEventManager $ev
+     */
+    public function register( \Zend\EventManager\SharedEventManager $ev)
+    {
+    	foreach($this->hooks AS $key => $value)
+    	{
+    		$ev->attach('Base\Model\BaseModel', $key, array($this, $value));
+    	}
+    }
     
     /**
      * We disable this so we don't send on user creation
@@ -50,13 +72,17 @@ class NotificationEvent extends PMNotificationEvent
      */
     public function sendInviteAdd(\Zend\EventManager\Event $event)
     {
-    	$data = $event->getParam('data');
-    	$user_id = $event->getParam('user_id');
+    	$invite_id = $event->getParam('invite_id');
+    	$invite = $event->getTarget();
+    	$invite_data = $invite->getInvite(array('id' => $invite_id));
+    	print_r($invite_data);
+    	echo $invite_id;
+    	exit;
     	$this->mail->addTo($data['email'], $data['first_name'].' '.$data['last_name']);
     	$this->mail->setViewDir($this->email_view_path);
-    	$this->mail->setEmailView('user-registration', array('user_data' => $data, 'user_id' => $user_id));
-    	$this->mail->setTranslationDomain('pm');
-    	$this->mail->setSubject('user_registration_email_subject');
+    	$this->mail->setEmailView('account-invite', array('invite_data' => $invite_data));
+    	$this->mail->setTranslationDomain('hm');
+    	$this->mail->setSubject('account_invite_email_subject');
     	$this->mail->send();		
     }
 }

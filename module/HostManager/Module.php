@@ -53,6 +53,9 @@ class Module
 		$this->service_manager = $application->getServiceManager();
 		$sql_event = $this->service_manager->get('HostManager\Event\SqlEvent');
 		$sql_event->register($this->sharedEvents);
+
+		$notification_event = $this->service_manager->get('PM\Event\NotificationEvent');
+		$notification_event->register($this->sharedEvents);
 	}
 	
     public function getConfig()
