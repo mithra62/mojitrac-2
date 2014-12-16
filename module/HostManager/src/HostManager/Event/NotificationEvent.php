@@ -43,6 +43,7 @@ class NotificationEvent extends PMNotificationEvent
     	'project.addteam.post' => 'sendAddProjectTeam',
     	'file.add.post' => 'sendFileAdd',
     	'invite.add.post' => 'sendInviteAdd',
+    	'account.add.post' => 'sendAccountAdd',
     );
 
     /**
@@ -82,6 +83,33 @@ class NotificationEvent extends PMNotificationEvent
     	$this->mail->setEmailView('account-invite', array('invite_data' => $invite_data, 'invite_url' => $invite_url));
     	$this->mail->setTranslationDomain('hm');
     	$this->mail->setSubject('account_invite_email_subject');
+    	$this->mail->send();
+    }
+    
+    /**
+     * Send an invite email to the user 
+     * @param \Zend\EventManager\Event $event
+     */
+    public function sendAccountAdd(\Zend\EventManager\Event $event)
+    {
+    	$account_id = $event->getParam('account_id');
+    	$user_id = $event->getParam('user_id');
+    	
+    	$account = $event->getTarget();
+    	$account_data = $account->getAccount(array('a.id' => $account_id));
+    	$account_url = $account->createAccountUrl($account_id);//$this->mail->web_url.'/invite/confirm/'.$account_data['verification_hash'];
+    	
+    	$user_data = $this->user->getUserById($user_id);
+    	if( !$user_data )
+    	{
+    		return;
+    	}
+    	
+    	$this->mail->addTo($user_data['email'], $user_data['first_name'].' '.$user_data['last_name']);
+    	$this->mail->setViewDir($this->email_view_path);
+    	$this->mail->setEmailView('account-create', array('user_data' => $user_data, 'account_data' => $account_data, 'account_url' => $account_url));
+    	$this->mail->setTranslationDomain('hm');
+    	$this->mail->setSubject('account_create_email_subject');
     	$this->mail->send();
     }
 }

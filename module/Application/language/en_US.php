@@ -31,9 +31,11 @@ return array(
     'forgot_password' => 'Forgot Password',
 	'forgot_password_email_subject' => 'MojiTrac Forgot Password',
 	'check_your_emmail' => 'Please check your email',
-	'forgot_password_email' => 'To reset your password for your MojiTrac account, click the link below:<br /><br />
+	'forgot_password_email' => 'Hello %1$s, <br /><br />
+		
+			To reset your password for your MojiTrac account, click the link below:<br /><br />
 
-			%s<br /><br />
+			%2$s<br /><br />
 			
 			Copy and paste the URL in a new browser window if you can\'t click on it. Please keep in mind that the link will only work for 24 hours; after that it will be inactive. 
 			If you didn\'t request to reset your password you don\'t need to take any further action and can safely disregard this email.<br /><br />

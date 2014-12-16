@@ -13,7 +13,7 @@
  */
 
 return array(
-	//singup form
+	//signup form
 	'signup_welcome_message' => 'Signup for MojiTrac',
 	'signup_instructions' => 'To signup please complete the below.',
 	'last_name' => 'Last Name',
@@ -24,6 +24,32 @@ return array(
 	'js_last_name_validation_message' => 'Please enter your last name',
 	'js_subdomain_validation_message' => 'Please enter a subdomain',
 	'js_organization_validation_message' => 'Please enter a company name',
+
+	//account create email
+	'account_create_email_subject' => 'Your New MojiTrac Account',
+	'account_create_email' => 'Hello %1$s, <br /><br />
+		
+			Your MojiTrac account has been created at the below URL:<br /><br />
+			%2$s<br /><br />
+			
+			Once you log in you\'ll have be able to create your projects and tasks, track your time, attach other MojiTrac users to your account (so they can be a part of your team),
+			and so much more. <br /><br />
+			
+			
+			Copy and paste the URL in a new browser window if you can\'t click on it. Please keep in mind that the link will only work for 24 hours; after that it will be inactive. 
+			<br /><br />
+			
+			Keep in mind that this is a public functional beta and, as such, everything is temporary. You may lose any data entered during this phase so don\'t use for day to day activity yet.  <br /><br />
+
+			The <a href="https://mithra62.freshdesk.com/support/discussions/5000045276">MojiTrac Forums</a>, located in the mithra62 Support Portal, 
+			is where you can get support and keep an eye on what\'s going on with MojiTrac. If you have any suggestions, please don\'t hesitate hitting up the 
+			<a href="https://mithra62.freshdesk.com/support/discussions/forums/5000178952">Feature Request</a> forum 
+			to have your voice heard.<br /><br />
+			
+			MojiTrac :)<br /><br />
+			
+			Please don\'t respond to this email; all emails are automatically deleted.			
+		',
 		
 	//invite system
 	'invite_sent' => 'Invitation Sent!',

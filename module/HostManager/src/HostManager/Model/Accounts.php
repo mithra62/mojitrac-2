@@ -27,6 +27,9 @@ use HostManager\Traits\Account;
 class Accounts extends AbstractModel
 {
 	use Account;
+
+	const EventAddAccountPre = 'account.add.pre';
+	const EventAddAccountPost = 'account.add.post';
 	
 	/**
 	 * Prepares the SQL array for the accounts table
@@ -167,7 +170,11 @@ class Accounts extends AbstractModel
 			\Application\Model\Settings $setting, 
 			\PM\Model\Options $option
 	)
-	{		
+	{	
+
+		$ext = $this->trigger(self::EventAddAccountPre, $this, compact('data'), array());
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+				
 		$user_data = $user->getUserByEmail($data['email']);
 		if( !$user_data )
 		{
@@ -175,6 +182,7 @@ class Accounts extends AbstractModel
 			$user_data = $user->getUserById($user_id);
 		}
 		
+		$user_id = $user_data['id'];
 		$sql = $this->getSQL($data);
 		$sql['owner_id'] = $user_data['id'];
 		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
@@ -221,7 +229,20 @@ class Accounts extends AbstractModel
 			$this->insert('options', $sql);
 		}		
 		
+
+		$ext = $this->trigger(self::EventAddAccountPost, $this, compact('account_id', 'user_id'), array());
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $account_id = $ext->last();
+				
 		//and wrap it up so we can go home
 		return $account_id;
+	}
+	
+	public function createAccountUrl($account_id)
+	{
+		$account_data = $this->getAccount(array('id' => $account_id));
+		if($account_data)
+		{
+			return 'http://'.$account_data['slug'].$this->config['sub_primary_url'];
+		}
 	}
 }

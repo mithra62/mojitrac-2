@@ -30,7 +30,12 @@ class AccountsController extends AbstractController
 	 */
     public function signupAction() 
     {
-					//return $this->redirect()->toRoute('account/signup/complete');
+		if( $this->identity )
+		{
+			$login = $this->getServiceLocator()->get('Application\Model\Login');
+			$login->logout($this->getSessionStorage(), $this->getAuthService());
+		}
+		
     	$form = $this->getServiceLocator()->get('HostManager\Form\SignupForm');
     	$request = $this->getRequest();
     	if ($request->isPost())
@@ -82,7 +87,6 @@ class AccountsController extends AbstractController
 
     public function indexAction()
     {
-    	echo 'fdsa';
-    	exit;
+    	return $this->redirect()->toRoute('hosted-accounts/signup');
     }
 }

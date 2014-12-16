@@ -28,6 +28,8 @@ class Invites extends AbstractModel
 {
 	const EventAddAccountInvitePre = 'invite.add.pre';
 	const EventAddAccountInvitePost = 'invite.add.post';
+	const EventAcceptAccountInvitePre = 'invite.accept.pre';
+	const EventAcceptAccountInvitePost = 'invite.accept.post';
 	
 	/**
 	 * Setup the Account Trait
@@ -182,9 +184,17 @@ class Invites extends AbstractModel
 	public function approveCode($code)
 	{
         $invite_data = $this->getInvite(array('verification_hash' => $code));
+
+        $ext = $this->trigger(self::EventAcceptAccountInvitePre, $this, compact('invite_data'), array());
+        if($ext->stopped()) return $ext->last(); elseif($ext->last()) $invite_data = $ext->last();
+        
         if( $this->linkUserToAccount($invite_data['user_id'], $invite_data['account_id']) )
         {
         	$this->remove('account_invites', array('user_id' => $invite_data['user_id'], 'account_id' => $invite_data['account_id']));
+
+        	$ext = $this->trigger(self::EventAcceptAccountInvitePost, $this, compact('invite_data'), array());
+        	if($ext->stopped()) return $ext->last(); elseif($ext->last()) $invite_data = $ext->last();
+        	        	
         	return true;
         }
 	}
