@@ -29,7 +29,6 @@ class NotificationEvent extends PMNotificationEvent
 	public function __construct( Mail $mail, Users $users, Projects $project, Tasks $task, $identity = null)
 	{
 		parent::__construct($mail, $users, $project, $task, $identity);
-		$this->email_view_path = $this->mail->getModulePath(__DIR__).'/view/emails';
 	}
 	
     /**
@@ -73,6 +72,7 @@ class NotificationEvent extends PMNotificationEvent
      */
     public function sendInviteAdd(\Zend\EventManager\Event $event)
     {
+		$this->email_view_path = $this->mail->getModulePath(__DIR__).'/view/emails';
     	$invite_id = $event->getParam('invite_id');
     	$invite = $event->getTarget();
     	$invite_data = $invite->getInvite(array('ai.id' => $invite_id));
@@ -92,6 +92,7 @@ class NotificationEvent extends PMNotificationEvent
      */
     public function sendAccountAdd(\Zend\EventManager\Event $event)
     {
+		$this->email_view_path = $this->mail->getModulePath(__DIR__).'/view/emails';
     	$account_id = $event->getParam('account_id');
     	$user_id = $event->getParam('user_id');
     	
