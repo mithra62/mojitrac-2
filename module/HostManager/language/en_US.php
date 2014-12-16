@@ -25,6 +25,8 @@ return array(
 	'js_subdomain_validation_message' => 'Please enter a subdomain',
 	'js_organization_validation_message' => 'Please enter a company name',
 
+	'signup_complete_instructions' => 'Your account has been created. Please check your email to finish the registration process.',
+	'signup_complete' => 'Signup Complete!',
 	//account create email
 	'account_create_email_subject' => 'Your New MojiTrac Account',
 	'account_create_email' => 'Hello %1$s, <br /><br />

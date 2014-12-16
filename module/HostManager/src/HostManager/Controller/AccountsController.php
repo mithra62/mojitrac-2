@@ -37,6 +37,7 @@ class AccountsController extends AbstractController
 		}
 		
     	$form = $this->getServiceLocator()->get('HostManager\Form\SignupForm');
+    	$status = $this->params()->fromRoute('status');
     	$request = $this->getRequest();
     	if ($request->isPost())
     	{
@@ -63,6 +64,7 @@ class AccountsController extends AbstractController
     	$view = array();
     	$view['messages'] = $this->flashMessenger()->getMessages();
         $view['form'] = $form;
+        $view['status'] = $status;
         return $view;
     }
     
