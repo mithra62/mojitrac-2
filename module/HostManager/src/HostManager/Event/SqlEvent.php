@@ -104,7 +104,14 @@ class SqlEvent extends BaseEvent
 			{
 				if( !$this->account->userOnAccount($this->identity, $this->account_id) )
 				{
-					throw(new \Exception('NO!!!'));
+					$accounts = $this->account->getUserAccounts(array('user_id' => $this->identity));
+					if( !$accounts )
+					{
+						//something went terribly wrong so log out and gtfo
+						throw(new \Exception('Something went terribly wrong...'));
+					}
+					
+					throw(new \Exception('No!!!'));
 					
 					/**
 					 * @todo redirect to proper account if not a valid request

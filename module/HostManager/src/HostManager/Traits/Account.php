@@ -64,6 +64,17 @@ trait Account
 		return $this->account_id;
 	}
 	
+	public function getUserAccounts(array $where = array())
+	{
+		$sql = $this->db->select()->from(array('ua'=> 'user_accounts'));
+		if( $where )
+		{
+			$sql = $sql->where($where);
+		}
+		
+		return $this->getRow($sql);	
+	}
+	
 	/**
 	 * Links a user to a given account
 	 * @param int $user_id
@@ -86,7 +97,7 @@ trait Account
 	public function userOnAccount($user_id, $account_id)
 	{
 		$where = array('user_id' => $user_id, 'account_id' => $account_id);
-		$sql = $this->db->select()->from('user_accounts')->where($where);
+		$sql = $this->db->select()->from('user_accounts')->where($where)->join(array('u' => 'users'), 'user_id = u.id', array());
 		return $this->getRow($sql);
 	}
 }

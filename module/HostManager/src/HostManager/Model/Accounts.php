@@ -237,6 +237,11 @@ class Accounts extends AbstractModel
 		return $account_id;
 	}
 	
+	/**
+	 * Returns a full URL for the passed account_id
+	 * @param int $account_id
+	 * @return string
+	 */
 	public function createAccountUrl($account_id)
 	{
 		$account_data = $this->getAccount(array('id' => $account_id));
