@@ -87,7 +87,7 @@ class NotificationEvent extends PMNotificationEvent
     }
     
     /**
-     * Send an invite email to the user 
+     * Send an account creation email to the user 
      * @param \Zend\EventManager\Event $event
      */
     public function sendAccountAdd(\Zend\EventManager\Event $event)
@@ -97,19 +97,17 @@ class NotificationEvent extends PMNotificationEvent
     	
     	$account = $event->getTarget();
     	$account_data = $account->getAccount(array('a.id' => $account_id));
-    	$account_url = $account->createAccountUrl($account_id);//$this->mail->web_url.'/invite/confirm/'.$account_data['verification_hash'];
+    	$account_url = $account->createAccountUrl($account_id);
     	
     	$user_data = $this->user->getUserById($user_id);
-    	if( !$user_data )
+    	if( $user_data )
     	{
-    		return;
+	    	$this->mail->addTo($user_data['email'], $user_data['first_name'].' '.$user_data['last_name']);
+	    	$this->mail->setViewDir($this->email_view_path);
+	    	$this->mail->setEmailView('account-create', array('user_data' => $user_data, 'account_data' => $account_data, 'account_url' => $account_url));
+	    	$this->mail->setTranslationDomain('hm');
+	    	$this->mail->setSubject('account_create_email_subject');
+	    	$this->mail->send();
     	}
-    	
-    	$this->mail->addTo($user_data['email'], $user_data['first_name'].' '.$user_data['last_name']);
-    	$this->mail->setViewDir($this->email_view_path);
-    	$this->mail->setEmailView('account-create', array('user_data' => $user_data, 'account_data' => $account_data, 'account_url' => $account_url));
-    	$this->mail->setTranslationDomain('hm');
-    	$this->mail->setSubject('account_create_email_subject');
-    	$this->mail->send();
     }
 }
