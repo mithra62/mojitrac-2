@@ -250,4 +250,24 @@ class Accounts extends AbstractModel
 			return 'http://'.$account_data['slug'].$this->config['sub_primary_url'];
 		}
 	}
+	
+	/**
+	 * Removes a user from an account
+	 * @param unknown $user_id
+	 * @param string $account_id
+	 * @return int
+	 */
+	public function removeUserFromAccount($user_id, $account_id = false)
+	{
+		if(!$account_id)
+		{
+			$account_id = $this->getAccountId();
+		}
+
+		if($this->remove('user_accounts', array('user_id' => $user_id, 'account_id' => $account_id)))
+		{
+			$this->remove('user2role', array('user_id' => $user_id, 'account_id' => $account_id));
+			return true;
+		}
+	}
 }

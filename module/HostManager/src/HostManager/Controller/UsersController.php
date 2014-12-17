@@ -237,7 +237,7 @@ class UsersController extends PmUsers
 					return $this->redirect()->toRoute('users/view', array('user_id' => $id));
 				}
 
-				if($account->removeAccount($id))
+				if($account->removeUserFromAccount($id))
 				{
 					$this->flashMessenger()->addMessage($this->translate('user_removed', 'pm'));
 					return $this->redirect()->toRoute('users');
