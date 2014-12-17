@@ -40,8 +40,8 @@ class Users extends PmUsers
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \Application\Model\Users::getAllUsers()
+	 * Returns the users on an account
+	 * @param string $status
 	 */
 	public function getAccountUsers($status = FALSE)
 	{

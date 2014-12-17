@@ -130,17 +130,34 @@ return array(
         				)
         			),
         			'edit' => array(
-        				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit[/:user_id]',
-        					'constraints' => array(
-        						'user_id' => '[0-9]+'
-        					),
         					'defaults' => array(
-        						'action' => 'edit'
+        						'controller' => 'PM\Controller\Users',
         					)
         				)
         			)
+        		)
+        	), //End User Routes 
+        	'projects' => array( //User Routes
+        		'type' => 'segment',
+        		'options' => array(
+        			'route' => '/pm/projects'
+        		),
+        		'may_terminate' => true,
+        		'child_routes' => array(
+        			'manage-team' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/manage-team/:project_id',
+        					'constraints' => array(
+        						'slug' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'controller' => 'HostManager\Controller\Projects',
+        						'action' => 'manageTeam'
+        					)
+        				)
+        			), 
         		)
         	), //End User Routes 
         )
@@ -151,6 +168,7 @@ return array(
             'HostManager\Controller\Accounts' => 'HostManager\Controller\AccountsController',
             'HostManager\Controller\AccountsApi' => 'HostManager\Controller\AccountsApiController',
             'HostManager\Controller\Users' => 'HostManager\Controller\UsersController',
+            'HostManager\Controller\Projects' => 'HostManager\Controller\ProjectsController',
         ),
     ),
     'view_manager' => array(
