@@ -90,12 +90,8 @@ return array(
         			'view' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/[:user_id]',
-        					'constraints' => array(
-        						'user_id' => '[0-9]+'
-        					),
         					'defaults' => array(
-        						'action' => 'view'
+        						'controller' => 'PM\Controller\Users',
         					)
         				)
         			),
