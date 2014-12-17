@@ -82,7 +82,7 @@ trait Account
 	 */
 	public function linkUserToAccount($user_id, $account_id)
 	{
-		$data = array('user_id' => $user_id, 'account_id' => $account_id);
+		$data = array('user_id' => $user_id, 'account_id' => $account_id, 'created_date' => new \Zend\Db\Sql\Expression('NOW()'));
 		if( !$this->userOnAccount($user_id, $account_id) )
 		{
 			return $this->insert('user_accounts', $data);

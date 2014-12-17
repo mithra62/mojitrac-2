@@ -1,12 +1,15 @@
 <div class="content_headers" style="padding-top:0px;">
 	<div class="user_role_header">Remove User: <?php echo $this->user['first_name']?> <?php echo $this->user['last_name']?></div>	
 </div>
-<div class="attention png_bg">
-<?php if($this->projects_owned_count || $this->tasks_owned_count || $this->files_owned_count):?>
-You can't remove a user if there has been activity with the account; it will be changed to a status of "suspended" and they will no longer be able to login instead. 
+
+<?php 
+if($this->identity == $this->user['id']): ?>
+<div class="fail png_bg">
+You can't remove yourself...
+</div>
 <?php else: ?>
-Are you sure you want to remove "<?php echo $this->user['first_name']?> <?php echo $this->user['last_name']?>"? This can not be undone...
-<?php endif; ?>
+<div class="attention png_bg">
+Are you sure you want to remove <?php echo $this->user['first_name']?> <?php echo $this->user['last_name']?>? This can not be undone...
 </div>
 
 <p>
@@ -32,3 +35,5 @@ echo $this->formRow($csrf);
 <?php echo $this->files_owned_count; ?> Files Owned
 
 </p>
+
+<?php endif; ?>

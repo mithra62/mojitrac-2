@@ -204,6 +204,7 @@ class UsersController extends PmUsers
 
         $view = array();
 		$user = $this->getServiceLocator()->get('HostManager\Model\Users');
+		$account = $this->getServiceLocator()->get('HostManager\Model\Accounts');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
 		$id = $this->params()->fromRoute('user_id');
 		if(!$id)
@@ -211,13 +212,13 @@ class UsersController extends PmUsers
 			return $this->redirect()->toRoute('users'); 
 		}
 		
-		if($this->identity == $id)
+		if($this->identity == $id && !$this->getRequest()->isXmlHttpRequest())
 		{
 			$this->flashMessenger()->addMessage($this->translate('user_cant_remove_self', 'pm'));
 			return $this->redirect()->toRoute('users/view', array('user_id' => $id));  
 		}
 		 
-		$view['user'] = $user->getUserById($id.'f');
+		$view['user'] = $user->getUserById($id);
 		if(!$view['user'])
 		{
 			return $this->redirect()->toRoute('users'); 
@@ -236,7 +237,7 @@ class UsersController extends PmUsers
 					return $this->redirect()->toRoute('users/view', array('user_id' => $id));
 				}
 
-				if($user->removeUser($id))
+				if($account->removeAccount($id))
 				{
 					$this->flashMessenger()->addMessage($this->translate('user_removed', 'pm'));
 					return $this->redirect()->toRoute('users');
@@ -248,6 +249,7 @@ class UsersController extends PmUsers
 		$view['projects_owned_count'] = count($user->getAssignedProjectIds($id));
 		$view['tasks_owned_count'] = count($user->getOpenAssignedTasks($id));
 		$view['id'] = $id;
+		$view['identity'] = $this->identity;
 		$view['form'] = $form;
 		return $this->ajaxOutput($view);
 	}
