@@ -26,7 +26,7 @@ if($this->users):
 
 else: ?>
 
-<div class="information png_bg">There aren't users added yet. Want to <a href="<?php echo $this->url('users/add', array('module' => 'pm','controller'=>'users','action'=>'add'), null, TRUE); ?>">add</a> one?.</div>
+<div class="information png_bg">There aren't users added yet. Want to <a href="<?php echo $this->url('users/invite'); ?>" rel="facebox">add</a> one?.</div>
 
 <?php endif; ?>
 
@@ -41,6 +41,6 @@ if($this->invites):
 
 else: ?>
 
-<div class="information png_bg">There aren't invites pending. Want to <a href="<?php echo $this->url('users/add', array('module' => 'pm','controller'=>'users','action'=>'add'), null, TRUE); ?>">add</a> one?.</div>
+<div class="information png_bg">There aren't invites pending. Want to <a href="<?php echo $this->url('users/invite'); ?>" rel="facebox">invite</a> someone?.</div>
 
 <?php endif; ?>			

@@ -110,6 +110,10 @@ class UsersController extends PmUsers
 		return $this->ajaxOutput($view);
 	}
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \PM\Controller\UsersController::viewAction()
+	 */
 	public function viewAction()
 	{
 		$account = $this->getServiceLocator()->get('HostManager\Model\Accounts');
@@ -224,6 +228,12 @@ class UsersController extends PmUsers
 		{
 			return $this->redirect()->toRoute('users'); 
 		}
+		
+		$account_id = $account->getAccountId();
+		if( !$account->userOnAccount($id, $account_id) )
+		{
+			return $this->redirect()->toRoute('users');
+		}		
 		
 		if($this->identity == $id && !$this->getRequest()->isXmlHttpRequest())
 		{
