@@ -502,7 +502,6 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `created_date` timestamp NULL DEFAULT NULL,
   `last_modified` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `data_name` (`option_name`),
   KEY `account_id` (`account_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

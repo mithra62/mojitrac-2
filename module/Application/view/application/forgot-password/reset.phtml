@@ -2,6 +2,18 @@
 
 
 <?php 
+
+if(is_array($this->messages) && count($this->messages) >= 1)
+{
+	foreach($this->messages AS $message)
+	{
+		echo '<div class="success large png_bg">'.$message.'</div>';
+	}
+} else {
+
+	echo '<div class="information large png_bg">'.$this->_('reset_password_instructions', 'app').'</div> ';
+}
+
 $form = $this->form;
 $form->setAttribute('id', 'password_form');
 $form->setAttribute('class', 'sumbitForm');

@@ -57,4 +57,7 @@ return array(
     'js_email_validation_message' => 'Please enter an email address',
     'js_password_validation_message' => 'Please enter a password',
     'required' => 'Required',
+    
+    //reset password
+    'reset_password_instructions' => 'Create your new password here',
 );

@@ -128,7 +128,7 @@ return array(
         			'edit' => array(
         				'options' => array(
         					'defaults' => array(
-        						'controller' => 'PM\Controller\Users',
+        					
         					)
         				)
         			)
