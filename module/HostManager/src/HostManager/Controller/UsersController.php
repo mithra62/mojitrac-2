@@ -109,6 +109,19 @@ class UsersController extends PmUsers
 		$view['form'] = $form;
 		return $this->ajaxOutput($view);
 	}
+	
+	public function viewAction()
+	{
+		$account = $this->getServiceLocator()->get('HostManager\Model\Accounts');
+		$user_id = $this->params()->fromRoute('user_id');
+		$account_id = $account->getAccountId();
+		if( !$account->userOnAccount($user_id, $account_id) )
+		{
+			return $this->redirect()->toRoute('users');
+		}
+		
+		return parent::viewAction();
+	}
 
 	/**
 	 * User Edit Page

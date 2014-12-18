@@ -91,7 +91,7 @@ return array(
         				'type' => 'segment',
         				'options' => array(
         					'defaults' => array(
-        						'controller' => 'PM\Controller\Users',
+        					
         					)
         				)
         			),
