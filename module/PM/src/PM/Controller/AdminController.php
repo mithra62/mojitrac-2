@@ -31,8 +31,6 @@ class AdminController extends AbstractPmController
 	{
 		$e = parent::onDispatch( $e );
         parent::check_permission('admin_access');
-        //$this->view->headTitle('Administration', 'PREPEND');  
-        //$this->view->uri = $this->_request->getPathInfo();
 		$this->layout()->setVariable('active_nav', 'admin');
 		$this->layout()->setVariable('sub_menu', 'admin');
 

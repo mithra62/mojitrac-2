@@ -24,7 +24,7 @@
 			</a>
 		</div>	
 		<?php endif; ?>	
-		<?php if($this->CheckPermission('manage_users') || $this->id == $this->identity):?>
+		<?php if($this->CheckPermission('manage_users') || $this->id == $this->getIdentity()):?>
 		<div class="actions">
 			<a href="<?php echo $this->url('users/edit', array('user_id' => $this->user['id'])); ?>" title="<?php echo $this->_('edit', 'pm')?>">
 				<?php echo $this->InteractIcon('pencil', 'Edit User');?>

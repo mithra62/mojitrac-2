@@ -110,7 +110,7 @@ class SqlEvent extends BaseEvent
 						//something went terribly wrong so log out and gtfo
 						throw(new \Exception('Something went terribly wrong...'));
 					}
-					
+					throw(new \Exception('Something went terribly wrong...'));
 					//get a valid account
 
 					//first, check for an owned account
@@ -121,6 +121,7 @@ class SqlEvent extends BaseEvent
 						$account_data = $this->account->getAccount(array('id' => $accounts['account_id']));
 					}
 					
+					//ok. yeah... hacky and gross, but effective GTFO
 					$account_url = $this->account->createAccountUrl($account_data['id']);
 					header('Location: '.$account_url);
 					exit;

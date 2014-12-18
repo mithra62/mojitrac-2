@@ -132,6 +132,7 @@ return array(
     'view_helpers' => array(
 	    'invokables' => array(
 	    	'StaticUrl' => 'Application\View\Helper\StaticUrl',
+	    	'GetIdentity' => 'Application\View\Helper\GetIdentity',
 	    	'DispatchRouteEvents' => 'Application\View\Helper\DispatchRouteEvents',
 	    ),
     ),      
