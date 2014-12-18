@@ -111,14 +111,19 @@ class SqlEvent extends BaseEvent
 						throw(new \Exception('Something went terribly wrong...'));
 					}
 					
-					throw(new \Exception('No!!!'));
-					
-					/**
-					 * @todo redirect to proper account if not a valid request
-					 */
 					//get a valid account
+
+					//first, check for an owned account
+					$account_data = $this->account->getAccount(array('owner_id' => $this->identity));
+					if( !$account_data )
+					{
+						//none found so grab any account we have available
+						$account_data = $this->account->getAccount(array('id' => $accounts['account_id']));
+					}
 					
-					//redirect the user to it
+					$account_url = $this->account->createAccountUrl($account_data['id']);
+					header('Location: '.$account_url);
+					exit;
 				}
 			}
     	}
