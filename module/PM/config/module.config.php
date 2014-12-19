@@ -1128,7 +1128,7 @@ return array(
         			'edit' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/edit/[:user_id]',
+        					'route' => '/edit[/:user_id]',
         					'constraints' => array(
         						'user_id' => '[0-9]+'
         					),

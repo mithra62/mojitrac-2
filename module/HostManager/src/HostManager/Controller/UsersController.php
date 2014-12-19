@@ -133,7 +133,8 @@ class UsersController extends PmUsers
 	 */
 	public function editAction()
 	{
-		$id = $this->params()->fromRoute('user_id');
+		$id = $this->identity;
+		
 		$account = $this->getServiceLocator()->get('HostManager\Model\Accounts');
 		$account_id = $account->getAccountId();
 		if( !$account->userOnAccount($id, $account_id) )
@@ -141,7 +142,66 @@ class UsersController extends PmUsers
 			return $this->redirect()->toRoute('users');
 		}
 		
-		return parent::editAction();
+		if (!$id) 
+		{
+			$this->layout()->setVariable('active_nav', '');
+			$this->layout()->setVariable('sub_menu', 'settings');
+			$id = $this->identity;
+		}
+		
+		if(!$this->perm->check($this->identity, 'view_users_data'))
+        {
+			$this->layout()->setVariable('active_nav', '');
+			$this->layout()->setVariable('sub_menu', 'settings');
+        	$id = $this->identity;
+        }		
+
+		$user = $this->getServiceLocator()->get('Application\Model\Users');
+		$user_form = $this->getServiceLocator()->get('Application\Form\UsersForm');
+		$roles = $this->getServiceLocator()->get('Application\Model\Roles');
+
+		$view['id'] = $id;
+
+		$user_data = $user->getUserById($id);
+		
+		$user_form->setData($user_data);
+		 
+		$view['form'] = $user_form;
+
+		$request = $this->getRequest();
+		if ($request->isPost()) 
+		{
+			$formData = $request->getPost();
+            $user_form->setInputFilter($user->getEditInputFilter());
+			$user_form->setData($request->getPost());
+			if ($user_form->isValid($formData)) 
+			{		
+				$formData = $formData->toArray();
+				if($user->updateUser($formData, $formData['id']))
+				{	
+					$this->flashMessenger()->addMessage($this->translate('user_updated', 'pm'));
+					return $this->redirect()->toRoute('users/view', array('user_id' => $id));					
+				} 
+				else 
+				{
+					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
+					$user_form->setData($formData);
+				}
+
+			} 
+			else 
+			{
+				$view['errors'] = array($this->translate('please_fix_the_errors_below', 'pm'));
+				$this->layout()->setVariable('errors', $view['errors']);
+				$user_form->setData($formData);
+			}
+
+		}
+	  
+		$view['user_data'] = $user_data;
+		$this->layout()->setVariable('layout_style', 'left');
+		return $view;
 	}
 
 	/**

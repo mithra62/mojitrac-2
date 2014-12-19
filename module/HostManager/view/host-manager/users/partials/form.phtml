@@ -17,9 +17,6 @@ if($this->id > 0)
 
 		<li><a href="#general">General</a></li>
 		<li><a href="#phone">Phone</a></li>
-		<?php if($this->CheckPermission('manage_users')):?>
-		<li><a href="#roles">Roles</a></li>
-		<?php endif; ?>
 	</ul>
 	<div id="general">
 		
@@ -88,20 +85,7 @@ if($this->id > 0)
 		<p>
 			<input type="submit" class="submit" value="Submit" />
 		</p>			
-	</div>
-
-	<?php if($this->CheckPermission('manage_users')):?>
-	<div id="roles">
-		
-		<p class="user_role_boxes">
-		<?php $field = $form->get('user_roles'); echo $this->formRow($field); ?>		
-		</p>
-		
-		<p>
-			<input type="submit" class="submit" value="Submit" />
-		</p>			
 	</div>	
-	<?php endif; ?>		
 </div>	
 <?php echo $this->ConfirmPageUnload('#user_form')?>
 <?php echo $this->form()->closeTag() ?>
