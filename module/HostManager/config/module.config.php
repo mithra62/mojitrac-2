@@ -127,6 +127,7 @@ return array(
         			),
         			'edit' => array(
         				'options' => array(
+        					'route' => '/edit',
         					'defaults' => array(
         					
         					)
