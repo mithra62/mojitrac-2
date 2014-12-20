@@ -50,8 +50,13 @@
 			<td><?php echo $this->RelativeDate($user['last_modified']); ?></td>
 			<?php if($this->enable_actions):?>
 			<td>
-			<?php if($this->getIdentity() == $user['id']): ?><a href="<?php echo $this->url('users/edit', array('user_id'=>$user['id'])); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit User');?></a> <?php endif; ?>
-			<a href="<?php echo $this->url('users/remove', array('user_id'=>$user['id'])); ?>" title="Delete" rel="facebox"><?php echo $this->InteractIcon('cross', 'Remove User');?></a>
+			<?php if($this->getIdentity() == $user['id']): ?>
+				<a href="<?php echo $this->url('users/edit', array('user_id'=>$user['id'])); ?>" title="Edit"><?php echo $this->InteractIcon('pencil', 'Edit User');?></a> 
+			<?php endif; ?>
+			<?php if($this->getIdentity() != $user['id']): ?>
+				<a href="<?php echo $this->url('users/remove', array('user_id'=>$user['id'])); ?>" title="Delete" rel="facebox"><?php echo $this->InteractIcon('cross', 'Remove User');?></a>
+				<a href="<?php echo $this->url('users/roles', array('user_id'=>$user['id'])); ?>" title="Roles" rel="facebox"><?php echo $this->InteractIcon('user_roles', 'User Roles');?></a> 
+			<?php endif; ?>
 			</td>
 			<?php endif; ?>
 		</tr>

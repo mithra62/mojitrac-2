@@ -212,6 +212,60 @@ class UsersController extends PmUsers
 	{
 		return $this->redirect()->toRoute('users');
 	}
+	
+	public function rolesAction()
+	{
+		if(!$this->perm->check($this->identity, 'manage_users'))
+		{
+			return $this->redirect()->toRoute('users');
+		}
+
+		$user = $this->getServiceLocator()->get('HostManager\Model\Users');
+		$account = $this->getServiceLocator()->get('HostManager\Model\Accounts');
+		$form = $this->getServiceLocator()->get('Application\Form\User\RolesForm');
+
+		$id = $this->params()->fromRoute('user_id');
+		if(!$id)
+		{
+			return $this->redirect()->toRoute('users');
+		}
+		
+		$account_id = $account->getAccountId();
+		if( !$account->userOnAccount($id, $account_id) )
+		{
+			return $this->redirect()->toRoute('users');
+		}
+		
+		if($this->identity == $id && !$this->getRequest()->isXmlHttpRequest())
+		{
+			$this->flashMessenger()->addMessage($this->translate('user_cant_remove_self', 'pm'));
+			return $this->redirect()->toRoute('users/view', array('user_id' => $id));
+		}
+
+		$view = array();
+		$view['user'] = $user->getUserById($id);
+		if(!$view['user'])
+		{
+			return $this->redirect()->toRoute('users');
+		}
+		
+		$view['user_roles'] = $user->getUserRolesArr($id);
+		$form->setData(array('user_roles' => $view['user_roles']));
+		$request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setInputFilter($user->getRolesInputFilter());
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
+			{
+				
+			}
+		}
+		
+		$view['form'] = $form;
+		return $this->ajaxOutput($view);
+	}
 
 	/**
 	 * (non-PHPdoc)

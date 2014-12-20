@@ -94,6 +94,9 @@ class InteractIcon extends BaseViewHelper
 			break;	
 			case 'timer':
 				$icon = 'icons/tool_timer_16.png';
+			break;	
+			case 'user_roles':
+				$icon = 'icons/user_roles_16.png';
 			break;							
 		}
 		

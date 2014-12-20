@@ -125,6 +125,18 @@ return array(
         					)
         				)
         			),
+        			'roles' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/roles/:user_id',
+        					'constraints' => array(
+        						'user_id' => '[0-9]+'
+        					),
+        					'defaults' => array(
+        						'action' => 'roles'
+        					)
+        				)
+        			),
         			'edit' => array(
         				'options' => array(
         					'route' => '/edit',
