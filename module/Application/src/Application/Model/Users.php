@@ -39,6 +39,12 @@ class Users extends AbstractModel
 	 * @var object
 	 */
 	protected $passwordInputFilter;
+	
+	/**
+	 * The validation filter for the user roles form
+	 * @var object
+	 */	
+	protected $rolesInputFilter;
 
 	/**
 	 * The validation filter for the user registration form
@@ -279,7 +285,29 @@ class Users extends AbstractModel
 		}
 	
 		return $this->registrationInputFilter;
-	}	
+	}
+
+	public function getRolesInputFilter()
+	{
+		if (!$this->rolesInputFilter) {
+		
+			$inputFilter = new InputFilter();
+			$factory = new InputFactory();
+		
+			$inputFilter->add($factory->createInput(array(
+				'name'     => 'user_roles',
+				'required' => true,
+				'filters'  => array(
+					array('name' => 'StripTags'),
+					array('name' => 'StringTrim'),
+				),
+			)));
+		
+			$this->rolesInputFilter = $inputFilter;
+		}
+		
+		return $this->rolesInputFilter;		
+	}
 	
 	/**
 	 * Changes a users password
@@ -490,7 +518,19 @@ class Users extends AbstractModel
 		
 		$where = array('id' => $id);
 		return $this->update('users', $sql, $where);
-	}	
+	}
+
+	/**
+	 * Updates the Roles a $user_id is asssociated with
+	 * @param int $user_id
+	 * @param array $roles
+	 * @return boolean
+	 */
+	public function updateUserRoles($user_id, array $roles)
+	{
+		return $this->roles->updateUsersRoles($user_id, $roles);
+	}
+	
 	
 	/**
 	 * Handles everything for removing a user.

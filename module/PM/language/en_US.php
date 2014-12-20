@@ -66,6 +66,7 @@ return array(
 	'remove_user_role' => 'Remove User Role',
 	'cant_remove_role' => 'You can\'t remove this role.',
 	'role_removed' => 'Role Removed!',
+	'user_roles_updated' => 'User Roles Updated!',
 		
 	//companies 
 	'contact_updated' => 'Company updated!',

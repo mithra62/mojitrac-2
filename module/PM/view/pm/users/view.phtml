@@ -14,23 +14,7 @@
 				<?php echo $this->InteractIcon('email', 'Email User');?>
 				<div class="action_text"><?php echo $this->_('email', 'pm')?></div>
 			</a>
-		</div>				
-		<?php endif; ?>
-		<?php if($this->CheckPermission('manage_users')):?>
-		<div class="actions">
-			<a href="<?php echo $this->url('users/remove', array('user_id' => $this->user['id'])); ?>" title="<?php echo $this->_('delete', 'pm')?>">
-				<?php echo $this->InteractIcon('cross', 'Remove User');?>
-				<div class="action_text"><?php echo $this->_('delete', 'pm')?></div>
-			</a>
-		</div>	
-		<?php endif; ?>	
-		<?php if($this->CheckPermission('manage_users') || $this->id == $this->getIdentity()):?>
-		<div class="actions">
-			<a href="<?php echo $this->url('users/edit', array('user_id' => $this->user['id'])); ?>" title="<?php echo $this->_('edit', 'pm')?>">
-				<?php echo $this->InteractIcon('pencil', 'Edit User');?>
-				<div class="action_text"><?php echo $this->_('edit', 'pm')?></div>
-			</a>
-		</div>
+		</div>			
 		<?php endif; ?>		
 </div>
 

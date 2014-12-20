@@ -259,7 +259,18 @@ class UsersController extends PmUsers
 			$form->setData($request->getPost());
 			if ($form->isValid($formData))
 			{
-				
+				$formData = $form->getData();
+				if($user->updateUserRoles($id, $formData['user_roles']))
+				{	
+					$this->flashMessenger()->addMessage($this->translate('user_roles_updated', 'pm'));
+					return $this->redirect()->toRoute('users/view', array('user_id' => $id));					
+				} 
+				else 
+				{
+					$view['errors'] = array($this->translate('something_went_wrong', 'pm'));
+					$this->layout()->setVariable('errors', $view['errors']);
+					$form->setData($formData);
+				}
 			}
 		}
 		

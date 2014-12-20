@@ -60,4 +60,5 @@ return array(
     
     //reset password
     'reset_password_instructions' => 'Create your new password here',
+    
 );
