@@ -202,32 +202,6 @@ class SqlEvent extends BaseEvent
     }
     
     /**
-     * Returns the account_id to use for INSERT queries
-     * 
-     * Parses the INSERT object to ensure another account_id column isn't set
-     * and returns the set one from $sql if it is. This allows us to override the
-     * account_id taken from the URL request
-     * 
-     * @param \Zend\Db\Sql\Insert $sql
-     */
-    public function verifyInsertAccountId(\Zend\Db\Sql\Insert $sql)
-    {
-    	$state = $sql->getRawState();
-    	if(isset($state['columns']) && is_array($state['columns']))
-    	{
-    		foreach($state['columns'] AS $key => $column)
-    		{
-    			if($column == 'account_id' && isset($state['values'][$key]))
-    			{
-    				return $state['values'][$key];
-    			}
-    		}
-    	}
-    	
-    	return $this->account_id;
-    }
-    
-    /**
      * Modifies all the SELECT calls to inject account_id to all WHERE clauses (where appropriate)
      * @param \Zend\EventManager\Event $event
      */
@@ -251,6 +225,32 @@ class SqlEvent extends BaseEvent
     	}
     	
 		return $sql;
+    }
+    
+    /**
+     * Returns the account_id to use for INSERT queries
+     * 
+     * Parses the INSERT object to ensure another account_id column isn't set
+     * and returns the set one from $sql if it is. This allows us to override the
+     * account_id taken from the URL request
+     * 
+     * @param \Zend\Db\Sql\Insert $sql
+     */
+    public function verifyInsertAccountId(\Zend\Db\Sql\Insert $sql)
+    {
+    	$state = $sql->getRawState();
+    	if(isset($state['columns']) && is_array($state['columns']))
+    	{
+    		foreach($state['columns'] AS $key => $column)
+    		{
+    			if($column == 'account_id' && isset($state['values'][$key]))
+    			{
+    				return $state['values'][$key];
+    			}
+    		}
+    	}
+    	
+    	return $this->account_id;
     }
 
     /**
@@ -302,7 +302,43 @@ class SqlEvent extends BaseEvent
     	}
     
     	return $sql;
-    }  
+    } 
+
+    /**
+     * Returns the account_id to use for UPDATE queries
+     * 
+     * Parses the UPDATE object to ensure another account_id column isn't set
+     * and returns the set one from $sql if it is. This allows us to override the
+     * account_id taken from the URL request
+     * 
+     * @param \Zend\Db\Sql\Update $sql
+     */
+    public function verifyUpdateAccountId(\Zend\Db\Sql\Update $sql)
+    {
+    	$predicates = $sql->where->getPredicates();
+    	foreach($predicates AS $predicate)
+    	{
+    		if(is_array($predicate))
+    		{
+    			foreach($predicate AS $key => $value)
+    			{
+    				//ok, we're just checking here for any call to an account_id column 
+    				//and using THAT value as the account_id for the SQL call if found
+    				if(is_object($value) && $value instanceof \Zend\Db\Sql\Predicate\Operator)
+    				{
+    					$left = $value->getLeft();
+    					$right = $value->getRight();
+    					if($left == 'account_id' && $right >= '1')
+    					{
+    						return $right;
+    					}
+    				}    				
+    			}
+    		}
+    	}
+    	
+    	return $this->account_id;   	
+    }
 
     /**
      * Modifies all the UPDATE calls to inject account_id into statements (where appropriate)
@@ -318,7 +354,8 @@ class SqlEvent extends BaseEvent
     		if(class_exists($class_name))
     		{
     			$class = new $class_name($sql);
-    			$sql = $class->Update($sql, $this->account_id);
+    			$account_id = $this->verifyUpdateAccountId($sql);
+    			$sql = $class->Update($sql, $account_id);
     		}
     	}
     	catch (Exception $e)

@@ -56,11 +56,11 @@ class Settings extends KeyValue
 		'default_company_currency_code' => 'USD',
 		'default_company_default_hourly_rate' => '',
 			
-		'default_project_type' => '3',  
+		'default_project_type' => '',  
 		'default_project_priority' => '3',  
 		'default_project_status' => '3',
 			
-		'default_task_type' => '12',  
+		'default_task_type' => '',  
 		'default_task_priority' => '3',  
 		'default_task_status' => '3'
 	);	

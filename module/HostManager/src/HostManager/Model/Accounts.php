@@ -219,7 +219,14 @@ class Accounts extends AbstractModel
 		}
 		
 		//and link the new company as the master company for this account
-		$setting->updateSettings(array('master_company' => $company_id));
+		$sql = array(
+			'option_name' => 'master_company', 
+			'option_value' => $company_id, 
+			'account_id' => $account_id, 
+			'created_date' => new \Zend\Db\Sql\Expression('NOW()'), 
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+		); 
+		$this->insert('settings', $sql);
 		
 		//now create the option types
 		$option_data = $option->getAllOptions();

@@ -18,6 +18,7 @@
 	"zircote/hal": "dev-master",
 	"phpunit/phpunit": "4.1.*",
 	"rtconner/freshbooks-api": "dev-master",
-        "vgarvardt/zf-simple-migrations": "dev-master"
+        "vgarvardt/zf-simple-migrations": "dev-master",
+        "mtdowling/cron-expression": "1.0.*"
     }
 }
