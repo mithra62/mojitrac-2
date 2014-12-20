@@ -27,7 +27,7 @@ class ProjectPriority extends BaseViewHelper
 	{
 		$return = Projects::translatePriorityId($priority); 
 		//$url = $this->view->StaticUrl();
-		$return = '<img src="'.$this->view->serverUrl($url.'/images/priorities/'.$priority.'.gif.').'" alt="'.$return.'" title="'.$return.'" /> '.$return;
+		$return = '<img src="'.$this->view->serverUrl($url.'/images/priorities/'.$priority.'.gif.')'" alt="'.$return.'" title="'.$return.'" /> '.$return;
 		return $return; 
 	}
 }
