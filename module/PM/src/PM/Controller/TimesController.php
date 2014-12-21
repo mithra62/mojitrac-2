@@ -76,7 +76,7 @@ class TimesController extends AbstractPmController
     	    		    	
 		$form = $this->getServiceLocator()->get('PM\Form\TimeForm');
 
-		//$form->setData(array('date' => date('Y-m-d', mktime(0,0,0,$month, $day, $year))));
+		$form->setData(array('date' => date('Y-m-d', mktime(0,0,0,$month, $day, $year)), 'billable' => 1));
 		$request = $this->getRequest();
     	if ($request->isPost())
     	{
