@@ -55,6 +55,7 @@ use PM\Form\PrefsForm;
 
 use PM\Event\ActivityLogEvent;
 use PM\Event\NotificationEvent;
+use PM\Event\SettingsEvent;
 
 /**
  * PM - Module Object
@@ -96,6 +97,9 @@ class Module implements
 		$event->register($this->sharedEvents);
 
 		$event = $e->getApplication()->getServiceManager()->get('PM\Event\ActivityLogEvent');
+		$event->register($this->sharedEvents);
+
+		$event = $e->getApplication()->getServiceManager()->get('PM\Event\SettingsEvent');
 		$event->register($this->sharedEvents);
 	}
 
@@ -342,6 +346,9 @@ class Module implements
 				},	
 				'PM\Form\PrefsForm' => function($sm) {
 					return new PrefsForm('preferences');
+				},	
+				'PM\Form\InvoiceForm' => function($sm) {
+					return new InvoiceForm('invoice_form');
 				},			
 				
 				//events
@@ -358,9 +365,9 @@ class Module implements
 				    $project = $sm->get('PM\Model\Projects');
 					return new NotificationEvent($mail, $user, $project, $task, $auth->getIdentity());
 				},	
-				'PM\Form\InvoiceForm' => function($sm) {
-					return new InvoiceForm('invoice_form');
-				},									
+				'PM\Event\SettingsEvent' => function($sm) {
+					return new SettingsEvent();
+				},								
 			),
     	);
     }    

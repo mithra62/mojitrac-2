@@ -237,6 +237,7 @@ class ProjectsController extends AbstractPmController
 		$company_id = $this->params()->fromRoute('company_id');
 		$project = $this->getServiceLocator()->get('PM\Model\Projects');
 		$form = $this->getServiceLocator()->get('PM\Form\ProjectForm');
+		
 		$form->setData(
 			array(
 				'status' => $this->settings['default_project_status'],

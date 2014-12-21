@@ -43,26 +43,10 @@ class Settings extends KeyValue
 	 * @var array
 	 */
 	public $defaults = array(
-		'master_company' => '1', 
-		'enable_ip' => '0', 
-		'allowed_file_formats' => 'jpg,gif,png,txt,docx,doc,pdf,php,xls,xlsx,csv,psd,ppt,pptx,pot,potx,rar,zip,tar,gz,tgz,bz2,html,htm,avi,mov,fla,swf,asf,flv,sql,mp3', 
 		'date_format' => 'F j, Y',
 		'date_format_custom' => '',  
 		'time_format' => 'g:i A',  
-		'time_format_custom' => '', 
-			 
-		'default_company_type' => '1',  
-		'default_company_client_language' => 'en_US',
-		'default_company_currency_code' => 'USD',
-		'default_company_default_hourly_rate' => '',
-			
-		'default_project_type' => '',  
-		'default_project_priority' => '3',  
-		'default_project_status' => '3',
-			
-		'default_task_type' => '',  
-		'default_task_priority' => '3',  
-		'default_task_status' => '3'
+		'time_format_custom' => ''
 	);	
 
 	/**
