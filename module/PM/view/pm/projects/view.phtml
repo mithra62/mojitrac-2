@@ -129,7 +129,6 @@ endif;
 			</a>
 		</div>		
 		<?php if($this->CheckPermission('manage_tasks') || $this->user_is_on_team): ?>
-		<?php echo $this->ActionBlock('chart', 'Gantt Chart', $this->url('pm', array('module' => 'pm','controller' => 'reports','action'=>'gantt', 'project' => $this->id), null, TRUE), 'facebox'); ?>
 		
 		<div class="actions">
 			<a href="<?php echo $this->url('tasks/add', array('project_id' => $this->id)); ?>" title="Add Task">
