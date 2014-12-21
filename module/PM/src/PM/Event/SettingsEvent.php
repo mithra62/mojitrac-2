@@ -36,7 +36,7 @@ class SettingsEvent extends BaseEvent
 		'default_company_type' => '1',  
 		'default_company_client_language' => 'en_US',
 		'default_company_currency_code' => 'USD',
-		'default_company_default_hourly_rate' => '',
+		'default_company_hourly_rate' => '0.00',
 			
 		'default_project_type' => '',  
 		'default_project_priority' => '3',  

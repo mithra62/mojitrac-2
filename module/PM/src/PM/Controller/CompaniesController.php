@@ -223,7 +223,7 @@ class CompaniesController extends AbstractPmController
 				'type' => $this->settings['default_company_type'],
 				'client_language' => $this->settings['default_company_client_language'],
 				'currency_code' => $this->settings['default_company_currency_code'],
-				'default_hourly_rate' => $this->settings['default_company_default_hourly_rate']
+				'default_hourly_rate' => $this->settings['default_company_hourly_rate']
 		);
 		$form->setData($defaults);
 		$request = $this->getRequest();

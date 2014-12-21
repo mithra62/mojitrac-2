@@ -52,6 +52,7 @@ use PM\Form\FileForm;
 use PM\Form\File\RevisionForm;
 use PM\Form\InvoiceForm;
 use PM\Form\PrefsForm;
+use PM\Form\SettingsForm;
 
 use PM\Event\ActivityLogEvent;
 use PM\Event\NotificationEvent;
@@ -349,7 +350,10 @@ class Module implements
 				},	
 				'PM\Form\InvoiceForm' => function($sm) {
 					return new InvoiceForm('invoice_form');
-				},			
+				},	
+				'PM\Form\SettingsForm' => function($sm) {
+					return new SettingsForm('settings', $sm->get('PM\Model\Companies'), $sm->get('PM\Model\Options'));
+				},		
 				
 				//events
 				'PM\Event\ActivityLogEvent' => function($sm) {

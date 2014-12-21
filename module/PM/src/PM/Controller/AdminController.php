@@ -53,7 +53,7 @@ class AdminController extends AbstractPmController
         $this->layout()->setVariable('layout_style','right');
             	
     	$setting = $this->getServiceLocator()->get('Application\Model\Settings');
-		$form = $this->getServiceLocator()->get('Application\Form\SettingsForm');
+		$form = $this->getServiceLocator()->get('PM\Form\SettingsForm');
         
         $settings = $setting->getSettings();
         $form->setData($settings);

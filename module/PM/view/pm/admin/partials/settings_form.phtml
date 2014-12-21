@@ -27,11 +27,20 @@ echo $this->formRow($csrf);
 	</div>	
 	<div id="companies">
 		<p>
-			<label for="master_company">Master Company</label>
-			<?php $field = $form->get('master_company'); echo $this->formRow($field); ?>
+			<label for="default_company_type">Default Company Type</label>
+			<?php $field = $form->get('default_company_type'); echo $this->formRow($field); ?>
 		</p>
 		<p>
-			<label for="enable_ip"><?php $field = $form->get('enable_ip'); echo $this->formRow($field); ?> Enable Ip Locker</label>
+			<label for="default_company_client_language">Default Company Language</label>
+			<?php $field = $form->get('default_company_client_language'); echo $this->formRow($field); ?>
+		</p>
+		<p>
+			<label for="default_company_currency_code">Default Company Currency Code</label>
+			<?php $field = $form->get('default_company_currency_code'); echo $this->formRow($field); ?>
+		</p>
+		<p>
+			<label for="default_company_hourly_rate">Default Company Hourly Rate</label>
+			<?php $field = $form->get('default_company_hourly_rate'); echo $this->formRow($field); ?>
 		</p>
 		<p>
 			<input type="submit" class="submit" value="Submit" />
@@ -39,11 +48,16 @@ echo $this->formRow($csrf);
 	</div>	
 	<div id="projects">
 		<p>
-			<label for="master_company">Master Company</label>
-			<?php $field = $form->get('master_company'); echo $this->formRow($field); ?>
+			<label for="default_project_type">Default Project Type</label>
+			<?php $field = $form->get('default_project_type'); echo $this->formRow($field); ?>
 		</p>
 		<p>
-			<label for="enable_ip"><?php $field = $form->get('enable_ip'); echo $this->formRow($field); ?> Enable Ip Locker</label>
+			<label for="default_project_priority">Default Project Priority</label>
+			<?php $field = $form->get('default_project_priority'); echo $this->formRow($field); ?>
+		</p>
+		<p>
+			<label for="default_project_status">Default Project Status</label>
+			<?php $field = $form->get('default_project_status'); echo $this->formRow($field); ?>
 		</p>
 		<p>
 			<input type="submit" class="submit" value="Submit" />
@@ -51,11 +65,16 @@ echo $this->formRow($csrf);
 	</div>	
 	<div id="tasks">
 		<p>
-			<label for="master_company">Master Company</label>
-			<?php $field = $form->get('master_company'); echo $this->formRow($field); ?>
+			<label for="default_task_type">Default Task Type</label>
+			<?php $field = $form->get('default_task_type'); echo $this->formRow($field); ?>
 		</p>
 		<p>
-			<label for="enable_ip"><?php $field = $form->get('enable_ip'); echo $this->formRow($field); ?> Enable Ip Locker</label>
+			<label for="default_task_priority">Default Task Priority</label>
+			<?php $field = $form->get('default_task_priority'); echo $this->formRow($field); ?>
+		</p>
+		<p>
+			<label for="default_task_status">Default Task Status</label>
+			<?php $field = $form->get('default_task_status'); echo $this->formRow($field); ?>
 		</p>
 		<p>
 			<input type="submit" class="submit" value="Submit" />

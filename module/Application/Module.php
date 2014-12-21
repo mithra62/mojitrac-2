@@ -213,7 +213,7 @@ class Module
 				
 				//forms
 				'Application\Form\SettingsForm' => function($sm) {
-					return new SettingsForm('settings', $sm->get('PM\Model\Companies'));
+					return new SettingsForm('settings');
 				},
 				'Application\Form\PrefsForm' => function($sm) {
 					return new PrefsForm('preferences');

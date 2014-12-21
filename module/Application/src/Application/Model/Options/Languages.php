@@ -24,7 +24,8 @@ class Languages
 {
 	static public function langs()
 	{
-	    $return = array('en_US' => 'English / US', 'es_ES' => 'Spanish');
+	    //$return = array('en_US' => 'English / US', 'es_ES' => 'Spanish');
+		$return = array('en_US' => 'English / US');
 		return $return;
 	}
 }

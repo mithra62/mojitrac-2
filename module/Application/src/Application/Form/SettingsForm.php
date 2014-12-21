@@ -12,10 +12,9 @@
 namespace Application\Form;
 
 use Base\Form\BaseForm;
-use PM\Model\Options\Companies;
 
 /**
- * Password Form
+ * Settings Form
  *
  * Generates the Password form
  *
@@ -29,33 +28,8 @@ class SettingsForm extends BaseForm
 	 * Returns the System Settings form
 	 * @param string $options
 	 */	
-	public function __construct($name, \PM\Model\Companies $companies) 
+	public function __construct($name) 
 	{
 		parent::__construct($name);
-
-		$this->add(array(
-			'name' => 'master_company',
-			'type' => 'Select',
-			'attributes' => array(
-				'class' => 'select input',
-				'id' => 'master_company'
-			),
-			'options' => array(
-				'value_options' => Companies::companies($companies, TRUE),
-			)
-		));
-
-		$this->add(array(
-			'name' => 'enable_ip',
-			'type' => 'Checkbox',
-			'attributes' => array(
-				'class' => 'checkbox', 
-				'id' => 'enable_ip',
-			),
-			'options' => array(
-				'checked_value' => '1',
-				'unchecked_value' => '0'
-			)
-		));
 	}
 }
