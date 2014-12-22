@@ -41,8 +41,6 @@ return array(
 			Copy and paste the URL in a new browser window if you can\'t click on it. Please keep in mind that the link will only work for 24 hours; after that it will be inactive. 
 			<br /><br />
 			
-			Keep in mind that this is a public functional beta and, as such, everything is temporary. You may lose any data entered during this phase so don\'t use for day to day activity yet.  <br /><br />
-
 			The <a href="https://mithra62.freshdesk.com/support/discussions/5000045276">MojiTrac Forums</a>, located in the mithra62 Support Portal, 
 			is where you can get support and keep an eye on what\'s going on with MojiTrac. If you have any suggestions, please don\'t hesitate hitting up the 
 			<a href="https://mithra62.freshdesk.com/support/discussions/forums/5000178952">Feature Request</a> forum 
