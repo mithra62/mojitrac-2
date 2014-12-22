@@ -50,7 +50,7 @@ class UserData extends KeyValue
 		'time_format' => 'g:i A',  
 		'time_format_custom' => '',
 		'enable_rel_time' => '1',
-		'enable_contextual_help' => '1'
+		'enable_contextual_help' => '0'
 	);			
 	
 	/**

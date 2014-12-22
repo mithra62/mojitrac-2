@@ -27,7 +27,11 @@ class ActionBlock extends BaseViewHelper
     {
     	if($icon == 'help')
     	{
-    		//$prefs = Zend_Registry::get('pm_prefs');
+    		$helperPluginManager = $this->getServiceLocator();
+    		$serviceManager = $helperPluginManager->getServiceLocator();
+    		
+    		$user = $serviceManager->get('PM\Model\Users');
+    		$prefs = $user->user_data->getUsersData($this->view->getIdentity());
     		if(isset($prefs['enable_contextual_help']) && $prefs['enable_contextual_help'] == '0')
     		{
     			return;

@@ -94,7 +94,7 @@ class MakeLink extends BaseViewHelper
 	 */
 	private function makeUserLinkBody(array $info)
 	{
-		if($info['id'] == $this->identity)
+		if($info['id'] == $this->view->getIdentity())
 		{
 			return 'You';
 		}
