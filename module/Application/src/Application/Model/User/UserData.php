@@ -49,15 +49,6 @@ class UserData extends KeyValue
 		'date_format_custom' => '',  
 		'time_format' => 'g:i A',  
 		'time_format_custom' => '',
-		'noti_assigned_task' => '1',
-		'noti_status_task' => '1',
-		'noti_priority_task' => '1',
-		'noti_daily_task_reminder' => '1',
-		'noti_add_proj_team' => '1',
-		'noti_remove_proj_team' => '1',
-		'noti_file_uploaded' => '1',
-		'noti_file_revision_uploaded' => '1',
-		'timer_data' => '0',
 		'enable_rel_time' => '1',
 		'enable_contextual_help' => '1'
 	);			
@@ -71,7 +62,18 @@ class UserData extends KeyValue
 	{
 		parent::__construct($adapter, $db);
 		$this->setTable($this->table);
-		$this->setDefaults($this->defaults);
+
+		$defaults = $this->defaults;
+		$this->items = array();
+		
+		$ext = $this->trigger(self::EventUserDataDefaultsSetPre, $this, compact('defaults'));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $defaults = $ext->last();
+		
+		
+		$this->setDefaults($defaults);
+		
+		$defaults = $this->defaults;
+		$ext = $this->trigger(self::EventUserDataDefaultsSetPost, $this, compact('defaults'));
 	}
 	
 	/**

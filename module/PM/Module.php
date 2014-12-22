@@ -57,6 +57,7 @@ use PM\Form\SettingsForm;
 use PM\Event\ActivityLogEvent;
 use PM\Event\NotificationEvent;
 use PM\Event\SettingsEvent;
+use PM\Event\UserDataEvent;
 
 /**
  * PM - Module Object
@@ -87,20 +88,22 @@ class Module implements
 	/**
 	 * Setup the Events we're gonna piggyback on
 	 *
-	 * Note, we have to implement the other module events since we can't extend the Base\Controller
-	 *
 	 * @param \Zend\Mvc\MvcEvent $e
 	 * @todo Abstract the registering of events
 	 */	
 	public function onBootstrap(\Zend\Mvc\MvcEvent $e)
 	{
+		//have to ensure we do settings and user data BEFORE any other events
+		$event = $e->getApplication()->getServiceManager()->get('PM\Event\SettingsEvent');
+		$event->register($this->sharedEvents);
+		
+		$event = $e->getApplication()->getServiceManager()->get('PM\Event\UserDataEvent');
+		$event->register($this->sharedEvents);
+
 		$event = $e->getApplication()->getServiceManager()->get('PM\Event\NotificationEvent');
 		$event->register($this->sharedEvents);
 
 		$event = $e->getApplication()->getServiceManager()->get('PM\Event\ActivityLogEvent');
-		$event->register($this->sharedEvents);
-
-		$event = $e->getApplication()->getServiceManager()->get('PM\Event\SettingsEvent');
 		$event->register($this->sharedEvents);
 	}
 
@@ -175,6 +178,17 @@ class Module implements
 			'factories' => array(
 					
 				//models
+				'Timezone' => function($sm) {
+					$auth = $sm->get('AuthService');
+					$user = $sm->get('PM\Model\Users');
+					$data = $user->user_data->getUsersData($auth->getIdentity());
+					date_default_timezone_set($data['timezone']);
+						
+					$dt = new DateTime();
+					$offset = $dt->format('P');
+					$user->user_data->query("SET time_zone='$offset'");
+					return true;
+				},
 				'PM\Model\Projects' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
@@ -371,6 +385,9 @@ class Module implements
 				},	
 				'PM\Event\SettingsEvent' => function($sm) {
 					return new SettingsEvent();
+				},	
+				'PM\Event\UserDataEvent' => function($sm) {
+					return new UserDataEvent(); 
 				},								
 			),
     	);
