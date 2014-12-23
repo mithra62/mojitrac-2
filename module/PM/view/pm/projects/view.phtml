@@ -168,7 +168,7 @@ endif;
 		</div>		
 		<?php if($this->CheckPermission('manage_files')): ?>
 		<div class="actions">
-			<a href="<?php echo $this->url('files/add', array('type'=>'project', 'id' => $this->id), null, TRUE); ?>" rel="facebox" title="Add File">
+			<a href="<?php echo $this->url('files/add', array('type'=>'project', 'id' => $this->id)); ?>" rel="facebox" title="Add File">
 				<?php echo $this->InteractIcon('add', 'Add File');?> 
 				<div class="action_text">Add File</div>
 			</a>
@@ -181,7 +181,7 @@ endif;
 		echo $this->partial('pm/files/partials/files', $options); 
 	else: 
 	?>
-	<div class="information png_bg">There aren't any files uploaded yet. <?php if($this->CheckPermission('manage_files')): ?>Want to <a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'files','action'=>'add', 'project' => $this->id), null, TRUE); ?>" rel="facebox">add</a> one?<?php endif; ?></div>
+	<div class="information png_bg">There aren't any files uploaded yet. <?php if($this->CheckPermission('manage_files')): ?>Want to <a href="<?php echo $this->url('files/add', array('type'=>'project', 'id' => $this->id)); ?>" rel="facebox" >add</a> one?<?php endif; ?></div>
 	<?php 
 	endif;
 endif;
