@@ -50,6 +50,11 @@ class FilesController extends AbstractPmController
 
 		$id = $this->params()->fromRoute('id');
 		$type = $this->params()->fromRoute('type');
+		if( !$type )
+		{
+			return $this->redirect()->toRoute('pm');
+		}
+		
 		$view = array();
 		$file = $this->getServiceLocator()->get('PM\Model\Files');
 		if($type == 'company')

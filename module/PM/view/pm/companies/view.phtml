@@ -264,7 +264,7 @@ if($this->files):
 	echo $this->partial('pm/files/partials/files', $options); 
 else: 
 ?>
-<div class="information png_bg">There aren't any files added yet. Want to <a href="<?php echo $this->url('files', array('module' => 'pm','controller'=>'files','action'=>'add', 'company' => $this->id), null, TRUE); ?>">add</a> one?</div>
+<div class="information png_bg">There aren't any files added yet. Want to <a href="<?php echo $this->url('files/add', array('type' => 'company', 'id' => $this->id)); ?>" rel="facebox" >add</a> one?</div>
 <?php 
 endif;
 ?>
