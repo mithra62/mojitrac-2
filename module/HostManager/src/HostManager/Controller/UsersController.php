@@ -75,12 +75,17 @@ class UsersController extends PmUsers
 			if ($form->isValid($formData))
 			{
 				//check if this user exists already
-				$formData = $formData->toArray();
+				$formData = $form->getData();
 				$user_data = $user->getUserByEmail($formData['email']);
 				$hash = $this->getServiceLocator()->get('Application\Model\Hash');
 				if($user_data)
 				{
 					//just process the invite
+					if(isset($formData['user_roles']))
+					{
+						$user->roles->updateUsersRoles($user_data['id'], $formData['user_roles']);
+					}
+										
 					if($invite->addInvite($user_data['id'], $hash))
 					{
 						$this->flashMessenger()->addMessage($this->translate('invite_sent', 'hm'));
