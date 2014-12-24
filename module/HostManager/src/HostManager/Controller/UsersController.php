@@ -392,7 +392,7 @@ class UsersController extends PmUsers
 					return $this->redirect()->toRoute('users');
 				}
 				
-				if($invite->removeInvites(array('user_id' => $id, 'account_id' => $account_id))) 
+				if($invite->removeInvites($id, $account_id)) 
 				{
 					$this->flashMessenger()->addMessage($this->translate('user_invite_removed', 'hm'));
 					return $this->redirect()->toRoute('users');

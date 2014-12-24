@@ -204,8 +204,13 @@ class Invites extends AbstractModel
 	 * @param array $where
 	 * @return int
 	 */
-	public function removeInvites(array $where = array())
+	public function removeInvites($user_id, $account_id)
 	{
-		return $this->remove('account_invites', $where);
+		$where = array('user_id' => $user_id, 'account_id' => $account_id);
+		if( $this->remove('account_invites', $where) )
+		{
+			$this->remove('user2role', $where);
+			return true;
+		}
 	}
 }
