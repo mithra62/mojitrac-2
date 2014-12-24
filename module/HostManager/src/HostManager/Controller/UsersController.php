@@ -346,4 +346,63 @@ class UsersController extends PmUsers
 		$view['form'] = $form;
 		return $this->ajaxOutput($view);
 	}
+	
+	public function removeInviteAction()
+	{
+		if(!$this->perm->check($this->identity, 'manage_users'))
+		{
+			return $this->redirect()->toRoute('users');
+		}
+	
+		$view = array();
+		$user = $this->getServiceLocator()->get('HostManager\Model\Users');
+		$account = $this->getServiceLocator()->get('HostManager\Model\Accounts');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+        $invite = $this->getServiceLocator()->get('HostManager\Model\Account\Invites');
+        
+		$id = $this->params()->fromRoute('user_id');
+		if(!$id)
+		{
+			return $this->redirect()->toRoute('users');
+		}
+
+		$account_id = $account->getAccountId();
+        $invite_data = $invite->getInvite(array('user_id' => $id, 'account_id' => $account_id));
+		if(!$invite_data && !$this->getRequest()->isXmlHttpRequest())
+		{
+			$this->flashMessenger()->addMessage($this->translate('cant_find_invite', 'pm'));
+			return $this->redirect()->toRoute('users/view', array('user_id' => $id));
+		}
+		elseif( !$invite_data && !$this->getRequest()->isXmlHttpRequest())
+		{
+			$this->flashMessenger()->addMessage($this->translate('cant_find_invite', 'pm'));
+			return $this->redirect()->toRoute('users/view', array('user_id' => $id));
+		}
+	
+		$request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
+			{
+				$formData = $formData->toArray();
+				if(!empty($formData['fail']))
+				{
+					return $this->redirect()->toRoute('users');
+				}
+				
+				if($invite->removeInvites(array('user_id' => $id, 'account_id' => $account_id))) 
+				{
+					$this->flashMessenger()->addMessage($this->translate('user_invite_removed', 'hm'));
+					return $this->redirect()->toRoute('users');
+				}
+			}
+		}
+
+		$view['id'] = $id;
+		$view['invite_data'] = $invite_data;
+		$view['form'] = $form;
+		return $this->ajaxOutput($view);
+	}	
 }

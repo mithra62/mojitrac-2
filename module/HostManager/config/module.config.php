@@ -125,6 +125,15 @@ return array(
         					)
         				)
         			),
+        			'remove-invite' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/remove-invite/:user_id',
+        					'defaults' => array(
+        						'action' => 'removeInvite'
+        					)
+        				)
+        			),
         			'roles' => array(
         				'type' => 'segment',
         				'options' => array(

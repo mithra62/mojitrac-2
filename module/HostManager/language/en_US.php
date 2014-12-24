@@ -68,4 +68,5 @@ return array(
 		',
 	'account_invite_email_subject' => 'Invitation to Join MojiTrac Team!',
 	'invite_accepted' => 'Invite Accepted!',
+	'user_invite_removed' => 'User Invite Removed',
 );

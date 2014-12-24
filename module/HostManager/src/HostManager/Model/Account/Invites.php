@@ -198,4 +198,14 @@ class Invites extends AbstractModel
         	return true;
         }
 	}
+	
+	/**
+	 * Removes user invites
+	 * @param array $where
+	 * @return int
+	 */
+	public function removeInvites(array $where = array())
+	{
+		return $this->remove('account_invites', $where);
+	}
 }
