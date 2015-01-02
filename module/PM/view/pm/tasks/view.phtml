@@ -1,12 +1,6 @@
 <div class="content_headers" style="padding-top:0px;">
 
 	<div class="task_header">Viewing Task: <?php echo $this->task['name']; ?></div>
-		<div class="actions">
-			<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'view'), null, TRUE); ?>" rel="facebox" title="About Tasks">
-				<?php echo $this->InteractIcon('help', 'About Tasks');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>
 		<!-- 
 		<div class="actions">
 			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'tasks','action'=>'ical', 'id' => $this->id), null, TRUE); ?>" title="Export Time">
@@ -169,13 +163,7 @@ $(document).ready(function() {
 <?php endif; ?>
 
 <div class="content_headers">
-	<div class="assignment_history_header">Assignment History</div>
-	<div class="actions">
-		<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'assignment-history'), null, TRUE); ?>" rel="facebox" title="About Assignment History">
-			<?php echo $this->InteractIcon('help', 'About Assignment History');?>
-			<div class="action_text">Help</div>
-		</a>
-	</div>	
+	<div class="assignment_history_header">Assignment History</div>	
 </div>
 <?php 
 if($this->assignment_history):
@@ -190,13 +178,7 @@ endif;
 
 <?php if($this->CheckPermission('view_files')): ?>
 	<div class="content_headers">
-		<div class="file_header">Files</div>
-		<div class="actions">
-			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'files'), null, TRUE); ?>" rel="facebox" title="Add Task Files">
-				<?php echo $this->InteractIcon('help', 'About Task Files');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>		
+		<div class="file_header">Files</div>		
 		<div class="actions">
 			<a href="<?php echo $this->url('files/all', array('type'=>'task', 'id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All');?>
@@ -226,13 +208,7 @@ endif;
 ?>
 
 <div class="content_headers">
-	<div class="note_header">Notes</div>
-	<div class="actions">
-		<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'notes')); ?>" rel="facebox" title="Add Task Notes">
-			<?php echo $this->InteractIcon('help', 'About Task Notes');?>
-			<div class="action_text">Help</div>
-		</a>
-	</div>		
+	<div class="note_header">Notes</div>		
 	<div class="actions">
 		<a href="<?php echo $this->url('notes/all', array('type' => 'task', 'id' => $this->id)); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All');?> 
@@ -258,13 +234,7 @@ endif;
 ?>
 
 <div class="content_headers">
-	<div class="bookmark_header">Bookmarks</div>
-	<div class="actions">
-		<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'bookmarks'), null, TRUE); ?>" rel="facebox" title="About Task Bookmarks">
-			<?php echo $this->InteractIcon('help', 'About Task Bookmarks');?>
-			<div class="action_text">Help</div>
-		</a>
-	</div>	
+	<div class="bookmark_header">Bookmarks</div>	
 	<div class="actions">
 		<a href="<?php echo $this->url('bookmarks/all', array('type' => 'task', 'id' => $this->id), null, TRUE); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All');?>
@@ -291,13 +261,7 @@ endif;
 
 <?php if($this->CheckPermission('view_time')): ?>
 	<div class="content_headers">
-		<div class="timetracker_header">Timetracker</div>
-		<div class="actions">
-			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'tasks', 'page' => 'times'), null, TRUE); ?>" rel="facebox" title="About Task Times">
-				<?php echo $this->InteractIcon('help', 'About Task Times');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>			
+		<div class="timetracker_header">Timetracker</div>			
 		<div class="actions">
 			<a href="<?php echo $this->url('times/view', array('type' => 'task', 'id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All');?>

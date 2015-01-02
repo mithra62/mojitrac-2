@@ -1,11 +1,5 @@
 <div class="content_headers" style="padding-top:0px;">
 	<div class="calendar_header">Project Activity For <?php echo $this->RelativeDate(date('Y-m-d', mktime(0, 0, 0, $this->month, $this->day, $this->year))); ?></div>
-	<div class="actions">
-		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'calendar', 'page' => 'view-day'), null, TRUE); ?>" rel="facebox" title="Add Project">
-			<?php echo $this->InteractIcon('help', 'About Calendar Day View');?>
-			<div class="action_text">Help</div>
-		</a>
-	</div>	
 </div>
 <?php 
 $next_day = date('j', mktime(0, 0, 0, $this->month, $this->day+1, $this->year));
