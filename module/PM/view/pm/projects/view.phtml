@@ -8,14 +8,7 @@ $partials = $this->DispatchRouteEvents($partials, array());
 ?>
 <div class="content_headers" style="padding-top:0px;">
 
-	<div class="project_header">Viewing Project: <?php echo $this->project['name']; ?></div>
-		
-		<div class="actions">
-			<a href="<?php echo $this->url('projects/add', array('company_id' => '')); ?>" rel="facebox" title="Add Project">
-				<?php echo $this->InteractIcon('help', 'About Projects');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>	
+	<div class="project_header">Viewing Project: <?php echo $this->project['name']; ?></div>	
 		<?php if($this->CheckPermission('track_time')):?>
 		<div class="actions">
 			<a href="<?php echo $this->url('timers/view', array('type' => 'project', 'id' => $this->id), null, TRUE); ?>" title="Timer" rel="facebox">
@@ -85,13 +78,7 @@ $partials = $this->DispatchRouteEvents($partials, array());
 <?php endif; ?>
 
 <div class="content_headers">
-	<div class="projteam_header">Team Members</div>
-	<div class="actions">
-		<a href="<?php echo $this->url('docs', array('company_id' => FALSE,'controller' => 'docs','action'=>'projects', 'page' => 'team'), null, TRUE); ?>" rel="facebox" title="Add Project">
-			<?php echo $this->InteractIcon('help', 'About Project Team');?>
-			<div class="action_text">Help</div>
-		</a>
-	</div>		
+	<div class="projteam_header">Team Members</div>		
 	<?php if($this->CheckPermission('manage_projects') || $this->identity == $this->project['creator']): ?>
 	<div class="actions">
 		<a href="<?php echo $this->url('projects/manage-team', array('company_id' => FALSE,'controller' => 'projects','action'=>'manage-team', 'project' => $this->id), null, TRUE); ?>">
@@ -115,13 +102,7 @@ endif;
 
 <?php if($this->CheckPermission('view_tasks')): ?>
 	<div class="content_headers">
-		<div class="task_header">Tasks</div>
-		<div class="actions">
-			<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'projects', 'page' => 'tasks'), null, TRUE); ?>" rel="facebox" title="Add Project">
-				<?php echo $this->InteractIcon('help', 'About Project Tasks');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>				
+		<div class="task_header">Tasks</div>				
 		<div class="actions">
 			<a href="<?php echo $this->url('tasks/all', array('project_id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All');?> 
@@ -153,13 +134,7 @@ endif;
 
 <?php if($this->CheckPermission('view_files')): ?>
 	<div class="content_headers">
-		<div class="file_header">Files</div>
-		<div class="actions">
-			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'projects', 'page' => 'files')); ?>" rel="facebox" title="Add Project">
-				<?php echo $this->InteractIcon('help', 'About Project Files');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>		
+		<div class="file_header">Files</div>		
 		<div class="actions">
 			<a href="<?php echo $this->url('files/all', array('type' => 'project', 'id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All');?>  
@@ -188,13 +163,7 @@ endif;
 ?>
 
 <div class="content_headers">
-	<div class="note_header">Notes</div>
-	<div class="actions">
-		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'projects', 'page' => 'notes'), null, TRUE); ?>" rel="facebox" title="Add Project">
-			<?php echo $this->InteractIcon('help', 'About Project Notes');?>
-			<div class="action_text">Help</div>
-		</a>
-	</div>	
+	<div class="note_header">Notes</div>	
 	<div class="actions">
 		<a href="<?php echo $this->url('notes/all', array('type'=>'project', 'id' => $this->id)); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All');?>  
@@ -222,13 +191,7 @@ endif;
 ?>
 
 <div class="content_headers">
-	<div class="bookmark_header">Bookmarks</div>
-	<div class="actions">
-		<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'projects', 'page' => 'bookmarks'), null, TRUE); ?>" rel="facebox" title="Add Project">
-			<?php echo $this->InteractIcon('help', 'About Project Bookmarks');?>
-			<div class="action_text">Help</div>
-		</a>
-	</div>	
+	<div class="bookmark_header">Bookmarks</div>	
 	<div class="actions">
 		<a href="<?php echo $this->url('bookmarks/all', array('type' => 'project', 'id' => $this->id)); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All');?>  
@@ -257,13 +220,7 @@ endif;
 
 <?php if($this->CheckPermission('view_time')): ?>
 	<div class="content_headers">
-		<div class="timetracker_header">Timetracker</div>
-		<div class="actions">
-			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'projects', 'page' => 'times'), null, TRUE); ?>" rel="facebox" title="Add Project">
-				<?php echo $this->InteractIcon('help', 'About Project Times');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>		
+		<div class="timetracker_header">Timetracker</div>		
 		<div class="actions">
 			<a href="<?php echo $this->url('times/view', array('type' => 'project','id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All');?> 
