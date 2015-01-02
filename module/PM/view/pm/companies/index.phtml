@@ -9,7 +9,6 @@
 	</div>
 		
 		<?php 
-		echo $this->ActionBlock('help', 'Help', $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'main'), null, TRUE), 'facebox');
 		if($this->CheckPermission('manage_companies')):
 			echo $this->ActionBlock('add', 'Add Company', $this->url('companies/add'));
 		endif; 

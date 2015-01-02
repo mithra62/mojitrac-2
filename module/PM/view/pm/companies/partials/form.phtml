@@ -30,8 +30,7 @@ echo $this->formRow($csrf);
 		
 		<p>
 			<label for="type">Type</label>
-			<?php $name = $form->get('type'); echo $this->formRow($name); ?>
-			<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'type'), null, TRUE); ?>" rel="facebox"><?php echo $this->InteractIcon('help', 'About Company Type');?></a> 
+			<?php $name = $form->get('type'); echo $this->formRow($name); ?> 
 		</p>
 		
 		<p style="display: none" id="client_language_block">

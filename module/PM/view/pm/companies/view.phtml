@@ -1,13 +1,6 @@
 <div class="content_headers" style="padding-top:0px;">
 
 	<div class="company_header"><?php echo $this->company['name']; ?></div>
-		<div class="actions">
-			<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'view'), null, TRUE); ?>" rel="facebox" title="Add Companies">
-				<?php echo $this->InteractIcon('help', 'About Companies');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>		
-		
 		<?php if($this->company['state'] || $this->company['address1'] || $this->company['city'] || $this->company['zip']):?>
 		<div class="actions">
 			<a href="<?php echo $this->url('companies/map', array('company_id'=> $this->company_id)); ?>" rel="facebox" title="Map">
@@ -121,13 +114,7 @@
 <?php if($this->CheckPermission('view_projects') && ($this->company['type'] == '1' || $this->company['type'] == '6')): ?>
 	<div class="content_headers">
 		<div class="project_header">Projects</div>
-		<?php if($this->CheckPermission('manage_projects')): ?>
-		<div class="actions">
-			<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'projects'), null, TRUE); ?>" rel="facebox" title="About Company Projects">
-				<?php echo $this->InteractIcon('help', 'About Company Projects');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>		
+		<?php if($this->CheckPermission('manage_projects')): ?>	
 		<div class="actions">
 			<a href="<?php echo $this->url('projects/all',array('company_id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All Company Projects');?> 
@@ -157,13 +144,7 @@
 
 <?php if($this->CheckPermission('view_invoices') && ($this->company['type'] == '1')): ?>
 	<div class="content_headers">
-		<div class="invoice_header">Invoices</div>
-		<div class="actions">
-			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller' => 'docs','action'=>'invoices', 'page' => 'contacts'), null, TRUE); ?>" rel="facebox" title="About Company Invoice">
-				<?php echo $this->InteractIcon('help', 'About Company Invoices');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>			
+		<div class="invoice_header">Invoices</div>		
 		<div class="actions">
 			<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'invoices','action'=>'index', 'company' => $this->id), null, TRUE); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All Company Invoices');?> 
@@ -198,13 +179,7 @@ endif; ?>
 <?php 
 if($this->CheckPermission('view_company_contacts') || $this->CheckPermission('manage_company_contacts')):?>
 	<div class="content_headers">
-		<div class="contact_header">Contacts</div>
-		<div class="actions">
-			<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'contacts'), null, TRUE); ?>" rel="facebox" title="About Company Contacts">
-				<?php echo $this->InteractIcon('help', 'About Company Contacts');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>			
+		<div class="contact_header">Contacts</div>			
 		<div class="actions">
 			<a href="<?php echo $this->url('contacts/all', array('company_id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All Company Contacts');?> 
@@ -238,13 +213,7 @@ endif;
 ?>
 
 <div class="content_headers">
-	<div class="file_header">Files</div>
-		<div class="actions">
-			<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'files'), null, TRUE); ?>" rel="facebox" title="About Company Files">
-				<?php echo $this->InteractIcon('help', 'About Company Files');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>		
+	<div class="file_header">Files</div>	
 		<div class="actions">
 			<a href="<?php echo $this->url('files/all', array('type' => 'company', 'id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All Company Files');?> 
@@ -270,13 +239,7 @@ endif;
 ?>
 
 <div class="content_headers">
-	<div class="note_header">Notes</div>
-	<div class="actions">
-		<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'notes')); ?>" rel="facebox" title="About Company Notes">
-			<?php echo $this->InteractIcon('help', 'About Company Notes');?>
-			<div class="action_text">Help</div>
-		</a>
-	</div>		
+	<div class="note_header">Notes</div>	
 	<div class="actions">
 		<a href="<?php echo $this->url('notes/all', array('id' => $this->id, 'type' => 'company')); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All Company Notes');?>
@@ -302,13 +265,7 @@ endif;
 ?>
 
 <div class="content_headers">
-	<div class="bookmark_header">Bookmarks</div>
-	<div class="actions">
-		<a href="<?php echo $this->url('docs', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'bookmarks'), null, TRUE); ?>" rel="facebox" title="About Company Bookmarks">
-			<?php echo $this->InteractIcon('help', 'About Company Bookmarks');?>
-			<div class="action_text">Help</div>
-		</a>
-	</div>		
+	<div class="bookmark_header">Bookmarks</div>		
 	<div class="actions">
 		<a href="<?php echo $this->url('bookmarks/all', array('id' => $this->id, 'type' => 'company')); ?>" title="View All">
 			<?php echo $this->InteractIcon('view-all', 'View All Company Bookmarks');?> 
@@ -333,13 +290,7 @@ else:
 <?php if($this->company['type'] == '1' || $this->company['type'] == '6'): ?>
 
 	<div class="content_headers">
-		<div class="timetracker_header">Timetracker</div>
-		<div class="actions">
-			<a href="<?php echo $this->url('times', array('module' => 'pm','controller' => 'docs','action'=>'companies', 'page' => 'times')); ?>" rel="facebox" title="About Company Times">
-				<?php echo $this->InteractIcon('help', 'About Company Times');?>
-				<div class="action_text">Help</div>
-			</a>
-		</div>			
+		<div class="timetracker_header">Timetracker</div>		
 		<div class="actions">
 			<a href="<?php echo $this->url('times', array('company_id' => $this->id)); ?>" title="View All">
 				<?php echo $this->InteractIcon('view-all', 'View All Company Time');?>
