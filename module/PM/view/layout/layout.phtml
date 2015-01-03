@@ -7,7 +7,7 @@
 	    <div id="login">
 	    <?php
 	    //echo $this->identity;
-	    	$user_data = $this->UserInfo($this->identity);
+	    	$user_data = $this->UserInfo($this->getIdentity());
 	    	$username = $user_data['first_name'].' '.$user_data['last_name'];
             $return  = '<p>Welcome Back <a href="'.$this->url('users/view', array('user_id' => $this->identity), null, TRUE).'" class="highlight">'.$username.'</a> | ';
             $return .= ' <a href="'.$this->url('calendar').'" class="highlight">Calendar</a> | ';

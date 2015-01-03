@@ -23,6 +23,12 @@ use Base\View\Helper\BaseViewHelper;
 class CheckPermission extends BaseViewHelper
 {
 	/**
+	 * Contains the permissions
+	 * @var array
+	 */
+	private $permissions = false;
+	
+	/**
 	 * Checks a given permission 
 	 * @param unknown $permission
 	 */
@@ -31,6 +37,10 @@ class CheckPermission extends BaseViewHelper
 		return $this->getPermissions()->check($this->getIdentity(), $permission);
 	}
 
+	/**
+	 * Returns the Permissions object
+	 * @return \Application\Model\Permissions:
+	 */
 	public function getPermissions()
 	{
 		if (!$this->permissions) {

@@ -22,14 +22,29 @@ use Base\View\Helper\BaseViewHelper;
  */
 class UserInfo extends BaseViewHelper
 {
+	/**
+	 * Container of user data
+	 * @var array
+	 */
 	public $userInfo = FALSE;
 	
+	/**
+	 * @ignore
+	 * @param int $id
+	 * @param string $all
+	 * @return multitype:
+	 */
 	public function __invoke($id, $all = false)
 	{
 		return $this->getUserInfo($id);
 	}
 	
-	public function getUserInfo($id)
+	/**
+	 * Returns an array of $id info
+	 * @param int $id
+	 * @return array
+	 */
+	private function getUserInfo($id)
 	{
 		if(!$this->userInfo)
 		{
