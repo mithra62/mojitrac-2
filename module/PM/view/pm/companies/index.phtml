@@ -58,7 +58,7 @@ if($this->companies):
 			<td><?php echo $this->RelativeDate($company['created_date']); ?></td>
 			<td>
 			<?php if($this->CheckPermission('view_files')):?>
-				<a href="javascript:;" title="Files"><?php echo $this->InteractIcon('folder', 'View Company Files');?></a>
+				<a href="<?php echo $this->url('files/all', array('type' => 'company', 'id' => $company['id'])); ?>" title="Files"><?php echo $this->InteractIcon('folder', 'View Company Files');?></a>
 			<?php endif; ?>
 			
 			<?php if($this->CheckPermission('view_company_contacts')):?>				
