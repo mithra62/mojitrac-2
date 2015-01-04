@@ -37,6 +37,11 @@ return array(
            'port' => '25',
         ),
     ),
+    'image_handling' => array(
+    	array(
+    		'driver' => 'imagick'
+    	)	
+    ),
     'email_logging' => array(
     	'type' => 'file',
     	'file_options' => array(

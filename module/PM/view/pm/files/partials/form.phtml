@@ -41,7 +41,7 @@ if($this->id > 0)
 <?php if($this->company_data): ?>
 <p>
 	<label for="company_id" id="companies">Company</label>
-	<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'companies','action'=>'view', 'id' => $this->company['id']), null, TRUE); ?>"><?php echo $this->company['name']; ?></a>
+	<a href="<?php echo $this->url('companies/view', array('company_id'=> $this->company_data['id'])); ?>" target="_parent"><?php echo $this->company_data['name']; ?></a>
 	<input type="hidden" name="company_id" value="<?php echo $this->company_data['id']; ?>" />
 </p>
 <?php endif; ?>

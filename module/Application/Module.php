@@ -16,6 +16,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Db\Sql\Sql;
 use Zend\Authentication\AuthenticationService;
+use Intervention\Image\ImageManager;
 
 use Application\Model\Auth\AuthAdapter;
 use Application\Model\Users;
@@ -28,6 +29,7 @@ use Application\Model\Settings;
 use Application\Model\Hash;
 use Application\Model\Mail;
 use Application\Model\ViewEvents;
+use Application\Model\Image;
 
 use Application\Form\ForgotPasswordForm;
 use Application\Form\SettingsForm;
@@ -193,6 +195,9 @@ class Module
 				},
 				'Application\Model\Hash' => function($sm) {
 					return new Hash();
+				},
+				'Application\Model\Image' => function($sm) {
+					return new Image(new ImageManager(array('driver' => 'gd')));
 				},
 				'Application\Model\ViewEvents' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');

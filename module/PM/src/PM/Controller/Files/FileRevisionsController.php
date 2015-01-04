@@ -88,8 +88,8 @@ class FileRevisionsController extends AbstractPmController
 	public function previewAction()
 	{
 		$id = $this->params()->fromRoute('revision_id');
-		//$view_type = $this->_request->getParam('view-type', false);
-		//$view_size = $this->_request->getParam('view-size', false);
+		$view_type = $this->params()->fromRoute('view-type', false);
+		$view_size = $this->params()->fromRoute('view-size', false);
 		if (!$id) {
 			return $this->redirect()->toRoute('pm');
 		}
@@ -121,11 +121,12 @@ class FileRevisionsController extends AbstractPmController
 		$root_path = $file->checkMakeDirectory($file->getStoragePath(), $file_data['company_id'], $file_data['project_id'], $file_data['task_id']);
 		if(file_exists($root_path.DS.$rev_data['stored_name']))
 		{
-			//check if we're dealing with an image:
+			//check if we're dealing with an image
 			$image_check = getimagesize($root_path.DS.$rev_data['stored_name']);
 			if($image_check)
 			{
-				$view_size = $file->getPreviewSize($view_size);
+				$image = $this->getServiceLocator()->get('Application\Model\Image');
+				$view_size = $image->getPreviewSize($view_size);
 				$download_path  = $root_path.DS.$view_size.$rev_data['stored_name'];
 				if(!file_exists($download_path))
 				{
@@ -142,7 +143,7 @@ class FileRevisionsController extends AbstractPmController
 						}
 						else
 						{
-							$file->processImage($rev_data['stored_name'], $root_path, $image_check);
+							$image->processImage($rev_data['stored_name'], $root_path, $image_check);
 						}
 					}
 					else

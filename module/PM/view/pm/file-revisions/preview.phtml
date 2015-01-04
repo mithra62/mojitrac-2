@@ -10,4 +10,4 @@ Preview doesn't exist...
 return;
 endif;
 ?>
-<img src="<?php echo $this->url(array('module' => 'pm','controller'=>'files','action'=>'preview-revision', 'id' => $this->rev_data['id'], 'view-type' => 'html'), null, TRUE); ?>" />
+<img src="<?php echo $this->url('files/preview-revision', array('revision_id' => $this->rev_data['id'], 'view-type' => 'html')); ?>" />

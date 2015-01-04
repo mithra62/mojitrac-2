@@ -435,7 +435,7 @@ return array(
         			'preview-revision' => array(
         				'type' => 'segment',
         				'options' => array(
-        					'route' => '/revision/preview/:revision_id',
+        					'route' => '/revision/preview/:revision_id[/view-type/:view-type][/view-size/:view-size]',
         					'constraints' => array(
         						'revision_id' => '[0-9]+'
         					),

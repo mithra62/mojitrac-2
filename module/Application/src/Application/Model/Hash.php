@@ -20,13 +20,16 @@ namespace Application\Model;
 */
 class Hash
 {
+	/**
+	 * The default encryption key to use
+	 * @var string
+	 */
 	protected $key = 'c6PKuC t(b]a))NIuM)eX>^82+4kvk!@!v(eXM{yGW9yLFC A0D0X;]8pQ0@Iv~|';
 	
-	public function __construct()
-	{
-		
-	}
-	
+	/**
+	 * Creates a hash to use for salting
+	 * @return string
+	 */
 	public function gen_salt()
 	{
 		return md5(microtime());

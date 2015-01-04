@@ -51,6 +51,7 @@ class Files extends AbstractModel
 	 * The Project Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $db
+	 * @param \PM\Model\Files\Revisions $rev
 	 */
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db, \PM\Model\Files\Revisions $rev)
 	{
@@ -332,45 +333,6 @@ class Files extends AbstractModel
 				
 		return $data['file_id'];
 	}
-	
-	/**
-	 * Handles the processing of the images 
-	 * @param string $name
-	 * @param string $path
-	 */
-	public function processImage($name, $path, $image_data = false)
-	{
-		if(!$image_data)
-		{
-			$image_data = getimagesize($path.DS.$name);
-		}
-		
-		$imagick = new LambLib_Controller_Action_Helper_iMagick;
-		if('image/psd' == $image_data['mime'])
-		{
-			$name = $imagick->convert_psd($path, $name, 'jpg');
-		}
-		
-		$imagick->resize_image($path.DS.$name, $path.DS.'mid_'.$name, 700, false);
-		$imagick->resize_image($path.DS.$name, $path.DS.'tb_'.$name, 100, false);
-	}
-	
-	public function getPreviewSize($view_size)
-	{
-		switch($view_size)
-		{
-			case 'mid':
-			case 'tb':		
-				$view_size = $view_size.'_';
-			break;
-			
-			default:
-				$view_size = 'mid_';
-			break;
-		}
-		return $view_size;	
-	}
-	
 	
 	/**
 	 * Updates a file
