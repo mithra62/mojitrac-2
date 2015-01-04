@@ -144,24 +144,6 @@ class Files extends AbstractModel
 	}
 	
 	/**
-	 * Returns all the allowed file extensions for uploaded files
-	 * @return string
-	 */
-	public function getAllowedExtensions()
-	{
-		$settings = Zend_Registry::get('pm_settings');
-		if($settings['allowed_file_formats'] != '')
-		{
-			return $settings['allowed_file_formats'];
-		}
-		else
-		{
-			return 'jpg,gif,png,txt,docx,doc,pdf,php,xls,xlsx,csv,psd,ppt,pptx,pot,potx,rar,zip,tar,gz,tgz,bz2,html,htm,avi,mov,fla,swf,asf,flv,sql,mp3';
-	
-		}
-	}
-	
-	/**
 	 * The maximum file size, in bytes, for an uploaded file
 	 * @return string
 	 */

@@ -293,6 +293,11 @@ class FilesController extends AbstractPmController
 				{
 					if ($adapter->receive($formData['file_upload']['name']))
 					{
+						if(isset($company_data))
+						{
+							$formData['company_id']	= $company_data['id'];
+						}
+						
 						if(isset($project_data))
 						{
 							$formData['company_id'] = $project_data['company_id'];
@@ -307,7 +312,7 @@ class FilesController extends AbstractPmController
 							$temp = $project->getCompanyIdById($task_data['project_id']);
 							$formData['company_id'] = $temp['company_id'];
 						}
-										
+
 						$file_info = $adapter->getFileInfo('file_upload');
 						$formData['creator'] = $this->identity;	
 						$formData['owner'] = $this->identity;
