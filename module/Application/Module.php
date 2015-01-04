@@ -197,7 +197,8 @@ class Module
 					return new Hash();
 				},
 				'Application\Model\Image' => function($sm) {
-					return new Image(new ImageManager(array('driver' => 'gd')));
+					$config = $sm->get('Config');
+					return new Image(new ImageManager(array('driver' => $config['image_handling']['driver'])));
 				},
 				'Application\Model\ViewEvents' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');

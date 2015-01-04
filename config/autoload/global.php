@@ -38,9 +38,7 @@ return array(
         ),
     ),
     'image_handling' => array(
-    	array(
-    		'driver' => 'imagick'
-    	)	
+    	'driver' => 'imagick'	
     ),
     'email_logging' => array(
     	'type' => 'file',
