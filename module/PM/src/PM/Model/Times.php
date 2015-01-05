@@ -1,8 +1,7 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
@@ -17,11 +16,11 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
- /**
+/**
  * PM - Times Model
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	TimeTracker
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Model/Times.php
  */
 class Times extends AbstractModel
@@ -159,22 +158,6 @@ class Times extends AbstractModel
 		$where['i.project_id'] = $id;
 		return $this->getTimesWhere($where, $not);			
 	}
-	
-	/**
-	 * Returns all the times for a given project $id
-	 * @param int $id
-	 * @return array
-	 */
-	public function getUserTimesByMonth($user, $month)
-	{
-		if(!is_array($where))
-		{
-			$where = array();
-		}
-		
-		$where['i.project_id'] = $id;
-		return $this->getTimesWhere($where, $not);			
-	}	
 	
 	/**
 	 * Returns all the times for a given task $id
