@@ -13,6 +13,10 @@
 namespace HostManager;
 
 use Zend\EventManager\EventInterface as Event;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Zend\Console\Adapter\AdapterInterface as Console;
+use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
+
 use HostManager\Event\SqlEvent;
 use HostManager\Event\NotificationEvent;
 use HostManager\Model\Accounts;
@@ -20,7 +24,7 @@ use HostManager\Model\Account\Invites;
 use HostManager\Model\Users;
 use HostManager\Form\SignUpForm;
 use HostManager\Form\InviteForm;
-
+ 
 use Zend\ModuleManager\ModuleManager;
 
 
@@ -31,7 +35,9 @@ use Zend\ModuleManager\ModuleManager;
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/HostManager/Module.php
  */
-class Module
+class Module implements 
+    ConsoleUsageProviderInterface,
+    ConsoleBannerProviderInterface
 {		
 
 	/**
@@ -56,6 +62,34 @@ class Module
 
 		$notification_event = $this->service_manager->get('PM\Event\NotificationEvent');
 		//$notification_event->register($this->sharedEvents);
+	}
+
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\ModuleManager\Feature\ConsoleUsageProviderInterface::getConsoleUsage()
+	 */
+	public function getConsoleUsage(Console $console)
+	{
+		return array(
+			// Describe available commands
+			'run account cron [--verbose|-v]',
+			array('Executes any pending Cron requests from hosted accounts'),
+
+			// Describe expected parameters
+			array( '--verbose|-v',     '(optional) turn on verbose mode'),
+			'---------------------------------------',
+			'',
+			'---------------------------------------'
+		);
+	}	
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Zend\ModuleManager\Feature\ConsoleBannerProviderInterface::getConsoleBanner()
+	 */
+	public function getConsoleBanner(Console $console)
+	{
+		return 'Host Manager 2.X';
 	}
 	
     public function getConfig()

@@ -187,6 +187,7 @@ return array(
             'HostManager\Controller\AccountsApi' => 'HostManager\Controller\AccountsApiController',
             'HostManager\Controller\Users' => 'HostManager\Controller\UsersController',
             'HostManager\Controller\Projects' => 'HostManager\Controller\ProjectsController',
+            'HostManager\Controller\Cli' => 'HostManager\Controller\CliController',
         ),
     ),
     'view_manager' => array(
@@ -207,6 +208,22 @@ return array(
                 'base_dir' => __DIR__ . '/../language',
                 'pattern'  => '%s.php',
                 'text_domain' => 'hm',
+            ),
+        ),
+    ),
+    // Placeholder for console routes
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+	            'hm-cron' => array(
+            		'options' => array(
+						'route'    => 'run account cron [--verbose|-v]:verbose',
+            			'defaults' => array(
+            				'controller' => 'HostManager\Controller\Cli',
+            				'action'     => 'cron'
+            			)
+            		)
+	            )           
             ),
         ),
     ),
