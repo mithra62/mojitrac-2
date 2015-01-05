@@ -22,6 +22,13 @@ use Application\Model\AbstractModel;
  */
 class ViewEvents extends AbstractModel
 {
+	/**
+	 * Executes the actual event
+	 * @param string $event
+	 * @param array $partials
+	 * @param array $context
+	 * @return unknown
+	 */
 	public function runEvent($event, array $partials, array $context = array())
 	{
 		$ext = $this->trigger($event, $this, compact('partials', 'context'));

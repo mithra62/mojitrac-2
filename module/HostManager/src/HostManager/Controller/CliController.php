@@ -28,6 +28,9 @@ use Zend\Console\Exception\RuntimeException;
 class CliController extends AbstractController
 {	
 	
+	/**
+	 * The Cron execution action
+	 */
 	public function cronAction()
 	{
 		echo 'fdsa';

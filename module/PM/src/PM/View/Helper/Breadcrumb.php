@@ -102,6 +102,9 @@ class Breadcrumb extends BaseViewHelper
     	return '<div id="breadcrumbs">'.$this->create_links().'</div>';
     }
     
+    /**
+     * Adds a company breadcrumb
+     */
     private function add_company()
     {
     	$helperPluginManager = $this->getServiceLocator();
@@ -116,6 +119,9 @@ class Breadcrumb extends BaseViewHelper
     	}    	
     }
     
+    /**
+     * Adds a project breadcrumb
+     */
     private function add_project()
     {
     	$helperPluginManager = $this->getServiceLocator();
@@ -133,6 +139,9 @@ class Breadcrumb extends BaseViewHelper
     	}
     }
 
+    /**
+     * Adds a task breadcrumb
+     */
     private function add_task()
     {
     	$helperPluginManager = $this->getServiceLocator();
@@ -151,6 +160,9 @@ class Breadcrumb extends BaseViewHelper
     	}
     } 
     
+    /**
+     * Adds a file breadcrumb
+     */
     private function add_file()
     {
     	$helperPluginManager = $this->getServiceLocator();
@@ -184,6 +196,10 @@ class Breadcrumb extends BaseViewHelper
     	}
     }     
 
+    /**
+     * Creates the unordered list for the breadcrumb navication
+     * @return string
+     */
     public function create_links()
     {
     	$txt = '<ul>';
@@ -204,6 +220,12 @@ class Breadcrumb extends BaseViewHelper
     	return $txt;
     }
 
+    /**
+     * Adds a breadcrumb item to the list
+     * @param string $url
+     * @param string $txt
+     * @param string $active
+     */
     public function add_breadcrumb($url, $txt, $active = FALSE)
     {
     	$this->breadcrumb[$this->key]['txt'] = $txt;

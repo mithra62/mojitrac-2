@@ -113,10 +113,10 @@ class Revisions extends AbstractModel
 	
 	/**
 	 * Adds a file revision to the system
-	 * @param int $file_id
-	 * @param array $file_info
-	 * @param bool $process_file Determines if a given upload needs to be moved within the file system
-	 * @return boolean|Ambigous <\Base\Model\Ambigous, \Zend\Db\Adapter\Driver\mixed, NULL, \Zend\EventManager\mixed, mixed>
+	 * @param unknown $file_id
+	 * @param array $data
+	 * @param string $process_file
+	 * @return int
 	 */
 	public function addRevision($file_id, array $data, $process_file = false)
 	{
@@ -162,6 +162,7 @@ class Revisions extends AbstractModel
 	/**
 	 * Returns all the revisions for a given $file_id
 	 * @param int $file_id
+	 * @return array
 	 */
 	public function getFileRevisions($file_id)
 	{
@@ -172,7 +173,8 @@ class Revisions extends AbstractModel
 	
 	/**
 	 * Returns all the revision for a given $revision_id
-	 * @param int $file_id
+	 * @param int $revision_id
+	 * @return array
 	 */
 	public function getRevision($revision_id)
 	{
