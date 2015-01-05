@@ -136,6 +136,16 @@ class FileRevisionsController extends AbstractPmController
 						{
 							$view['preview_exists'] = false;
 						}
+
+						//we have to do special magic for PSD files
+						if($view['preview_exists'] && 'image/psd' == $image_check['mime'])
+						{
+							$download_path = $root_path.DS.$view_size.str_replace('.psd', '.'.str_replace('.','', 'jpg'), $rev_data['stored_name']);
+							if( !file_exists($download_path) )
+							{
+								$view['preview_exists'] = false;
+							}
+						}
 					}
 					else
 					{

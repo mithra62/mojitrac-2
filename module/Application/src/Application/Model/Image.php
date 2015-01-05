@@ -43,7 +43,7 @@ class Image
 			'bmp' => array('image/bmp', 'image/x-windows-bmp'), 
 			'bm' => array('image/bmp'), 
 			'ico' => array('image/x-icon'), 
-			'psd' => array('application/octet-stream')
+			'psd' => array('application/octet-stream', 'image/psd')
 		),
 		'gd' => array(
 			'jpg' => array('image/jpeg', 'image/pjpeg'),
