@@ -1,9 +1,8 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -15,17 +14,20 @@ namespace PM\Model;
 use Application\Model\User\UserData;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterInterface;
 
- /**
+/**
  * PM - Timers Model
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	TimeTracker\Timers
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Model/Timers.php
  */
 class Timers extends UserData
 {
+	/**
+	 * The avaialble configuration options for a timer
+	 * @var array
+	 */
 	private $options = array(
 		'task_id' => 0, 
 		'project_id' => 0, 
@@ -39,6 +41,11 @@ class Timers extends UserData
 	 */
 	public $cache_key = 'timers';
 	
+	/**
+	 * @ignore
+	 * @param \Zend\Db\Adapter\Adapter $adapter
+	 * @param \Zend\Db\Sql\Sql $db
+	 */
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
 	{
 		parent::__construct($adapter, $db);
@@ -92,9 +99,12 @@ class Timers extends UserData
 	public function decodeTimerData($str)
 	{
 		$data = \Zend\Json\Json::decode($str, 1);
-		$data['date'] = date('Y-m-d', $data['start_time']);
-		$data['time_running'] = $this->makeTimeRunning($data['start_time']);
-		return $data;
+		if($data && is_array($data))
+		{
+			$data['date'] = date('Y-m-d', $data['start_time']);
+			$data['time_running'] = $this->makeTimeRunning($data['start_time']);
+			return $data;
+		}
 	}
 	
 	public function getTimerData(array $where = array())
