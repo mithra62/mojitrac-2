@@ -146,6 +146,7 @@ class Files extends AbstractModel
 	/**
 	 * The maximum file size, in bytes, for an uploaded file
 	 * @return string
+	 * @todo abstract max size to settings
 	 */
 	public function getMaxFileSize()
 	{
@@ -153,8 +154,11 @@ class Files extends AbstractModel
 	}
 	
 	/**
-	 * Returns an array of all unique album names with artist names
-	 * @return mixed
+	 * Returns the file data only based on $where and $not
+	 * @param string $view_type
+	 * @param array $where
+	 * @param array $not
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
 	 */
 	public function getAllFiles($view_type = false, array $where = null, array $not = null)
 	{
@@ -170,6 +174,11 @@ class Files extends AbstractModel
 		return $this->getFilesWhere($where, $not);			
 	}
 	
+	/**
+	 * Returns a specific file based on $id
+	 * @param int $id
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 */
 	public function getFileById($id)
 	{
 		$sql = $this->db->select()->from(array('f'=>'files'));
@@ -184,6 +193,13 @@ class Files extends AbstractModel
 		return $this->getRow($sql);			
 	}
 	
+	/**
+	 * Returns all a company's files
+	 * @param int $id
+	 * @param array $where
+	 * @param array $not
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 */
 	public function getFilesByCompanyId($id, array $where = null, array $not = null)
 	{
 		if(!is_array($where))
@@ -195,6 +211,13 @@ class Files extends AbstractModel
 		return $this->getFilesWhere($where, $not);			
 	}
 	
+	/**
+	 * Returns all a project's files
+	 * @param int $id
+	 * @param array $where
+	 * @param array $not
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 */
 	public function getFilesByProjectId($id, array $where = null, array $not = null)
 	{
 		if(!is_array($where))
@@ -206,6 +229,13 @@ class Files extends AbstractModel
 		return $this->getFilesWhere($where, $not);				
 	}
 	
+	/**
+	 * Returns all a task's files
+	 * @param int $id
+	 * @param array $where
+	 * @param array $not
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 */
 	public function getFilesByTaskId($id, array $where = null, array $not = null)
 	{
 		if(!is_array($where))
@@ -217,6 +247,13 @@ class Files extends AbstractModel
 		return $this->getFilesWhere($where, $not);				
 	}
 	
+	/**
+	 * Returns all the files uploaded by a given user
+	 * @param int $id
+	 * @param array $where
+	 * @param array $not
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 */
 	public function getFilesByUserId($id, array $where = null, array $not = null)
 	{
 		if(!is_array($where))
@@ -228,6 +265,14 @@ class Files extends AbstractModel
 		return $this->getFilesWhere($where, $not);				
 	}	
 	
+	/**
+	 * Allows for abstract file database queries
+	 * @param array $where
+	 * @param array $not
+	 * @param array $orwhere
+	 * @param array $ornot
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 */
 	private function getFilesWhere(array $where = null, array $not = null, array $orwhere = null, array $ornot = null)
 	{
 		$sql = $this->db->select()->from(array('f'=> 'files'));
@@ -356,25 +401,5 @@ class Files extends AbstractModel
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $delete = $ext->last();
 		
 		return $delete;
-	}
-	
-	/**
-	 * Removes all the files for the given $company_id
-	 * @param int $company_id
-	 * @return bool
-	 */
-	public function removeFilesByCompany($company_id)
-	{
-		return $this->db->deleteFile($company_id, 'company_id');		
-	}
-
-	/**
-	 * Removes all the tasks for the given $project_id
-	 * @param int $project_id
-	 * @return bool
-	 */
-	public function removeFilesByProject($project_id)
-	{
-		return $this->db->deleteFile($project_id, 'project_id');		
 	}
 }

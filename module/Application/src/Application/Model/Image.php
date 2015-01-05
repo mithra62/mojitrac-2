@@ -14,7 +14,7 @@ namespace Application\Model;
 /**
  * Image Model
  *
- * @package 	Image
+ * @package 	Files
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Application/src/Application/Model/Image.php
 */
@@ -27,42 +27,93 @@ class Image
 	private $manager = null;
 	
 	/**
-	 * @ignore
-	 * @param \Intervention\Image\ImageManager $image_manager
+	 * Contains the image formats we can deal with based on system config
+	 * @var array
 	 */
-	public function __construct(\Intervention\Image\ImageManager $image_manager = null)
-	{
-		$this->manager = $image_manager;
-	}
+	private $allowed_formats = array();
 	
 	/**
 	 * The permissible image formats we can use
 	 * @var array
 	 */
 	private $formats = array(
-		'gd' => array('jpeg', 'png', 'gif', 'tif', 'bmp', 'ico', 'psd'),
-		'imagick' => array('jpeg', 'png', 'gif')
+		'imagick' => array(
+			'tif' => array('image/tiff', 'image/x-tiff'), 
+			'tiff' => array('image/tiff', 'image/x-tiff'), 
+			'bmp' => array('image/bmp', 'image/x-windows-bmp'), 
+			'bm' => array('image/bmp'), 
+			'ico' => array('image/x-icon'), 
+			'psd' => array('application/octet-stream')
+		),
+		'gd' => array(
+			'jpg' => array('image/jpeg', 'image/pjpeg'),
+			'jpeg' => array('image/jpeg', 'image/pjpeg'), 
+			'png' => array('image/png'), 
+			'x-png' => array('image/png'),
+			'gif' => array('image/gif')
+		)
 	);
+	
+	/**
+	 * @ignore
+	 * @param \Intervention\Image\ImageManager $image_manager
+	 */
+	public function __construct(\Intervention\Image\ImageManager $image_manager = null)
+	{
+		$this->manager = $image_manager;
+		$this->formats['imagick'] = array_merge($this->formats['imagick'], $this->formats['gd']);
+		$this->allowed_formats = $this->formats[$this->manager->config['driver']];
+	}
 
 	/**
 	 * Handles the processing of the images
 	 * @param string $name
 	 * @param string $path
+	 * @return bool
 	 */
 	public function processImage($name, $path, $image_data = false)
-	{
+	{	
+		if( !$this->canProcess($path.DS.$name) )
+		{
+			return false;
+		}
+		
 		if(!$image_data)
 		{
 			$image_data = getimagesize($path.DS.$name);
-		}
+		}		
 	
 		if('image/psd' == $image_data['mime'])
 		{
 			$name = $this->convertPsd($path, $name, 'jpg');
+			if( !$name )
+			{
+				return false; //we couldn't work with the PSD do no need to proceed
+			}
 		}
 	
 		$this->resize($path.DS.$name, $path.DS.'mid_'.$name, 700, false);
 		$this->resize($path.DS.$name, $path.DS.'tb_'.$name, 100, false);
+		return true;
+	}
+	
+	/**
+	 * Verifies we can actually do magic against the file
+	 * @param string $file
+	 * @return boolean
+	 */
+	public function canProcess($file)
+	{
+		$ext = pathinfo($file, PATHINFO_EXTENSION);
+		if( !empty($this->allowed_formats[$ext]) && is_array($this->allowed_formats[$ext]) )
+		{
+			$details = $this->getSize($file);
+			$mime = image_type_to_mime_type($details['type']);
+			if( in_array($mime, $this->allowed_formats[$ext]) )
+			{
+				return true;
+			}
+		}
 	}
 	
 	/**
@@ -135,8 +186,7 @@ class Image
 	public function convertPsd($file_path, $file_name, $type)
 	{
 		$new_name = str_replace('.psd', '.'.str_replace('.','', $type), $file_name);
-		$exec_str= $this->convert." -quality 95 -flatten ".$file_path.DS.$file_name."[0] " . $file_path.DS.$new_name;
-		$image_resize_exe = system($exec_str, $output);
+		$this->manager->make($file_path.'/'.$file_name)->encode($type)->save($file_path.'/'.$new_name);
 		return $new_name;
 	}	
 	
@@ -155,80 +205,4 @@ class Image
 		
 		return $s;
 	}
-	
-	/**
-	 * Changes an image from one format to another (gif => jpg, jpg => png, etc...)
-	 *
-	 * @param	string	$image_name		Full path to orignal file
-	 * @param	string	$dest_name		Full path to saved file
-	 * @global	array	$vars			System settings; used for ImageMagickPath
-	 * @return	void
-	 */
-	public function changeFormat($image_name, $dest_name)
-	{
-		$exec_str= $this->convert." $image_name $dest_name";
-		$image_resize_exe = system($exec_str, $output);
-	} 
-	
-	/**
-	 * Rotates an image by passed degrees
-	 *
-	 * @param	string	$image_name		Full path to orignal file
-	 * @param	string	$dest_name		Full path to saved file
-	 * @param	int		$degree			Rate to rotate an image by
-	 * @global	array	$vars			System settings; used for ImageMagickPath
-	 * @return	void
-	 */
-	public function rotate($degree, $image_name, $dest_name)
-	{
-		$exec_str= $this->convert." convert -rotate $degree $image_name $dest_name";
-		$image_resize_exe = system($exec_str, $output);
-	} 
-	
-	/**
-	 * Crops an image to meet passed dimensions squared
-	 *
-	 * @param	string	$image_name		Full path to orignal file
-	 * @param	string	$dest_name		Full path to saved file
-	 * @return	void
-	 */
-	public function shave($image_name, $dest_name)
-	{
-		$stats = $this->get_image_size($image_name);
-		if($stats['width'] >= $stats['height'])
-		{	
-			$exec_str = $this->convert." -shave " .round(($stats['width']-$stats['height'])/2) . "x0 \"$image_name\" \"$dest_name\" ";								
-		}
-		if($stats['width'] < $stats['height'])
-		{
-			$exec_str = $this->convert." -shave 0x" . round(($stats['height']-$stats['width'])/2) . " \"$image_name\" \"$dest_name\" ";
-		}
-		
-		$image_resize_exe = system($exec_str, $output);	
-	}
-	
-	/**
-	 * Crops an image to meet passed dimensions squared
-	 *
-	 * @param	string	$image_name		Full path to orignal file
-	 * @param	string	$dest_name		Full path to saved file
-	 * @param	string	$Text			String to write to the image
-	 * @global	array	$vars			System settings; used for ImageMagickPath
-	 * @return	void
-	 */
-	public function watermark($image_name, $dest_name, $Text)
-	{
-	
-		$CONVERT= $this->convert;
-	$temp = <<<HTML
-	    $CONVERT -size 200x25 xc:none -gravity center \
-	            -stroke black -strokewidth 2 -draw "text 0,0 '$Text'" \
-	            -gaussian 0x3 \
-	            -stroke none -fill white     -draw "text 0,0 '$Text'" \
-	            miff:- | \
-	       composite -gravity south -geometry +0-5 -type TruecolorMatte \
-	                    -   $image_name   $dest_name
-HTML;
-		$image_resize_exe = system($temp, $output);
-	}	
 }

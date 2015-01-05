@@ -132,18 +132,9 @@ class FileRevisionsController extends AbstractPmController
 				{
 					if($image_check && is_array($image_check))
 					{
-						if('image/psd' == $image_check['mime'])
+						if( !$image->processImage($rev_data['stored_name'], $root_path, $image_check) )
 						{
-							$psd_path = str_replace('.psd','.jpg',$download_path);
-							if(file_exists($psd_path))
-							{
-								$download_path = $psd_path;
-								$rev_data['mime_type'] = 'image/jpeg';
-							}
-						}
-						else
-						{
-							$image->processImage($rev_data['stored_name'], $root_path, $image_check);
+							$view['preview_exists'] = false;
 						}
 					}
 					else
