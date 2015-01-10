@@ -245,6 +245,11 @@ class NotificationEvent extends BaseEvent
     {
     	$task_id = $event->getParam('task_id');
     	$assigned_to = $event->getParam('assigned_to');
+    	if($assigned_to == '0' || $assigned_to == $this->identity)
+    	{
+    		return; //assigned to nobody (or so current user) so bounce
+    	}
+    	
     	if($this->user->checkPreference($assigned_to, 'noti_assigned_task', '1') != '0')
     	{
     		$user_data = $this->user->getUserById($assigned_to);
@@ -332,6 +337,8 @@ class NotificationEvent extends BaseEvent
 		$file_id = $event->getParam('file_id');
 		$file = $event->getTarget();
 		$file_data = $file->getFileById($file_id);
+		print_r($file_data);
+		exit;
 		$task_data = $project_data = false;
 		if($file_data['project_id'] != '0')
 		{

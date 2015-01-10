@@ -1,10 +1,9 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
- * @link		http://mithra62.com/
+ * @link		http://mojitrac.com/
  * @version		2.0
  * @filesource 	./module/PM/src/PM/Model/Files.php
  */
@@ -22,7 +21,7 @@ use PM\Traits\File;
  * PM - Files Model
  *
  * @package 	Files
- * @author		Eric Lamb
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Model/Files.php
  */
 class Files extends AbstractModel
@@ -188,7 +187,7 @@ class Files extends AbstractModel
 		$sql = $sql->join(array('p' => 'projects'), 'p.id = f.project_id', array('project_name' => 'name'), 'left');
 		$sql = $sql->join(array('t' => 'tasks'), 't.id = f.task_id', array('task_name' => 'name'), 'left');
 		$sql = $sql->join(array('c' => 'companies'), 'c.id = f.company_id', array('company_name' => 'name'), 'left');
-		$sql = $sql->join(array('u' => 'users'), 'u.id = f.owner', array('file_owner_first_name' => 'first_name','file_owner_last_name' => 'last_name'), 'left');
+		$sql = $sql->join(array('u' => 'users'), 'u.id = f.creator', array('file_creator_first_name' => 'first_name','file_creator_last_name' => 'last_name'), 'left');
 		
 		return $this->getRow($sql);			
 	}
