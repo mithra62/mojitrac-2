@@ -2,7 +2,6 @@
 /**
  * mithra62 - MojiTrac
  *
- * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -16,7 +15,7 @@ use Base\Event\BaseEvent, Exception;
 /**
  * HostManager - SQL Events
  *
- * @package 	HostManager
+ * @package 	Events
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/HostManager/src/HostManager/Event/SqlEvent.php
  */

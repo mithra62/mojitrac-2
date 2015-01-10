@@ -1,5 +1,5 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
  * @author		Eric Lamb <eric@mithra62.com>
@@ -16,7 +16,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 use Application\Model\AbstractModel;
 
- /**
+/**
  * PM - Tasks Model
  *
  * @package 	Tasks
@@ -237,8 +237,9 @@ class Tasks extends AbstractModel
 
 	/**
 	 * Returns the tasks that belong to a project
-	 * @param int $id
+	 * @param unknown $id
 	 * @param array $where
+	 * @param array $not
 	 * @return array
 	 */
 	public function getTasksByProjectId($id, array $where = null, array $not = null)
@@ -294,6 +295,14 @@ class Tasks extends AbstractModel
 		return $this->getRows($sql);
 	}
 
+	/**
+	 * Abstracts retrieving tasks from the system
+	 * @param array $where
+	 * @param array $not
+	 * @param array $orwhere
+	 * @param array $ornot
+	 * @return array
+	 */
 	private function getTasksWhere(array $where = null, array $not = null, array $orwhere = null, array $ornot = null)
 	{
 		$sql = $this->db->select()->from(array('t'=> 'tasks'));
@@ -377,10 +386,10 @@ class Tasks extends AbstractModel
 	}
 	
 	/**
-	 * Updates a task
+	 * Updates a Task
 	 * @param array $data
-	 * @param int	 $id
-	 * @return bool
+	 * @param int $task_id
+	 * @return Ambigous <\Zend\EventManager\mixed, NULL, mixed>|Ambigous <number, \Zend\EventManager\mixed, NULL, mixed>
 	 */
 	public function updateTask(array $data, $task_id)
 	{	
@@ -471,9 +480,8 @@ class Tasks extends AbstractModel
 	}	
 	
 	/**
-	 * Handles everything for a campaign to stop tracking a Last.fm Album Profile.
-	 * @param $id
-	 * @param $campaign_id
+	 * Removes the given task from the system
+	 * @param unknown $task_id
 	 * @return bool
 	 */
 	public function removeTask($task_id)
@@ -550,11 +558,11 @@ class Tasks extends AbstractModel
 	
 	/**
 	 * Logs the assignment of the task to a particular user
-	 * @param int $id
+	 * @param int $task_id
 	 * @param int $assigned_to
 	 * @param int $assigned_by
-	 * @param str $desc
-	 * @return bool
+	 * @param string $assign_comment
+	 * @return Ambigous <\Zend\EventManager\mixed, NULL, mixed>|Ambigous <\Base\Model\Ambigous, \Zend\Db\Adapter\Driver\mixed, NULL, \Zend\EventManager\mixed, mixed>
 	 */
 	public function logTaskAssignment($task_id, $assigned_to, $assigned_by, $assign_comment = null)
 	{
@@ -667,11 +675,5 @@ class Tasks extends AbstractModel
 		exit;
 		$where = array('status', );
 		return $this->update('tasks', $sql, $where);
-	}
-	
-	public function getByProjectIdTaskName($name, $project_id)
-	{
-		$sql = $this->db->select()->from(array('t' => $this->db->getTableName()), array('id'))->where('project_id = ?', $project_id)->where('name LIKE ?', $name);
-		return $this->db->getTask($sql);		
 	}
 }

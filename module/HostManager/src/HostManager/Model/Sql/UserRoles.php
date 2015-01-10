@@ -1,13 +1,11 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
- * @link		http://mithra62.com/
+ * @link		http://mojitrac.com/
  * @version		2.0
- * @filesource 	./module/HostManager/src/HostManager/Model/Sql/settings.php
+ * @filesource 	./module/HostManager/src/HostManager/Model/Sql/UserRoles.php
  */
 
 namespace HostManager\Model\Sql;
@@ -15,11 +13,11 @@ namespace HostManager\Model\Sql;
 use HostManager\Model\Sql\SqlAbstract;
 
 /**
- * HostManager - tasks table class
+ * HostManager - User Roles table class
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
- * @filesource 	./module/HostManager/src/HostManager/Model/Sql/tasks.php
+ * @package 	HostManager\Sql
+ * @author		Eric Lamb <eric@mojitrac.com>
+ * @filesource 	./module/HostManager/src/HostManager/Model/Sql/UserRoles.php
  */
 class UserRoles extends SqlAbstract {
 	

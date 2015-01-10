@@ -2,11 +2,10 @@
 /**
  * mithra62 - MojiTrac
  *
- * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
- * @link		http://mithra62.com/
+ * @link		http://mojitrac.com/
  * @version		2.0
- * @filesource 	./module/PM/src/PM/Controller/CliController.php
+ * @filesource 	./module/Manager/src/Manager/Controller/CliController.php
  */
 
 namespace HostManager\Controller;
@@ -17,13 +16,13 @@ use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\Console\Exception\RuntimeException;
 
 /**
- * PM - Command Line Controller
+ * HostManager - Command Line Controller
  *
- * Handles the PM module Console requests
+ * Handles the HostManager module Console requests
  *
- * @package 	Console
- * @author		Eric Lamb
- * @filesource 	./module/PM/src/PM/Controller/CliController.php
+ * @package 	HostManager\Console
+ * @author		Eric Lamb <eric@mithra62.com>
+ * @filesource 	./module/Manager/src/Manager/Controller/CliController.php
  */
 class CliController extends AbstractController
 {	

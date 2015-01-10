@@ -1,11 +1,9 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
- * @link		http://mithra62.com/
+ * @link		http://mojitrac.com/
  * @version		2.0
  * @filesource 	./module/HostManager/src/HostManager/Model/Sql/SqlAbstract.php
  */
@@ -15,8 +13,8 @@ namespace HostManager\Model\Sql;
 /**
  * HostManager - SqlAbstract
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	HostManager\Sql
+ * @author		Eric Lamb <eric@mojitrac.com>
  * @filesource 	./module/HostManager/src/HostManager/Model/Sql/SqlAbstract.php
  */
 abstract class SqlAbstract {

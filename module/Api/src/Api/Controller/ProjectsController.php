@@ -45,6 +45,7 @@ class ProjectsController extends AbstractRestfulJsonController
 	/**
 	 * (non-PHPdoc)
 	 * @see \Api\Controller\AbstractRestfulJsonController::onDispatch()
+	 * @ignore
 	 */
 	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{

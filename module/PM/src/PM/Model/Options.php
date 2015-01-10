@@ -26,6 +26,10 @@ use Application\Model\AbstractModel;
  */
 class Options extends AbstractModel
 {
+	/**
+	 * Contains the input filter
+	 * @var \Zend\InputFilter\InputFilter
+	 */
     protected $inputFilter;
 	
 	/**
@@ -47,6 +51,11 @@ class Options extends AbstractModel
 		parent::__construct($adapter, $db);
 	}
 	
+	/**
+	 * The SQL array for creating and updating options
+	 * @param array $data
+	 * @return multitype:\Zend\Db\Sql\Expression unknown
+	 */
 	public function getSQL(array $data){
 		return array(
 			'name' => $data['name'],
@@ -55,11 +64,21 @@ class Options extends AbstractModel
 		);
 	}
 	
+	/**
+	 * @ignore
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
+	 */
 	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
 		throw new \Exception("Not used");
 	}
 	
+	/**
+	 * Sets the input filter object and configures it
+	 * @param object $translator
+	 * @return \Zend\InputFilter\InputFilter
+	 */
 	public function getInputFilter($translator)
 	{
 		if (!$this->inputFilter) {
@@ -136,14 +155,10 @@ class Options extends AbstractModel
 		return $types;
 	}
 	
-	public function getOptions($key = FALSE, $value = FALSE, $area)
-	{
-		$sql = $this->db->select();
-		return $this->db->getOptions($sql);		
-	}	
-	
 	/**
-	 * Returns all the Options
+	 * Returns all the Options based on $where
+	 * @param array $where
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
 	 */
 	public function getAllOptions(array $where = array())
 	{
@@ -156,6 +171,11 @@ class Options extends AbstractModel
 		return $this->getRows($sql);
 	}
 	
+	/**
+	 * Returns a specific option
+	 * @param int $id
+	 * @return array
+	 */
 	public function getOptionById($id)
 	{
 		$sql = $this->db->select()->from(array('o'=>'options'));
@@ -167,6 +187,7 @@ class Options extends AbstractModel
 	 * Adds an Option to the db
 	 * @param array $data
 	 * @param int $creator
+	 * @return int
 	 */
 	public function addOption(array $data, $creator)
 	{
@@ -179,6 +200,7 @@ class Options extends AbstractModel
 	/**
 	 * Removes an option and updates all the entries for that option
 	 * @param string $id
+	 * @return bool
 	 */
 	public function removeOption($id)
 	{

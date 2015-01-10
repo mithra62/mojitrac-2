@@ -5,7 +5,7 @@
  * @package		mithra62:Mojitrac
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
- * @link		http://mithra62.com/
+ * @link		http://mojitrac.com/
  * @version		2.0
  * @filesource 	./module/HostManager/src/HostManager/Model/Sql/CompanyContacts.php
  */
@@ -17,7 +17,7 @@ use HostManager\Model\Sql\SqlAbstract;
 /**
  * HostManager - bookmarks table class
  *
- * @package 	mithra62:Mojitrac
+ * @package 	HostManager\Sql
  * @author		Eric Lamb
  * @filesource 	./module/HostManager/src/HostManager/Model/Sql/CompanyContacts.php
  */

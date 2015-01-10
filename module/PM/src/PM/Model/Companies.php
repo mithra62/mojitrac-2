@@ -1,8 +1,7 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
  * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
@@ -20,12 +19,16 @@ use Application\Model\AbstractModel;
  /**
  * PM - Companies Model
  *
- * @package 	mithra62:Mojitrac
+ * @package 	Companies
  * @author		Eric Lamb
  * @filesource 	./module/PM/src/PM/Model/Companies.php
  */
 class Companies extends AbstractModel
 {
+	/**
+	 * The validation filter object
+	 * @var \Zend\InputFilter\InputFilter
+	 */
 	protected $inputFilter;
 	
 	/**
@@ -38,11 +41,20 @@ class Companies extends AbstractModel
 		parent::__construct($adapter, $db);
 	}
 	
+	/**
+	 * Sets the input validation filter
+	 * @param InputFilterInterface $inputFilter
+	 * @throws \Exception
+	 */
 	public function setInputFilter(InputFilterInterface $inputFilter)
 	{
 		throw new \Exception("Not used");
 	}
 	
+	/**
+	 * Returns the input filter
+	 * @return \Zend\InputFilter\InputFilter
+	 */
 	public function getInputFilter()
 	{
 		if (!$this->inputFilter) {
@@ -123,7 +135,13 @@ class Companies extends AbstractModel
 		}
 	}	
 	
-	public function getCompanyById($id, $what = null)
+	/**
+	 * Returns a company by its id
+	 * @param int $id
+	 * @param array $what
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 */
+	public function getCompanyById($id, array $what = null)
 	{
 		$sql = $this->db->select();
 		if(is_array($what))
@@ -140,8 +158,10 @@ class Companies extends AbstractModel
 	}
 	
 	/**
-	 * Returns an array of all unique artist names
-	 * @return mixed
+	 * Returns all the company names
+	 * @param string $type
+	 * @param string $ids
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
 	 */
 	public function getAllCompanyNames($type = FALSE, $ids = FALSE)
 	{
@@ -162,8 +182,9 @@ class Companies extends AbstractModel
 	}
 	
 	/**
-	 * Returns an array of all unique album names with artist names
-	 * @return mixed
+	 * Returns all the companies
+	 * @param string $view_type
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
 	 */
 	public function getAllCompanies($view_type = FALSE)
 	{
@@ -177,11 +198,11 @@ class Companies extends AbstractModel
 	}
 	
 	/**
-	 * Returns the total projects a company has
+	 * Calculates how many projects a given comapny has
 	 * @param int $id
-	 * @return int
+	 * @return string
 	 */
-	public function getProjectCount($id, $status = FALSE)
+	public function getProjectCount($id)
 	{
 		$sql = $this->db->select()
 					->from('projects')->columns(array('count' => new \Zend\Db\Sql\Expression('COUNT(id)')))
@@ -196,10 +217,9 @@ class Companies extends AbstractModel
 	/**
 	 * Returns the total tasks a company has
 	 * @param int $id
-	 * @param int $status
 	 * @return int
 	 */
-	public function getTaskCount($id, $status = FALSE)
+	public function getTaskCount($id)
 	{
 		$sql = $this->db->select()
 					->from('tasks')->columns(array('count' => new \Zend\Db\Sql\Expression('COUNT(id)')))
@@ -214,10 +234,9 @@ class Companies extends AbstractModel
 	/**
 	 * Returns the total files a company has
 	 * @param int $id
-	 * @param int $status
 	 * @return int
 	 */
-	public function getFileCount($id, $status = FALSE)
+	public function getFileCount($id)
 	{
 		$sql = $this->db->select()
 					->from('files')->columns(array('count' => new \Zend\Db\Sql\Expression('COUNT(id)')))
@@ -232,8 +251,7 @@ class Companies extends AbstractModel
 	/**
 	 * Inserts or updates a Company
 	 * @param $data
-	 * @param $bypass_update
-	 * @return mixed
+	 * @return int
 	 */
 	public function addCompany($data)
 	{
@@ -253,7 +271,7 @@ class Companies extends AbstractModel
 	/**
 	 * Updates a company
 	 * @param array $data
-	 * @param int	 $id
+	 * @param int $company_id
 	 * @return bool
 	 */
 	public function updateCompany($data, $company_id)

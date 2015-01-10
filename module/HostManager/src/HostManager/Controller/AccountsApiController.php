@@ -1,13 +1,11 @@
 <?php
 /**
  * mithra62 - MojiTrac
-*
-* @package		mithra62:Mojitrac
-* @author		Eric Lamb
-* @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
-* @link			http://mithra62.com/
-* @version		2.0
-* @filesource 	./module/Api/src/HostManager/Controller/AccountsApiController.php
+ *
+ * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
+ * @link		http://mojitrac.com/
+ * @version		2.0
+ * @filesource 	./module/Api/src/HostManager/Controller/AccountsApiController.php
 */
 
 namespace HostManager\Controller;
@@ -17,12 +15,12 @@ use Zend\View\Model\JsonModel;
 use Zend_Exception;
 
 /**
- * Api - Options Controller
+ * HostManager - Accounts API Controller
  *
- * Options REST API Controller
+ * Accounts API Controller
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	HostManager\Accounts
+ * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/Api/src/Api/Controller/OptionsController.php
  */
 class AccountsApiController extends AbstractRestfulJsonController

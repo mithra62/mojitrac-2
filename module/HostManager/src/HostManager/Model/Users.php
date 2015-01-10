@@ -16,7 +16,7 @@ use PM\Model\Users as PmUsers;
 /**
  * HostManager - Users Model
  *
- * @package 	Users\HostManager
+ * @package 	HostManager
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/HostManager/src/HostManager/Model/Users.php
  */

@@ -2,8 +2,6 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -220,6 +218,12 @@ class Roles extends AbstractModel
 		}
 	}
 	
+	/**
+	 * Adds permissions to a role
+	 * @param array $data
+	 * @param array $id
+	 * @return boolean
+	 */
 	public function addRolePermissions($data, $id)
 	{
 		$perms = $this->getAllPermissions();
@@ -241,6 +245,11 @@ class Roles extends AbstractModel
 		return TRUE;
 	}
 	
+	/**
+	 * Removes a role from a permission
+	 * @param unknown $role_id
+	 * @return Ambigous <number, \Zend\EventManager\mixed, NULL, mixed>
+	 */
 	public function deleteRolePermissions($role_id)
 	{
 		return $this->remove('user_role_2_permissions', array('role_id' => $role_id));

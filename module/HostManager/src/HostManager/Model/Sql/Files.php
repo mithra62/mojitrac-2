@@ -5,7 +5,7 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mojitrac.com/
  * @version		2.0
- * @filesource 	./module/HostManager/src/HostManager/Model/Sql/ProjectTeams.php
+ * @filesource 	./module/HostManager/src/HostManager/Model/Sql/Files.php
  */
 
 namespace HostManager\Model\Sql;
@@ -13,12 +13,12 @@ namespace HostManager\Model\Sql;
 use HostManager\Model\Sql\SqlAbstract;
 
 /**
- * HostManager - project_teams table class
+ * HostManager - Files table class
  *
  * @package 	HostManager\Sql
  * @author		Eric Lamb <eric@mojitrac.com>
- * @filesource 	./module/HostManager/src/HostManager/Model/Sql/ProjectTeams.php
+ * @filesource 	./module/HostManager/src/HostManager/Model/Sql/Files.php
  */
-class ProjectTeams extends SqlAbstract {
-	
+class Files extends SqlAbstract {
+
 }

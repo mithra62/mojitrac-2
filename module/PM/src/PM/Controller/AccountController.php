@@ -27,6 +27,7 @@ class AccountController extends AbstractPmController
 	/**
 	 * (non-PHPdoc)
 	 * @see \PM\Controller\AbstractPmController::onDispatch()
+	 * @ignore
 	 */
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{

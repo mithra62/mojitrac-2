@@ -2,9 +2,8 @@
 /**
  * mithra62 - MojiTrac
  *
- * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
- * @link		http://mithra62.com/
+ * @link		http://mojitrac.com/
  * @version		2.0
  * @filesource 	./module/PM/src/PM/Model/Options/Tasks.php
  */
@@ -20,27 +19,22 @@ namespace PM\Model\Options;
  */
 class Tasks extends AbstractOptions
 {
-	static public function types($options)
+	/**
+	 * Returns the availble "types" for tasks
+	 * @param \PM\Model\Options $options
+	 * @return Ambigous <\PM\Model\Options\multitype:string, multitype:string unknown >
+	 */
+	static public function types(\PM\Model\Options $options)
 	{		
 		return parent::filterOptions($options->getAllTaskTypes());
 	}
 	
-	static public function access()
-	{
-		$access = array();
-		$access['1'] = 'Public';
-		$access['2'] = 'Protected';
-		$access['3'] = 'Participant';
-		$access['4'] = 'Private';
-		
-		return $access;
-	}
-	
-	static public function tasks()
-	{
-		return array();
-	}	
-	
+	/**
+	 * Translates a given type_id ($id) into its readable name
+	 * @param int $id
+	 * @param \PM\Model\Options $options
+	 * @return Ambigous <>
+	 */
 	static public function translateTypeId($id, \PM\Model\Options $options)
 	{
 		$types = $options->getAllTaskTypes();
@@ -53,6 +47,10 @@ class Tasks extends AbstractOptions
 		}
 	}
 	
+	/**
+	 * Creates the progress options array
+	 * @return multitype:number
+	 */
 	static public function progress()
 	{
 		$arr = array();

@@ -62,6 +62,8 @@ class Users extends AbstractModel
 	 * The User Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param Sql $db
+	 * @param \Application\Model\Roles $roles
+	 * @param \Application\Model\User\UserData $user_data
 	 */
 	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db, \Application\Model\Roles $roles, \Application\Model\User\UserData $user_data)
 	{
@@ -287,6 +289,10 @@ class Users extends AbstractModel
 		return $this->registrationInputFilter;
 	}
 
+	/**
+	 * Returns the InputFilter for validation
+	 * @return object
+	 */
 	public function getRolesInputFilter()
 	{
 		if (!$this->rolesInputFilter) {
@@ -325,8 +331,10 @@ class Users extends AbstractModel
 	
 	/**
 	 * Verifies that the provided credentials are accurate after salting, hashing and db checking.
-	 * @param string $email
-	 * @param string $password
+	 * @param unknown $key
+	 * @param unknown $password
+	 * @param string $col
+	 * @return array
 	 */
 	public function verifyCredentials($key, $password, $col = 'email')
 	{
@@ -352,20 +360,6 @@ class Users extends AbstractModel
 		{
 			return $hash['hash'];
 		}
-	}	
-	
-	/**
-	 * Returns the id for a given artist $name
-	 * @param $name
-	 * @return mixed
-	 */
-	public function getUsersIdByName($name)
-	{
-		$sql = $this->db->select()
-					  ->from($this->db->getTableName(), array('id'))
-					  ->where('name LIKE ?', $name);
-					  
-		return $this->db->getUsers($sql);
 	}
 	
 	/**
@@ -380,7 +374,9 @@ class Users extends AbstractModel
 	
 	/**
 	 * Returns a user array by password hash
-	 * @param string $email
+	 * @param unknown $hash
+	 * @param string $expired
+	 * @return array
 	 */
 	public function getUserByPwHash($hash, $expired = TRUE)
 	{
@@ -417,8 +413,9 @@ class Users extends AbstractModel
 	}
 	
 	/**
-	 * Returns an array of all unique album names with artist names
-	 * @return mixed
+	 * Returns all the system users
+	 * @param string $status
+	 * @return array
 	 */
 	public function getAllUsers($status = FALSE)
 	{
@@ -436,8 +433,7 @@ class Users extends AbstractModel
 	 * Creates a member
 	 * @param array $data
 	 * @param \Application\Model\Hash $hash
-	 * @param \Application\Model\Roles $roles
-	 * @return unknown
+	 * @return int
 	 */
 	public function addUser(array $data, \Application\Model\Hash $hash)
 	{
@@ -597,52 +593,13 @@ class Users extends AbstractModel
 		return $return;
 	}
 	
-	private function getUsersWhere(array $where = null, array $not = null, array $orwhere = null, array $ornot = null)
-	{
-		$sql = $this->db->select()->setIntegrityCheck(false)->from(array('u'=>$this->db->getTableName()));
-		
-		if(is_array($where))
-		{
-			foreach($where AS $key => $value)
-			{
-				$sql = $sql->where("$key = ? ", $value);
-			}
-		}
-		
-		if(is_array($not))
-		{
-			foreach($not AS $key => $value)
-			{
-				$sql = $sql->where("$key != ? ", $value);
-			}
-		}
-		
-		if(is_array($orwhere))
-		{
-			foreach($orwhere AS $key => $value)
-			{
-				$sql = $sql->orwhere("$key = ? ", $value);
-			}
-		}
-		
-		if(is_array($ornot))
-		{
-			foreach($ornot AS $key => $value)
-			{
-				$sql = $sql->orwhere("$key != ? ", $value);
-			}
-		}		
-		
-		return $this->db->getUsers($sql);
-		
-	}	
-	
-	public function getUserByFirstLastName($first, $last)
-	{
-		$sql = $this->db->select()->from(array('u' => $this->db->getTableName()), array('id'))->where('first_name LIKE ?', $first)->where('last_name LIKE ?', $last);
-		return $this->db->getUser($sql);		
-	}
-	
+	/**
+	 * Determines whether a user has a preference set
+	 * @param int $id
+	 * @param string $pref
+	 * @param string $default
+	 * @return unknown|string
+	 */
 	public function checkPreference($id, $pref, $default = FALSE)
 	{
 		$data = $this->user_data->getUsersData($id);

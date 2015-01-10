@@ -1,11 +1,9 @@
 <?php
- /**
+/**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
- * @link		http://mithra62.com/
+ * @link		http://mojitrac.com/
  * @version		2.0
  * @filesource 	./module/HostManager/src/HostManager/Model/Sql/Projects.php
  */
@@ -17,19 +15,10 @@ use HostManager\Model\Sql\SqlAbstract;
 /**
  * HostManager - projects table class
  *
- * @package 	mithra62:Mojitrac
- * @author		Eric Lamb
+ * @package 	HostManager\Sql
+ * @author		Eric Lamb <eric@mojitrac.com>
  * @filesource 	./module/HostManager/src/HostManager/Model/Sql/Projects.php
  */
 class Projects extends SqlAbstract {
-	
-	/**
-	 * Appends the account_id column to all SELECT calls to filter database queries
-	 * @param \Zend\Db\Sql\Select $sql
-	 * @return \Zend\Db\Sql\Select
-	 */
-	public function Select(\Zend\Db\Sql\Select $sql, $account_id)
-	{
-		return parent::Select($sql, $account_id);
-	}
+
 }
