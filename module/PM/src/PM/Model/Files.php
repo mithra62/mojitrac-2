@@ -311,7 +311,7 @@ class Files extends AbstractModel
 		$sql = $sql->join(array('p' => 'projects'), 'p.id = f.project_id', array('project_name' => 'name'), 'left');
 		$sql = $sql->join(array('t' => 'tasks'), 't.id = f.task_id', array('task_name' => 'name'), 'left');
 		$sql = $sql->join(array('c' => 'companies'), 'c.id = f.company_id', array('company_name' => 'name'), 'left');
-		$sql = $sql->join(array('u' => 'users'), 'u.id = f.owner', array('file_owner_first_name' => 'first_name', 'file_owner_last_name' => 'last_name'), 'left');
+		$sql = $sql->join(array('u' => 'users'), 'u.id = f.creator', array('file_creator_first_name' => 'first_name', 'file_creator_last_name' => 'last_name'), 'left');
 		
 		return $this->getRows($sql);	
 		

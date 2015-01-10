@@ -337,8 +337,17 @@ class NotificationEvent extends BaseEvent
 		$file_id = $event->getParam('file_id');
 		$file = $event->getTarget();
 		$file_data = $file->getFileById($file_id);
-		print_r($file_data);
-		exit;
+		$revision_data = $file->revision->getFileRevisions($file_id);
+		if(isset($revision_data['0']))
+		{
+			$revision_data = $revision_data['0']; //we only want that first revision for this
+		}
+		else
+		{
+			//no revision so something's off; bounce
+			return;
+		}
+		
 		$task_data = $project_data = false;
 		if($file_data['project_id'] != '0')
 		{
@@ -369,7 +378,8 @@ class NotificationEvent extends BaseEvent
 	    		$view_data = array(
 	    			'file_data' => $file_data,
 	    			'project_data' => $project_data,
-	    			'task_data' => $task_data
+	    			'task_data' => $task_data,
+	    			'revision_data' => $revision_data
 	    		);
 	    		 
 	    		$this->mail->setEmailView('file-add', $view_data);
