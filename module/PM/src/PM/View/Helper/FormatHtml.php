@@ -25,6 +25,6 @@ class FormatHtml extends BaseViewHelper
 {
 	public function __invoke($str)
 	{
-		return MarkdownExtra::defaultTransform($str);
+		return '<div class="md_wrap">'.MarkdownExtra::defaultTransform($str).'</div>';
 	}
 }

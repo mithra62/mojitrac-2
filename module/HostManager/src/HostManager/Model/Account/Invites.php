@@ -62,9 +62,11 @@ class Invites extends AbstractModel
 	
 	/**
 	 * Returns an instance of the InputFilter for data validation
+	 * @param int $identity The user ID
+	 * @param string $match_col The column we want to restrict matching to
 	 * @return \Zend\InputFilter\InputFilter
 	 */
-	public function getInputFilter()
+	public function getInputFilter($identity, \Application\Model\Users $user, $match_col = 'email')
 	{
 		if (!$this->inputFilter) {
 			$inputFilter = new InputFilter();
@@ -80,6 +82,14 @@ class Invites extends AbstractModel
 				'validators' => array(
 					array(
 						'name' => 'EmailAddress',
+					),
+					array(
+						'name' => '\Application\Validate\User\PreventSelfEmail',
+						'options' => array(
+							'identity' => $identity,
+							'invite' => $this,
+							'user' => $user,
+						)
 					),
 				),
 			)));

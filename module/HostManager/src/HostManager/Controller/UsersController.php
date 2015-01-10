@@ -69,7 +69,7 @@ class UsersController extends PmUsers
 		if ($request->isPost())
 		{
 			$formData = $this->getRequest()->getPost();
-            $form->setInputFilter($invite->getInputFilter());
+            $form->setInputFilter($invite->getInputFilter($this->identity, $user, 'email'));
 			$form->setData($request->getPost());
 			if ($form->isValid($formData))
 			{

@@ -859,3 +859,10 @@ h3 a.project_dashboard
 	background-position: 0pt 50%; 
 	background-image: url('/images/icons/tool_timer_16.png');
 }
+
+.md_wrap ol 
+{
+	padding-left: 25px;
+	font-size:12px;
+	list-style-type: decimal;
+}

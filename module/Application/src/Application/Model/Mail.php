@@ -2,10 +2,8 @@
 /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
- * @link		http://mithra62.com/
+ * @link		http://mojitrac.com/
  * @version		2.0
  * @filesource 	./module/Application/src/Application/Model/Mail.php
  */
@@ -100,7 +98,7 @@ class Mail extends AbstractModel
 		$this->message->addReplyTo("no-reply@mojitrac.com", "MojiTrac");
 		$this->message->setSender("no-reply@mojitrac.com", "MojiTrac");
 		$this->message->setFrom("no-reply@mojitrac.com", "MojiTrac");
-		$this->web_url = 'http://'.$_SERVER['HTTP_HOST'];
+		$this->web_url = (isset($_SERVER['HTTP_HOST']) ? 'https://'.$_SERVER['HTTP_HOST'] : false);
 	}
 	
 	/**
@@ -258,14 +256,14 @@ class Mail extends AbstractModel
 	 */
 	public function setBody($message)
 	{
-		//$text = new MimePart(strip_tags($message));
-		//$text->type = "text/plain";
+		$text = new MimePart(strip_tags($message));
+		$text->type = "text/plain";
 		
 		$html = new MimePart($message);
 		$html->type = "text/html";
 		
 		$body_html = new MimeMessage();
-		$body_html->setParts(array($html));
+		$body_html->setParts(array($html, $text));
 				
 		$this->message->setBody($body_html);
 		return $this;
