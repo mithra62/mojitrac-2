@@ -9,7 +9,7 @@ for($i=0;$i<$count;$i++):
 	$active = (is_numeric($this->active_sub) && $i == $this->active_sub ? 'active' : FALSE);
 	
 ?>
-	<li><a href="/pm/projects/index/view/<?php echo $i; ?>" class="<?php echo $class.' '.$active; ?>"><?php echo $this->sub_menu_options[$i]; ?></a></li>
+	<li><a href="javascript:;" class="<?php echo $class.' '.$active; ?>"><?php echo $this->sub_menu_options[$i]; ?></a></li>
 <?php 
 endfor;
 ?>
