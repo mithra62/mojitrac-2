@@ -66,7 +66,6 @@ class DashboardTimeline extends BaseViewHelper
 				case 'bookmark_remove':
 				case 'bookmark_update':
 				case 'file_revision_remove':
-				case 'file_revision_add':
 				case 'file_review_remove':
 				case 'file_review_add':
 					return 'facebox';
@@ -261,7 +260,7 @@ class DashboardTimeline extends BaseViewHelper
 				case 'file_revision_add':	
 					if(isset($data['file_name']) && $data['file_name'] != '')
 					{
-						return $this->view->url('pm', array('module'=> 'pm', 'controller'=>'files','action'=>'preview-revision', 'id' => $data['file_rev_id']), null, TRUE);
+						return $this->view->url('files/view', array('file_id' => $data['file_id']));
 					} 
 					$data['stuff'] = \Zend\Json\Json::decode($data['stuff'], \Zend\Json\Json::TYPE_ARRAY);
 				break;					
