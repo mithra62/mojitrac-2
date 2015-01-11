@@ -28,11 +28,14 @@ if($this->id > 0)
 </p>
 <?php endif; ?>
 
+<?php if($file_data['status'] != '3'): ?>
 <p>
 	<label for="status">Status</label>
 	<?php $name = $form->get('status'); echo $this->formRow($name); ?>
 </p>
-
+<?php else: ?>
+<input type="hidden" value="<?php echo $file_data['status']; ?>" name="status" />
+<?php endif; ?>
 <p>
 	<label for="description">Description</label>
 	<?php $name = $form->get('description'); echo $this->formRow($name); ?>

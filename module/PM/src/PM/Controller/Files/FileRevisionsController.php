@@ -226,14 +226,6 @@ class FileRevisionsController extends AbstractPmController
 						$revision_id = $file->revision->addRevision($file_id, $formData, true);
 						if($revision_id)
 						{
-							if(isset($file_data['project_id']) && $file_data['project_id'] >= 1)
-							{
-								//$noti = new PM_Model_Notifications;
-								//$noti->sendRevisionAdd($id);
-							}
-	
-							//PM_Model_ActivityLog::logFileRevisionAdd($formData, $id, $this->identity);
-					    	//$this->_flashMessenger->addMessage('File Revision Added!');
 							$this->flashMessenger()->addMessage($this->translate('file_revision_added', 'pm'));
 							return $this->redirect()->toRoute('files/view', array('file_id' => $file_id));
 						}
@@ -263,6 +255,7 @@ class FileRevisionsController extends AbstractPmController
 		$view['form_action'] = $this->getRequest()->getRequestUri();
 		$view['file_data'] = $file_data;
 		$view['form'] = $form;
+		$view['file_data'] = $file_data;
 		return $this->ajaxOutput($view);
 	}
 	
