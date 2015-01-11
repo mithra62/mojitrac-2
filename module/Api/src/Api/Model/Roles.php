@@ -42,7 +42,7 @@ class Roles extends PmRoles
 	 * (non-PHPdoc)
 	 * @see \Application\Model\Roles::getAllRoles()
 	 */
-	public function getAllRoles()
+	public function getAllRoles(array $where = array())
 	{
 		$roles = parent::getAllRoles();
 		$total_results = $this->getTotalResults();

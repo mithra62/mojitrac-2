@@ -57,6 +57,7 @@ return array(
 	'permission_view_tasks' => 'Can the user view tasks?',
 	'permission_view_time' => 'Can the user view time tracker data?',
 	'permission_view_users_data' => 'Can the user view other users data?',
+	'permission_access_rest_api' => 'Can the user access the REST API?',
 		
 	//roles controller
 	'user_roles' => 'User Roles',

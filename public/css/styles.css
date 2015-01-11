@@ -702,6 +702,15 @@ div.invites_header {
 	background: url('/images/icons/email_32.png') no-repeat;	
 }
 
+div.rest_api_header {
+	float:left;
+	padding-left: 35px;
+	padding-top:4px;
+	padding-bottom:4px;
+	float:left;
+	background: url('/images/icons/lock_32.png') no-repeat;	
+}
+
 .revision_images {
 	float: left;
 	padding-right: 10px;

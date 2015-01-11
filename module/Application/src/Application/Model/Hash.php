@@ -11,6 +11,8 @@
 
 namespace Application\Model;
 
+use Zend\Crypt\BlockCipher;
+
 /**
  * Hash Model
  *
@@ -26,6 +28,8 @@ class Hash
 	 */
 	protected $key = 'c6PKuC t(b]a))NIuM)eX>^82+4kvk!@!v(eXM{yGW9yLFC A0D0X;]8pQ0@Iv~|';
 	
+	private $block_cipher = null;
+	
 	/**
 	 * Creates a hash to use for salting
 	 * @return string
@@ -35,12 +39,22 @@ class Hash
 		return md5(microtime());
 	}
 	
+	/**
+	 * Encrypts up the password for storage
+	 * @param string $password
+	 * @param string $salt
+	 * @return string
+	 */
 	public function password($password, $salt)
 	{
 		$salt = hash_hmac('sha512', $salt, $this->key);
 		return hash_hmac('sha512', $password . $salt, $this->key);
 	}
 	
+	/**
+	 * Creates a standard GUID string
+	 * @return string
+	 */
 	public function guid()
 	{
 	    if (function_exists('com_create_guid'))
@@ -63,8 +77,33 @@ class Hash
 	    }		
 	}
 	
+	/**
+	 * Returns a GUID without wrapping brackets
+	 * @return string
+	 */
 	public function guidish()
 	{
 		return strtolower(str_replace(array('}', '{'), '', $this->guid()));
+	}
+	
+	public function encrypt($string)
+	{
+		$this->block_cipher->setKey($this->key);
+		return $this->block_cipher->encrypt($string);
+	}
+	
+	public function decrypt($string)
+	{
+		
+	}
+	
+	private function getBlockCypher()
+	{
+		if(!$this->block_cipher)
+		{
+			$this->block_cipher = BlockCipher::factory('mcrypt', array('algo' => 'aes'));
+		}
+		
+		return $this->block_cipher;
 	}
 }

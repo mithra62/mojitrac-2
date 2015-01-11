@@ -2,7 +2,6 @@
 /**
  * mithra62 - MojiTrac
  *
- * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
@@ -32,8 +31,6 @@ class AccountController extends AbstractPmController
 	public function onDispatch(  \Zend\Mvc\MvcEvent $e )
 	{
 		$e = parent::onDispatch( $e );
-        //parent::check_permission('view_projects');
-        //$this->layout()->setVariable('layout_style', 'single');
         $this->layout()->setVariable('sidebar', 'dashboard');
         $this->layout()->setVariable('sub_menu', 'account');
         $this->layout()->setVariable('active_nav', 'account');

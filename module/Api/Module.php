@@ -10,6 +10,7 @@
  */
 namespace Api;
 
+use Zend\ModuleManager\ModuleManager;
 use Zend\ModuleManager\Feature;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
@@ -22,6 +23,9 @@ use Api\Model\Companies;
 use Api\Model\Options;
 use Api\Model\Roles;
 
+use Api\Event\UserDataEvent;
+use Api\Event\ViewEvent;
+
 /**
  * Api - Module Loader
  *
@@ -32,11 +36,32 @@ use Api\Model\Roles;
 class Module implements Feature\BootstrapListenerInterface
 {
 	/**
+	 * Sets up the module layout
+	 * @param ModuleManager $moduleManager
+	 */
+	public function init(ModuleManager $moduleManager)
+	{
+		//sets the layout
+		$this->sharedEvents = $moduleManager->getEventManager()->getSharedManager();
+		$this->sharedEvents->attach(__NAMESPACE__, 'dispatch', function($e) {
+			$controller = $e->getTarget();
+			$controller->layout('layout/pm');
+		}, 100);
+				
+	}
+		
+	/**
 	 * (non-PHPdoc)
 	 * @see \Zend\ModuleManager\Feature\BootstrapListenerInterface::onBootstrap()
 	 */
 	public function onBootstrap(EventInterface $e)
 	{	
+		$event = $e->getApplication()->getServiceManager()->get('Api\Event\UserDataEvent');
+		$event->register($this->sharedEvents);
+
+		$event = $e->getApplication()->getServiceManager()->get('Api\Event\ViewEvent');
+		$event->register($this->sharedEvents);
+		
 		//we have to work some magic to only use the Json ViewStrategy on the API module
 		$app = $e->getApplication();
 		$em  = $app->getEventManager()->getSharedManager();
@@ -93,7 +118,18 @@ class Module implements Feature\BootstrapListenerInterface
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
 					return new Roles($adapter, $db);
-				},									
+				},
+
+				//events
+				'Api\Event\UserDataEvent' => function($sm) {
+					return new UserDataEvent(); 
+				},
+				'Api\Event\ViewEvent' => function($sm) {
+					$auth = $sm->get('AuthService');
+					$user = $sm->get('Api\Model\Users');
+					
+					return new ViewEvent($auth->getIdentity(), $user); 
+				},
 			),
     	);
     } 
