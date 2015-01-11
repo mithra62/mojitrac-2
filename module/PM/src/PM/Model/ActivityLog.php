@@ -95,7 +95,7 @@ class ActivityLog extends AbstractModel
 			
 			if(array_key_exists('project_id', $filter) && is_numeric($filter['project_id']))
 			{
-				$sql = $sql->where('a.project_id = ?', $filter['project_id']);
+				$sql = $sql->where(array('a.project_id' => $filter['project_id']));
 			}			
 		}
 		
@@ -104,64 +104,6 @@ class ActivityLog extends AbstractModel
 		$sql = $sql->limit($limit);
 		return $this->getRows($sql);
 	}
-	
-	public function getActivityById($id, $filter_teams = FALSE)
-	{
-		$activity = new PM_Model_DbTable_ActivityLog;
-		$sql = $activity->select()->setIntegrityCheck(false)->from(array('a'=>$activity->getTableName()));
-		$sql = $sql->where('a.id = ?', $id);
-				
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = a.project_id', array('name AS project_name', 'id AS project_id'));
-		$sql = $sql->joinLeft(array('t' => 'tasks'), 't.id = a.task_id', array('t.name AS task_name'));
-		$sql = $sql->joinLeft(array('n' => 'notes'), 'n.id = a.note_id ', array('subject AS note_subject'));
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = a.user_id', array('first_name AS user_first_name', 'last_name AS user_last_name'));
-		$sql = $sql->joinLeft(array('u2' => 'users'), 'u2.id = a.performed_by', array('first_name AS performed_by_first_name', 'last_name AS performed_by_last_name'));
-		$sql = $sql->joinLeft(array('b' => 'bookmarks'), 'b.id = a.bookmark_id ', array('name AS bookmark_name'));
-		$sql = $sql->joinLeft(array('f' => 'files'), 'f.id = a.file_id', array('name AS file_name'));
-		return $activity->getLogs($sql);
-	}
-	
-	private function getActivityWhere(array $where = null, array $not = null, array $orwhere = null, array $ornot = null)
-	{
-		$activity = new PM_Model_DbTable_ActivityLog;
-		$sql = $activity->select()->setIntegrityCheck(false)->from(array('a'=>$activity->getTableName()));
-		
-		if(is_array($where))
-		{
-			foreach($where AS $key => $value)
-			{
-				$sql = $sql->where("$key = ? ", $value);
-			}
-		}
-		
-		if(is_array($not))
-		{
-			foreach($not AS $key => $value)
-			{
-				$sql = $sql->where("$key != ? ", $value);
-			}
-		}
-		
-		if(is_array($orwhere))
-		{
-			foreach($orwhere AS $key => $value)
-			{
-				$sql = $sql->orwhere("$key = ? ", $value);
-			}
-		}
-		
-		if(is_array($ornot))
-		{
-			foreach($ornot AS $key => $value)
-			{
-				$sql = $sql->orwhere("$key != ? ", $value);
-			}
-		}		
-		
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = a.project_id', array('name AS project_name', 'id AS project_id'));
-		$sql = $sql->joinLeft(array('u' => 'users'), 'u.id = a.user_id', array('first_name AS user_first_name', 'last_name AS user_last_name'));
-		return $activity->getLogs($sql);	
-	}	
 
 	/**
 	 * Handles the logging of an activity

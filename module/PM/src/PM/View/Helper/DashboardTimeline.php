@@ -23,13 +23,17 @@ use Base\View\Helper\BaseViewHelper;
 class DashboardTimeline extends BaseViewHelper
 {
     	
+	/**
+	 * @ignore
+	 * @return unknown
+	 */
 	public function __invoke()
 	{
 	    $helperPluginManager = $this->getServiceLocator();
 	    $serviceManager = $helperPluginManager->getServiceLocator();
 	    $activity = $serviceManager->get('PM\Model\ActivityLog');
 
-	    $filter = false;
+	    $filter = $this->compileFilter($serviceManager);
 		$identity = $this->getIdentity();
 		$logs = $activity->getUsersProjectActivity($identity, $filter);
 		if(count($logs) >= 1)
@@ -53,7 +57,44 @@ class DashboardTimeline extends BaseViewHelper
 		}
 	}
 	
-	private function determineRel($data)
+	/**
+	 * Compiles the SQL WHERE filtering to do for pulling activity log info
+	 * @param \Zend\ServiceManager\ServiceManager $serviceManager
+	 */
+	private function compileFilter(\Zend\ServiceManager\ServiceManager $serviceManager)
+	{
+		$route = $serviceManager->get('Application')->getMvcEvent()->getRouteMatch();
+		$routeMatch = $route->getMatchedRouteName();
+		$route_params = $route->getParams();
+		
+		$return = false;
+		switch($routeMatch)
+		{
+			case 'projects/edit':
+			case 'tasks/add':
+				$return = array('project_id' => $route_params['project_id']);
+			break;
+
+			case 'notes/add':
+			case 'bookmarks/add':
+			case 'files/add':
+				$type = $route_params['type'];
+				if($type == 'project')
+				{
+					$return = array('project_id' => $route_params['id']);
+				}
+			break;
+		}
+		
+		return $return;
+	}
+	
+	/**
+	 * Determines the value for the rel parameter on hrefs
+	 * @param array $data
+	 * @return string|boolean
+	 */
+	private function determineRel(array $data = array())
 	{
 		if(array_key_exists('type', $data))
 		{
@@ -106,7 +147,12 @@ class DashboardTimeline extends BaseViewHelper
 		}
 	}
 	
-	private function determineActionTitle($data)
+	/**
+	 * Determines the title to use for the href
+	 * @param array $data
+	 * @return string|unknown
+	 */
+	private function determineActionTitle(array $data = array())
 	{
 		if(array_key_exists('type', $data))
 		{
@@ -190,7 +236,11 @@ class DashboardTimeline extends BaseViewHelper
 		}
 	}
 	
-	private function determineURL($data)
+	/**
+	 * Determines the URL to use
+	 * @param array $data
+	 */
+	private function determineURL(array $data = array())
 	{
 		if(array_key_exists('type', $data))
 		{
@@ -269,7 +319,12 @@ class DashboardTimeline extends BaseViewHelper
 		}
 	}
 	
-	private function determineImage($data)
+	/**
+	 * Determine's the icon image to use
+	 * @param array $data
+	 * @return string
+	 */
+	private function determineImage(array $data = array())
 	{
 		if(array_key_exists('type', $data))
 		{
@@ -351,7 +406,12 @@ class DashboardTimeline extends BaseViewHelper
 		}
 	}
 	
-	private function determineTitle($data)
+	/**
+	 * Determines the title to use
+	 * @param array $data
+	 * @return unknown|Ambigous <Ambigous <\Zend\Json\mixed, \Zend\Json\$_tokenValue, NULL>, Ambigous <\Zend\Json\mixed, \Zend\Json\$_tokenValue, multitype:, multitype:Ambigous <\Zend\Json\mixed, \Zend\Json\$_tokenValue, NULL> , NULL>>|string
+	 */
+	private function determineTitle(array $data = array())
 	{
 		if(array_key_exists('type', $data))
 		{
