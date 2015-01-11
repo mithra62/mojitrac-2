@@ -46,10 +46,10 @@ if($this->id > 0)
 </p>
 <?php endif; ?>
 
-<?php if($this->project_data): _id?>
+<?php if($this->project_data): ?>
 <p>
 	<label for="project_id">Project</label>
-	<a href="<?php echo $this->url('pm', array('module' => 'pm','controller'=>'projects','action'=>'view', 'id' => $this->project['id']), null, TRUE); ?>"><?php echo $this->project['name']; ?></a>
+	<a href="<?php echo $this->url('projects/view', array('project_id' => $this->project_data['id'])); ?>"><?php echo $this->project_data['name']; ?></a>
 	<input type="hidden" name="project_id" value="<?php echo $this->project_data['id']; ?>" />
 </p>
 <?php endif; ?>
