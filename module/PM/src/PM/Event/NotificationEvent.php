@@ -43,6 +43,7 @@ class NotificationEvent extends BaseEvent
     	'project.removeteammember.pre' => 'sendRemoveFromProjectTeam',
     	'project.addteam.post' => 'sendAddProjectTeam',
     	'file.add.post' => 'sendFileAdd',
+    	'file.revision.add.post' => 'sendFileRevisionAdd',
     );
     
     /**
@@ -387,5 +388,57 @@ class NotificationEvent extends BaseEvent
 	    		$this->mail->send($mail->transport);
 	    	}
 		} 	
+    }
+    
+    /**
+     * Sends the email when a file revision is uploaded
+     * @param \Zend\EventManager\Event $event
+     */    
+    public function sendFileRevisionAdd(\Zend\EventManager\Event $event)
+    {
+    	$revision_id = $event->getParam('revision_id');
+    	$file = $event->getTarget();
+    	$revision_data = $file->revision->getRevision($revision_id);
+    	$file_data = $file->getFileById($revision_data['file_id']);
+    	
+    	$task_data = $project_data = false;
+    	if($file_data['project_id'] != '0')
+    	{
+    		$project_data = $this->project->getProjectById($file_data['project_id']);
+    		if(isset($file_data['task']))
+    		{
+    			$task_data = $this->task->getTaskById($file_data['task']);
+    		}
+    	
+    		//ok; now let's grab the project team members
+    		$team = $this->project->getProjectTeamMembers($file_data['project_id']);
+    		$sending = FALSE;
+    		foreach($team AS $member)
+    		{
+    			if($this->user->checkPreference($member['user_id'], 'noti_file_uploaded', '1') == '0')
+    			{
+    				continue;
+    			}
+    	
+    			$sending = TRUE;
+    			$this->mail->addTo($member['email'], $member['first_name'].' '.$member['last_name']);
+    		}
+    	
+    		if( $sending )
+    		{
+    			$this->mail->setViewDir($this->email_view_path);
+    	
+    			$view_data = array(
+    				'file_data' => $file_data,
+    				'project_data' => $project_data,
+    				'task_data' => $task_data,
+    				'revision_data' => $revision_data
+    			);
+    	
+    			$this->mail->setEmailView('file-revision-add', $view_data);
+    			$this->mail->setSubject($this->mail->translator->translate('email_subject_file_revision_add', 'pm').': '.$file_data['name']);
+    			$this->mail->send($mail->transport);
+    		}
+    	}    	
     }
 }

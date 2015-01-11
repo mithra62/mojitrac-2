@@ -42,6 +42,7 @@ class NotificationEvent extends PMNotificationEvent
     	'file.add.post' => 'sendFileAdd',
     	'invite.add.post' => 'sendInviteAdd',
     	'account.add.post' => 'sendAccountAdd',
+    	'file.revision.add.post' => 'sendFileRevisionAdd',
     );
 
     /**

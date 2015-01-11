@@ -158,6 +158,7 @@ return array(
 	'daily_task_reminder_email_subject' => 'Daily Task Reminder',
 	'email_subject_file_add' => 'File Uploaded',
 	'user_registration_email_subject' => 'New MojiTrac Account Created!',
+	'email_subject_file_revision_add' => 'File Revision Uploaded',
 		
 	'sent_by_moji' => 'Sent By: MojiTrac',
 	

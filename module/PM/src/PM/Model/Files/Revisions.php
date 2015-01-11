@@ -119,11 +119,7 @@ class Revisions extends AbstractModel
 	 * @return int
 	 */
 	public function addRevision($file_id, array $data, $process_file = false)
-	{
-
-		$ext = $this->trigger(self::EventFileRevisionAddPre, $this, compact('file_id', 'data', 'process_file'), $this->setXhooks($data));
-		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
-		
+	{	
 		if($process_file) {
 			
 			$path = $this->checkMakeDirectory($data['upload_file_data']['destination'],
@@ -151,12 +147,7 @@ class Revisions extends AbstractModel
 		$sql = $this->getSQL($data);
 		$sql['file_id'] = $file_id;
 		
-		$revision_id = $this->insert('file_revisions', $sql);
-
-		$ext = $this->trigger(self::EventFileRevisionAddPost, $this, compact('revision_id', 'data'), $this->setXhooks($data));
-		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $revision_id = $ext->last();
-		
-		return $revision_id;
+		return $this->insert('file_revisions', $sql);
 	}
 
 	/**

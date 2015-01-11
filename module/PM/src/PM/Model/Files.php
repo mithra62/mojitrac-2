@@ -401,4 +401,24 @@ class Files extends AbstractModel
 		
 		return $delete;
 	}
+	
+	/**
+	 * 
+	 * @param unknown $file_id
+	 * @param array $data
+	 * @param string $process_file
+	 * @return Ambigous <\Zend\EventManager\mixed, NULL, mixed>|Ambigous <number, boolean, \Base\Model\Ambigous, \Zend\Db\Adapter\Driver\mixed, NULL, \Zend\EventManager\mixed, mixed>
+	 */
+	public function addRevision($file_id, array $data, $process_file = false)
+	{
+		$ext = $this->trigger(self::EventFileRevisionAddPre, $this, compact('file_id', 'data', 'process_file'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
+		
+		$revision_id = $this->revision->addRevision($file_id, $data, $process_file);
+		
+		$ext = $this->trigger(self::EventFileRevisionAddPost, $this, compact('revision_id', 'data'), $this->setXhooks($data));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $revision_id = $ext->last();
+
+		return $revision_id;
+	}
 }

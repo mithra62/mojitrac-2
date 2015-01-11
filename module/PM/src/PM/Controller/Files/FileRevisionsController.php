@@ -223,7 +223,7 @@ class FileRevisionsController extends AbstractPmController
 						$formData['upload_file_data'] = $file_info['file_upload'];
 						$formData['file_data'] = $file_data;
 						
-						$revision_id = $file->revision->addRevision($file_id, $formData, true);
+						$revision_id = $file->addRevision($file_id, $formData, true);
 						if($revision_id)
 						{
 							$this->flashMessenger()->addMessage($this->translate('file_revision_added', 'pm'));

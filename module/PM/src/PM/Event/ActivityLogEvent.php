@@ -348,10 +348,10 @@ class ActivityLogEvent extends BaseEvent
 	{
 		$revision_id = $event->getParam('revision_id');
 		$data = $event->getParam('data');
-		$revision = $event->getTarget();
+		$file = $event->getTarget();
 		
 		//we don't want to log the first entry since we're already logging the master file being added
-		$total_revisions = $revision->getTotalFileRevisions($data['file_data']['id']);
+		$total_revisions = $file->revision->getTotalFileRevisions($data['file_data']['id']);
 		if($total_revisions > 1)
 		{
 			$data = array('stuff' => $data, 'file_rev_id' => $revision_id, 'file_id' => $data['file_data']['id'], 'project_id' => $data['file_data']['project_id'], 'company_id' => $data['file_data']['company_id'], 'task_id' => $data['file_data']['task_id'], 'type' => 'file_revision_add', 'performed_by' => $this->identity);
