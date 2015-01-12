@@ -34,6 +34,12 @@ class CliController extends AbstractController
 	{
 		echo 'fdsa';
 		exit;	
+		
+		//get the users
+		
+		//check if any users have crons pending
+		
+		//run crons
 	}
 	
 	/**

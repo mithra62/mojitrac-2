@@ -146,6 +146,7 @@ class Revisions extends AbstractModel
 
 		$sql = $this->getSQL($data);
 		$sql['file_id'] = $file_id;
+		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 		
 		return $this->insert('file_revisions', $sql);
 	}
