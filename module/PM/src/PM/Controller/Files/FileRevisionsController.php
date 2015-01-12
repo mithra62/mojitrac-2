@@ -301,10 +301,8 @@ class FileRevisionsController extends AbstractPmController
 					return $this->redirect()->toRoute('files/view', array('file_id' => $rev_data['file_id']));
 				}
 				
-	    	   	if($file->revision->removeRevision($id))
+	    	   	if($file->removeRevision($id))
 	    		{	
-					//PM_Model_ActivityLog::logFileRevisionRemove($rev_data, $id, $this->identity);
-					  			
 					$this->flashMessenger()->addMessage($this->translate('file_revision_removed', 'pm'));
 					return $this->redirect()->toRoute('files/view', array('file_id' => $rev_data['file_id']));
 					

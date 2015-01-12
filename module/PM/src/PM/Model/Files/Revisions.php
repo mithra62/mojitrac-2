@@ -180,14 +180,7 @@ class Revisions extends AbstractModel
 	 */
 	public function removeRevision($revision_id)
 	{
-		$ext = $this->trigger(self::EventFileRevisionRemovePre, $this, compact('revision_id'), $this->setXhooks(array()));
-		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $revision_id = $ext->last();
-		
 		$delete = $this->remove('file_revisions', array('id' => $revision_id));
-
-		$ext = $this->trigger(self::EventFileRevisionRemovePost, $this, compact('revision_id'), $this->setXhooks(array()));
-		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $revision_id = $ext->last();
-		
 		return $delete;
 	}
 	

@@ -366,17 +366,11 @@ class ActivityLogEvent extends BaseEvent
 	public function logFileRevisionRemove(\Zend\EventManager\Event $event)
 	{
 		$revision_id = $event->getParam('revision_id');
-		$revision = $event->getTarget();
-		$revision_data = $revision->getRevision($revision_id);
-		
-		$sql = $revision->db->select()->from('files')->where(array('file_id' => $revision_data['file_id']));
-		$file_data = $revision->getRow($sql);
-		
-		print_r($file_data);
-		exit;
-		
-		$data = $this->filterForKeys($data);
-		$this->al->logActivity(self::setDate(), 'file_revision_remove', $performed_by, $data, $data['project_id'], $data['company_id'], $data['task_id'], 0, 0, 0, $data['file_id'], $id);
+		$file = $event->getTarget();
+		$revision_data = $file->revision->getRevision($revision_id);
+		$file_data = $file->getFileById($revision_data['file_id']);
+		$data = array('stuff' => $data, 'file_rev_id' => $revision_id, 'file_id' => $revision_data['file_id'], 'project_id' => $file_data['project_id'], 'company_id' => $file_data['company_id'], 'task_id' => $file_data['task_id'], 'type' => 'file_revision_remove', 'performed_by' => $this->identity);
+		$this->al->logActivity($data);
 	}	
 	
 	/**
