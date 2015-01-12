@@ -148,6 +148,9 @@ class Module implements
 					$user->setAccount($account);
 					return $user;
 				},
+				'HostManager\Model\Crons' => function($sm) {
+					return 'fdsa';
+				},
 
 				//forms
 				'HostManager\Form\SignUpForm' => function($sm) {

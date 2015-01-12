@@ -32,9 +32,7 @@ class CliController extends AbstractController
 	 */
 	public function cronAction()
 	{
-		echo 'fdsa';
-		exit;	
-		
+		$cron = $this->getServiceLocator()->get('HostManager\Model\Crons');
 		//get the users
 		
 		//check if any users have crons pending
