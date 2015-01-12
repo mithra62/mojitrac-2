@@ -93,6 +93,9 @@ class Accounts extends AbstractModel
 							'adapter' => $this->adapter
 						)
 					),
+					array(
+						'name' => 'Alnum'		
+					),
 				),
 			)));
 			
