@@ -42,9 +42,9 @@ class Permissions extends AbstractModel
 	public function check($id, $permission)
 	{
 		// If I don't have any permissions, fetch them
-		if (!$this->permissions || !is_array($this->permissions)) 
+		if (!$this->permissions[$id] || !is_array($this->permissions[$id])) 
 		{
-			$this->permissions = array();
+			$this->permissions[$id] = array();
 			
 			$sql = $this->db->select()->from(array('urp'=>'user_role_permissions')) 
 					->columns(array('name'));
@@ -56,11 +56,11 @@ class Permissions extends AbstractModel
 			$perms = $this->getRows($sql);
 			foreach($perms As $perm)
 			{
-				$this->permissions[] = $perm['name'];
+				$this->permissions[$id][] = $perm['name'];
 			}
 		}
 
-		if (in_array($permission ,$this->permissions))
+		if (in_array($permission ,$this->permissions[$id]))
 		{
 			return TRUE;
 		} 

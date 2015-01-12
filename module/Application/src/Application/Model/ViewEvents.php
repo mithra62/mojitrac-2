@@ -2,9 +2,8 @@
 /**
  * mithra62 - MojiTrac
  *
- * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
- * @link		http://mithra62.com/
+ * @link		http://mojitrac.com/
  * @version		2.0
  * @filesource 	./module/Application/src/Application/Model/ViewEvents.php
  */
@@ -27,7 +26,7 @@ class ViewEvents extends AbstractModel
 	 * @param string $event
 	 * @param array $partials
 	 * @param array $context
-	 * @return unknown
+	 * @return array
 	 */
 	public function runEvent($event, array $partials, array $context = array())
 	{

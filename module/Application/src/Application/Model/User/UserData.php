@@ -61,16 +61,7 @@ class UserData extends KeyValue
 		parent::__construct($adapter, $db);
 		$this->setTable($this->table);
 
-		$defaults = $this->defaults;
 		$this->items = array();
-		
-		$ext = $this->trigger(self::EventUserDataDefaultsSetPre, $this, compact('defaults'));
-		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $defaults = $ext->last();
-		
-		$this->setDefaults($defaults);
-		
-		$defaults = $this->defaults;
-		$ext = $this->trigger(self::EventUserDataDefaultsSetPost, $this, compact('defaults'));
 	}
 	
 	/**
@@ -123,7 +114,8 @@ class UserData extends KeyValue
 	 * @param string $setting
 	 */
 	public function getUserData($data, $identity)
-	{;
+	{
+		$this->setupDefaults();
 		return $this->getItem($data, array('user_id' => $identity));
 	}
 	
@@ -158,7 +150,20 @@ class UserData extends KeyValue
 	 * Returns the settings array and sets the cache accordingly
 	 */
 	public function getUsersData($identity)
-	{
+	{		
+		$this->setupDefaults();
 		return parent::getItems(array('user_id' => $identity));
+	}
+	
+	private function setupDefaults()
+	{
+		$defaults = $this->defaults;
+		$ext = $this->trigger(self::EventUserDataDefaultsSetPre, $this, compact('defaults'));
+		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $defaults = $ext->last();
+		
+		$this->setDefaults($defaults);
+		
+		$defaults = $this->defaults;
+		$ext = $this->trigger(self::EventUserDataDefaultsSetPost, $this, compact('defaults'));		
 	}
 }

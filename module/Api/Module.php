@@ -17,6 +17,7 @@ use Zend\EventManager\EventInterface;
 use Zend\View\Model\JsonModel;
 
 use Api\Model\Projects;
+use Api\Model\Key;
 use Api\Model\Tasks;
 use Api\Model\Users;
 use Api\Model\Companies;
@@ -87,6 +88,11 @@ class Module implements Feature\BootstrapListenerInterface
 			'factories' => array(
 					
 				//models
+				'Api\Model\Key' => function($sm) {
+					$hash = $sm->get('Application\Model\Hash');
+					$user = $sm->get('Api\Model\Users');
+					return new Key($hash, $user);
+				},	 
 				'Api\Model\Projects' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
@@ -117,7 +123,8 @@ class Module implements Feature\BootstrapListenerInterface
 				'Api\Model\Roles' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Roles($adapter, $db);
+					$permission = $sm->get('Application\Model\Permissions');
+					return new Roles($adapter, $db, $permission);
 				},
 
 				//events

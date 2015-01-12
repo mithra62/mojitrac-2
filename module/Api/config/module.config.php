@@ -193,7 +193,12 @@ return array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
-    ),   
+    ),  
+    'view_helpers' => array(
+    		'invokables' => array(
+    				'GetApiKey' => 'Api\View\Helper\GetApiKey'
+    		),
+    ),     
     'translator' => array(
         'translation_file_patterns' => array(
             array(

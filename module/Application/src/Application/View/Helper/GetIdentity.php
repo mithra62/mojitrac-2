@@ -16,7 +16,7 @@ use Base\View\Helper\BaseViewHelper;
  /**
  * View Helper - Get Identity
  *
- * @package 	ViewHelpers\Routes
+ * @package 	ViewHelpers
  * @author		Eric Lamb
  * @filesource 	./module/Application/src/Application/View/Helper/GetIdentity.php
  */

@@ -2,10 +2,8 @@
  /**
  * mithra62 - MojiTrac
  *
- * @package		mithra62:Mojitrac
- * @author		Eric Lamb
  * @copyright	Copyright (c) 2014 mithra62, Eric Lamb.
- * @link		http://mithra62.com/
+ * @link		http://mojitrac.com/
  * @version		2.0
  * @filesource 	./module/Api/src/Api/Model/Options.php
  */
@@ -17,7 +15,7 @@ use PM\Model\Options as PmOptions;
 /**
  * Api - Users Model
  *
- * @package 	mithra62:Mojitrac
+ * @package 	Options\Api
  * @author		Eric Lamb
  * @filesource 	./module/Api/src/Api/Model/Options.php
  */

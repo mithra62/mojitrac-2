@@ -162,7 +162,8 @@ class Module
 				'Application\Model\Roles' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Roles($adapter, $db);
+					$permissions = $sm->get('Application\Model\Permissions');
+					return new Roles($adapter, $db, $permissions);
 				},
 				'Application\Model\Permissions' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');

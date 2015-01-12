@@ -6,7 +6,7 @@
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mithra62.com/
  * @version		2.0
- * @filesource 	./module/PM/src/PM/Event/UserDataEvent.php
+ * @filesource 	./module/Api/src/Api/Event/UserDataEvent.php
  */
 
 namespace Api\Event;
@@ -14,13 +14,13 @@ namespace Api\Event;
 use Base\Event\BaseEvent;
 
 /**
- * PM - User Data Event
+ * Api - User Data Event
  * 
  * Injects the needed PM user data into the MojiTrac user data system
  *
- * @package 	PM\Settings
+ * @package 	Api\Settings
  * @author		Eric Lamb
- * @filesource 	./module/PM/src/PM/Event/UserDataEvent.php
+ * @filesource 	./module/PM/src/Api/Event/UserDataEvent.php
  */
 class UserDataEvent extends BaseEvent
 {	

@@ -28,6 +28,10 @@ class Hash
 	 */
 	protected $key = 'c6PKuC t(b]a))NIuM)eX>^82+4kvk!@!v(eXM{yGW9yLFC A0D0X;]8pQ0@Iv~|';
 	
+	/**
+	 * The actual cipher object
+	 * @var \Zend\Crypt\BlockCipher
+	 */
 	private $block_cipher = null;
 	
 	/**
@@ -86,17 +90,32 @@ class Hash
 		return strtolower(str_replace(array('}', '{'), '', $this->guid()));
 	}
 	
+	/**
+	 * Encrypts a string for storage using a reversible format
+	 * @param string $string
+	 * @return string
+	 */
 	public function encrypt($string)
 	{
-		$this->block_cipher->setKey($this->key);
-		return $this->block_cipher->encrypt($string);
+		$this->getBlockCypher()->setKey($this->key);
+		return $this->getBlockCypher()->encrypt($string);
 	}
 	
+	/**
+	 * Decrypts a previously encrypt() string
+	 * @param string $string
+	 * @return Ambigous <string, boolean>
+	 */
 	public function decrypt($string)
 	{
-		
+		$this->getBlockCypher()->setKey($this->key);
+		return $this->getBlockCypher()->decrypt($string);
 	}
 	
+	/**
+	 * Returns a copy of our cipher object
+	 * @return Ambigous <\Zend\Crypt\BlockCipher, \Zend\Crypt\BlockCipher>
+	 */
 	private function getBlockCypher()
 	{
 		if(!$this->block_cipher)

@@ -26,6 +26,9 @@ use PM\Traits\File;
  */
 class Files extends AbstractModel
 {
+	/**
+	 * Include the File Trait
+	 */
 	use File;
 	
 	/**
@@ -260,7 +263,7 @@ class Files extends AbstractModel
 			$where = array();
 		}
 		
-		$where['f.owner'] = $id;
+		$where['f.creator'] = $id;
 		return $this->getFilesWhere($where, $not);				
 	}	
 	

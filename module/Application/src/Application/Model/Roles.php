@@ -10,7 +10,6 @@
 
 namespace Application\Model;
 
-use Zend\Db\Sql\Sql;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
@@ -45,13 +44,15 @@ class Roles extends AbstractModel
 	protected $inputFilter;
 	
 	/**
-	 * The User Model
+	 * @ignore
 	 * @param \Zend\Db\Adapter\Adapter $adapter
-	 * @param Sql $db
+	 * @param \Zend\Db\Sql\Sql $db
+	 * @param \Application\Model\Permissions $permissions
 	 */
-	public function __construct(\Zend\Db\Adapter\Adapter $adapter, Sql $db)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db, \Application\Model\Permissions $permissions)
 	{
 		parent::__construct($adapter, $db);
+		$this->perm = $permissions;
 	}	
 	
 	/**
