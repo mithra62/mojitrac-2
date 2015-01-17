@@ -16,6 +16,8 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Db\Sql\Sql;
 use Zend\Authentication\AuthenticationService;
+use Zend\Session\Config\StandardConfig;
+
 use Intervention\Image\ImageManager;
 
 use Application\Model\Auth\AuthAdapter;
@@ -115,7 +117,14 @@ class Module
     				
 				//setting up the Authentication stuff
 				'Application\Model\Auth\AuthStorage' => function($sm){
-					return new \Application\Model\Auth\AuthStorage('mojitrac');
+					$storage = new \Application\Model\Auth\AuthStorage('mojitrac');
+					
+					$moji_config = $sm->get('Config');
+					$session_config = new StandardConfig();
+					$session_config->setOptions($moji_config['moji_session']);
+					
+					$storage->setConfig($session_config);
+					return $storage;
 				},
 				'AuthService' => function($sm) {
 					$db = $sm->get('Zend\Db\Adapter\Adapter');

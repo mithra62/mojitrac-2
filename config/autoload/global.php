@@ -56,4 +56,8 @@ return array(
             'Zend\Authentication\AuthenticationService' => 'Zend\Authentication\AuthenticationService',
 		),			
 	),
+	'moji_session' => array(
+		'remember_me_seconds' => '1209600',
+		//'cookie_domain' => 'moji2.com',
+	)
 );

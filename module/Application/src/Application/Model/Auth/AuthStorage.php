@@ -25,6 +25,16 @@ use Zend\Authentication\Storage;
 class AuthStorage extends Storage\Session
 {
 	/**
+	 * Sets the session configuration object
+	 * @param \Zend\Session\Config\ConfigInterface $config
+	 */
+	public function setConfig(\Zend\Session\Config\ConfigInterface $config)
+	{
+		$this->session->getManager()->setConfig($config);
+		return $this;
+	}
+	
+	/**
 	 * Sets the logged in timeout
 	 * @param number $rememberMe
 	 * @param number $time
@@ -35,6 +45,7 @@ class AuthStorage extends Storage\Session
 		if ($rememberMe == 1) {
 			$this->session->getManager()->rememberMe($time);
 		}
+		return $this;
 	}
 
 	/**
@@ -44,5 +55,6 @@ class AuthStorage extends Storage\Session
 	public function forgetMe()
 	{
 		$this->session->getManager()->forgetMe();
+		return $this;
 	}
 }
