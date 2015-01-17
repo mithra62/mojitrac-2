@@ -4,7 +4,7 @@
  *
  * @author		Infosoft Global Pvt. Ltd.
  * @copyright	Infosoft Global Pvt. Ltd.
- * @link		http://mithra62.com/
+ * @link		http://mojitrac.com/
  * @version		2.0
  * @filesource 	./module/PM/src/PM/Model/FusionCharts.php
  */
