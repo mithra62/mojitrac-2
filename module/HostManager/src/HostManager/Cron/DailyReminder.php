@@ -82,9 +82,9 @@ class DailyReminder extends BaseCron
 			$this->setLastRunDate($last_ran);
 			if( !$this->isDue() ) 
 			{
-				//$this->console->writeLine('Skipping '.$member['email'].' since not due yet...');
+				$this->console->writeLine('Skipping '.$member['email'].' since not due yet...');
 				//$this->console->writeLine('Next run at: '.$this->getNextRunDate());
-				//continue;
+				continue;
 			}
 			
 			//now grab tasks and see if we have content yet
@@ -105,7 +105,8 @@ class DailyReminder extends BaseCron
 			$mail->setEmailView('task-reminder', array('user_data' => $member, 'tasks' => $user_tasks));
 			$mail->setSubject('daily_task_reminder_email_subject');
 			$mail->send();
-				
+			
+			$user->user_data->updateUserDataEntry('_daily_reminder_schedule_last_sent', time(), $member['id']);
 			$this->console->writeLine('Sent for '.$member['email']);
 		}
 	}
