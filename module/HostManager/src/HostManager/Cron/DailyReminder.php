@@ -104,7 +104,8 @@ class DailyReminder extends BaseCron
 			$mail->setViewDir($this->email_view_path);
 			$mail->setEmailView('task-reminder', array('user_data' => $member, 'tasks' => $user_tasks));
 			$mail->setSubject('daily_task_reminder_email_subject');
-			$mail->send();	
+			$mail->send();
+				
 			$this->console->writeLine('Sent for '.$member['email']);
 		}
 	}

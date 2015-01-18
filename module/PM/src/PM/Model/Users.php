@@ -97,8 +97,7 @@ class Users extends MojiUsers
 		$upcoming_date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d")+$upcoming, date("Y")));
 		$tomorrow_date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d")+1, date("Y")));
 		$week_date = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d")+7, date("Y")));
-		//$lambLib = new LambLib_Controller_Action_Helper_Utilities;
-
+		
 		$open_tasks = $this->getOpenAssignedTasks($id);
 		if( !$open_tasks )
 		{
@@ -133,11 +132,7 @@ class Users extends MojiUsers
 				continue;
 			}
 							
-			if($task_date <= $upcoming_date)
-			{			
-				$user_tasks['upcoming'][] = $task;
-				continue;
-			}				
+			$user_tasks['upcoming'][] = $task;				
 		}
 		
 		return $user_tasks;		

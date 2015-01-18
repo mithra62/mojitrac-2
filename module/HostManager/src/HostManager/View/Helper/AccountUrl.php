@@ -25,17 +25,22 @@ use Base\View\Helper\BaseViewHelper;
  */
 class AccountUrl extends BaseViewHelper
 {
+	private $account_urls = array();
+	
 	/**
 	 * @ignore
 	 */
     public function __invoke($account_id, $route)
     {
+    	if( empty($this->account_urls[$account_id]) )
+    	{
+			$helperPluginManager = $this->getServiceLocator();
+			$serviceManager = $helperPluginManager->getServiceLocator();
+			$account = $serviceManager->get('HostManager\Model\Accounts');	
+			$this->account_urls[$account_id] = $account->createAccountUrl($account_id);
+    	}
     	
-		$helperPluginManager = $this->getServiceLocator();
-		$serviceManager = $helperPluginManager->getServiceLocator();
-		$account = $serviceManager->get('HostManager\Model\Accounts');	
-			
-    	return $account->createAccountUrl($account_id).$route;
+    	return $this->account_urls[$account_id].$route;
     }
     
 }
