@@ -11,8 +11,6 @@
 
 namespace Application\Model;
 
-use Cron\CronExpression;
-
 /**
  * Cron Model
  *
@@ -52,14 +50,48 @@ class Cron extends AbstractModel
 	}
 	
 	/**
+	 * Sets the namespace all executed Crons will fall under
+	 * @param string $namespace
+	 */
+	public function setNamespace($namespace)
+	{
+		$this->namespace = $namespace;
+		return $this;
+	}
+	
+	/**
 	 * Executes all the configured Crons 
 	 * @return boolean
 	 */
-	public function run(\Zend\Console\Adapter\AbstractAdapter $cron)
+	public function run(\Zend\Console\Adapter\AbstractAdapter $cron, $namespace = null)
 	{
-		$cron = CronExpression::factory('@daily');
-		$cron->isDue();
-		echo $cron->getNextRunDate()->format('Y-m-d H:i:s');
+		if( is_dir($this->path) && is_readable($this->path))
+		{
+			$d = dir($this->path);
+			$ignore = array('.', '..');
+			while (false !== ($entry = $d->read())) {
+				if( !in_array($entry, $ignore) )
+				{
+					$parts = explode('.php', $entry);
+					if($parts['0'] != '')
+					{
+						try {
+							$class_name = '\\'.$this->namespace.'\Cron\\'.$parts['0'];
+							$class = new $class_name;
+							if($class instanceof \Base\Cron\BaseCron)
+							{
+								echo 'fdsa';
+							}	
+						} catch (Exception $e) {
+							//echo 'Caught exception: ',  $e->getMessage(), "\n";
+							//ok, should probably log this so... 
+							//@todo add Logging to failed execution
+						}						
+					}
+				}
+			}
+			$d->close();
+		}
 		return true;
 	}
 }

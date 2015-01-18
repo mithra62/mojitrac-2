@@ -154,7 +154,7 @@ class Module implements
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$cron = new Cron($adapter, $db);
 					$path = realpath(__DIR__ . '/src/' . __NAMESPACE__.'/Cron');
-					$cron->setPath($path);
+					$cron->setNamespace(__NAMESPACE__)->setPath($path);
 					return $cron;
 				},
 
