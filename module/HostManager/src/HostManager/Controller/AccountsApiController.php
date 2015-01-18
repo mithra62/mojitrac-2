@@ -63,8 +63,6 @@ class AccountsApiController extends AbstractRestfulJsonController
 			return $this->setError(422, 'missing_input_data', null, null, array('errors' => $inputFilter->getMessages()));
 		}
 		
-		echo 'fdsa';
-		exit;
 		$account_id = $account->createAccount($data, $user, $company, $hash, $setting, $option);
 		if(!$account_id)
 		{

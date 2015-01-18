@@ -39,7 +39,8 @@ class UserDataEvent extends BaseEvent
 		'noti_file_revision_uploaded' => '1',
 		'timer_data' => '0',
 		'daily_reminder_schedule' => '9', //hour of day email will be sent
-		'_daily_reminder_schedule_last_sent' => ''
+		'_daily_reminder_schedule_last_sent' => '',
+		'task_reminder_upcoming_days' => '30'
 	);
 	
     /**

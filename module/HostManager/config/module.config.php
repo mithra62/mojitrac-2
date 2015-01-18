@@ -200,7 +200,13 @@ return array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
         ),
-    ),    
+    ),
+
+    'view_helpers' => array(
+	    'invokables' => array(
+		    'AccountUrl' => 'HostManager\View\Helper\AccountUrl'
+	    ),
+    ),
     'translator' => array(
         'translation_file_patterns' => array(
             array(

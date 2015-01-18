@@ -289,7 +289,7 @@ class Mail extends AbstractModel
 	 */
 	public function send()
 	{
-		if($this->isValid())
+		//if($this->isValid())
 		{
 			//first log it!
 			$this->file_transport->send($this->message);

@@ -67,11 +67,11 @@ class Cron extends AbstractModel
 	
 	/**
 	 * Executes any setup Crons
-	 * @param \Zend\Console\Adapter\AbstractAdapter $cron
+	 * @param \Zend\Console\Adapter\AbstractAdapter $console
 	 * @param string $namespace
 	 * @return boolean
 	 */
-	public function run(\Zend\Console\Adapter\AbstractAdapter $cron, $namespace = null)
+	public function run(\Zend\Console\Adapter\AbstractAdapter $console, $namespace = null)
 	{
 		if( is_dir($this->path) && is_readable($this->path))
 		{
@@ -89,6 +89,8 @@ class Cron extends AbstractModel
 							$class = new $class_name;
 							if($class instanceof \Base\Cron\BaseCron)
 							{
+								$class->setConsole($console);
+								$class->setContext($this);
 								$class->setServiceLocator($this->serviceLocator);
 								if($class->shouldRun())
 								{
@@ -96,7 +98,7 @@ class Cron extends AbstractModel
 								}
 							}
 							
-						} catch (Exception $e) {
+						} catch (\Exception $e) {
 							//echo 'Caught exception: ',  $e->getMessage(), "\n";
 							//ok, should probably log this so... 
 							//@todo add Logging to failed execution

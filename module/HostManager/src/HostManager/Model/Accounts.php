@@ -156,6 +156,22 @@ class Accounts extends AbstractModel
 		
 		return $this->getRow($sql);	
 	}
+
+	/**
+	 * Returns the data on an account
+	 * @param array $where
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 */
+	public function getAccounts(array $where = array())
+	{
+		$sql = $this->db->select()->from(array('a'=> 'accounts'));
+		if( $where )
+		{
+			$sql = $sql->where($where);
+		}
+	
+		return $this->getRows($sql);
+	}	
 	
 	/**
 	 * Creates a MojiTrac account 

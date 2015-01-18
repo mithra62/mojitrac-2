@@ -152,12 +152,11 @@ class Users extends MojiUsers
 	public function getOpenAssignedTasks($id, $project = FALSE, $overdue = FALSE)
 	{
 		$sql = $this->db->select()->from(array('t'=> 'tasks'));
-		$sql = $sql->where(array('assigned_to' => $id,'progress != 100', 't.end_date != \'0000-00-00 00:00:00\''));
+		$sql = $sql->where(array('assigned_to' => $id,'progress != 100', 't.end_date IS NOT NULL'));
 		if($project)
 		{
 			$sql = $sql->where(array ('project_id' => $project));	
 		}
-		$sql = $sql->where('t.status != 4');
 		
 		$sql = $sql->join(array('p' => 'projects'), 'p.id = t.project_id', array('project_name' => 'name'));
 		$sql = $sql->join(array('u2' => 'users'), 'u2.id = t.creator', array('creator_first_name' => 'first_name', 'creator_last_name' => 'last_name'), $sql::JOIN_LEFT);
@@ -165,6 +164,7 @@ class Users extends MojiUsers
 
 		$sql->where(array('p.status NOT IN(4,5,6)'));
 		$sql = $sql->order('t.end_date DESC');
+		
 		return $this->getRows($sql);		
 	}
 }
