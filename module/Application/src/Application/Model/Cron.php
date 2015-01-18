@@ -49,6 +49,12 @@ class Cron extends AbstractModel
 		return $this;
 	}
 	
+	public function setServiceLocator($service_locator)
+	{
+		$this->serviceLocator = $service_locator;
+		return $this;
+	}
+	
 	/**
 	 * Sets the namespace all executed Crons will fall under
 	 * @param string $namespace
@@ -60,7 +66,9 @@ class Cron extends AbstractModel
 	}
 	
 	/**
-	 * Executes all the configured Crons 
+	 * Executes any setup Crons
+	 * @param \Zend\Console\Adapter\AbstractAdapter $cron
+	 * @param string $namespace
 	 * @return boolean
 	 */
 	public function run(\Zend\Console\Adapter\AbstractAdapter $cron, $namespace = null)
@@ -76,12 +84,18 @@ class Cron extends AbstractModel
 					if($parts['0'] != '')
 					{
 						try {
+							
 							$class_name = '\\'.$this->namespace.'\Cron\\'.$parts['0'];
 							$class = new $class_name;
 							if($class instanceof \Base\Cron\BaseCron)
 							{
-								echo 'fdsa';
-							}	
+								$class->setServiceLocator($this->serviceLocator);
+								if($class->shouldRun())
+								{
+									$class->run();
+								}
+							}
+							
 						} catch (Exception $e) {
 							//echo 'Caught exception: ',  $e->getMessage(), "\n";
 							//ok, should probably log this so... 

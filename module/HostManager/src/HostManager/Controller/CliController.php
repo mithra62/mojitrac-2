@@ -34,6 +34,7 @@ class CliController extends AbstractController
 	{
 		$console = $this->getServiceLocator()->get('Console');
 		$cron = $this->getServiceLocator()->get('HostManager\Model\Crons');
+		$cron->setServiceLocator($this->getServiceLocator());
 		$cron->run($console);
 		//get the users
 		

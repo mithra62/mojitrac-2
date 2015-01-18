@@ -2,7 +2,6 @@
  /**
  * mithra62 - MojiTrac
  *
- * @subpackage	HostManager
  * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mojitrac.com/
@@ -32,7 +31,7 @@ use Zend\ModuleManager\ModuleManager;
 /**
  * HostManager - Module Object
  *
- * @package 	MojiTrac
+ * @package 	HostManager
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/HostManager/Module.php
  */
