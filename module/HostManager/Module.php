@@ -24,6 +24,7 @@ use HostManager\Model\Account\Invites;
 use HostManager\Model\Users;
 use HostManager\Form\SignUpForm;
 use HostManager\Form\InviteForm;
+use Application\Model\Cron;
  
 use Zend\ModuleManager\ModuleManager;
 
@@ -149,7 +150,12 @@ class Module implements
 					return $user;
 				},
 				'HostManager\Model\Crons' => function($sm) {
-					return 'fdsa';
+					$db = $sm->get('SqlObject');
+					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
+					$cron = new Cron($adapter, $db);
+					$path = realpath(__DIR__ . '/src/' . __NAMESPACE__.'/Cron');
+					$cron->setPath($path);
+					return $cron;
 				},
 
 				//forms

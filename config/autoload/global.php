@@ -58,6 +58,7 @@ return array(
 	),
 	'moji_session' => array(
 		'remember_me_seconds' => '1209600',
+		'cookie_httponly' => true,
 		//'cookie_domain' => 'moji2.com',
 	)
 );

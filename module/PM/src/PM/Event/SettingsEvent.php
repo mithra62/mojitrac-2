@@ -44,7 +44,10 @@ class SettingsEvent extends BaseEvent
 			
 		'default_task_type' => '',  
 		'default_task_priority' => '3',  
-		'default_task_status' => '3'
+		'default_task_status' => '3',
+			
+		'task_auto_archive_days' => '6',
+		'_task_auto_archive_last_ran' => ''
 	);
 	
     /**
