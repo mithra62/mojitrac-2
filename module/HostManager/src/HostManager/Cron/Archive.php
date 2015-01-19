@@ -30,11 +30,19 @@ class Archive extends BaseCron
 	 */
 	protected $expression_template = '@daily';
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Base\Cron\BaseCron::shouldRun()
+	 */
 	public function shouldRun()
 	{
 		return true;
 	}
 	
+	/**
+	 * (non-PHPdoc)
+	 * @see \Base\Cron\BaseCron::run()
+	 */
 	public function run()
 	{
 		$this->console->writeLine('Starting Auto Archive...');
