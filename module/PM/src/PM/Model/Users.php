@@ -74,8 +74,9 @@ class Users extends MojiUsers
 		);
 		$sql = $this->db->select()->from(array('t'=> 'tasks'))
 					->columns( array('total_count' => new \Zend\Db\Sql\Expression("COUNT(t.id)")))
-			   		->join(array('p' => 'projects'), 'p.id = t.project_id')
+			   		->join(array('p' => 'projects'), 'p.id = t.project_id', array())
 			   		->where($where);
+		
 		return $this->getRow($sql);				
 	}
 	
