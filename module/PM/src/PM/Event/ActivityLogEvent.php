@@ -98,7 +98,7 @@ class ActivityLogEvent extends BaseEvent
 		$data = $event->getParam('data');
 		$task_id = $event->getParam('task_id');
 		$project_id = $data['project_id'];
-		$data = array('stuff' => $data, 'project_id' => $project_id, 'type' => 'task_add', 'performed_by' => $this->identity);
+		$data = array('stuff' => $data, 'project_id' => $project_id, 'task_id' => $task_id, 'type' => 'task_add', 'performed_by' => $this->identity);
 		$this->al->logActivity($data);
 	}
 	
