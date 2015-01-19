@@ -92,9 +92,9 @@ class Settings extends KeyValue
 	 * Returns the full settings array
 	 * @return multitype:array
 	 */
-	public function getSettings()
+	public function getSettings(array $where = array())
 	{
-		return parent::getItems();
+		return parent::getItems($where);
 	}
 	
 	/**
@@ -150,9 +150,9 @@ class Settings extends KeyValue
 	 * @param array $settings
 	 * @return boolean
 	 */
-	public function updateSettings(array $settings)
+	public function updateSettings(array $settings, array $where = array())
 	{
-		return parent::updateItems($settings);
+		return parent::updateItems($settings, $where);
 	}
 	
 }

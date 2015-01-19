@@ -99,7 +99,7 @@ class Cron extends AbstractModel
 							}
 							
 						} catch (\Exception $e) {
-							//echo 'Caught exception: ',  $e->getMessage(), "\n";
+							echo 'Caught exception: ',  $e->getMessage(), "\n";
 							//ok, should probably log this so... 
 							//@todo add Logging to failed execution
 						}						

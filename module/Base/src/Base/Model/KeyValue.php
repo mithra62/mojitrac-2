@@ -88,7 +88,7 @@ abstract class KeyValue extends BaseModel
 			$check = $this->getItem($item, $where);
 			if(!$check)
 			{
-				$this->addItem($item);
+				$this->addItem($item, $where);
 			}
 				
 			return true;
@@ -99,9 +99,15 @@ abstract class KeyValue extends BaseModel
 	 * Adds a setting to the databse
 	 * @param string $setting
 	 */
-	public function addItem($item)
+	public function addItem($item, array $more = array())
 	{
-		$sql = $this->getSQL(array('option_name' => $item), TRUE);
+		$insert = array('option_name' => $item);
+		$sql = $this->getSQL($insert, TRUE);
+		if($more)
+		{
+			$sql = array_merge($sql, $more);
+		}
+
 		$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
 		return $this->insert($this->table, $sql);
 	}
@@ -160,7 +166,7 @@ abstract class KeyValue extends BaseModel
 	{
 		if(!$this->items)
 		{
-			$sql = $this->db->select()->from($this->table)->columns( array('option_name', 'option_value'));
+			$sql = $this->db->select()->from($this->table);
 			if($where) {
 				$sql->where($where);
 			}
@@ -204,5 +210,15 @@ abstract class KeyValue extends BaseModel
 		}
 	
 		return $arr;
-	}	
+	}
+
+	/**
+	 * Removes the class variable container
+	 * @return \Base\Model\KeyValue
+	 */
+	public function reset()
+	{
+		$this->items = array();
+		return $this;
+	}
 }

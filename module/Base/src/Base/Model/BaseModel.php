@@ -99,6 +99,15 @@ abstract class BaseModel implements EventManagerInterfaceConstants
             $this->db = $sql;
 	    }
 	}
+	
+	/**
+	 * Returns an instance of the DB object
+	 * @return object
+	 */
+	public function getDb()
+	{
+		return $this->db;
+	}
 
 	/**
 	 * Returns single row from $sql
