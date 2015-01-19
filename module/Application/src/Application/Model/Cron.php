@@ -75,6 +75,7 @@ class Cron extends AbstractModel
 	{
 		if( is_dir($this->path) && is_readable($this->path))
 		{
+			$this->setTimezone('America/Los_Angeles');
 			$d = dir($this->path);
 			$ignore = array('.', '..');
 			while (false !== ($entry = $d->read())) {

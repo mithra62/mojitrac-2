@@ -65,7 +65,12 @@ abstract class AbstractPmController extends AbstractController
 		$this->settings = $settings->getSettings();	
 		
 		$this->_initPrefs();
-		$this->getServiceLocator()->get('Timezone');
+		
+		//setup timezone
+		$user = $this->getServiceLocator()->get('PM\Model\Users');
+		$user_data = $user->user_data->getUsersData($this->identity);
+		$user->setTimezone($user_data['timezone']);
+		
 		$this->perm = $this->getServiceLocator()->get('Application\Model\Permissions');
 		
 		$translator = $e->getApplication()->getServiceManager()->get('translator');

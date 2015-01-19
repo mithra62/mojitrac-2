@@ -33,14 +33,9 @@ class CliController extends AbstractController
 	public function cronAction()
 	{
 		$console = $this->getServiceLocator()->get('Console');
-		$cron = $this->getServiceLocator()->get('HostManager\Model\Crons');
+		$cron = $this->getServiceLocator()->get('Crons');
 		$cron->setServiceLocator($this->getServiceLocator());
 		$cron->run($console);
-		//get the users
-		
-		//check if any users have crons pending
-		
-		//run crons
 	}
 	
 	/**

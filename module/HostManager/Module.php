@@ -148,7 +148,7 @@ class Module implements
 					$user->setAccount($account);
 					return $user;
 				},
-				'HostManager\Model\Crons' => function($sm) {
+				'Crons' => function($sm) {
 					$db = $sm->get('SqlObject');
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$cron = new Cron($adapter, $db);

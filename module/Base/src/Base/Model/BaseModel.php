@@ -12,6 +12,7 @@ namespace Base\Model;
 
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
+use DateTime;
 
 /**
  * Base - Model
@@ -501,4 +502,16 @@ abstract class BaseModel implements EventManagerInterfaceConstants
 		}
 		return $path;
 	}	
+	
+	/**
+	 * Sets the Timezone for the system
+	 * @param string $timezone
+	 */
+	public function setTimezone($timezone)
+	{
+		date_default_timezone_set($timezone);
+		$dt = new DateTime();
+		$offset = $dt->format('P');
+		$this->query("SET time_zone='$offset'");
+	}
 }

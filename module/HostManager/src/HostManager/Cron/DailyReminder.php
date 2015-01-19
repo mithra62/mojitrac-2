@@ -69,6 +69,8 @@ class DailyReminder extends BaseCron
 
 			//now should we send based on last send?
 			$last_ran = $user->checkPreference($member['id'], '_daily_reminder_schedule_last_sent');
+			$user_data = $user->user_data->getUsersData($member['id']);
+			$user->setTimezone($user_data['timezone']);
 			if( !$last_ran )
 			{
 				//never been ran before so we set now and wait for next iteration to process
