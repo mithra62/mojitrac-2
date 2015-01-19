@@ -96,7 +96,7 @@ class UserData extends KeyValue
 	 */
 	public function getSQL(array $data, $create = TRUE){
 		$sql = array(
-			'option_value' => $data['option_value'],
+			'option_value' => (isset($data['option_value']) ? $data['option_value'] : ''),
 			'option_name' => $data['option_name'],
 			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
 		);
