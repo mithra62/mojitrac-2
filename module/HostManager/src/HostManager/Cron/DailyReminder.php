@@ -69,12 +69,12 @@ class DailyReminder extends BaseCron
 
 			//now should we send based on last send?
 			$last_ran = $user->checkPreference($member['id'], '_daily_reminder_schedule_last_sent');
-			$user_data = $user->user_data->getUsersData($member['id']);
+			$user_data = $user->user_data->reset()->getUsersData($member['id']);
 			$user->setTimezone($user_data['timezone']);
 			if( !$last_ran )
 			{
 				//never been ran before so we set now and wait for next iteration to process
-				$user->user_data->updateUserDataEntry('_daily_reminder_schedule_last_sent', time(), $member['id']);
+				$user->user_data->updateUserDataEntry('_daily_reminder_schedule_last_sent', date('U'), $member['id']);
 				$this->console->writeLine('Skipping '.$member['email'].' hasn\'t been processed yet...');
 				continue;
 			}
@@ -84,8 +84,8 @@ class DailyReminder extends BaseCron
 			$this->setLastRunDate($last_ran);
 			if( !$this->isDue() ) 
 			{
-				$this->console->writeLine('Skipping '.$member['email'].' since not due yet...');
-				//$this->console->writeLine('Next run at: '.$this->getNextRunDate());
+				$this->console->writeLine('Skipping '.$member['email'].' since last ran on '.$this->getPreviousRunDate().'...');
+				$this->console->writeLine('Next run at: '.$this->getNextRunDate());
 				continue;
 			}
 			
@@ -108,7 +108,7 @@ class DailyReminder extends BaseCron
 			$mail->setSubject('daily_task_reminder_email_subject');
 			$mail->send();
 			
-			$user->user_data->updateUserDataEntry('_daily_reminder_schedule_last_sent', time(), $member['id']);
+			$user->user_data->updateUserDataEntry('_daily_reminder_schedule_last_sent', date('U'), $member['id']);
 			$this->console->writeLine('Sent for '.$member['email']);
 		}
 	}
