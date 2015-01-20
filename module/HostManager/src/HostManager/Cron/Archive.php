@@ -66,8 +66,8 @@ class Archive extends BaseCron
 			$this->setLastRunDate($last_ran);
 			if( !$this->isDue() )
 			{
-				$this->console->writeLine('Skipping '.$site['slug'].' since not due yet...');
-				//$this->console->writeLine('Next run at: '.$this->getNextRunDate());
+				$this->console->writeLine('Skipping '.$site['slug'].' since last ran on '.$this->getPreviousRunDate().'...');
+				$this->console->writeLine('Next run at: '.$this->getNextRunDate());
 				continue;
 			}
 

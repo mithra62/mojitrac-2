@@ -96,7 +96,7 @@ abstract class BaseCron implements ServiceLocatorAwareInterface
 	public function isDue()
 	{
 		$cron = CronExpression::factory($this->expression);
-		return $cron->isDue(date('r', $this->last_ran));		
+		return $cron->isDue();		
 	}
 
 	/**
@@ -111,10 +111,26 @@ abstract class BaseCron implements ServiceLocatorAwareInterface
 		return $this;
 	}
 	
+	/**
+	 * Returns the next run date
+	 * @param string $format
+	 * @return string
+	 */
 	public function getNextRunDate($format = 'Y-m-d H:i:s')
 	{
 		$cron = CronExpression::factory($this->expression);
 		return $cron->getNextRunDate()->format($format);
+	}
+	
+	/**
+	 * Returns the previous run date
+	 * @param string $format
+	 * @return string
+	 */
+	public function getPreviousRunDate($format = 'Y-m-d H:i:s')
+	{
+		$cron = CronExpression::factory($this->expression);
+		return $cron->getPreviousRunDate()->format($format);
 	}
 	
 	/**
