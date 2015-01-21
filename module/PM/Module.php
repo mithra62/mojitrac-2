@@ -200,9 +200,8 @@ class Module implements
 					return new Companies($adapter, $db);
 				},				
 				'PM\Model\Timers' => function($sm) {
-					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
-					$db = $sm->get('SqlObject');
-					return new Timers($adapter, $db);
+					$ud = $sm->get('Application\Model\User\Data');
+					return new Timers($ud);
 				},
 				'PM\Model\Charts' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');

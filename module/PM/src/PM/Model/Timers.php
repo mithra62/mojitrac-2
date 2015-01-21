@@ -11,7 +11,6 @@
 
 namespace PM\Model;
 
-use Application\Model\User\UserData;
 use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 
@@ -22,7 +21,7 @@ use Zend\InputFilter\InputFilter;
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Model/Timers.php
  */
-class Timers extends UserData
+class Timers
 {
 	/**
 	 * The avaialble configuration options for a timer
@@ -36,19 +35,13 @@ class Timers extends UserData
 	);
 	
 	/**
-	 * Used to determine cache uniqueness
-	 * @var string
-	 */
-	public $cache_key = 'timers';
-	
-	/**
 	 * @ignore
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $db
 	 */
-	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
+	public function __construct(\Application\Model\User\UserData $user_data)
 	{
-		parent::__construct($adapter, $db);
+		$this->user_data = $user_data;
 	}
 	
 	/**
@@ -88,7 +81,7 @@ class Timers extends UserData
 	public function startTimer($identity, array $options)
 	{
 		$options['start_time'] = @mktime();
-		return $this->updateUserDataEntry('timer_data', \Zend\Json\Json::encode($options), $identity);
+		return $this->user_data->updateUserDataEntry('timer_data', \Zend\Json\Json::encode($options), $identity);
 	}
 	
 	/**
@@ -109,7 +102,7 @@ class Timers extends UserData
 	
 	public function getTimerData(array $where = array())
 	{
-		$user_data = $this->getUserData('timer_data', $where);
+		$user_data = $this->user_data->getUserData('timer_data', $where);
 		return $this->decodeTimerData($user_data['option_value']);
 	}
 	
@@ -119,7 +112,7 @@ class Timers extends UserData
 	 */
 	public function clearTimerData($identity)
 	{
-		return $this->updateUserDataEntry('timer_data', '', $identity);
+		return $this->user_data->updateUserDataEntry('timer_data', '', $identity);
 	}
 	
 	/**
