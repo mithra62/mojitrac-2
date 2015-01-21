@@ -622,14 +622,14 @@ class Tasks extends AbstractModel
 	public function updateProgress($id, $progress)
 	{
 		$sql = array('progress' => $progress, 'last_modified' => new \Zend\Db\Sql\Expression('NOW()'));
-		if($progress != 0)
-		{
-			$sql['status'] = '3';
-		}	
 		
 		if($progress == 100)
 		{
 			$sql['status'] = '5';
+		}
+		else 
+		{
+			$sql['status'] = 3;
 		}
 		
 		return $this->update('tasks', $sql, array('id' => $id));		
