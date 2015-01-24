@@ -9,7 +9,7 @@
  * @filesource 	./module/PM/src/PM/Model/Options/Currencies.php
  */
 
-namespace PM\Model\Options;
+namespace Application\Model\Options;
 
 /**
  * PM - Currencies Options Model

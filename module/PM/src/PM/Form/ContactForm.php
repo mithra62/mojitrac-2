@@ -11,7 +11,7 @@
 
 namespace PM\Form;
 
-use PM\Model\Options\Us\States;
+use Application\Model\Options\Us\States;
 use PM\Model\Options\Companies;
 use Base\Form\BaseForm;
 

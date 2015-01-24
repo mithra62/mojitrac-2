@@ -13,7 +13,7 @@ namespace PM\Form;
 
 use PM\Model\Options\Companies;
 use Application\Model\Options\Languages;
-use PM\Model\Options\Currencies;
+use Application\Model\Options\Currencies;
 use Base\Form\BaseForm;
 
 /**

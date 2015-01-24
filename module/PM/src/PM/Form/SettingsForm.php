@@ -15,7 +15,7 @@ use Application\Form\SettingsForm AS AppSettingsForm;
 use PM\Model\Options\Companies;
 use PM\Model\Options\Projects;
 use PM\Model\Options\Tasks;
-use PM\Model\Options\Currencies;
+use Application\Model\Options\Currencies;
 use Application\Model\Options\Languages;
 
 /**

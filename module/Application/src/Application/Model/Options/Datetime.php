@@ -9,7 +9,7 @@
  * @filesource 	./module/PM/src/PM/Model/Options/Datetime.php
  */
 
-namespace PM\Model\Options;
+namespace Application\Model\Options;
 
 /**
  * PM - Projects Options Model

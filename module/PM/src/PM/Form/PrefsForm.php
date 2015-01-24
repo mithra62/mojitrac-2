@@ -12,6 +12,7 @@
 namespace PM\Form;
 
 use Application\Form\PrefsForm AS AppForm;
+use Application\Model\Options\Datetime;
 
 /**
  * PM - PrefsForm Form
@@ -120,6 +121,18 @@ class PrefsForm extends AppForm
 			'options' => array(
 				'checked_value' => '1',
 				'unchecked_value' => '0'
+			)
+		));
+		
+		$this->add(array(
+			'name' => 'daily_reminder_schedule',
+			'type' => 'Select',
+			'attributes' => array(
+				'class' => 'select input',
+				'id' => 'timezone'
+			),
+			'options' => array(
+				'value_options' => Datetime::hours(),
 			)
 		));
 

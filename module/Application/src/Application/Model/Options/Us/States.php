@@ -9,7 +9,7 @@
  * @filesource 	./module/PM/src/PM/Model/Options/Us/States.php
  */
 
-namespace PM\Model\Options\Us;
+namespace Application\Model\Options\Us;
 
 /**
  * PM - US States Options Model
