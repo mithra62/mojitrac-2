@@ -27,10 +27,6 @@ echo $this->formRow($csrf);
 			
 			<label for="noti_daily_task_reminder"><?php $name = $form->get('noti_daily_task_reminder'); echo $this->formRow($name); ?> Daily task reminder.</label>
 					
-		</p>
-		<p>
-			<label for="daily_reminder_schedule">Daily Task Reminder Schedule</label>
-			<?php $field = $form->get('daily_reminder_schedule'); echo $this->formRow($field); ?>
 		</p>		
 		
 		<p>
@@ -52,12 +48,16 @@ echo $this->formRow($csrf);
 	</div>
 	
 	<div id="misc">
-		<p><label for="enable_contextual_help"><?php $name = $form->get('enable_contextual_help'); echo $this->formRow($name); ?> Enable contextual help.</label></p>
-	
+		
 		<p>
 			<label for="locale">Locale</label>
 			<?php $field = $form->get('locale'); echo $this->formRow($field); ?>
 		</p>	
+		
+		<p>
+			<label for="daily_reminder_schedule">Daily Task Reminder Schedule</label>
+			<?php $field = $form->get('daily_reminder_schedule'); echo $this->formRow($field); ?>
+		</p>		
 			
 		<p>
 			<input type="submit" class="submit" value="Submit" />
