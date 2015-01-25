@@ -18,6 +18,7 @@ return array(
         'ZF\ApiProblem',
         //'Freshbooks',
     	'HostManager', //keep this as last at all times if being hosted
+    	'BjyProfiler',
         'ZendDeveloperTools',
     	'ZfSimpleMigrations'
     ),
