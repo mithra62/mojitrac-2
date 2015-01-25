@@ -60,6 +60,20 @@ class BookmarkForm extends BaseForm
                 'rows' => '7',
                 'cols' => '40',
             ),
-        ));				
+        ));
+        
+		$this->add(array(
+			'name' => 'hashed',
+			'type' => 'Checkbox',
+			'attributes' => array(
+				'class' => 'checkbox', 
+				'id' => 'hashed',
+			),
+			'options' => array(
+				'checked_value' => '1',
+				'unchecked_value' => '0'
+			)
+		));
+        				
 	}
 }

@@ -28,15 +28,22 @@ use Application\Model\AbstractModel;
 class Bookmarks extends AbstractModel implements HashInterface
 {	
     protected $inputFilter;
+
+    /**
+     * The Hashing object
+     * @var \Application\Model\Hash
+     */
+    protected $hash;
     
 	/**
 	 * The Times Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $db
 	 */
-	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db, \Application\Model\Hash $hash)
 	{
 		parent::__construct($adapter, $db);
+		$this->hash = $hash;
 	}
 	
 	public function getSQL($data){
@@ -44,7 +51,8 @@ class Bookmarks extends AbstractModel implements HashInterface
 			'owner' => $data['owner'],
 			'name' => $data['name'],
 			'url' => $data['url'],
-			'description' => $data['description'],
+			'hashed' => $data['hashed'],
+			'description' => ($data['hashed'] == '1' ? $this->encrypt($data['description']) : $data['description']),
 			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
 		);
 	}	
@@ -76,20 +84,6 @@ class Bookmarks extends AbstractModel implements HashInterface
 	}	
 	
 	/**
-	 * Returns the $mbid for a given artist $name
-	 * @param $name
-	 * @return mixed
-	 */
-	public function getBookmarkIdByName($name)
-	{
-		$sql = $this->db->select()
-					  ->from($this->db->getTableName(), array('id'))
-					  ->where('name LIKE ?', $name);
-					  
-		return $this->db->getTask($sql);
-	}
-	
-	/**
 	 * Returns a bookmark for a given task $id
 	 * @param int $id
 	 * @return array
@@ -103,7 +97,14 @@ class Bookmarks extends AbstractModel implements HashInterface
 		$sql = $sql->join(array('u' => 'users'), 'u.id = bk.owner', array('owner_first_name' => 'first_name', 'owner_last_name' => 'last_name'), 'left');
 		$sql = $sql->join(array('t' => 'tasks'), 't.id = bk.task_id', array('task_name' => 'name'), 'left');
 		$sql = $sql->join(array('c' => 'companies'), 'c.id = bk.company_id', array('company_name' => 'name'), 'left');
-		return $this->getRow($sql);
+		$bookmark = $this->getRow($sql);
+		
+		if($bookmark && $bookmark['hashed'] == '1')
+		{
+			$bookmark['description'] = $this->decrypt($bookmark['description']);
+		}
+		
+		return $bookmark;
 	}
 	
 	/**
@@ -344,21 +345,21 @@ class Bookmarks extends AbstractModel implements HashInterface
 	
 		return $return;
 	}
-	
-	/* (non-PHPdoc)
+
+	/**
+	 * Encrypts a string
 	 * @see \Base\Model\HashInterface::encrypt()
 	 */
 	public function encrypt($string) {
-		// TODO Auto-generated method stub
-		
+		return $this->hash->encrypt($string);
 	}
-
-	/* (non-PHPdoc)
+	
+	/**
+	 * Decrypts a string
 	 * @see \Base\Model\HashInterface::decrypt()
 	 */
 	public function decrypt($string) {
-		// TODO Auto-generated method stub
-		
+		return $this->hash->decrypt($string);
 	}
 	
 }

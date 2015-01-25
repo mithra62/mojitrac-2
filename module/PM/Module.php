@@ -235,7 +235,8 @@ class Module implements
 				'PM\Model\Bookmarks' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Bookmarks($adapter, $db);
+					$hash = $sm->get('Application\Model\Hash');
+					return new Bookmarks($adapter, $db, $hash);
 				},
 				'PM\Model\Notes' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
