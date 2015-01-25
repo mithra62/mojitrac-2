@@ -22,20 +22,33 @@ use Base\View\Helper\BaseViewHelper;
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/HostManager/src/HostManager/View/Helper/getUserAccounts.php
  */
-class getUserAccounts extends BaseViewHelper
+class GetUserAccounts extends BaseViewHelper
 {	
 	/**
 	 * @ignore
 	 */
-    public function __invoke($identity)
+    public function __invoke($identity, $include_self = true)
     {
 		$helperPluginManager = $this->getServiceLocator();
 		$serviceManager = $helperPluginManager->getServiceLocator();
 		$account = $serviceManager->get('HostManager\Model\Accounts');	
     	$accounts = $account->getUserAccounts(array('user_id' => $identity));
-    	print_r($accounts);
-    	exit;
-		return $accounts;
+    	
+    	$account_id = $account->getAccountId();
+    	$return = array();
+    	foreach($accounts AS $moji)
+    	{
+    		if($account_id == $moji['account_id'] && !$include_self)
+    		{
+    			continue;
+    		}
+    		
+    		$account_details = $account->getAccountDetails($moji['account_id']);
+    		$url = $account->createAccountUrl($moji['account_id']);
+    		$return[] = array_merge(array('joined_date' => $moji['created_date'], 'url' => $url), $account_details);
+    	}
+    	
+		return $return;
     }
     
 }

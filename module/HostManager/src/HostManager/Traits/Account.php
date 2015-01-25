@@ -64,6 +64,10 @@ trait Account
 		return $this->account_id;
 	}
 	
+	/**
+	 * Returns the account details for $where
+	 * @param array $where
+	 */
 	public function getUserAccounts(array $where = array())
 	{
 		$sql = $this->db->select()->from(array('ua'=> 'user_accounts'));
@@ -98,6 +102,20 @@ trait Account
 	{
 		$where = array('user_id' => $user_id, 'account_id' => $account_id);
 		$sql = $this->db->select()->from('user_accounts')->where($where)->join(array('u' => 'users'), 'user_id = u.id', array());
+		return $this->getRow($sql);
+	}
+	
+	/**
+	 * Will return a detailed array about an account
+	 * @param int $account_id
+	 * @return array
+	 */
+	public function getAccountDetails($account_id)
+	{
+		$sql = $this->db->select()->from('settings')->where(array('option_name' => 'master_company', 'settings.account_id' => $account_id));
+		$sql->join('companies', 'companies.id = settings.option_value', array('company_name' => 'name'));
+		$sql->join('accounts', 'accounts.id = settings.account_id', array('slug'));
+		$sql->join('users', 'accounts.owner_id = users.id', array('email', 'first_name', 'last_name'));
 		return $this->getRow($sql);
 	}
 }

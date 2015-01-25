@@ -76,17 +76,11 @@ class ViewEvent extends BaseEvent
 	public function modAccountView(\Zend\EventManager\Event $event)
 	{
 		$partials = $event->getParam('partials');
-		
 		$accounts = $this->account->getUserAccounts(array('user_id' => $this->identity));
 		if($accounts && is_array($accounts) && count($accounts) > 1)
 		{
-			//we only want to set the view if the user is allowed to access the REST API
-			if($this->user->roles->perm->check($this->identity, 'access_rest_api')) 
-			{
-				$partials[] = 'host-manager/accounts/partials/user_accounts';
-				$event->setParam('partials', $partials);
-			}
-			
+			$partials[] = 'host-manager/accounts/partials/user_accounts';
+			$event->setParam('partials', $partials);
 			return $partials;
 		}
 		

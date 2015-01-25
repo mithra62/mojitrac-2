@@ -188,7 +188,7 @@ class SqlEvent extends BaseEvent
     				{
     					$left = $value->getLeft();
     					$right = $value->getRight();
-    					if($left == 'account_id' && $right >= '1')
+    					if(substr($left, -10) == 'account_id' && $right >= '1')
     					{
     						return $right;
     					}
