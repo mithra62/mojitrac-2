@@ -3,7 +3,8 @@
 		<tr>
 			<th>#</th>
 			<th>Type</th>
-			<th>Name</th>			
+			<th>File Name</th>
+			<th>Status</th>			
 			<th>Uploaded By</th>
 			<th>Uploaded</th>
 			<th>Size</th>
@@ -26,6 +27,7 @@
 			<td><?php echo ($i+1); ?></td>
 			<td><?php echo $this->FileTypeImage($revision['mime_type'])?></td>
 			<td><?php echo $revision['file_name']; ?></td>
+			<td><?php echo $this->FileStatus($revision['status']); ?></td>
 			<td><?php echo $this->MakeLink('user', $uploader_data);?></td>
 			<td><?php echo $this->RelativeDate($revision['created_date']); ?></td>
 			<td><?php echo $this->FileSize($revision['size']); ?></td>
