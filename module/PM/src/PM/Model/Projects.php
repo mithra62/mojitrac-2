@@ -2,7 +2,6 @@
 /**
  * mithra62 - MojiTrac
  *
- * @author		Eric Lamb <eric@mithra62.com>
  * @copyright	Copyright (c) 2014, mithra62, Eric Lamb.
  * @link		http://mojitrac.com/
  * @version		2.0
@@ -336,13 +335,29 @@ class Projects extends AbstractModel
 	 * @param int	 $id
 	 * @return bool
 	 */
-	public function updateProject($data, $project_id)
+	public function updateProject($data, $project_id, \PM\Model\Files $file = null)
 	{
 		$ext = $this->trigger(self::EventProjectUpdatePre, $this, compact('data', 'project_id'), $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $data = $ext->last();
-		
+
+		//ok. we have to explicitly check for company changes so we need a copy of what we're working with
+		$project_data = $this->getProjectById($project_id);
 		$sql = $this->getSQL($data);
 		$return = $this->update('projects', $sql, array('id' => $project_id));
+		
+		if($return && !empty($data['company_id']) && ($project_data['company_id'] != $data['company_id']))
+		{
+			//we have a company change here
+			$this->update('tasks', array('company_id' => $data['company_id']), array('project_id' => $project_id));
+			$this->update('bookmarks', array('company_id' => $data['company_id']), array('project_id' => $project_id));
+			$this->update('notes', array('company_id' => $data['company_id']), array('project_id' => $project_id));
+			$this->update('times', array('company_id' => $data['company_id']), array('project_id' => $project_id));
+			$this->update('activity_logs', array('company_id' => $data['company_id']), array('project_id' => $project_id));
+			//files have to be handled seperately
+			if($file !== null){
+				$file->changeProjectCompany($project_id, $data['company_id']);
+			}
+		}		
 		
 		$ext = $this->trigger(self::EventProjectUpdatePost, $this, compact('data', 'project_id'), $this->setXhooks($data));
 		if($ext->stopped()) return $ext->last(); elseif($ext->last()) $return = $ext->last();

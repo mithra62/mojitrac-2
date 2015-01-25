@@ -442,4 +442,42 @@ class Files extends AbstractModel
 		
 		return $delete;		
 	}
+	
+	/**
+	 * Handles moving all a Project's file data to a new company 
+	 * @param int $project_id
+	 * @param int $company_id
+	 * @return int
+	 */
+	public function changeProjectCompany($project_id, $company_id)
+	{
+		$file_data = $this->getFilesByProjectId($project_id);
+		if($file_data)
+		{
+			foreach($file_data AS $file)
+			{
+				$task_id = ($file['task_id'] != '0' ? $file['task_id'] : false);
+				$old_path = $this->checkMakeDirectory($this->getStoragePath(), $file['company_id'], $project_id, $task_id);
+				$new_path = $this->checkMakeDirectory($this->getStoragePath(), $company_id, $project_id, $task_id);
+				//now grab the revisions
+				
+				$revision_data = $this->revision->getFileRevisions($file['id']);
+				if( $revision_data )
+				{
+					foreach($revision_data AS $revision)
+					{
+						//now move things to where they need to be
+						$old_file_path = realpath($old_path.'/'.$revision['stored_name']);
+						$new_file_path = realpath($new_path).'/'.$revision['stored_name'];
+						if( file_exists($old_file_path) )
+						{
+							rename($old_file_path, $new_file_path);
+						}
+					}
+				}
+			}
+			
+			return $this->update('files', array('company_id' => $company_id), array('project_id' => $project_id));
+		}
+	}
 }

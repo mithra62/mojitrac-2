@@ -201,7 +201,8 @@ class ProjectsController extends AbstractPmController
             $form->setData($request->getPost());
             if ($form->isValid($formData)) 
             {
-            	if($project->updateProject($formData->toArray(), $id))
+            	$file = $this->getServiceLocator()->get('PM\Model\Files');
+            	if($project->updateProject($formData->toArray(), $id, $file))
 	            {
 					$this->flashMessenger()->addMessage($this->translate('project_updated', 'pm')); 
 					return $this->redirect()->toRoute('projects/view', array('project_id' => $id));      		
