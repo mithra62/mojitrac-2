@@ -44,6 +44,10 @@ class GetUserAccounts extends BaseViewHelper
     		}
     		
     		$account_details = $account->getAccountDetails($moji['account_id']);
+			if(!$account_details)
+			{
+				continue;
+			}
     		$url = $account->createAccountUrl($moji['account_id']);
     		$return[] = array_merge(array('joined_date' => $moji['created_date'], 'url' => $url), $account_details);
     	}

@@ -31,8 +31,21 @@ trait Controller
 		{
 			$ip = $this->getServiceLocator()->get('PM\Model\Ips');
 			if(!$ip->isAllowed($_SERVER['REMOTE_ADDR']))
-			{
-				exit;
+			{	
+				$good_controller = 'PM\Controller\Ips';
+				$good_actions = array('blocked', 'self-allow', 'confirm-allow');
+				$controller = $this->getEvent()->getRouteMatch()->getParam('controller', 'index');
+				$action = $this->getEvent()->getRouteMatch()->getParam('action', 'index');
+				
+				//check if we even have a chance of bypassing things
+				if(!$this->perm->check($this->identity, 'self_allow_ip'))
+				{
+					if($controller != $good_controller || !in_array($action, $good_actions))
+					{
+						$this->redirect()->toRoute('ips/blocked');
+					}
+				}
+
 			}
 		}
 	}

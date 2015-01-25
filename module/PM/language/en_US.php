@@ -143,6 +143,7 @@ return array(
 	'ip_address_added' => 'IP Address Added!',
 	'ip_address_updated' => 'IP Address Updated!',
 	'cant_update_ip_address' => 'Couldn\'t update Ip Address...', 
+	'ip_locker_enabled_message' => 'The MojiTrac administrator has enabled IP restrictions, so only authorized people can access the site. In order to continue you\'ll need to contact the Administrator and have them allow your IP address.',
 		
 	//invoices
 	'invoice_updated' => 'Invoice Updated!',

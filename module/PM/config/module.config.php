@@ -539,6 +539,24 @@ return array(
         						'action' => 'enable'
         					)
         				)
+        			), 			
+        			'allow-self' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/allow-self',
+        					'defaults' => array(
+        						'action' => 'allowSelf'
+        					)
+        				)
+        			), 			
+        			'blocked' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/blocked',
+        					'defaults' => array(
+        						'action' => 'blocked'
+        					)
+        				)
         			),
         		)
         	), //end IP Routes

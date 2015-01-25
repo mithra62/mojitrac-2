@@ -31,10 +31,6 @@ class IpsController extends AbstractPmController
 	public function onDispatch( \Zend\Mvc\MvcEvent $e )
 	{
 		$e = parent::onDispatch( $e ); 
-        $this->layout()->setVariable('sidebar', 'dashboard');
-        $this->layout()->setVariable('active_nav', 'admin');
-        $this->layout()->setVariable('sub_menu', 'admin');
-        $this->layout()->setVariable('active_sub', 'ips');
 		return $e;       
 	}
     
@@ -44,6 +40,10 @@ class IpsController extends AbstractPmController
 	 */
     public function enableAction()
     {
+        $this->layout()->setVariable('active_nav', 'admin');
+        $this->layout()->setVariable('sub_menu', 'admin');
+        $this->layout()->setVariable('active_sub', 'ips');
+        
     	$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
 		$ip = $this->getServiceLocator()->get('PM\Model\Ips');
     	$request = $this->getRequest();
@@ -87,6 +87,11 @@ class IpsController extends AbstractPmController
     
 	public function viewAction()
 	{
+
+		$this->layout()->setVariable('active_nav', 'admin');
+		$this->layout()->setVariable('sub_menu', 'admin');
+		$this->layout()->setVariable('active_sub', 'ips');
+		
 		$id = $this->params()->fromRoute('ip_id');
 		if (!$id) 
 		{	
@@ -109,6 +114,11 @@ class IpsController extends AbstractPmController
 	 */
 	public function addAction()
 	{
+
+		$this->layout()->setVariable('active_nav', 'admin');
+		$this->layout()->setVariable('sub_menu', 'admin');
+		$this->layout()->setVariable('active_sub', 'ips');
+		
 		$ip = $this->getServiceLocator()->get('PM\Model\Ips');
 		$form = $this->getServiceLocator()->get('PM\Form\IpForm');
 		$request = $this->getRequest();
@@ -140,6 +150,11 @@ class IpsController extends AbstractPmController
 	 */
 	public function editAction()
 	{
+
+		$this->layout()->setVariable('active_nav', 'admin');
+		$this->layout()->setVariable('sub_menu', 'admin');
+		$this->layout()->setVariable('active_sub', 'ips');
+		
 		$id = $this->params()->fromRoute('ip_id');
 		if (!$id) 
 		{
@@ -199,6 +214,9 @@ class IpsController extends AbstractPmController
 	
 	public function removeAction()
 	{
+        $this->layout()->setVariable('active_nav', 'admin');
+        $this->layout()->setVariable('sub_menu', 'admin');
+        $this->layout()->setVariable('active_sub', 'ips');
 		$ips = $this->getServiceLocator()->get('PM\Model\Ips');
 		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
 		
@@ -245,6 +263,17 @@ class IpsController extends AbstractPmController
 		
 		$view['form'] = $form;
 		return $this->ajaxOutput($view);	
+	}
+	
+	public function blockedAction()
+	{
+		
+	}
+	
+	public function allowSelfAction()
+	{
+		echo __FUNCTION__;
+		exit;
 	}
     
 }
