@@ -540,7 +540,7 @@ return array(
         					)
         				)
         			), 			
-        			'allow-self' => array(
+        			'self-allow' => array(
         				'type' => 'segment',
         				'options' => array(
         					'route' => '/allow-self',

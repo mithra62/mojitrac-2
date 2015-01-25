@@ -58,6 +58,7 @@ return array(
 	'permission_view_time' => 'Can the user view time tracker data?',
 	'permission_view_users_data' => 'Can the user view other users data?',
 	'permission_access_rest_api' => 'Can the user access the REST API?',
+	'permission_self_allow_ip' => 'Can the user allow their own IP Address?',
 		
 	//roles controller
 	'user_roles' => 'User Roles',
@@ -144,6 +145,7 @@ return array(
 	'ip_address_updated' => 'IP Address Updated!',
 	'cant_update_ip_address' => 'Couldn\'t update Ip Address...', 
 	'ip_locker_enabled_message' => 'The MojiTrac administrator has enabled IP restrictions, so only authorized people can access the site. In order to continue you\'ll need to contact the Administrator and have them allow your IP address.',
+	'ip_locker_enabled_allow_self_message' => 'The MojiTrac administrator has enabled IP restrictions, so only authorized people can access the site. In order to continue you\'ll need to verify your account ownership to allow requests from your location.',	
 		
 	//invoices
 	'invoice_updated' => 'Invoice Updated!',

@@ -33,7 +33,7 @@ trait Controller
 			if(!$ip->isAllowed($_SERVER['REMOTE_ADDR']))
 			{	
 				$good_controller = 'PM\Controller\Ips';
-				$good_actions = array('blocked', 'self-allow', 'confirm-allow');
+				$good_actions = array('blocked', 'allowSelf', 'confirm-allow');
 				$controller = $this->getEvent()->getRouteMatch()->getParam('controller', 'index');
 				$action = $this->getEvent()->getRouteMatch()->getParam('action', 'index');
 				
@@ -45,7 +45,11 @@ trait Controller
 						$this->redirect()->toRoute('ips/blocked');
 					}
 				}
-
+				
+				if($controller != $good_controller || !in_array($action, $good_actions))
+				{
+					$this->redirect()->toRoute('ips/self-allow');
+				}
 			}
 		}
 	}

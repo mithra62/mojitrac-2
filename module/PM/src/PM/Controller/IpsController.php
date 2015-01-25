@@ -272,8 +272,23 @@ class IpsController extends AbstractPmController
 	
 	public function allowSelfAction()
 	{
-		echo __FUNCTION__;
-		exit;
+		$ip = $this->getServiceLocator()->get('PM\Model\Ips');
+		$form = $this->getServiceLocator()->get('PM\Form\ConfirmForm');
+
+		$request = $this->getRequest();
+		if ($request->isPost())
+		{
+			$formData = $this->getRequest()->getPost();
+			$form->setData($request->getPost());
+			if ($form->isValid($formData))
+			{
+				echo 'fdsa';
+				exit;
+			}	
+		}	
+		$view = array();
+		$view['form'] = $form;
+		return $view;
 	}
     
 }
