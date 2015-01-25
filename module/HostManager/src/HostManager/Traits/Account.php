@@ -72,7 +72,7 @@ trait Account
 			$sql = $sql->where($where);
 		}
 		
-		return $this->getRow($sql);	
+		return $this->getRows($sql);	
 	}
 	
 	/**

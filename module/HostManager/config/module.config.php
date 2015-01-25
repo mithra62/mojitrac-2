@@ -204,7 +204,8 @@ return array(
 
     'view_helpers' => array(
 	    'invokables' => array(
-		    'AccountUrl' => 'HostManager\View\Helper\AccountUrl'
+		    'AccountUrl' => 'HostManager\View\Helper\AccountUrl',
+		    'getUserAccounts' => 'HostManager\View\Helper\getUserAccounts'
 	    ),
     ),
     'translator' => array(

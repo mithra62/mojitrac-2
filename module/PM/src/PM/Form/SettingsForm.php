@@ -45,7 +45,7 @@ class SettingsForm extends AppSettingsForm
 				'id' => 'master_company'
 			),
 			'options' => array(
-				'value_options' => Companies::companies($companies, TRUE),
+				'value_options' => Companies::companies($companies),
 			)
 		));
 

@@ -18,6 +18,7 @@ use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 
 use HostManager\Event\SqlEvent;
 use HostManager\Event\NotificationEvent;
+use HostManager\Event\ViewEvent;
 use HostManager\Model\Accounts;
 use HostManager\Model\Account\Invites;
 use HostManager\Model\Users;
@@ -60,8 +61,8 @@ class Module implements
 		$sql_event = $this->service_manager->get('HostManager\Event\SqlEvent');
 		$sql_event->register($this->sharedEvents);
 
-		$notification_event = $this->service_manager->get('PM\Event\NotificationEvent');
-		//$notification_event->register($this->sharedEvents);
+		$event = $e->getApplication()->getServiceManager()->get('HostManager\Event\ViewEvent');
+		$event->register($this->sharedEvents);
 	}
 
 	/**
@@ -182,6 +183,12 @@ class Module implements
 				    $project = $sm->get('PM\Model\Projects');
 					return new NotificationEvent($mail, $user, $project, $task, $auth->getIdentity());
 				},	
+				'HostManager\Event\ViewEvent' => function($sm) {
+					$auth = $sm->get('AuthService');
+					$user = $sm->get('Api\Model\Users');
+					$account = $sm->get('HostManager\Model\Accounts');
+					return new ViewEvent($auth->getIdentity(), $user, $account); 
+				},
 			)
 		);
     }
