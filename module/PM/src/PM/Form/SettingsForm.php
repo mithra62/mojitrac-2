@@ -182,6 +182,16 @@ class SettingsForm extends AppSettingsForm
 			)
 		));
 		
-		
+		$this->add(array(
+			'name' => 'task_auto_archive_days',
+			'type' => 'Select',
+			'attributes' => array(
+				'class' => 'select input',
+				'id' => 'task_auto_archive_days'
+			),
+			'options' => array(
+				'value_options' => range(0, 30)
+			)
+		));
 	}
 }
