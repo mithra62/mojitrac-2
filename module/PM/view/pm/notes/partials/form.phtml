@@ -10,7 +10,6 @@ echo $this->formRow($csrf);
 	if($this->id > 0)
 		echo '<input type="hidden" value="'.$this->id.'" name="id" />';
 ?>	
-
 <style>
 #loading
 {
@@ -61,6 +60,8 @@ if($this->id > 0)
 	<p>
 		<label for="description">Description</label>
 		<?php $name = $form->get('description'); echo $this->formRow($name); ?>
+		<label for="hashed"><?php $name = $form->get('hashed'); echo $this->formRow($name); ?>Encrypt*</label>
+		*If you're storing sensitive details, like login credentials, you should encrypt the data for storage.
 	</p>
 	
 	<p>

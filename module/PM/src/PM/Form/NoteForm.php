@@ -65,6 +65,19 @@ class NoteForm extends BaseForm
 				'id' => 'description'
 			),
 		));
+
+		$this->add(array(
+			'name' => 'hashed',
+			'type' => 'Checkbox',
+			'attributes' => array(
+				'class' => 'checkbox', 
+				'id' => 'hashed',
+			),
+			'options' => array(
+				'checked_value' => '1',
+				'unchecked_value' => '0'
+			)
+		));
 				
 	}
 }

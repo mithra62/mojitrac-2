@@ -15,6 +15,7 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
+use Base\Model\HashInterface;
 use Application\Model\AbstractModel;
 
 /**
@@ -24,7 +25,7 @@ use Application\Model\AbstractModel;
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Model/Bookmarks.php
  */
-class Bookmarks extends AbstractModel
+class Bookmarks extends AbstractModel implements HashInterface
 {	
     protected $inputFilter;
     
@@ -342,5 +343,22 @@ class Bookmarks extends AbstractModel
 			$return[] = array('status' => $data['status']);
 	
 		return $return;
-	}	
+	}
+	
+	/* (non-PHPdoc)
+	 * @see \Base\Model\HashInterface::encrypt()
+	 */
+	public function encrypt($string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-PHPdoc)
+	 * @see \Base\Model\HashInterface::decrypt()
+	 */
+	public function decrypt($string) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

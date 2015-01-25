@@ -15,6 +15,7 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
+use Base\Model\HashInterface;
 use Application\Model\AbstractModel;
 
  /**
@@ -24,27 +25,42 @@ use Application\Model\AbstractModel;
  * @author		Eric Lamb <eric@mithra62.com>
  * @filesource 	./module/PM/src/PM/Model/Notes.php
  */
-class Notes extends AbstractModel
+class Notes extends AbstractModel implements HashInterface
 {
     protected $inputFilter;
+    
+    /**
+     * The Hashing object
+     * @var \Application\Model\Hash
+     */
+    protected $hash;
     
 	/**
 	 * The Notes Model
 	 * @param \Zend\Db\Adapter\Adapter $adapter
 	 * @param \Zend\Db\Sql\Sql $db
+	 * @param \Application\Model\Hash $hash
 	 */
-	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db)
+	public function __construct(\Zend\Db\Adapter\Adapter $adapter, \Zend\Db\Sql\Sql $db, \Application\Model\Hash $hash)
 	{
 		parent::__construct($adapter, $db);
+		$this->hash = $hash;
 	}
 	
-	public function getSQL($data){
+	/**
+	 * Contains the database setting array
+	 * @param array $data
+	 * @return multitype:\Zend\Db\Sql\Expression unknown
+	 */
+	public function getSQL(array $data)
+	{
 		return array(
-		'topic' => $data['topic'],
-		'date' => $data['date'],
-		'subject' => $data['subject'],
-		'description' => $data['description'],
-		'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
+			'topic' => $data['topic'],
+			'date' => $data['date'],
+			'hashed' => $data['hashed'],
+			'subject' => $data['subject'],
+			'description' => ($data['hashed'] == '1' ? $this->encrypt($data['description']) : $data['description']),
+			'last_modified' => new \Zend\Db\Sql\Expression('NOW()')
 		);
 	}
 	
@@ -82,22 +98,6 @@ class Notes extends AbstractModel
 	
 		return $this->inputFilter;
 	}
-		
-	
-	/**
-	 * Returns the $mbid for a given artist $name
-	 * @param $name
-	 * @return mixed
-	 */
-	public function getNoteIdByName($name)
-	{
-		$bk = new PM_Model_DbTable_Bookmarks;
-		$sql = $bk->select()
-					  ->from($bk->getTableName(), array('id'))
-					  ->where('name LIKE ?', $name);
-					  
-		return $bk->getTask($sql);
-	}
 	
 	/**
 	 * Returns a note for a given $id
@@ -112,22 +112,13 @@ class Notes extends AbstractModel
 		$sql = $sql->join(array('p' => 'projects'), 'p.id = n.project_id', array('project_name' => 'name', 'project_id' => 'id'), 'left');
 		$sql = $sql->join(array('t' => 'tasks'), 't.id = n.task_id', array('task_name' => 'name'), 'left');
 		$sql = $sql->join(array('c' => 'companies'), 'c.id = n.company_id', array('company_name' => 'name'), 'left');
-		return $this->getRow($sql);
-	}
-	
-	/**
-	 * Returns an array of all unique album names with artist names
-	 * @return mixed
-	 */
-	public function getAllNotes($view_type = FALSE)
-	{
-		$note = new PM_Model_DbTable_Notes;
-		$sql = $note->select()->setIntegrityCheck(false)->from(array('n'=>$note->getTableName()));
+		$note = $this->getRow($sql);
+		if($note && $note['hashed'] == '1')
+		{
+			$note['description'] = $this->decrypt($note['description']);
+		}
 		
-		$sql = $sql->joinLeft(array('p' => 'projects'), 'p.id = n.project_id', array('name AS project_name', 'id AS project_id'));
-		$sql = $sql->joinLeft(array('u2' => 'users'), 'u2.id = n.creator', array('first_name AS creator_first_name', 'last_name AS creator_last_name'));
-			
-		return $note->getNotes($sql);		
+		return $note;
 	}
 	
 	/**
@@ -301,24 +292,19 @@ class Notes extends AbstractModel
 	}
 	
 	/**
-	 * Deletes a "Note" record from the database based on $company_id
-	 * @param $company_id
-	 * @return bool
+	 * Encrypts a string
+	 * @see \Base\Model\HashInterface::encrypt()
 	 */
-	public function removeNotesByCompany($company_id)
-	{
-		$note = new PM_Model_DbTable_Notes;
-		return $note->deleteNote($company_id, 'company_id');
+	public function encrypt($string) {
+		return $this->hash->encrypt($string);
 	}
-	
-	/**
-	 * Deletes a "Note" record from the database based on $project_id
-	 * @param $project_id
-	 * @return bool
+
+	/** 
+	 * Decrypts a string
+	 * @see \Base\Model\HashInterface::decrypt()
 	 */
-	public function removeNotesByProject($project_id)
-	{
-		$note = new PM_Model_DbTable_Notes;
-		return $note->deleteNote($project_id, 'project_id');
-	}		
+	public function decrypt($string) {
+		return $this->hash->decrypt($string);
+	}
+		
 }

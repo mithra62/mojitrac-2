@@ -240,7 +240,8 @@ class Module implements
 				'PM\Model\Notes' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
 					$db = $sm->get('SqlObject');
-					return new Notes($adapter, $db);
+					$hash = $sm->get('Application\Model\Hash');
+					return new Notes($adapter, $db, $hash);
 				},
 				'PM\Model\Options' => function($sm) {
 					$adapter = $sm->get('Zend\Db\Adapter\Adapter');
