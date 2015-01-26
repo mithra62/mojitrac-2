@@ -317,8 +317,6 @@ class IpsController extends AbstractPmController
 			return $this->redirect()->toRoute('pm');
 		}
 		
-		echo '44';
-		exit;
 		$this->flashMessenger()->addMessage($this->translate('ip_allow_code_access_fail', 'pm'));
 		return $this->redirect()->toRoute('ips/self-allow');
 	}
