@@ -146,6 +146,9 @@ return array(
 	'cant_update_ip_address' => 'Couldn\'t update Ip Address...', 
 	'ip_locker_enabled_message' => 'The MojiTrac administrator has enabled IP restrictions, so only authorized people can access the site. In order to continue you\'ll need to contact the Administrator and have them allow your IP address.',
 	'ip_locker_enabled_allow_self_message' => 'The MojiTrac administrator has enabled IP restrictions, so only authorized people can access the site. In order to continue you\'ll need to verify your account ownership to allow requests from your location.',	
+	'ip_allow_verify_sent' => 'Email Sent! Check your email to continue.',
+	'ip_allow_bad_code' => 'Woops! Invalid code ya got there...',	
+	'ip_allow_code_access_sucess' => 'Your IP Address has been whitelisted!',
 		
 	//invoices
 	'invoice_updated' => 'Invoice Updated!',
@@ -163,6 +166,7 @@ return array(
 	'email_subject_file_add' => 'File Uploaded',
 	'user_registration_email_subject' => 'New MojiTrac Account Created!',
 	'email_subject_file_revision_add' => 'File Revision Uploaded',
+	'email_subject_ip_self_allow' => 'MojiTrac IP Allow Request',
 		
 	'sent_by_moji' => 'Sent By: MojiTrac',
 	

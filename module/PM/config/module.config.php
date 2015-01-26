@@ -557,7 +557,20 @@ return array(
         						'action' => 'blocked'
         					)
         				)
+        			),		
+        			'verify-allow' => array(
+        				'type' => 'segment',
+        				'options' => array(
+        					'route' => '/v/:verify_code',
+        					'defaults' => array(
+        						'action' => 'verifyCode'
+        					),
+        					'constraints' => array(
+        						'verify_code' => '([a-z0-9]{8})-([a-z0-9]{4})-([a-z0-9]{4})-([a-z0-9]{4})-([a-z0-9]{12})'
+        					),
+        				)
         			),
+        			
         		)
         	), //end IP Routes
 

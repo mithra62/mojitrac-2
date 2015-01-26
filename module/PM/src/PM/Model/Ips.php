@@ -97,6 +97,40 @@ class Ips extends AbstractModel
 	}
 	
 	/**
+	 * Returns an array of IP Addresses
+	 * @param array $where
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 */
+	public function getIps(array $where = array())
+	{
+		$sql = $this->db->select()->from(array('ip'=>'ips'));
+		$sql = $sql->join(array('u' => 'users'), 'u.id = ip.creator', array('first_name', 'last_name'), 'left');
+		if($where)
+		{
+			$sql = $sql->where($where);
+		}
+		
+		return $this->getRows($sql);		
+	}
+	
+	/**
+	 * Returns a single IP Address and its details
+	 * @param array $where
+	 * @return Ambigous <\Base\Model\array:, multitype:, unknown, \Zend\EventManager\mixed, NULL, mixed>
+	 */
+	public function getIp(array $where = array())
+	{
+		$sql = $this->db->select()->from(array('ip'=>'ips'));
+		$sql = $sql->join(array('u' => 'users'), 'u.id = ip.creator', array('first_name', 'last_name'), 'left');
+		if($where)
+		{
+			$sql = $sql->where($where);
+		}
+		
+		return $this->getRow($sql);		
+	}
+	
+	/**
 	 * Returns the IP for the pk
 	 * @param int $id
 	 */
@@ -114,7 +148,7 @@ class Ips extends AbstractModel
 	 */
 	public function isAllowed($ip)
 	{
-		$sql = $this->db->select()->from(array('ip' => 'ips'))->columns( array('id'))->where(array('ip' => ip2long($ip)));
+		$sql = $this->db->select()->from(array('ip' => 'ips'))->columns( array('id'))->where(array('ip' => ip2long($ip), 'confirm_key' => ''));
 		$data = $this->getRow($sql);
 		return $data;
 	}
@@ -149,7 +183,7 @@ class Ips extends AbstractModel
 	{
 		if($this->remove('ips', array('id' => $id)))
 		{
-		    return TRUE;			
+		    return TRUE;
 		}
 	}
 	
@@ -165,5 +199,51 @@ class Ips extends AbstractModel
 		{
 		    return TRUE;	
 		}
+	}
+	
+	/**
+	 * Processes an IP address a user wants to verify for access
+	 * @param string $ip
+	 * @param array $user_data
+	 * @param \Application\Model\Mail $mail
+	 */
+	public function allowSelf($ip, array $user_data, \Application\Model\Mail $mail, \Application\Model\Hash $hash)
+	{
+		$hash = $hash->guidish();
+		$where = array('ip' => ip2long($ip));
+		$check = $this->getIps($where);
+		$success = false;
+		if(!$check)
+		{
+			$sql = $this->getSQL(array('ip' => $ip, 'description' => 'Self Added'));
+			$sql['confirm_key'] = $hash;;
+			$sql['creator'] = $user_data['id'];
+			$sql['created_date'] = new \Zend\Db\Sql\Expression('NOW()');
+			$success = $this->insert('ips', $sql);
+		}
+		else
+		{
+			$sql = array('confirm_key' => $hash, 'last_modified' => new \Zend\Db\Sql\Expression('NOW()'));
+			$success = $this->update('ips', $sql, $where);
+		}
+		
+		if($success)
+		{
+			$mail->addTo($user_data['email'], $user_data['first_name'].' '.$user_data['last_name']);
+			$mail->setViewDir($mail->getModulePath(__DIR__).'/view/emails');
+			$mail->setEmailView('ip-self-allow', array('user_data' => $user_data, 'user_id' => $user_data['id'], 'verify_code' => $hash));
+			$mail->setTranslationDomain('pm');
+			$mail->setSubject('email_subject_ip_self_allow');
+			
+			if($mail->send())
+			{
+				return true;
+			}
+		}	
+	}
+	
+	public function allowCodeAccess($code)
+	{
+		return $this->update('ips', array('confirm_key' => ''), array('confirm_key' => $code));
 	}
 }
