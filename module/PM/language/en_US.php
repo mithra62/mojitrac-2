@@ -149,6 +149,7 @@ return array(
 	'ip_allow_verify_sent' => 'Email Sent! Check your email to continue.',
 	'ip_allow_bad_code' => 'Woops! Invalid code ya got there...',	
 	'ip_allow_code_access_sucess' => 'Your IP Address has been whitelisted!',
+	'cant_remove_own_ip' => 'You can\'t remove your current IP Address.',
 		
 	//invoices
 	'invoice_updated' => 'Invoice Updated!',
